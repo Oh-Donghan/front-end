@@ -13,6 +13,9 @@ export default {
       width: {
         '480px': '480px',
       },
+      maxWidth: {
+        '480px': '480px',
+      },
     },
   },
   plugins: [
