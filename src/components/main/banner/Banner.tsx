@@ -10,7 +10,6 @@ import '../../../index.css';
 export default function Banner() {
   return (
     <Swiper
-      draggable={false}
       spaceBetween={0}
       slidesPerView={1}
       loop={true}

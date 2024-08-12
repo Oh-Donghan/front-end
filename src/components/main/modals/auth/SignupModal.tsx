@@ -20,7 +20,6 @@ import {
   PopoverContent,
   PopoverHeader,
   PopoverArrow,
-  PopoverCloseButton,
   PopoverBody,
 } from '@chakra-ui/react';
 import { RiLock2Fill } from 'react-icons/ri';
@@ -35,9 +34,11 @@ import { RiLockPasswordFill } from 'react-icons/ri';
 
 export default function SignupModal({ onClose, isOpen, initialRef }) {
   const [verificationMode, setVerificationMode] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [confirmPassword, setConfirmPassword] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
   const [isIdValid, setIsIdValid] = useState(true);
@@ -356,7 +357,7 @@ export default function SignupModal({ onClose, isOpen, initialRef }) {
                 </Text>
               </Flex>
             </Checkbox>
-            <Popover>
+            <Popover trigger="hover">
               <PopoverTrigger>
                 <Text
                   cursor={'pointer'}
@@ -372,7 +373,6 @@ export default function SignupModal({ onClose, isOpen, initialRef }) {
                   약관내용
                 </PopoverHeader>
                 <PopoverArrow />
-                <PopoverCloseButton />
                 <PopoverBody fontSize={'0.75rem'} lineHeight={'26px'} padding={'14px'}>
                   <Text>
                     제1조(목적) 본 약관은 대·중소기업·농어업협력재단 기술보호통합포털(이하 "당

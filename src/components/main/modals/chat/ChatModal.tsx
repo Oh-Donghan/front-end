@@ -6,6 +6,7 @@ import {
   PopoverHeader,
   PopoverTrigger,
   Button,
+  useToast,
 } from '@chakra-ui/react';
 import ChatButton from './ChatModalButton';
 import ChatModalInput from './ChatModalInput';
@@ -13,33 +14,43 @@ import { useState } from 'react';
 import ChatList from '../../chat/ChatList';
 
 export default function ChatModal() {
-  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+  const [isChatModalOpen, setIsChatModalOpen] = useState(false);
+  const loggedIn = true;
+  const toast = useToast();
+
+  const handleButtonClick = () => {
+    if (!loggedIn) {
+      toast({
+        title: `로그인 후 사용 가능한 서비스입니다.`,
+        position: 'top',
+        isClosable: true,
+      });
+    } else {
+      setIsChatModalOpen(prev => !prev);
+    }
+  };
 
   return (
     <div className="fixed bottom-12 right-7 z-[100]">
-      <Popover placement="top-start" closeOnBlur={false}>
-        <span
-          onClick={() => {
-            setIsPopoverOpen(prev => {
-              return (prev = !prev);
-            });
-          }}
-        >
+      <Popover placement="top-start" closeOnBlur={false} isOpen={loggedIn && isChatModalOpen}>
+        <span onClick={handleButtonClick}>
           <PopoverTrigger>
             <Button backgroundColor={'rgba(1,1,1,0)'} _hover={{ backgroundColor: 'rgba(1,1,1,0)' }}>
-              <ChatButton isPopoverOpen={isPopoverOpen} />
+              <ChatButton isPopoverOpen={isChatModalOpen} />
             </Button>
           </PopoverTrigger>
         </span>
-        <PopoverContent boxShadow={'2px 2px 6px rgba(1,1,1,0.1)'} width={'360px'}>
-          <PopoverHeader marginRight={'20px'} width={'full'}>
-            <ChatModalInput />
-          </PopoverHeader>
-          <PopoverArrow />
-          <PopoverBody padding={'0px'}>
-            <ChatList />
-          </PopoverBody>
-        </PopoverContent>
+        {loggedIn && (
+          <PopoverContent boxShadow={'2px 2px 6px rgba(1,1,1,0.1)'} width={'360px'}>
+            <PopoverHeader marginRight={'20px'} width={'full'}>
+              <ChatModalInput />
+            </PopoverHeader>
+            <PopoverArrow />
+            <PopoverBody padding={'0px'}>
+              <ChatList />
+            </PopoverBody>
+          </PopoverContent>
+        )}
       </Popover>
     </div>
   );

@@ -13,13 +13,13 @@ export default function Chat() {
         paddingY={'14px'}
       >
         <Flex align={'center'}>
-          <img src={defaul_profile} alt="기본 프로필 이미지" className="w-12 h-12" />
+          <img src={defaul_profile} alt="기본 프로필 이미지" className="w-[50px] h-[50px]" />
           <div className="ml-2.5">
             <Text
               fontSize={16}
               textColor={'rgba(70,70,70,1)'}
               fontWeight={'bold'}
-              marginBottom={'2px'}
+              marginBottom={'3px'}
             >
               메시 국대 유니폼
             </Text>

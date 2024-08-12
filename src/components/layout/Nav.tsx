@@ -1,15 +1,21 @@
-import { Button, useDisclosure } from '@chakra-ui/react';
+import { Button, useDisclosure, useToast } from '@chakra-ui/react';
 import { RxTextAlignJustify } from 'react-icons/rx';
 import SigninModal from '../main/modals/auth/SigninModal';
 import SignupModal from '../main/modals/auth/SignupModal';
 import { useRef } from 'react';
 import { Link } from 'react-router-dom';
+import PointChargeModal from '../main/modals/point/PointChargeModal';
+import AlarmModal from '../main/modals/alarm/AlarmModal';
+import ViewedAuctionModal from '../main/modals/viewed/ViewedAuctionModal';
 
 export default function Nav() {
   const signinDisclosure = useDisclosure();
   const signupDisclosure = useDisclosure();
+  const pointChargeDisclosure = useDisclosure();
+
   const initialRef = useRef(null);
-  let loggedIn = false;
+  const toast = useToast();
+  const loggedIn = true;
 
   const handleSignupOpen = () => {
     signinDisclosure.onClose();
@@ -18,6 +24,10 @@ export default function Nav() {
 
   return (
     <>
+      <PointChargeModal
+        onClose={pointChargeDisclosure.onClose}
+        isOpen={pointChargeDisclosure.isOpen}
+      />
       <SigninModal
         onClose={signinDisclosure.onClose}
         isOpen={signinDisclosure.isOpen}
@@ -38,12 +48,20 @@ export default function Nav() {
           <ul className="flex justify-between items-center font-semibold w-full gap-3">
             {loggedIn ? (
               <>
-                <li className="mr-4">알림</li>
-                <li className="mr-4">최근 본 경매</li>
-                <li className="mr-4">마이페이지</li>
-                <li className="mr-4">로그아웃</li>
+                <li className="mr-4 cursor-pointer">
+                  <AlarmModal />
+                </li>
+                <li className="mr-4 cursor-pointer">
+                  <ViewedAuctionModal />
+                </li>
+                <li className="mr-4 cursor-pointer">마이페이지</li>
+                <li className="mr-4 cursor-pointer">로그아웃</li>
                 <li>
-                  <Button colorScheme="blue" variant="outline">
+                  <Button
+                    colorScheme="blue"
+                    variant="outline"
+                    onClick={pointChargeDisclosure.onOpen}
+                  >
                     포인트 충전
                   </Button>
                 </li>
@@ -62,12 +80,32 @@ export default function Nav() {
                   회원가입
                 </li>
                 <li>
-                  <Button colorScheme="blue" variant="outline">
+                  <Button
+                    colorScheme="blue"
+                    variant="outline"
+                    onClick={() => {
+                      toast({
+                        title: `로그인 후 사용 가능한 서비스입니다.`,
+                        position: 'top',
+                        isClosable: true,
+                      });
+                    }}
+                  >
                     포인트 충전
                   </Button>
                 </li>
                 <li>
-                  <Button colorScheme="blue" variant="solid">
+                  <Button
+                    colorScheme="blue"
+                    variant="solid"
+                    onClick={() => {
+                      toast({
+                        title: `로그인 후 사용 가능한 서비스입니다.`,
+                        position: 'top',
+                        isClosable: true,
+                      });
+                    }}
+                  >
                     경매 만들기
                   </Button>
                 </li>
