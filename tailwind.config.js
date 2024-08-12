@@ -16,6 +16,9 @@ export default {
       maxWidth: {
         '480px': '480px',
       },
+      height: {
+        'h-screen-minus-nav': 'calc(100vh - 90px)',
+      },
     },
   },
   plugins: [

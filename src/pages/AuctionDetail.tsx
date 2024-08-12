@@ -60,7 +60,11 @@ export default function AuctionDetail() {
         initialRef={initialRef}
       />
       <div className="px-6 max-w-screen-xl flex flex-col mx-auto text-xm mb-24">
-        <Breadcrumb className="py-4 px-6" spacing="8px" separator={<RxChevronRight />}>
+        <Breadcrumb
+          className="py-4 px-6 max-sm:text-sm"
+          spacing="8px"
+          separator={<RxChevronRight />}
+        >
           <BreadcrumbItem>
             <BreadcrumbLink href="/">전체</BreadcrumbLink>
           </BreadcrumbItem>
@@ -117,7 +121,7 @@ export default function AuctionDetail() {
                 </>
               )}
             </div>
-            <div className="w-480px ml-auto max-lg:mx-auto max-sm:w-full">
+            <div className="w-480px ml-auto max-lg:mx-auto max-sm:w-full max-sm:text-sm">
               <List spacing={3} className="p-6 border border-black">
                 <ListItem className="flex justify-between">
                   <div>
@@ -192,7 +196,7 @@ export default function AuctionDetail() {
                 neque laborum. Praesentium eveniet culpa inventore.
               </span>
             </div>
-            <div className="flex gap-6">
+            <div className="flex gap-6 max-sm:flex-col">
               <div className="flex flex-col gap-2">
                 <span>거래 방법</span>
                 <div className="flex gap-2 text-sm">
@@ -233,7 +237,7 @@ export default function AuctionDetail() {
                   질문 작성하기
                 </div>
               </div>
-              <div className="h-64 overflow-y-scroll no-scrollbar">
+              <div className="h-64 overflow-y-scroll no-scrollbar max-sm:text-sm">
                 <Accordion allowToggle>
                   <AccordionItem>
                     <h2>
