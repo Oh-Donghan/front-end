@@ -1,7 +1,7 @@
 import { Button, useDisclosure } from '@chakra-ui/react';
 import { RxTextAlignJustify } from 'react-icons/rx';
-import SigninModal from '../main/modals/SigninModal';
-import SignupModal from '../main/modals/SignupModal';
+import SigninModal from '../main/modals/auth/SigninModal';
+import SignupModal from '../main/modals/auth/SignupModal';
 import { useRef } from 'react';
 import { Link } from 'react-router-dom';
 
