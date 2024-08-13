@@ -6,8 +6,10 @@ import {
   PopoverBody,
   PopoverArrow,
   Box,
+  Text,
 } from '@chakra-ui/react';
 import { useRef } from 'react';
+import ViewedAuctionList from './ViewedAuctionList';
 
 export default function ViewedAuctionModal() {
   const initialRef = useRef(null);
@@ -18,10 +20,22 @@ export default function ViewedAuctionModal() {
         <PopoverTrigger>
           <span>최근 본 경매</span>
         </PopoverTrigger>
-        <PopoverContent>
+        <PopoverContent width={'380px'}>
           <PopoverArrow />
-          <PopoverHeader>최근 본 경매</PopoverHeader>
-          <PopoverBody>최근 본 경매 내용</PopoverBody>
+          <PopoverHeader
+            display={'flex'}
+            justifyContent={'start'}
+            alignItems={'center'}
+            paddingY={4}
+            paddingLeft={6}
+          >
+            <Text fontSize={15} color={'rgba(160,160,160,1)'} fontWeight={'normal'}>
+              *최근 조회한 5개의 경매만 보관됩니다.
+            </Text>
+          </PopoverHeader>
+          <PopoverBody padding={'0px'}>
+            <ViewedAuctionList />
+          </PopoverBody>
         </PopoverContent>
       </Popover>
     </Box>

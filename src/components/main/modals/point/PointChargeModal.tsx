@@ -69,7 +69,7 @@ export default function PointChargeModal({ isOpen, onClose }) {
                   textAlign="right"
                   fontSize={19}
                   fontWeight={'semibold'}
-                  _placeholder={{ color: 'black' }}
+                  _placeholder={{ color: 'rgba(70,70,70,1)' }}
                   readOnly={true}
                   _focus={{ border: '1px solid rgba(220,220,220,1)' }}
                 />
@@ -114,7 +114,7 @@ export default function PointChargeModal({ isOpen, onClose }) {
                   borderBottom={'none'}
                   fontSize={17}
                   fontWeight={'semibold'}
-                  _placeholder={{ color: 'black' }}
+                  _placeholder={{ color: 'rgba(70,70,70,1)' }}
                   readOnly={true}
                   _focus={{ border: '1px solid rgba(220,220,220,1)' }}
                   borderBottomRadius={'none'}
@@ -129,7 +129,7 @@ export default function PointChargeModal({ isOpen, onClose }) {
                   border={'1px solid rgba(220,220,220,1)'}
                   fontSize={17}
                   fontWeight={'semibold'}
-                  _placeholder={{ color: 'black' }}
+                  _placeholder={{ color: 'rgba(70,70,70,1)' }}
                   readOnly={true}
                   _focus={{ border: '1px solid rgba(220,220,220,1)' }}
                   borderTopRadius={'none'}

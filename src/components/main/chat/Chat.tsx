@@ -1,5 +1,5 @@
 import { Flex, Text, Link } from '@chakra-ui/react';
-import defaul_profile from '../../../assets/image/main/profile.png';
+import defaul_profile from '../../../assets/image/modal/chat/profile.png';
 
 export default function Chat() {
   return (
@@ -9,8 +9,8 @@ export default function Chat() {
         align="center"
         justify="space-between"
         cursor={'pointer'}
-        paddingX={'12px'}
-        paddingY={'14px'}
+        paddingX={'14px'}
+        paddingY={'16px'}
       >
         <Flex align={'center'}>
           <img src={defaul_profile} alt="기본 프로필 이미지" className="w-[50px] h-[50px]" />

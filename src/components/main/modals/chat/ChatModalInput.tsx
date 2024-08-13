@@ -5,7 +5,7 @@ export default function ChatModalInput() {
   return (
     <InputGroup>
       <InputLeftElement>
-        <IoSearch color="rgba(190,190,190,1)" />
+        <IoSearch color="rgba(190,190,190,1)" size={20} />
       </InputLeftElement>
       <Input placeholder="경매방 이름으로 검색해주세요" fontSize={'1rem'} />
     </InputGroup>

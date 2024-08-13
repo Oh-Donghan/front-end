@@ -7,11 +7,13 @@ import { Link } from 'react-router-dom';
 import PointChargeModal from '../main/modals/point/PointChargeModal';
 import AlarmModal from '../main/modals/alarm/AlarmModal';
 import ViewedAuctionModal from '../main/modals/viewed/ViewedAuctionModal';
+import CreateAuctionModal from '../main/modals/auction/CreateAuctionModal';
 
 export default function Nav() {
   const signinDisclosure = useDisclosure();
   const signupDisclosure = useDisclosure();
   const pointChargeDisclosure = useDisclosure();
+  const createAuctionDisclosure = useDisclosure();
 
   const initialRef = useRef(null);
   const toast = useToast();
@@ -24,6 +26,11 @@ export default function Nav() {
 
   return (
     <>
+      <CreateAuctionModal
+        onClose={createAuctionDisclosure.onClose}
+        isOpen={createAuctionDisclosure.isOpen}
+      />
+
       <PointChargeModal
         onClose={pointChargeDisclosure.onClose}
         isOpen={pointChargeDisclosure.isOpen}
@@ -66,7 +73,11 @@ export default function Nav() {
                   </Button>
                 </li>
                 <li>
-                  <Button colorScheme="blue" variant="solid">
+                  <Button
+                    colorScheme="blue"
+                    variant="solid"
+                    onClick={createAuctionDisclosure.onOpen}
+                  >
                     경매 만들기
                   </Button>
                 </li>

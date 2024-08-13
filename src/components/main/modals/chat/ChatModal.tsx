@@ -41,7 +41,7 @@ export default function ChatModal() {
           </PopoverTrigger>
         </span>
         {loggedIn && (
-          <PopoverContent boxShadow={'2px 2px 6px rgba(1,1,1,0.1)'} width={'360px'}>
+          <PopoverContent boxShadow={'2px 2px 6px rgba(1,1,1,0.1)'} width={'370px'}>
             <PopoverHeader marginRight={'20px'} width={'full'}>
               <ChatModalInput />
             </PopoverHeader>
