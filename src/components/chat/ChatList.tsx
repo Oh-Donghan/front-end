@@ -5,7 +5,7 @@ export default function ChatList() {
   return (
     <Flex
       direction={'column'}
-      maxHeight={'410px'}
+      height={'757px'}
       overflowY={'scroll'}
       sx={{
         '::-webkit-scrollbar': {
@@ -15,6 +15,14 @@ export default function ChatList() {
         'scrollbar-width': 'none', // Firefox
       }}
     >
+      <Chat />
+      <Chat />
+      <Chat />
+      <Chat />
+      <Chat />
+      <Chat />
+      <Chat />
+      <Chat />
       <Chat />
       <Chat />
       <Chat />

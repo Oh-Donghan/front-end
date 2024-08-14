@@ -1,5 +1,5 @@
 import { Flex, Text } from '@chakra-ui/react';
-import defaul_profile from '../../assets/image/main';
+import defaul_profile from '../../assets/image/chat/profile.png';
 
 export default function Chat() {
   return (
@@ -15,7 +15,7 @@ export default function Chat() {
         <img src={defaul_profile} alt="기본 프로필 이미지" className="w-[50px] h-[50px]" />
         <div className="ml-2.5">
           <Text
-            fontSize={16}
+            fontSize={15}
             textColor={'rgba(70,70,70,1)'}
             fontWeight={'bold'}
             marginBottom={'3px'}
