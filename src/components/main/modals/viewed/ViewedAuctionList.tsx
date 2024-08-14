@@ -33,7 +33,6 @@ export default function ViewedAuctionList() {
   return (
     <Flex
       direction={'column'}
-      height={'380px'}
       overflowY={'scroll'}
       sx={{
         '::-webkit-scrollbar': {

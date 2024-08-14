@@ -20,16 +20,16 @@ export default function ViewedAuctionModal() {
         <PopoverTrigger>
           <span>최근 본 경매</span>
         </PopoverTrigger>
-        <PopoverContent width={'380px'}>
+        <PopoverContent width={['280px', '380px']}>
           <PopoverArrow />
           <PopoverHeader
             display={'flex'}
             justifyContent={'start'}
             alignItems={'center'}
-            paddingY={4}
-            paddingLeft={6}
+            paddingY={['2', '4']}
+            paddingLeft={['4', '6']}
           >
-            <Text fontSize={15} color={'rgba(160,160,160,1)'} fontWeight={'normal'}>
+            <Text fontSize={['xs', 'sm']} color={'rgba(160,160,160,1)'} fontWeight={'normal'}>
               *최근 조회한 5개의 경매만 보관됩니다.
             </Text>
           </PopoverHeader>

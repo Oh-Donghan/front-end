@@ -52,9 +52,9 @@ export default function PointChargeModal({ isOpen, onClose }) {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={handleClose} isCentered>
+    <Modal isOpen={isOpen} onClose={handleClose} isCentered blockScrollOnMount={false}>
       <ModalOverlay />
-      <ModalContent maxWidth={'550px'} paddingX={'10px'} paddingY={'14px'}>
+      <ModalContent minWidth={'446px'} maxWidth={'550px'} paddingX={'10px'} paddingY={'14px'}>
         <ModalHeader display={'flex'} justifyContent={'center'}>
           <PointChargeModalStep step={step} />
         </ModalHeader>

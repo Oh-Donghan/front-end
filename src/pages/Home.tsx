@@ -8,7 +8,7 @@ import ChatModal from '../components/main/modals/chat/ChatModal';
 
 export default function Home() {
   return (
-    <div>
+    <div className="min-w-[442px]">
       <ChatModal />
       <Banner />
       <Input />

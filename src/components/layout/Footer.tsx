@@ -36,7 +36,7 @@ export default function Footer() {
           <span className="footerText">Cookies Settings</span>
         </div>
       </div>
-      <div className="px-4 py-6 lg:hidden">
+      <div className="px-4 py-6 min-w-[442px] lg:hidden">
         <Menu matchWidth>
           {({ isOpen }) => (
             <div className="relative z-50">

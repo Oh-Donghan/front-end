@@ -50,21 +50,19 @@ export default function AlarmList() {
   return (
     <Flex
       direction={'column'}
-      height={'272px'}
+      maxHeight={['200px', '272px']}
       overflowY={'scroll'}
       sx={{
         '::-webkit-scrollbar': {
           display: 'none',
         },
-        '-ms-overflow-style': 'none', // IE and Edge
-        'scrollbar-width': 'none', // Firefox
+        '-ms-overflow-style': 'none',
+        'scrollbar-width': 'none',
       }}
     >
-      {datas.map(data => {
-        return (
-          <Alarm key={data.id} type={data.type} content={data.content} createdAt={data.createdAt} />
-        );
-      })}
+      {datas.map(data => (
+        <Alarm key={data.id} type={data.type} content={data.content} createdAt={data.createdAt} />
+      ))}
     </Flex>
   );
 }

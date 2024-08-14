@@ -30,15 +30,15 @@ export default function Alarm({ type, content, createdAt }) {
     <Flex
       justifyContent={'space-between'}
       alignItems={'center'}
-      py={'20px'}
-      px={'22px'}
+      py={['10px', '20px']}
+      px={['10px', '22px']}
       _hover={{ bgColor: 'rgba(240,240,240,1)' }}
     >
       <Flex alignItems={'center'}>
         <img src={logo} alt="alarm logo" className="w-7 h-6.5 mr-3.5" />
-        <Text>{content}</Text>
+        <Text fontSize={['14px', '16px']}>{content}</Text>
       </Flex>
-      <Text fontSize={14} fontWeight={'normal'} color={'rgba(150,150,150,1)'}>
+      <Text fontSize={['12px', '14px']} fontWeight={'normal'} color={'rgba(150,150,150,1)'}>
         {timeElapsed}
       </Text>
     </Flex>

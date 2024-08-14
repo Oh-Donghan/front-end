@@ -1,4 +1,14 @@
-import { Button, useDisclosure, useToast } from '@chakra-ui/react';
+import {
+  Button,
+  useDisclosure,
+  useToast,
+  Drawer,
+  DrawerBody,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+} from '@chakra-ui/react';
 import { RxTextAlignJustify } from 'react-icons/rx';
 import SigninModal from '../main/modals/auth/SigninModal';
 import SignupModal from '../main/modals/auth/SignupModal';
@@ -14,6 +24,7 @@ export default function Nav() {
   const signupDisclosure = useDisclosure();
   const pointChargeDisclosure = useDisclosure();
   const createAuctionDisclosure = useDisclosure();
+  const drawerDisclosure = useDisclosure();
 
   const initialRef = useRef(null);
   const toast = useToast();
@@ -46,11 +57,15 @@ export default function Nav() {
         isOpen={signupDisclosure.isOpen}
         initialRef={initialRef}
       />
-      <div className="flex justify-between items-center h-[90px] px-10">
+      <div className="flex justify-between items-center h-[90px] px-10 min-w-[442px]">
         <Link to={'/'} className="text-3xl font-bold">
           Logo
         </Link>
-        <RxTextAlignJustify className="lg:hidden" size={38} />
+        <RxTextAlignJustify
+          className="lg:hidden cursor-pointer"
+          size={38}
+          onClick={drawerDisclosure.onOpen}
+        />
         <div className="hidden lg:block">
           <ul className="flex justify-between items-center font-semibold w-full gap-3">
             {loggedIn ? (
@@ -125,6 +140,59 @@ export default function Nav() {
           </ul>
         </div>
       </div>
+
+      <Drawer isOpen={drawerDisclosure.isOpen} placement="left" onClose={drawerDisclosure.onClose}>
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerCloseButton marginTop={2} />
+          <DrawerHeader fontSize={21}>메뉴</DrawerHeader>
+
+          <DrawerBody>
+            <ul
+              className="flex flex-col font-semibold text-lg gap-2 
+            "
+            >
+              {loggedIn ? (
+                <>
+                  <li className="mb-4 cursor-pointer mt-4" onClick={drawerDisclosure.onClose}>
+                    <AlarmModal />
+                  </li>
+                  <li className="mb-4 cursor-pointer" onClick={drawerDisclosure.onClose}>
+                    <ViewedAuctionModal />
+                  </li>
+                  <li className="mb-4 cursor-pointer" onClick={drawerDisclosure.onClose}>
+                    마이페이지
+                  </li>
+                  <li className="mb-4 cursor-pointer" onClick={drawerDisclosure.onClose}>
+                    로그아웃
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li
+                    className="mb-4 cursor-pointer mt-4"
+                    onClick={() => {
+                      signinDisclosure.onOpen();
+                      drawerDisclosure.onClose();
+                    }}
+                  >
+                    로그인
+                  </li>
+                  <li
+                    className="mb-4 cursor-pointer"
+                    onClick={() => {
+                      signupDisclosure.onOpen();
+                      drawerDisclosure.onClose();
+                    }}
+                  >
+                    회원가입
+                  </li>
+                </>
+              )}
+            </ul>
+          </DrawerBody>
+        </DrawerContent>
+      </Drawer>
     </>
   );
 }

@@ -189,7 +189,7 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
   return (
     <Modal isOpen={isOpen} onClose={handleClose} isCentered>
       <ModalOverlay />
-      <ModalContent maxWidth={'950px'}>
+      <ModalContent maxWidth={'950px'} minWidth={'808px'}>
         <ModalHeader paddingX={'40px'} paddingTop={'30px'} paddingBottom={'20px'}>
           <Text fontSize={'3xl'}>Logo</Text>
         </ModalHeader>

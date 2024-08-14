@@ -61,7 +61,7 @@ export default function Categories() {
 
   return (
     <>
-      <div className="block sm:hidden mt-4 px-6 relative z-50">
+      <div className="block sm:hidden mt-4 mx-[26px] relative z-50">
         <Menu isLazy matchWidth>
           <MenuButton
             as={Button}

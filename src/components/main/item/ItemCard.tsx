@@ -9,19 +9,34 @@ import {
   CardFooter,
   Button,
   Flex,
+  Badge,
+  Box,
 } from '@chakra-ui/react';
 import Timer from '../timer/Timer';
+import { HiUser } from 'react-icons/hi';
 
 export default function ItemCard() {
   return (
     <Card borderWidth="1px" borderColor="gray.200" position={'relative'} zIndex={40}>
       <CardBody>
-        <Image
-          src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
-          alt="Green double couch with wooden legs"
-          borderRadius="lg"
-        />
+        <Box position={'relative'}>
+          <Image
+            src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
+            alt="Green double couch with wooden legs"
+            borderRadius="lg"
+          />
+          <Badge position={'absolute'} top={2} right={2} bgColor={'rgba(200,200,200,0.2)'}>
+            <Flex alignItems={'center'}>
+              <HiUser className="mr-1" />
+              <Text>2.lk</Text>
+            </Flex>
+          </Badge>
+        </Box>
         <Stack mt="6" spacing="3">
+          <Stack direction="row">
+            <Badge colorScheme="green">직거래</Badge>
+            <Badge colorScheme="blue">택배</Badge>
+          </Stack>
           <Heading size="md" marginBottom={'8px'}>
             Living room Sofa
           </Heading>
