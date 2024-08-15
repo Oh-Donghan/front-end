@@ -14,10 +14,24 @@ import {
 } from '@chakra-ui/react';
 import Timer from '../timer/Timer';
 import { HiUser } from 'react-icons/hi';
+import { useNavigate } from 'react-router-dom';
+
 
 export default function ItemCard() {
+  const navigate = useNavigate();
+
+  const moveDetail = () => {
+    navigate(`/detail`);
+  };
+
   return (
-    <Card borderWidth="1px" borderColor="gray.200" position={'relative'} zIndex={40}>
+    <Card
+      borderWidth="1px"
+      borderColor="gray.200"
+      position={'relative'}
+      zIndex={40}
+      onClick={moveDetail}
+    >
       <CardBody>
         <Box position={'relative'}>
           <Image
