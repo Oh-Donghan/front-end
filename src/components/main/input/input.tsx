@@ -3,8 +3,12 @@ import { IoSearch } from 'react-icons/io5';
 
 export default function Input() {
   return (
-    <Box display="flex" justifyContent="center" className="mt-10 sm:mt-14">
-      <Stack spacing={4} width={{ base: '90%', md: '40%' }} minWidth={'430px'}>
+    <Box display="flex" justifyContent="center" className="mt-10 sm:mt-[72px]">
+      <Stack
+        spacing={4}
+        width={{ base: '90%', md: '40%' }}
+        minWidth={{ base: '370px', md: '430px' }}
+      >
         <InputGroup>
           <InputLeftElement pointerEvents="none">
             <IoSearch color="rgba(190,190,190,1)" size={20} />

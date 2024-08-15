@@ -40,7 +40,7 @@ const data = [
   { id: 7, title: '굿즈', image: goods },
   { id: 8, title: '식품', image: food },
   { id: 9, title: '뷰티', image: beauty },
-  { id: 10, title: '반려용품', image: pet },
+  { id: 10, title: '반려동물', image: pet },
   { id: 11, title: '가구', image: bed },
   { id: 12, title: '스포츠', image: sport },
   { id: 13, title: '생활용품', image: house },
@@ -61,7 +61,7 @@ export default function Categories() {
 
   return (
     <>
-      <div className="block sm:hidden mt-4 px-6 relative z-50">
+      <div className="block sm:hidden mt-4 mx-[26px] relative z-50">
         <Menu isLazy matchWidth>
           <MenuButton
             as={Button}
