@@ -9,7 +9,8 @@ export default function ChatItem({ chat, isSelected, onSelect }) {
       justify="space-between"
       minWidth={'350px'}
       cursor={'pointer'}
-      paddingX={'16px'}
+      paddingLeft={'16px'}
+      paddingRight={'20px'}
       paddingY={'18px'}
       bgColor={!isSelected ? 'rgba(255,255,255,1)' : 'rgba(245,245,245,1)'}
       onClick={onSelect}

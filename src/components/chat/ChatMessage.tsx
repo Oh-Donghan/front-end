@@ -15,7 +15,7 @@ export default function ChatMessage({ type, text, createdAt }) {
         paddingY={'12px'}
         paddingX={'18px'}
         borderRadius={'10px'}
-        boxShadow={'1px 1px 8px rgba(150,150,150,0.1)'}
+        boxShadow={'1px 1px 8px rgba(150,150,150,0.4)'}
         maxWidth={'650px'}
         lineHeight={'30px'}
       >

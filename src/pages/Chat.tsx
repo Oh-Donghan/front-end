@@ -5,6 +5,7 @@ import { useState } from 'react';
 import default_profile from '../assets/image/chat/profile.png';
 import { IoMdSend } from 'react-icons/io';
 import ChatMessage from '../components/chat/ChatMessage';
+import { Link } from 'react-router-dom';
 
 const chats = [
   { id: 1, name: '메시 국대 유니폼', message: '안녕하세요!', time: '19:49', unread: 1 },
@@ -27,7 +28,7 @@ export default function Chat() {
   const [selectedChatId, setSelectedChatId] = useState(1);
 
   return (
-    <Flex align={'center'} justify={'center'} className="w-full h-[880px] bg-gray-100">
+    <Flex align={'center'} justify={'center'} className="w-full h-[100vh] bg-gray-300">
       <Flex
         width={'1200px'}
         height={'672px'}
@@ -45,15 +46,17 @@ export default function Chat() {
             paddingX={6}
             shadow={'0px -2px 10px rgba(150,150,150,0.1)'}
           >
-            <MdLogout size={20} color="rgba(100,100,100,1)" />
-            <Text
-              cursor={'pointer'}
-              color="rgba(100,100,100,1)"
-              fontWeight={'semibold'}
-              marginLeft={2}
-            >
-              나가기
-            </Text>
+            <Link to={'/'} className="flex items-center cursor-pointer">
+              <MdLogout size={20} color="rgba(100,100,100,1)" />
+              <Text
+                cursor={'pointer'}
+                color="rgba(100,100,100,1)"
+                fontWeight={'semibold'}
+                marginLeft={2}
+              >
+                나가기
+              </Text>
+            </Link>
           </Flex>
         </Flex>
         <Flex flex={3} direction={'column'} minWidth={'800px'}>
@@ -80,7 +83,7 @@ export default function Chat() {
                 colorScheme="blue"
                 variant="outline"
                 fontWeight={'normal'}
-                fontSize={'15px'}
+                fontSize={'14px'}
                 paddingY={'8px'}
                 paddingX={'12px'}
               >
@@ -90,7 +93,7 @@ export default function Chat() {
                 colorScheme="blue"
                 variant="outline"
                 fontWeight={'normal'}
-                fontSize={'15px'}
+                fontSize={'14px'}
                 paddingY={'8px'}
                 paddingX={'12px'}
               >
@@ -101,7 +104,7 @@ export default function Chat() {
           <Flex direction={'column'}>
             <Flex
               direction={'column'}
-              background={'rgba(200,200,200,0.1)'}
+              background={'rgba(180,180,180,0.1)'}
               height={'508px'}
               width={'full'}
               padding={'30px'}
@@ -155,7 +158,7 @@ export default function Chat() {
               />
             </Flex>
             <Flex
-              background={'rgba(200,200,200,0.1)'}
+              background={'rgba(180,180,180,0.1)'}
               alignItems={'center'}
               height={'80px'}
               paddingBottom={'16px'}
