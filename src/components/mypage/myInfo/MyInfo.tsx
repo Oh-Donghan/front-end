@@ -15,10 +15,10 @@ import Calendar from '../calendar/Calendar';
 
 export default function MyInfo() {
   return (
-    <Box flex={1} bgColor={'lightgray'} className="p-12 flex justify-center">
-      <Flex gap={10}>
+    <Box flex={1} className="py-12 flex justify-center">
+      <Flex gap={10} w={'1045px'} justifyContent={'center'}>
         <Avatar width={'120px'} height={'120px'} />
-        <Flex direction={'column'} bgColor={'skyblue'} gap={4}>
+        <Flex direction={'column'} gap={4}>
           <Flex gap={16}>
             <Flex direction={'column'} gap={2}>
               <Flex>
@@ -51,7 +51,7 @@ export default function MyInfo() {
             <ListItem>소셜로그인 계정은 정보를 수정할 수 없습니다.</ListItem>
             <ListItem>이메일과 동일한 아이디는 사용이 불가능합니다.</ListItem>
           </UnorderedList>
-          <Calendar />
+          <Calendar isInfo={true} />
           <List spacing={1}>
             <ListItem className="p-3 border border-black">메시 국대 유니폼 입찰</ListItem>
             <ListItem className="p-3 border border-black">메시 국대 유니폼 입찰</ListItem>
