@@ -1,18 +1,21 @@
 import { Flex, Text } from '@chakra-ui/react';
-import defaul_profile from '../../assets/image/chat/profile.png';
+import default_profile from '../../assets/image/chat/profile.png';
 
-export default function Chat() {
+export default function ChatItem({ chat, isSelected, onSelect }) {
   return (
     <Flex
-      _hover={{ bgColor: 'rgba(240,240,240,1)' }}
+      _hover={{ bgColor: 'rgba(245,245,245,1)' }}
       align="center"
       justify="space-between"
+      minWidth={'350px'}
       cursor={'pointer'}
-      paddingX={'14px'}
-      paddingY={'16px'}
+      paddingX={'16px'}
+      paddingY={'18px'}
+      bgColor={!isSelected ? 'rgba(255,255,255,1)' : 'rgba(245,245,245,1)'}
+      onClick={onSelect}
     >
       <Flex align={'center'}>
-        <img src={defaul_profile} alt="기본 프로필 이미지" className="w-[50px] h-[50px]" />
+        <img src={default_profile} alt="기본 프로필 이미지" className="w-[50px] h-[50px]" />
         <div className="ml-2.5">
           <Text
             fontSize={15}
@@ -20,10 +23,10 @@ export default function Chat() {
             fontWeight={'bold'}
             marginBottom={'3px'}
           >
-            메시 국대 유니폼
+            {chat.name}
           </Text>
           <Text fontSize={12} textColor={'rgba(160,160,160,1)'}>
-            안녕하세요!
+            {chat.message}
           </Text>
         </div>
       </Flex>
@@ -34,7 +37,7 @@ export default function Chat() {
           textColor={'rgba(160,160,160,1)'}
           marginBottom={'6px'}
         >
-          19:49
+          {chat.time}
         </Text>
         <Flex
           className="bg-violet-400 text-white font-thin w-4 h-4"
@@ -43,7 +46,7 @@ export default function Chat() {
           fontSize={11}
           borderRadius={'50%'}
         >
-          1
+          {chat.unread}
         </Flex>
       </Flex>
     </Flex>
