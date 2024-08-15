@@ -5,7 +5,7 @@ import { MdLogout } from 'react-icons/md';
 export default function Chat() {
   return (
     <Flex align={'center'} justify={'center'} className="w-full h-[828px] bg-gray-100">
-      <Flex width={'1500px'} backgroundColor={'white'}>
+      <Flex width={'1500px'} height={'646px'} backgroundColor={'white'}>
         <Flex flexDirection={'column'} flex={1} borderRight={'1px solid rgba(200,200,200,0.4)'}>
           <ChatList />
           <Flex alignItems={'center'} height={'70px'} paddingY={8} paddingX={6}>
@@ -20,7 +20,13 @@ export default function Chat() {
             </Text>
           </Flex>
         </Flex>
-        <Flex flex={3}>chat</Flex>
+        <Flex flex={3}>
+          <Flex></Flex>
+          <Flex>
+            <Flex></Flex>
+            <Flex></Flex>
+          </Flex>
+        </Flex>
       </Flex>
     </Flex>
   );
