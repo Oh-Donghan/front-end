@@ -3,6 +3,7 @@ import Layout from '../components/layout/Layout';
 import Home from '../pages/Home';
 import AuctionDetail from '../pages/AuctionDetail';
 import AuctionMyPage from '../pages/AuctionMyPage';
+import AuctionList from '../pages/AuctionList';
 import MyInfo from '../components/mypage/myInfo/MyInfo';
 import PurchaseHistory from '../components/mypage/order/PurchaseHistory';
 import SellHistory from '../components/mypage/order/SellHistory';
@@ -20,6 +21,10 @@ export const router = createBrowserRouter([
       {
         path: '/detail',
         element: <AuctionDetail />,
+      },
+      {
+        path: '/list',
+        element: <AuctionList />,
       },
       {
         path: '/mypage',
