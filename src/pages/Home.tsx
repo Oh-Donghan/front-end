@@ -1,37 +1,45 @@
-import Input from '../components/main/input/input';
 import Banner from '../components/main/banner/Banner';
 import Categories from '../components/main/categories/Categories';
-import { FaPlus } from 'react-icons/fa6';
-import ItemList from '../components/main/item/ItemList';
-import hot from '../assets/image/main/hot.png';
+import SwiperItemList from '../components/main/item/ItemList';
 import ChatModal from '../components/main/modals/chat/ChatModal';
+import { Box, Flex, Text } from '@chakra-ui/react';
+import Input from '../components/main/input/input';
+import { Link } from 'react-router-dom';
 
 export default function Home() {
   return (
-    <div className="min-w-[442px]">
+    <>
       <ChatModal />
       <Banner />
       <Input />
       <Categories />
-      <section className="px-8 mt-12 sm:mt-[112px]">
-        <div className="flex items-center mb-4 sm:mb-5">
-          <span className="font-bold ml-0 text-xl sm:text-2xl sm:ml-3">지금 핫한 경매</span>
-          <img src={hot} alt="" className="w-6 h-6 ml-2" />
-        </div>
-        <ItemList type={'hot'} />
-      </section>
-      <section className="px-10 mb-12 sm:mb-20 mt-12 sm:mt-20 ">
-        <div className="flex items-end justify-between mb-4 sm:mb-5">
-          <span className="font-bold ml-0 text-xl sm:text-2xl sm:ml-3">전체 경매</span>
-          <div className="flex items-center cursor-pointer mr-3 text-gray-400">
-            <FaPlus color="rgba(160,160,160,1)" className="mr-1 mt-0.5" size={15} />
-            <span className="text-sm pt-0.5 font-semibold md:text-[1rem] lg:text-[1.05rem]">
-              더보기
-            </span>
-          </div>
-        </div>
-        <ItemList />
-      </section>
-    </div>
+      <Box minW="442px" px={8} overflowX="hidden">
+        {/* 지금 핫한 Top5 섹션 */}
+        <Box mt={{ base: '12', sm: '75px' }}>
+          <Flex alignItems="center" mb={{ base: '4', sm: '5' }}>
+            <Text fontSize={{ base: 'xl', sm: '1.5rem' }} fontWeight="bold">
+              지금 핫한 경매 Top5
+            </Text>
+          </Flex>
+          <SwiperItemList type="hot" />
+        </Box>
+
+        {/* 전체 매물 섹션 */}
+        <Box mb={{ base: '12', sm: '20' }} mt={{ base: '12', sm: '20' }}>
+          <Flex alignItems="end" justifyContent="space-between" mb={{ base: '4', sm: '5' }}>
+            <Text fontSize={{ base: 'xl', sm: '1.5rem' }} fontWeight="bold">
+              전체 경매
+            </Text>
+            <Flex alignItems={'end'} cursor="pointer" ml={2} color="gray.500">
+              <Text fontSize={20}>+</Text>
+              <Link to={`/auctions?category=전체`}>
+                <Text>더보기</Text>
+              </Link>
+            </Flex>
+          </Flex>
+          <SwiperItemList />
+        </Box>
+      </Box>
+    </>
   );
 }

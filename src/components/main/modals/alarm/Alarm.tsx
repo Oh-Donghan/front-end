@@ -4,7 +4,6 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import 'dayjs/locale/ko';
 import question from '../../../../assets/image/modal/alarm/question.png';
 import done from '../../../../assets/image/modal/alarm/done.png';
-import change_bid from '../../../../assets/image/modal/alarm/change_bid.png';
 import confirm from '../../../../assets/image/modal/alarm/confirm.png';
 import answer from '../../../../assets/image/modal/alarm/answer.png';
 
@@ -18,13 +17,11 @@ export default function Alarm({ type, content, createdAt }) {
       ? question
       : type === 'DONE'
         ? done
-        : type === 'CHANGE_BID'
-          ? change_bid
-          : type === 'CONFIRM'
-            ? confirm
-            : type === 'ANSWER'
-              ? answer
-              : undefined;
+        : type === 'CONFIRM'
+          ? confirm
+          : type === 'ANSWER'
+            ? answer
+            : undefined;
 
   return (
     <Flex

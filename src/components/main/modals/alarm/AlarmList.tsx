@@ -16,12 +16,6 @@ export default function AlarmList() {
       createdAt: '2024-08-03T11:12:13',
     },
     {
-      id: 3,
-      type: 'CHANGE_BID', // 입찰가 변동
-      content: 'OOO 경매의 최고 입찰가가 변경되었습니다.',
-      createdAt: '2024-08-03T11:12:13',
-    },
-    {
       id: 4,
       type: 'CONFIRM', // 구매 확정 알림
       content: 'OOO 경매의 구매가 확정 되었습니다.',

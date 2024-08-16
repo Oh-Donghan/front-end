@@ -2,33 +2,33 @@ import { Grid, GridItem, useBreakpointValue } from '@chakra-ui/react';
 import ItemCard from './ItemCard';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
-import 'swiper/css/navigation';
+import 'swiper/css/effect-cards';
 import 'swiper/css/pagination';
-import { Navigation, Pagination } from 'swiper/modules';
+import { EffectCards, Pagination } from 'swiper/modules';
 
 interface ItemListProps {
   type?: string;
 }
 
-export default function ItemList({ type }: ItemListProps) {
+export default function SwiperItemList({ type }: ItemListProps) {
   const isSlider = useBreakpointValue({ base: true, sm2: false, md: false });
-  const items = type ? Array(5).fill(<ItemCard />) : Array(10).fill(<ItemCard />);
+  const items = type
+    ? Array(5)
+        .fill(0)
+        .map((_, i) => <ItemCard rank={i + 1} />)
+    : Array(10).fill(<ItemCard />);
 
   return isSlider ? (
     <Swiper
-      spaceBetween={10}
-      slidesPerView={1}
-      navigation
+      effect={'cards'}
+      grabCursor={true}
       pagination={{ clickable: true }}
-      modules={[Navigation, Pagination]}
-      loop={true}
+      modules={[EffectCards, Pagination]}
       className="mySwiper"
       style={{ marginTop: '25px' }}
     >
       {items.map((item, index) => (
-        <SwiperSlide style={{ padding: '0px 65px 0px 65px' }} key={index}>
-          {item}
-        </SwiperSlide>
+        <SwiperSlide key={index}>{item}</SwiperSlide>
       ))}
     </Swiper>
   ) : (
