@@ -2,6 +2,7 @@ import { createBrowserRouter, Navigate } from 'react-router-dom';
 import Layout from '../components/layout/Layout';
 import Home from '../pages/Home';
 import AuctionDetail from '../pages/AuctionDetail';
+import Chat from '../pages/Chat';
 import AuctionMyPage from '../pages/AuctionMyPage';
 import AuctionList from '../pages/AuctionList';
 import MyInfo from '../components/mypage/myInfo/MyInfo';
@@ -26,6 +27,7 @@ export const router = createBrowserRouter([
         path: '/auctions',
         element: <AuctionList />,
       },
+      { path: '/chat', element: <Chat /> },
       {
         path: '/mypage',
         element: <AuctionMyPage />,

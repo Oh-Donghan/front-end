@@ -12,94 +12,10 @@ import {
   Thead,
   Tr,
 } from '@chakra-ui/react';
+
 import { useLocation } from 'react-router-dom';
 
-export const sampleData = [
-  {
-    id: 1,
-    productName: '메시 국대 유니폼',
-    price: '95,000P',
-    sellerId: 'abcd153',
-    status: '거래 종료',
-    purchaseDate: '2024-07-24',
-    details: {
-      deliveryMethod: '만나서 거래',
-      condition: '4.5 / 5',
-      sellerEmail: 'abcd153@gmail.com',
-      color: '노란색',
-      startingBid: '80,000P',
-      instantBuyPrice: '100,000P',
-    },
-  },
-  {
-    id: 2,
-    productName: '마이클 조던 농구화',
-    price: '95,000P',
-    sellerId: 'abcd153',
-    status: '거래 진행 중',
-    purchaseDate: '2024-07-22',
-    details: {
-      deliveryMethod: '택배',
-      condition: '새 상품',
-      sellerEmail: 'abcd153@gmail.com',
-      color: '검정색',
-      startingBid: '90,000P',
-      instantBuyPrice: '120,000P',
-    },
-  },
-  {
-    id: 3,
-    productName: '마이클 조던 농구화',
-    price: '95,000P',
-    sellerId: 'abcd153',
-    status: '거래 진행 중',
-    purchaseDate: '2024-07-22',
-    details: {
-      deliveryMethod: '택배',
-      condition: '새 상품',
-      sellerEmail: 'abcd153@gmail.com',
-      color: '검정색',
-      startingBid: '90,000P',
-      instantBuyPrice: '120,000P',
-    },
-  },
-  {
-    id: 4,
-    productName: '마이클 조던 농구화',
-    price: '95,000P',
-    sellerId: 'abcd153',
-    status: '거래 진행 중',
-    purchaseDate: '2024-07-22',
-    details: {
-      deliveryMethod: '택배',
-      condition: '새 상품',
-      sellerEmail: 'abcd153@gmail.com',
-      color: '검정색',
-      startingBid: '90,000P',
-      instantBuyPrice: '120,000P',
-    },
-  },
-  {
-    id: 5,
-    productName: '마이클 조던 농구화',
-    price: '95,000P',
-    sellerId: 'abcd153',
-    status: '거래 진행 중',
-    purchaseDate: '2024-07-22',
-    details: {
-      deliveryMethod: '택배',
-      condition: '새 상품',
-      sellerEmail: 'abcd153@gmail.com',
-      color: '검정색',
-      startingBid: '90,000P',
-      instantBuyPrice: '120,000P',
-    },
-  },
-
-  // 추가 데이터 ...
-];
-
-export default function OrderTable() {
+export default function OrderTable({ posts }) {
   const location = useLocation();
   const isBuyPage = location.pathname === '/mypage/buy';
 
@@ -125,8 +41,8 @@ export default function OrderTable() {
         </Tr>
       </Thead>
       <Tbody>
-        {sampleData.map(item => (
-          <Tr key={item.id}>
+        {posts.map(item => (
+          <Tr key={item.auctionId}>
             <Td colSpan={5} p={0} className="relative">
               <Accordion allowToggle>
                 <AccordionItem border="none">
@@ -141,16 +57,16 @@ export default function OrderTable() {
                       {item.productName}
                     </Box>
                     <Box flex="1" textAlign="left" paddingX={'12px'} paddingY={'20px'}>
-                      {item.price}
+                      {item.salePrice}
                     </Box>
                     <Box flex="1" textAlign="left" paddingX={'12px'} paddingY={'20px'}>
-                      {item.sellerId}
+                      {item.buyerId}
                     </Box>
                     <Box flex="1" textAlign="left" paddingX={'12px'} paddingY={'20px'}>
-                      {item.status}
+                      {item.productStatus}
                     </Box>
                     <Box flex="1" textAlign="left" paddingX={'12px'} paddingY={'20px'}>
-                      {item.purchaseDate}
+                      {item.saleDate}
                     </Box>
                     <div className="absolute right-3">
                       <AccordionIcon />
@@ -165,36 +81,36 @@ export default function OrderTable() {
                     >
                       <Box className="flex flex-col gap-6">
                         <p className="flex flex-col gap-1">
-                          <strong>수령 방법</strong> {item.details.deliveryMethod}
+                          <strong>수령 방법</strong> {item.receiveType}
                         </p>
                         <p className="flex flex-col gap-1">
                           <strong>상품명</strong> {item.productName}
                         </p>
                         <p className="flex flex-col gap-1">
-                          <strong>색상</strong> {item.details.color}
+                          <strong>색상</strong> {item.productColor}
                         </p>
                       </Box>
                       <Box className="flex flex-col gap-6">
                         <p className="flex flex-col gap-1">
-                          <strong>상태</strong> {item.details.condition}
+                          <strong>상태</strong> {item.productStatus}
                         </p>
                         <p className="flex flex-col gap-1">
-                          <strong>결제 금액</strong> {item.price}
+                          <strong>결제 금액</strong> {item.salePrice}
                         </p>
                         <p className="flex flex-col gap-1">
-                          <strong>입찰 시작가</strong> {item.details.startingBid}
+                          <strong>입찰 시작가</strong> {item.startPrice}
                         </p>
                       </Box>
                       <Box className="flex flex-col gap-6">
                         <p className="flex flex-col gap-1">
                           <strong>{isBuyPage ? '판매자' : '구매자'} 이메일</strong>{' '}
-                          {item.details.sellerEmail}
+                          {item.sellerEmail}
                         </p>
                         <p className="flex flex-col gap-1">
-                          <strong>{isBuyPage ? '구매' : '판매'} 날짜</strong> {item.purchaseDate}
+                          <strong>{isBuyPage ? '구매' : '판매'} 날짜</strong> {item.saleDate}
                         </p>
                         <p className="flex flex-col gap-1">
-                          <strong>즉시 구매가</strong> {item.details.instantBuyPrice}
+                          <strong>즉시 구매가</strong> {item.instantPrice}
                         </p>
                       </Box>
                       <Box className="bg-stone-400"></Box>

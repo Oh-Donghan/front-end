@@ -3,7 +3,7 @@ import defaul_profile from '../../../assets/image/modal/chat/profile.png';
 
 export default function Chat() {
   return (
-    <Link href="/#" _hover={{ textDecoration: 'none' }}>
+    <Link href="/chat" _hover={{ textDecoration: 'none' }}>
       <Flex
         _hover={{ bgColor: 'rgba(240,240,240,1)' }}
         align="center"
