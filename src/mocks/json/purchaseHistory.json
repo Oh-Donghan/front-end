@@ -1,0 +1,97 @@
+{
+  "totalPages": 1,
+  "totalElements": 4,
+  "first": true,
+  "last": true,
+  "size": 5,
+  "content": [
+    {
+      "id": 1,
+      "auctionId": 1,
+      "thumbnailUrl": "https://movieticket-s3-bucket.s3.ap-northeast-2.amazonaws.com/47c9f7cb-fabb-4e6a-9290-d4d02b894512KakaoTalk_Photo_2024-08-13-19-13-19.jpeg",
+      "productName": "name1",
+      "productStatus": 3.5,
+      "productColor": "color",
+      "startPrice": 2000,
+      "instantPrice": 4000,
+      "sellerEmail": "seller@naver.com",
+      "buyerId": "test",
+      "salePrice": 4000,
+      "transType": "CONTINUE",
+      "buyType": "INSTANT",
+      "receiveType": "ALL",
+      "saleDate": "2024-08-16 12:25"
+    },
+    {
+      "id": 2,
+      "auctionId": 2,
+      "thumbnailUrl": "https://movieticket-s3-bucket.s3.ap-northeast-2.amazonaws.com/47c9f7cb-fabb-4e6a-9290-d4d02b894512KakaoTalk_Photo_2024-08-13-19-13-19.jpeg",
+      "productName": "name2",
+      "productStatus": 4.5,
+      "productColor": "color",
+      "startPrice": 2000,
+      "instantPrice": 4000,
+      "sellerEmail": "seller@naver.com",
+      "buyerId": "test",
+      "salePrice": 4000,
+      "transType": "CONTINUE",
+      "buyType": "INSTANT",
+      "receiveType": "ALL",
+      "saleDate": "2024-08-16 12:25"
+    },
+    {
+      "id": 3,
+      "auctionId": 3,
+      "thumbnailUrl": "https://movieticket-s3-bucket.s3.ap-northeast-2.amazonaws.com/47c9f7cb-fabb-4e6a-9290-d4d02b894512KakaoTalk_Photo_2024-08-13-19-13-19.jpeg",
+      "productName": "name",
+      "productStatus": 3.5,
+      "productColor": "color",
+      "startPrice": 2000,
+      "instantPrice": 4000,
+      "sellerEmail": "seller@naver.com",
+      "buyerId": "test",
+      "salePrice": 4000,
+      "transType": "CONTINUE",
+      "buyType": "INSTANT",
+      "receiveType": "ALL",
+      "saleDate": "2024-08-16 12:25"
+    },
+    {
+      "id": 4,
+      "auctionId": 4,
+      "thumbnailUrl": "https://movieticket-s3-bucket.s3.ap-northeast-2.amazonaws.com/47c9f7cb-fabb-4e6a-9290-d4d02b894512KakaoTalk_Photo_2024-08-13-19-13-19.jpeg",
+      "productName": "name",
+      "productStatus": 3.5,
+      "productColor": "color",
+      "startPrice": 2000,
+      "instantPrice": 4000,
+      "sellerEmail": "seller@naver.com",
+      "buyerId": "test",
+      "salePrice": 4000,
+      "transType": "CONTINUE",
+      "buyType": "INSTANT",
+      "receiveType": "ALL",
+      "saleDate": "2024-08-16 12:25"
+    }
+  ],
+  "number": 0,
+  "sort": {
+    "empty": true,
+    "unsorted": true,
+    "sorted": false
+  },
+  "numberOfElements": 3,
+  "pageable": {
+    "pageNumber": 0,
+    "pageSize": 10,
+    "sort": {
+      "empty": true,
+      "unsorted": true,
+      "sorted": false
+    },
+    "offset": 0,
+    "paged": true,
+    "unpaged": false
+  },
+  "empty": false
+}
