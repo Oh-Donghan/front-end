@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Box, Button, Flex, Text, IconButton, useBreakpointValue } from '@chakra-ui/react';
 import { useLocation, Link } from 'react-router-dom';
 import { FaCheck, FaSearch } from 'react-icons/fa';
@@ -138,11 +138,11 @@ export default function AuctionList() {
               height: '6px',
             },
             '&::-webkit-scrollbar-thumb': {
-              backgroundColor: '#E2E8F0', // 스크롤바 손잡이의 색상
+              backgroundColor: '#E2E8F0',
               borderRadius: '10px',
             },
             '&::-webkit-scrollbar-track': {
-              backgroundColor: '#F7FAFC', // 스크롤바 트랙의 색상
+              backgroundColor: '#F7FAFC',
             },
           }}
         >
@@ -223,7 +223,9 @@ export default function AuctionList() {
       <Box mb={{ base: '12', sm: '20' }} mt={{ base: '12', sm: '20' }}>
         <Flex alignItems="center" justifyContent="space-between" mb={{ base: '4', sm: '5' }}>
           <Text fontSize={{ base: '1.3rem', md: '1.5rem' }} fontWeight="bold">
-            {category !== '전체' ? `전체 ${category} 경매` : '전체 경매'}
+            {category !== '전체'
+              ? `전체 ${subCategory === null ? category : subCategory} 경매`
+              : '전체 경매'}
           </Text>
         </Flex>
         <ItemList />
