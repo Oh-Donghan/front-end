@@ -13,7 +13,7 @@ import { RxTextAlignJustify } from 'react-icons/rx';
 import SigninModal from '../main/modals/auth/SigninModal';
 import SignupModal from '../main/modals/auth/SignupModal';
 import { useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import PointChargeModal from '../main/modals/point/PointChargeModal';
 import AlarmModal from '../main/modals/alarm/AlarmModal';
 import ViewedAuctionModal from '../main/modals/viewed/ViewedAuctionModal';
@@ -26,6 +26,8 @@ export default function Nav() {
   const createAuctionDisclosure = useDisclosure();
   const drawerDisclosure = useDisclosure();
 
+  const navigate = useNavigate();
+
   const initialRef = useRef(null);
   const toast = useToast();
   const loggedIn = true;
@@ -33,6 +35,10 @@ export default function Nav() {
   const handleSignupOpen = () => {
     signinDisclosure.onClose();
     signupDisclosure.onOpen();
+  };
+
+  const moveToMypage = () => {
+    navigate('/mypage');
   };
 
   return (
@@ -76,7 +82,9 @@ export default function Nav() {
                 <li className="mr-4 cursor-pointer">
                   <ViewedAuctionModal />
                 </li>
-                <li className="mr-4 cursor-pointer">마이페이지</li>
+                <li className="mr-4 cursor-pointer" onClick={moveToMypage}>
+                  마이페이지
+                </li>
                 <li className="mr-4 cursor-pointer">로그아웃</li>
                 <li>
                   <Button
