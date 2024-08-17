@@ -57,7 +57,9 @@ export default function Nav() {
         isOpen={signupDisclosure.isOpen}
         initialRef={initialRef}
       />
-      <div className="flex justify-between items-center h-[90px] px-10 min-w-[442px]">
+
+      {/* 네비게이션 바 */}
+      <div className="flex justify-between items-center h-[90px] px-10 min-w-[375px] max-w-full">
         <Link to={'/'} className="text-3xl font-bold">
           Logo
         </Link>
@@ -141,6 +143,7 @@ export default function Nav() {
         </div>
       </div>
 
+      {/* 드로어 */}
       <Drawer isOpen={drawerDisclosure.isOpen} placement="left" onClose={drawerDisclosure.onClose}>
         <DrawerOverlay />
         <DrawerContent>
@@ -148,10 +151,7 @@ export default function Nav() {
           <DrawerHeader fontSize={21}>메뉴</DrawerHeader>
 
           <DrawerBody>
-            <ul
-              className="flex flex-col font-semibold text-lg gap-2 
-            "
-            >
+            <ul className="flex flex-col font-semibold text-lg gap-2">
               {loggedIn ? (
                 <>
                   <li className="mb-4 cursor-pointer mt-4" onClick={drawerDisclosure.onClose}>

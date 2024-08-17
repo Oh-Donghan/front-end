@@ -14,8 +14,8 @@ export default function Input() {
     <Box display="flex" justifyContent="center" className="mt-10 sm:mt-[62px]">
       <Stack
         spacing={4}
-        width={{ base: '90%', md: '40%' }}
-        minWidth={{ base: '370px', md: '430px' }}
+        width={{ base: '87%', md: '30%' }}
+        minWidth={{ base: '20px', md: '430px' }}
       >
         <InputGroup>
           <InputLeftAddon borderColor="gray.300">
