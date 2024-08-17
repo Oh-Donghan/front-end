@@ -16,8 +16,11 @@ import Timer from '../timer/Timer';
 import { HiUser } from 'react-icons/hi';
 import { useNavigate } from 'react-router-dom';
 
+interface ItemCardProps {
+  rank?: number;
+}
 
-export default function ItemCard() {
+export default function ItemCard({ rank }: ItemCardProps) {
   const navigate = useNavigate();
 
   const moveDetail = () => {
@@ -45,6 +48,19 @@ export default function ItemCard() {
               <Text>2.lk</Text>
             </Flex>
           </Badge>
+          {rank &&
+            rank <= 5 && ( // 랭킹이 1~5일 때만 표시
+              <Box position="absolute" top={1.5} left={4} zIndex={50}>
+                <Text
+                  fontSize="1.5rem"
+                  fontWeight="bold"
+                  color="rgba(255, 255, 255, 0.9)"
+                  textShadow="1px 1px 2px rgba(0, 0, 0, 0.8)"
+                >
+                  {rank}
+                </Text>
+              </Box>
+            )}
         </Box>
         <Stack mt="6" spacing="3">
           <Stack direction="row">

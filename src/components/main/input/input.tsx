@@ -1,24 +1,38 @@
-import { InputGroup, InputLeftElement, Stack, Input as MainInput, Box } from '@chakra-ui/react';
+import {
+  InputGroup,
+  Stack,
+  Input as MainInput,
+  Box,
+  InputLeftAddon,
+  InputRightElement,
+  Button,
+} from '@chakra-ui/react';
 import { IoSearch } from 'react-icons/io5';
 
 export default function Input() {
   return (
-    <Box display="flex" justifyContent="center" className="mt-10 sm:mt-[72px]">
+    <Box display="flex" justifyContent="center" className="mt-10 sm:mt-[62px]">
       <Stack
         spacing={4}
         width={{ base: '90%', md: '40%' }}
         minWidth={{ base: '370px', md: '430px' }}
       >
         <InputGroup>
-          <InputLeftElement pointerEvents="none">
+          <InputLeftAddon borderColor="gray.300">
+            {' '}
             <IoSearch color="rgba(190,190,190,1)" size={20} />
-          </InputLeftElement>
+          </InputLeftAddon>
           <MainInput
             type="search"
             placeholder="상품명으로 검색해주세요."
             fontSize={'1rem'}
-            borderColor="gray.400"
+            borderColor="gray.300"
           />
+          <InputRightElement width="4.5rem">
+            <Button h="1.75rem" size="sm" color={'rgba(130,130,130,1)'}>
+              enter
+            </Button>
+          </InputRightElement>
         </InputGroup>
       </Stack>
     </Box>

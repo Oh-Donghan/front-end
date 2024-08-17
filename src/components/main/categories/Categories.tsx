@@ -29,6 +29,7 @@ import ring from '../../../assets/image/category/ring.png';
 import more from '../../../assets/image/category/more.png';
 import { IoChevronDownSharp } from 'react-icons/io5';
 import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 const data = [
   { id: 1, title: '남성의류', image: man_cloth },
@@ -51,17 +52,20 @@ const data = [
 
 export default function Categories() {
   const [selectedOption, setSelectedOption] = useState({
-    title: '카테고리를 선택해주세요',
-    image: man_cloth,
+    title: '카테고리를 선택해 주세요',
+    image: null,
   });
+
+  const navigation = useNavigate();
 
   const handleSelect = item => {
     setSelectedOption(prev => ({ ...prev, title: item.title, image: item.image }));
+    navigation(`/auctions?category=${item.title}`);
   };
 
   return (
     <>
-      <div className="block sm:hidden mt-4 mx-[26px] relative z-50">
+      <div className="block sm:hidden mt-4 mx-[25px]  relative z-50">
         <Menu isLazy matchWidth>
           <MenuButton
             as={Button}
@@ -74,20 +78,21 @@ export default function Categories() {
             textAlign="left"
           >
             <Flex align="start">
-              <Image
-                src={selectedOption.image}
-                alt="category image"
-                boxSize="1.3rem"
-                mr="9px"
-                marginLeft={'-6px'}
-              />
+              {selectedOption.image && (
+                <Image
+                  src={selectedOption.image}
+                  alt="category image"
+                  boxSize="1.3rem"
+                  mr="9px"
+                  marginLeft={'-6px'}
+                />
+              )}
               <Text color={'rgba(150,150,150,1)'} fontWeight={'normal'}>
                 {selectedOption.title}
               </Text>
             </Flex>
           </MenuButton>
           <MenuList maxH="220px" overflowY="auto" width={'100%'}>
-            {' '}
             {data.map(item => (
               <MenuItem
                 key={item.id}
@@ -119,12 +124,14 @@ export default function Categories() {
         >
           {data.map(item => {
             return (
-              <GridItem key={item.id} w="100%" h="10" cursor={'pointer'}>
-                <Flex align="center">
-                  <img src={item.image} alt="남성의류 로고" className="w-8 lg:w-9 xl:w-10 mr-2" />
-                  <span className="flex-shrink-0 text-sm lg:text-md">{item.title}</span>
-                </Flex>
-              </GridItem>
+              <Link to={`/auctions?category=${item.title}`} key={item.id}>
+                <GridItem w="100%" h="10" cursor={'pointer'}>
+                  <Flex align="center">
+                    <img src={item.image} alt="카테고리 로고" className="w-8 lg:w-9 xl:w-10 mr-2" />
+                    <span className="flex-shrink-0 text-sm lg:text-md">{item.title}</span>
+                  </Flex>
+                </GridItem>
+              </Link>
             );
           })}
         </Grid>
