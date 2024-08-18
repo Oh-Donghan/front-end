@@ -9,6 +9,7 @@ import MyInfo from '../components/mypage/myInfo/MyInfo';
 import PurchaseHistory from '../components/mypage/order/PurchaseHistory';
 import SellHistory from '../components/mypage/order/SellHistory';
 import RechargeHistory from '../components/mypage/order/RechargeHistory';
+import Payment from '../pages/Payment';
 
 export const router = createBrowserRouter([
   {
@@ -54,6 +55,7 @@ export const router = createBrowserRouter([
           },
         ],
       },
+      { path: '/payment', element: <Payment /> },
     ],
   },
 ]);
