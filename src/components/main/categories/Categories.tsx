@@ -56,11 +56,11 @@ export default function Categories() {
     image: null,
   });
 
-  const navigation = useNavigate();
+  const navigate = useNavigate();
 
   const handleSelect = item => {
     setSelectedOption(prev => ({ ...prev, title: item.title, image: item.image }));
-    navigation(`/auctions?category=${item.title}`);
+    navigate(`/auctions?category=${item.title}`);
   };
 
   return (

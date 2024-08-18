@@ -8,14 +8,14 @@ import { Link } from 'react-router-dom';
 
 export default function Home() {
   return (
-    <>
+    <Box minW="375px">
       <ChatModal />
       <Banner />
       <Input />
       <Categories />
-      <Box minW="442px" px={8} overflowX="hidden">
+      <Box minW="375px" px={8} overflowX="hidden">
         {/* 지금 핫한 Top5 섹션 */}
-        <Box mt={{ base: '12', sm: '75px' }}>
+        <Box minW="375px" mt={{ base: '12', sm: '75px' }}>
           <Flex alignItems="center" mb={{ base: '4', sm: '5' }}>
             <Text fontSize={{ base: 'xl', sm: '1.5rem' }} fontWeight="bold">
               지금 핫한 경매 Top5
@@ -25,7 +25,7 @@ export default function Home() {
         </Box>
 
         {/* 전체 매물 섹션 */}
-        <Box mb={{ base: '12', sm: '20' }} mt={{ base: '12', sm: '20' }}>
+        <Box minW="375px" mb={{ base: '12', sm: '20' }} mt={{ base: '12', sm: '20' }}>
           <Flex alignItems="end" justifyContent="space-between" mb={{ base: '4', sm: '5' }}>
             <Text fontSize={{ base: 'xl', sm: '1.5rem' }} fontWeight="bold">
               전체 경매
@@ -40,6 +40,6 @@ export default function Home() {
           <SwiperItemList />
         </Box>
       </Box>
-    </>
+    </Box>
   );
 }

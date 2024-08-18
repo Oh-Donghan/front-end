@@ -29,7 +29,6 @@ export default function SelectDateSection({ endDate, setEndDate }: SelectDateSec
           placeholderText="날짜를 선택해주세요"
           customInput={<Input borderColor={'rgba(200,200,200,1)'} fontSize={'0.95rem'} readOnly />}
           popperClassName="zIndexFix"
-          required={true}
         />
         <InputRightElement pointerEvents="none">
           <IoCalendarOutline color="gray.300" />

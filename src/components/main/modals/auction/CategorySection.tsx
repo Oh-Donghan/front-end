@@ -59,7 +59,7 @@ export default function CategorySection({
           borderColor={'rgba(200,200,200,1)'}
           fontSize={'0.95rem'}
           onClick={handleCategoryChange}
-          {...register('parentCategoryId', { required: true })}
+          {...register('parentCategoryId')}
         >
           <option value="">카테고리 선택</option>
           <option value="1">남성의류</option>
@@ -92,7 +92,7 @@ export default function CategorySection({
         <Select
           borderColor={'rgba(200,200,200,1)'}
           fontSize={'0.95rem'}
-          {...register('childCategoryId', { required: true })}
+          {...register('childCategoryId')}
           onClick={handleSubCategoryChange}
           isDisabled={!selectedCategory}
         >

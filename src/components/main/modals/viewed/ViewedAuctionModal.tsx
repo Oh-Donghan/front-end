@@ -15,7 +15,7 @@ export default function ViewedAuctionModal() {
   const initialRef = useRef(null);
 
   return (
-    <Box ref={initialRef}>
+    <Box ref={initialRef} position={'relative'} zIndex={'50'}>
       <Popover placement="bottom-end" closeOnBlur={true} trigger={'hover'}>
         <PopoverTrigger>
           <span>최근 본 경매</span>

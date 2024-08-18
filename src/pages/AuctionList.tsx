@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Box, Button, Flex, Text, IconButton, useBreakpointValue } from '@chakra-ui/react';
 import { useLocation, Link } from 'react-router-dom';
 import { FaCheck, FaSearch } from 'react-icons/fa';
@@ -75,7 +75,8 @@ export default function AuctionList() {
   const searchParams = new URLSearchParams(location.search);
   const category = searchParams.get('category');
   const subCategory = searchParams.get('sub');
-  const subCategories = categories[category].sub;
+  const search = searchParams.get('word');
+  const subCategories = category ? categories[category]?.sub : [];
 
   const showSearchButton = useBreakpointValue({ base: true, lg: false });
 
@@ -95,7 +96,14 @@ export default function AuctionList() {
       {/* 카테고리와 서브카테고리 네비게이션 */}
       <Box pt="30px">
         <Flex alignItems="center" fontSize="14px" color="rgba(90,90,90,1)" pl="6px">
-          {category !== '전체' ? (
+          {search && (
+            <>
+              <Text>전체 경매</Text>
+              <GoChevronRight className="mx-1" />
+              <Text>{search}</Text>
+            </>
+          )}
+          {category !== '전체' && !search && (
             <>
               <Text>전체 경매</Text>
               <GoChevronRight className="mx-1" />
@@ -107,24 +115,27 @@ export default function AuctionList() {
                 </>
               )}
             </>
-          ) : (
+          )}
+          {category === '전체' && !search && (
             <>
               <Text>전체 경매</Text>
             </>
           )}
         </Flex>
-        <Flex alignItems={'center'} marginTop={'20px'}>
-          <img
-            src={categories[category].img}
-            alt=""
-            width={'28px'}
-            height={'28px'}
-            className="ml-1 mb-0.5"
-          />
-          <Text fontSize="26px" fontWeight="bold" pl="6px" ml="3px">
-            {category}
-          </Text>
-        </Flex>
+        {!search && (
+          <Flex alignItems={'center'} marginTop={'20px'}>
+            <img
+              src={categories[category].img}
+              alt=""
+              width={'28px'}
+              height={'28px'}
+              className="ml-1 mb-0.5"
+            />
+            <Text fontSize="26px" fontWeight="bold" pl="6px" ml="3px">
+              {search ? `'${search}'에 대한 검색 결과` : category}
+            </Text>
+          </Flex>
+        )}
 
         {/* 반응형 서브카테고리 및 기타 요소 네비게이션 */}
         <Flex
@@ -138,47 +149,54 @@ export default function AuctionList() {
               height: '6px',
             },
             '&::-webkit-scrollbar-thumb': {
-              backgroundColor: '#E2E8F0', // 스크롤바 손잡이의 색상
+              backgroundColor: '#E2E8F0',
               borderRadius: '10px',
             },
             '&::-webkit-scrollbar-track': {
-              backgroundColor: '#F7FAFC', // 스크롤바 트랙의 색상
+              backgroundColor: '#F7FAFC',
             },
           }}
         >
           <Flex alignItems="center" justifyContent={'space-between'} width={'full'}>
-            <Flex>
-              <Link to={`/auctions?category=${category}`} className="mr-2">
-                <Button
-                  size={{ base: 'xs', sm: 'sm' }}
-                  variant={!subCategory ? 'solid' : 'outline'}
-                  colorScheme={!subCategory ? 'blue' : 'gray'}
-                  leftIcon={!subCategory ? <FaCheck /> : null}
-                >
-                  전체
-                </Button>
-              </Link>
-              {subCategories?.map((sub, i) => (
-                <Link
-                  to={
-                    category !== '전체'
-                      ? `/auctions?category=${category}&sub=${sub}`
-                      : `/auctions?category=${sub}`
-                  }
-                  key={i}
-                  className="mr-2"
-                >
+            {search ? (
+              <Text fontSize="26px" fontWeight="bold" pl="6px" ml="3px">
+                {search ? `'${search}'에 대한 검색 결과` : category}
+              </Text>
+            ) : (
+              <Flex>
+                <Link to={`/auctions?category=${category}`} className="mr-2">
                   <Button
                     size={{ base: 'xs', sm: 'sm' }}
-                    variant={sub === subCategory ? 'solid' : 'outline'}
-                    colorScheme={sub === subCategory ? 'blue' : 'gray'}
-                    leftIcon={sub === subCategory ? <FaCheck /> : null}
+                    variant={!subCategory ? 'solid' : 'outline'}
+                    colorScheme={!subCategory ? 'blue' : 'gray'}
+                    leftIcon={!subCategory ? <FaCheck /> : null}
                   >
-                    {sub}
+                    전체
                   </Button>
                 </Link>
-              ))}
-            </Flex>
+                {subCategories?.map((sub, i) => (
+                  <Link
+                    to={
+                      category !== '전체'
+                        ? `/auctions?category=${category}&sub=${sub}`
+                        : `/auctions?category=${sub}`
+                    }
+                    key={i}
+                    className="mr-2"
+                  >
+                    <Button
+                      size={{ base: 'xs', sm: 'sm' }}
+                      variant={sub === subCategory ? 'solid' : 'outline'}
+                      colorScheme={sub === subCategory ? 'blue' : 'gray'}
+                      leftIcon={sub === subCategory ? <FaCheck /> : null}
+                    >
+                      {sub}
+                    </Button>
+                  </Link>
+                ))}
+              </Flex>
+            )}
+
             <Flex>
               <Box display={{ base: 'none', lg: 'block' }} ml={2}>
                 <Input />
@@ -209,25 +227,43 @@ export default function AuctionList() {
         </Box>
       )}
 
-      {/* 지금 핫한 Top5 섹션 */}
-      <Box mt={{ base: '12', sm: '60px' }}>
-        <Flex alignItems="center" mb={{ base: '4', sm: '5' }}>
-          <Text fontSize={{ base: '1.3rem', md: '1.5rem' }} fontWeight="bold">
-            {category !== '전체' ? `지금 핫한 ${category} Top5` : '지금 핫한 Top5'}
-          </Text>
-        </Flex>
-        <SwiperItemList type="hot" />
-      </Box>
+      {search ? (
+        <>
+          {/* 검색된 경매 섹션 */}
+          <Box mb={{ base: '12', sm: '20' }} mt={{ base: '12', sm: '4' }}>
+            <Flex
+              alignItems="center"
+              justifyContent="space-between"
+              mb={{ base: '4', sm: '5' }}
+            ></Flex>
+            <ItemList type="search" />
+          </Box>
+        </>
+      ) : (
+        <>
+          {/* 지금 핫한 Top5 섹션 */}
+          <Box mt={{ base: '12', sm: '60px' }}>
+            <Flex alignItems="center" mb={{ base: '4', sm: '5' }}>
+              <Text fontSize={{ base: '1.3rem', md: '1.5rem' }} fontWeight="bold">
+                {category !== '전체' ? `지금 핫한 ${category} Top5` : '지금 핫한 Top5'}
+              </Text>
+            </Flex>
+            <SwiperItemList type="hot" />
+          </Box>
 
-      {/* 전체 매물 섹션 */}
-      <Box mb={{ base: '12', sm: '20' }} mt={{ base: '12', sm: '20' }}>
-        <Flex alignItems="center" justifyContent="space-between" mb={{ base: '4', sm: '5' }}>
-          <Text fontSize={{ base: '1.3rem', md: '1.5rem' }} fontWeight="bold">
-            {category !== '전체' ? `전체 ${category} 경매` : '전체 경매'}
-          </Text>
-        </Flex>
-        <ItemList />
-      </Box>
+          {/* 전체 경매 섹션 */}
+          <Box mb={{ base: '12', sm: '20' }} mt={{ base: '12', sm: '20' }}>
+            <Flex alignItems="center" justifyContent="space-between" mb={{ base: '4', sm: '5' }}>
+              <Text fontSize={{ base: '1.3rem', md: '1.5rem' }} fontWeight="bold">
+                {category !== '전체'
+                  ? `전체 ${subCategory === null ? category : subCategory} 경매`
+                  : '전체 경매'}
+              </Text>
+            </Flex>
+            <ItemList />
+          </Box>
+        </>
+      )}
     </Box>
   );
 }

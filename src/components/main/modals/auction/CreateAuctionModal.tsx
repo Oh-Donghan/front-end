@@ -213,7 +213,7 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
                           borderColor={'rgba(200,200,200,1)'}
                           type="text"
                           fontSize={'0.95rem'}
-                          {...register('title', { required: true })}
+                          {...register('title')}
                         />
                       </Flex>
                     </InputGroup>
@@ -231,7 +231,7 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
                           borderColor={'rgba(200,200,200,1)'}
                           type="text"
                           fontSize={'0.95rem'}
-                          {...register('productName', { required: true })}
+                          {...register('productName')}
                         />
                       </Flex>
                     </InputGroup>
@@ -295,7 +295,7 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
                           borderColor={'rgba(200,200,200,1)'}
                           type="text"
                           fontSize={'0.95rem'}
-                          {...register('startPrice', { required: true })}
+                          {...register('startPrice')}
                         />
                       </Flex>
                     </InputGroup>
@@ -313,7 +313,7 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
                           borderColor={'rgba(200,200,200,1)'}
                           type="text"
                           fontSize={'0.95rem'}
-                          {...register('instantPrice', { required: true })}
+                          {...register('instantPrice')}
                         />
                       </Flex>
                     </InputGroup>
@@ -389,7 +389,6 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
                         fontSize={'0.95rem'}
                         onChange={handleTradeMethodChange}
                         value={tradeMethod}
-                        required={true}
                       >
                         <option value="">거래 방법 선택</option>
                         <option value="직접 만나서">직접 만나서</option>
@@ -410,7 +409,6 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
                         fontSize={'0.95rem'}
                         onChange={handleShippingMethodChange}
                         value={shippingMethod}
-                        required={tradeMethod === '택배' ? true : false}
                         isDisabled={tradeMethod !== '택배'}
                       >
                         <option value="">비용 지불 방법 선택</option>
