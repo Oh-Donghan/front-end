@@ -40,8 +40,6 @@ export default function SwiperItemList({ type }: ItemListProps) {
         '2xl': 'repeat(5, 1fr)',
       }}
       gap={6}
-      position={'relative'}
-      zIndex={'50'}
     >
       {items.map((item, index) => (
         <GridItem key={index}>{item}</GridItem>

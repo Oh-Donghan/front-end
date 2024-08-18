@@ -17,7 +17,7 @@ export default function AlarmModal() {
   const [isLargerThan480] = useMediaQuery('(min-width: 480px)');
 
   return (
-    <Box ref={initialRef}>
+    <Box ref={initialRef} position={'relative'} zIndex={'50'}>
       <Popover
         placement={isLargerThan480 ? 'bottom-end' : 'bottom'}
         closeOnBlur={true}
