@@ -65,7 +65,7 @@ export default function Categories() {
 
   return (
     <>
-      <div className="block sm:hidden mt-4 mx-[25px]  relative z-50">
+      <div className="flex sm:hidden mt-4  relative z-50 justify-center">
         <Menu isLazy matchWidth>
           <MenuButton
             as={Button}
@@ -73,7 +73,7 @@ export default function Categories() {
             bg={'white'}
             border={'1px'}
             borderColor="gray.400"
-            width={'full'}
+            width={'88%'}
             justifyContent="flex-start"
             textAlign="left"
           >

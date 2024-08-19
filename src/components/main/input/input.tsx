@@ -54,11 +54,7 @@ export default function Input() {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Box display="flex" justifyContent="center" className="mt-10 sm:mt-[62px]">
-        <Stack
-          spacing={4}
-          width={{ base: '87%', md: '30%' }}
-          minWidth={{ base: '20px', md: '430px' }}
-        >
+        <Stack spacing={4} width={'88%'} maxWidth={'600px'}>
           <InputGroup>
             <InputLeftAddon borderColor="gray.300">
               {' '}

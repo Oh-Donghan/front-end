@@ -65,7 +65,7 @@ export default function Nav() {
       />
 
       {/* 네비게이션 바 */}
-      <div className="flex justify-between items-center h-[90px] px-10 min-w-[375px] max-w-full">
+      <div className="flex justify-between items-center h-[84px] px-10 min-w-[375px] max-w-full">
         <Link to={'/'} className="text-3xl font-bold">
           Logo
         </Link>

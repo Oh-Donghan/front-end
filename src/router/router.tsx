@@ -55,7 +55,19 @@ export const router = createBrowserRouter([
           },
         ],
       },
-      { path: '/payment', element: <Payment /> },
+      {
+        path: '/members',
+        children: [
+          {
+            path: 'payment/approve',
+            element: <Payment />,
+          },
+          {
+            path: 'payment/cancle',
+            element: <Payment />,
+          },
+        ],
+      },
     ],
   },
 ]);

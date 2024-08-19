@@ -35,13 +35,13 @@ export default function CategorySection({
     const subCategoryOptions = categories[category] || [];
     setSubCategories(subCategoryOptions);
     setValue('parentCategoryId', category);
-    setValue('childCategoryId', ''); // 세부 카테고리 초기화
+    setValue('childCategoryId', '');
   };
 
   const handleSubCategoryChange = e => {
     const category = e.target.value;
     setSelectedSubCategory(category);
-    setValue('childCategoryId', category); // 세부 카테고리 초기화
+    setValue('childCategoryId', category);
   };
 
   return (
