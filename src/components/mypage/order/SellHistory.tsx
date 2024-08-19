@@ -13,7 +13,7 @@ export default function SellHistory() {
 
   // Tanstack Query를 사용하여 데이터를 패칭
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['salesData'],
+    queryKey: ['/api/transactions/sales'],
     queryFn: fetchSellHistoryData,
   });
 
