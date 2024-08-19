@@ -119,7 +119,7 @@ export default function AuctionList() {
               height={'28px'}
               className="ml-1 mb-0.5"
             />
-            <Text fontSize="26px" fontWeight="bold" pl="6px" ml="3px">
+            <Text fontSize={{ base: '14px', lg: '26px' }} fontWeight="bold" pl="6px" ml="3px">
               {search ? `'${search}'에 대한 검색 결과` : category}
             </Text>
           </Flex>
@@ -147,7 +147,7 @@ export default function AuctionList() {
         >
           <Flex alignItems="center" justifyContent={'space-between'} width={'full'}>
             {search ? (
-              <Text fontSize="26px" fontWeight="bold" pl="6px" ml="3px">
+              <Text fontSize={{ base: '22px', lg: '26px' }} fontWeight="bold" pl="6px" ml="3px">
                 {search ? `'${search}'에 대한 검색 결과` : category}
               </Text>
             ) : (
