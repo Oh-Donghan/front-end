@@ -120,7 +120,7 @@ export default function Categories() {
       >
         <Grid
           templateColumns={{ base: 'repeat(4, 1fr)', md: 'repeat(6, 1fr)', lg: 'repeat(8, 1fr)' }}
-          gap={{ base: '6', md: '8', lg: '12' }}
+          gap={{ base: '6', md: '8', lg: '10' }}
         >
           {data.map(item => {
             return (
