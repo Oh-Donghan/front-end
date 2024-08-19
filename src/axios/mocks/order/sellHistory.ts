@@ -1,6 +1,6 @@
-import axios from 'axios';
+import axiosInstance from '../../instances';
 
 export const fetchSellHistoryData = async () => {
-  const response = await axios.get('/api/transactions/sales');
+  const response = await axiosInstance.get('/api/transactions/sales');
   return response.data.content;
 };
