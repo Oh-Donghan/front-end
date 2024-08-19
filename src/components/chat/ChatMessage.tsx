@@ -2,7 +2,7 @@ import { Flex, Text } from '@chakra-ui/react';
 
 export default function ChatMessage({ type, text, createdAt }) {
   return (
-    <Flex alignItems={'end'} justifyContent={type === 'me' ? 'start' : 'end'} marginBottom={'20px'}>
+    <Flex alignItems={'end'} justifyContent={type === 'me' ? 'start' : 'end'}>
       {type === 'you' && (
         <Text marginRight={'10px'} marginBottom={'4px'} fontSize={13}>
           {createdAt}

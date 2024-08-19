@@ -18,9 +18,10 @@ const chats = [
   { id: 14, name: '호날두 국대 유니폼', message: '안녕하세요!', time: '18:32', unread: 2 },
 ];
 
-export default function ChatList({ selectedChatId, setSelectedChatId }) {
+export default function ChatList({ selectedChatId, setSelectedChatId, scrollBottom }) {
   const handleSelect = id => {
     setSelectedChatId(id);
+    scrollBottom();
   };
 
   return (
