@@ -57,6 +57,7 @@ export default function Chat() {
         duration: 2000,
         isClosable: true,
       });
+      return;
     }
   };
 
