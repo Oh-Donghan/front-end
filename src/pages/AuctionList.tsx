@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'react';
-import { Box, Button, Flex, Text, IconButton, useBreakpointValue } from '@chakra-ui/react';
+import { Box, Button, Flex, Text, useBreakpointValue } from '@chakra-ui/react';
 import { useLocation, Link } from 'react-router-dom';
-import { FaCheck, FaSearch } from 'react-icons/fa';
+import { FaCheck } from 'react-icons/fa';
 import { GoChevronRight } from 'react-icons/go';
 import ItemList from '../components/listpage/ItemList';
 import SwiperItemList from '../components/main/item/ItemList';
@@ -70,7 +69,6 @@ const categories = {
 };
 
 export default function AuctionList() {
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const category = searchParams.get('category');
@@ -78,17 +76,7 @@ export default function AuctionList() {
   const search = searchParams.get('word');
   const subCategories = category ? categories[category]?.sub : [];
 
-  const showSearchButton = useBreakpointValue({ base: true, lg: false });
-
-  useEffect(() => {
-    if (!showSearchButton) {
-      setIsSearchOpen(false);
-    }
-  }, [showSearchButton]);
-
-  const handleSearchIconClick = () => {
-    setIsSearchOpen(!isSearchOpen);
-  };
+  const showSearchInputBelow = useBreakpointValue({ base: true, lg: false });
 
   return (
     <Box minW="442px" px={8} overflowX="hidden">
@@ -198,19 +186,10 @@ export default function AuctionList() {
             )}
 
             <Flex>
-              <Box display={{ base: 'none', lg: 'block' }} ml={2}>
-                <Input />
-              </Box>
-              {showSearchButton && (
-                <IconButton
-                  icon={<FaSearch size={13} color="rgba(100,100,100,1)" />}
-                  border={'1px solid rgba(210,210,210,1)'}
-                  aria-label="Search"
-                  onClick={handleSearchIconClick}
-                  variant="outline"
-                  size={'sm'}
-                  ml={2}
-                />
+              {!showSearchInputBelow && (
+                <Box display={{ base: 'none', lg: 'block' }} ml={2}>
+                  <Input />
+                </Box>
               )}
               <Flex cursor="pointer" ml={2} color="gray.500">
                 <SortButton />
@@ -220,8 +199,8 @@ export default function AuctionList() {
         </Flex>
       </Box>
 
-      {/* 버튼 아래에 Input이 나타나도록 구현 */}
-      {isSearchOpen && (
+      {/* 너비가 좁아질 때 아래에 Input이 나타나도록 구현 */}
+      {showSearchInputBelow && (
         <Box mb={{ base: '4', sm: '5' }} mt={'5'}>
           <Input />
         </Box>

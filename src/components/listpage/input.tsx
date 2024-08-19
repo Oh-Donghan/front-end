@@ -11,7 +11,7 @@ import { IoSearch } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
 
 export default function Input() {
-  const { register, handleSubmit, formState } = useForm();
+  const { register, handleSubmit } = useForm();
   const navigate = useNavigate();
   const toast = useToast();
 
