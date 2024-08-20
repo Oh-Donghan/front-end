@@ -6,6 +6,8 @@ export const fetchPurchaseHistoryData = async (
   searchWord: string,
   transType: string,
   sorted: string,
+  startDate: Date | null,
+  endDate: Date | null,
 ) => {
   const response = await axiosInstance.get('/api/transactions/purchases', {
     params: {
@@ -14,6 +16,8 @@ export const fetchPurchaseHistoryData = async (
       word: searchWord || '', // 검색어
       transTypeString: transType || '', // 거래 상태
       sorted: sorted || 'recent', // 정렬 기준
+      startDate: startDate ? startDate.toISOString().slice(0, 10) : null, // 시작 날짜
+      endDate: endDate ? endDate.toISOString().slice(0, 10) : null, // 종료 날짜
     },
   });
 
