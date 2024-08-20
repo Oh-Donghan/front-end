@@ -123,8 +123,7 @@ export default function Nav() {
                       toast({
                         title: `로그인 후 사용 가능한 서비스입니다.`,
                         position: 'top',
-                        isClosable: true,
-                        duration: 2000,
+                        duration: 1300,
                       });
                     }}
                   >
@@ -139,8 +138,7 @@ export default function Nav() {
                       toast({
                         title: `로그인 후 사용 가능한 서비스입니다.`,
                         position: 'top',
-                        isClosable: true,
-                        duration: 2000,
+                        duration: 1300,
                       });
                     }}
                   >

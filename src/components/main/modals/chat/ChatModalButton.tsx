@@ -7,7 +7,7 @@ export default function ChatButton({ isPopoverOpen }) {
       <img
         src={!isPopoverOpen ? chat : close}
         alt="채팅 아이콘"
-        className="w-[56px] h-[58px]"
+        className={`${!isPopoverOpen ? 'w-[60px] h-[60px]' : 'w-[56px] h-[58px]'}`}
         draggable={false}
       />
     </div>

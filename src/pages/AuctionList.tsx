@@ -24,28 +24,13 @@ import house from '../assets/image/category/house.png';
 import plant from '../assets/image/category/plant.png';
 import ring from '../assets/image/category/ring.png';
 import more from '../assets/image/category/more.png';
+import all from '../assets/image/category/all.png';
+import CategorySortButton from '../components/listpage/CategorySortButton';
 
 const categories = {
   전체: {
-    sub: [
-      '남성의류',
-      '여성의류',
-      '키덜트',
-      '가전제품',
-      '도서제품',
-      '유아용품',
-      '굿즈',
-      '식품',
-      '뷰티',
-      '반려동물',
-      '가구',
-      '스포츠',
-      '생활용품',
-      '식물',
-      '익세사리',
-      '기타',
-    ],
-    img: man_cloth,
+    sub: [],
+    img: all,
   },
   남성의류: { sub: ['셔츠', '바지', '자켓', '코트', '액세서리'], img: man_cloth },
   여성의류: { sub: ['드레스', '블라우스', '스커트', '코트', '가방'], img: woman_cloth },
@@ -70,9 +55,11 @@ const categories = {
 
 export default function AuctionList() {
   const location = useLocation();
+
   const searchParams = new URLSearchParams(location.search);
-  const category = searchParams.get('category');
+  const category = searchParams.get('category') || '전체';
   const subCategory = searchParams.get('sub');
+  const sort = searchParams.get('sort');
   const search = searchParams.get('word');
   const subCategories = category ? categories[category]?.sub : [];
 
@@ -119,7 +106,7 @@ export default function AuctionList() {
               height={'28px'}
               className="ml-1 mb-0.5"
             />
-            <Text fontSize={{ base: '14px', lg: '26px' }} fontWeight="bold" pl="6px" ml="3px">
+            <Text fontSize="26px" fontWeight="bold" pl="6px" ml="3px">
               {search ? `'${search}'에 대한 검색 결과` : category}
             </Text>
           </Flex>
@@ -147,28 +134,22 @@ export default function AuctionList() {
         >
           <Flex alignItems="center" justifyContent={'space-between'} width={'full'}>
             {search ? (
-              <Text fontSize={{ base: '22px', lg: '26px' }} fontWeight="bold" pl="6px" ml="3px">
-                {search ? `'${search}'에 대한 검색 결과` : category}
+              <Text fontSize="26px" fontWeight="bold" pl="6px" ml="3px">
+                {search ? `'${search}'에 대한 검색 결과'` : category}
               </Text>
             ) : (
               <Flex>
-                <Link to={`/auctions?category=${category}`} className="mr-2">
-                  <Button
-                    size={{ base: 'xs', sm: 'sm' }}
-                    variant={!subCategory ? 'solid' : 'outline'}
-                    colorScheme={!subCategory ? 'blue' : 'gray'}
-                    leftIcon={!subCategory ? <FaCheck /> : null}
-                  >
-                    전체
-                  </Button>
-                </Link>
+                <CategorySortButton /> {/* 대분류 변경 핸들러 추가 */}
                 {subCategories?.map((sub, i) => (
                   <Link
-                    to={
-                      category !== '전체'
-                        ? `/auctions?category=${category}&sub=${sub}`
-                        : `/auctions?category=${sub}`
-                    }
+                    to={{
+                      pathname: '/auctions',
+                      search: new URLSearchParams({
+                        category,
+                        sub,
+                        ...(sort && { sort }), // sort가 있으면 포함
+                      }).toString(),
+                    }}
                     key={i}
                     className="mr-2"
                   >
@@ -191,6 +172,7 @@ export default function AuctionList() {
                   <Input />
                 </Box>
               )}
+
               <Flex cursor="pointer" ml={2} color="gray.500">
                 <SortButton />
               </Flex>
