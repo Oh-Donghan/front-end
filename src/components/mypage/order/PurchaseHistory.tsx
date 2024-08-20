@@ -1,14 +1,4 @@
-import {
-  Box,
-  Button,
-  Flex,
-  Input,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  Spinner,
-} from '@chakra-ui/react';
+import { Box, Button, Flex, Menu, MenuButton, MenuItem, MenuList, Spinner } from '@chakra-ui/react';
 import { IoChevronDownSharp } from 'react-icons/io5';
 import Calendar from '../calendar/Calendar';
 import OrderTable from './OrderTable';
@@ -16,28 +6,43 @@ import HistoryPagination from './HistoryPagination';
 import { useState } from 'react';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { fetchPurchaseHistoryData } from '../../../axios/mocks/order/purchaseHistory';
+import MypageInput from './MypageInput';
 
 export default function PurchaseHistory() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchWord, setSearchWord] = useState('');
   const [transType, setTransType] = useState(''); // 추가된 상태
   const [sorted, setSorted] = useState('recent'); // 정렬 기준 상태 추가
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
   const itemsPerPage = 5;
 
   // Tanstack Query를 사용하여 데이터를 패칭
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['/api/transactions/purchases', currentPage, searchWord, transType, sorted],
+    queryKey: [
+      '/api/transactions/purchases',
+      currentPage,
+      searchWord,
+      transType,
+      sorted,
+      startDate,
+      endDate,
+    ],
     queryFn: () =>
-      fetchPurchaseHistoryData(currentPage, itemsPerPage, searchWord, transType, sorted),
+      fetchPurchaseHistoryData(
+        currentPage,
+        itemsPerPage,
+        searchWord,
+        transType,
+        sorted,
+        startDate,
+        endDate,
+      ),
     placeholderData: keepPreviousData,
   });
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-  };
-
-  const handleSearch = () => {
-    setCurrentPage(1);
   };
 
   const handleTransTypeChange = (type: string) => {
@@ -48,6 +53,12 @@ export default function PurchaseHistory() {
   const handleSortChange = (sortOption: string) => {
     setSorted(sortOption);
     setCurrentPage(1); // 정렬이 변경될 때 페이지 초기화
+  };
+
+  const handleDateChange = (start: Date | null, end: Date | null) => {
+    setStartDate(start);
+    setEndDate(end);
+    setCurrentPage(1); // 날짜 변경 시 페이지 초기화
   };
 
   if (isLoading) {
@@ -107,31 +118,27 @@ export default function PurchaseHistory() {
             as={Button}
             rightIcon={<IoChevronDownSharp />}
           >
-            {transType || '전체'}
+            {transType === ''
+              ? '전체'
+              : transType === 'continue'
+                ? '진행중'
+                : transType === 'end' && '종료'}
           </MenuButton>
           <MenuList>
             <MenuItem fontSize="sm" onClick={() => handleTransTypeChange('')}>
               전체
             </MenuItem>
-            <MenuItem fontSize="sm" onClick={() => handleTransTypeChange('CONTINUE')}>
+            <MenuItem fontSize="sm" onClick={() => handleTransTypeChange('continue')}>
               진행 중
             </MenuItem>
-            <MenuItem fontSize="sm" onClick={() => handleTransTypeChange('END')}>
+            <MenuItem fontSize="sm" onClick={() => handleTransTypeChange('end')}>
               종료
             </MenuItem>
           </MenuList>
         </Menu>
 
-        <Calendar isInfo={false} />
-        <Input
-          w="200px"
-          h="34px"
-          value={searchWord}
-          onChange={e => setSearchWord(e.target.value)}
-        />
-        <Button h="34px" onClick={handleSearch}>
-          조회
-        </Button>
+        <Calendar isInfo={false} onDateChange={handleDateChange} />
+        <MypageInput setSearchWord={setSearchWord} onSearch={handlePageChange} />
       </Flex>
       <OrderTable posts={data?.content || []} />
       <HistoryPagination
