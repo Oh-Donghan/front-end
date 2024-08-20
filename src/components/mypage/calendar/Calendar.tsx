@@ -5,16 +5,28 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { FaCalendarAlt } from 'react-icons/fa';
 import { FaMinus } from 'react-icons/fa6';
 
-export default function Calendar({ isInfo }) {
+interface CalendarProps {
+  isInfo: boolean;
+  onDateChange: (startDate: Date | null, endDate: Date | null) => void;
+}
+
+export default function Calendar({ isInfo, onDateChange }: CalendarProps) {
   const [startDate, setStartDate] = useState<Date | null>(new Date());
   const [endDate, setEndDate] = useState<Date | null>(new Date());
 
-  const handleSearch = () => {
-    if (startDate && endDate) {
-      console.log(`기간: ${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`);
-    } else {
-      console.log('시작 날짜와 끝나는 날짜를 모두 선택해주세요.');
-    }
+  // const handleSearch = () => {
+  //   if (startDate && endDate) {
+  //     console.log(`기간: ${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`);
+  //     onDateChange(startDate, endDate);
+  //   } else {
+  //     console.log('시작 날짜와 끝나는 날짜를 모두 선택해주세요.');
+  //   }
+  // };
+
+  const handleDateChange = (start: Date | null, end: Date | null) => {
+    setStartDate(start);
+    setEndDate(end);
+    onDateChange(start, end); // 부모 컴포넌트로 날짜 전달
   };
 
   return (
@@ -23,7 +35,8 @@ export default function Calendar({ isInfo }) {
         <Flex>
           <div>포인트 사용 내역</div>
           <Spacer />
-          <div onClick={handleSearch}>조회</div>
+          {/* <div onClick={handleSearch}>조회</div> */}
+          <div>조회</div>
         </Flex>
       )}
       <Flex alignItems={'center'}>
@@ -33,7 +46,7 @@ export default function Calendar({ isInfo }) {
             dateFormat="yyyy.MM.dd"
             shouldCloseOnSelect
             selected={startDate}
-            onChange={(date: Date | null) => setStartDate(date)}
+            onChange={(date: Date | null) => handleDateChange(date, endDate)}
           />
           <span className="absolute left-2">
             <FaCalendarAlt />
@@ -48,7 +61,7 @@ export default function Calendar({ isInfo }) {
             dateFormat="yyyy.MM.dd"
             shouldCloseOnSelect
             selected={endDate}
-            onChange={(date: Date | null) => setEndDate(date)}
+            onChange={(date: Date | null) => handleDateChange(startDate, date)}
           />
           <span className="absolute left-2">
             <FaCalendarAlt />
