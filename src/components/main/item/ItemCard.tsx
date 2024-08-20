@@ -52,7 +52,7 @@ export default function ItemCard({ rank }: ItemCardProps) {
             rank <= 5 && ( // 랭킹이 1~5일 때만 표시
               <Box position="absolute" top={1.5} left={4} zIndex={50}>
                 <Text
-                  fontSize="1.5rem"
+                  fontSize="1.8rem"
                   fontWeight="bold"
                   color="rgba(255, 255, 255, 0.9)"
                   textShadow="1px 1px 2px rgba(0, 0, 0, 0.8)"
