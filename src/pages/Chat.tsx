@@ -5,7 +5,6 @@ import {
   Input,
   InputGroup,
   InputRightElement,
-  Box,
   useDisclosure,
   useToast,
 } from '@chakra-ui/react';
@@ -54,8 +53,7 @@ export default function Chat() {
       toast({
         title: '메세지를 채워주세요',
         status: 'error',
-        duration: 2000,
-        isClosable: true,
+        duration: 1300,
       });
       return;
     }
@@ -71,7 +69,7 @@ export default function Chat() {
         isOpen={ConfirmPurchaseDisclosure.isOpen}
         onClose={ConfirmPurchaseDisclosure.onClose}
       />
-      <Flex align={'center'} justify={'center'} className="w-full h-[100vh] bg-gray-300">
+      <Flex align={'center'} justify={'center'} className="w-full h-[100vh] bg-slate-200">
         <Flex
           width={'1200px'}
           height={'672px'}
@@ -229,13 +227,16 @@ export default function Chat() {
                       {...register('message')}
                     />
                     <InputRightElement>
-                      <Box
+                      <Button
+                        bgColor={'rgba(0,0,0,0)'}
+                        padding={0}
+                        type="submit"
                         cursor="pointer"
                         color="rgba(150,150,150,1)"
                         _hover={{ color: 'blue.500' }}
                       >
                         <IoMdSend />
-                      </Box>
+                      </Button>
                     </InputRightElement>
                   </InputGroup>
                 </form>
