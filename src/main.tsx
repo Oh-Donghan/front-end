@@ -5,7 +5,7 @@ import { ChakraProvider, customTheme } from './config/ChakraProvider';
 import './index.css';
 import { worker } from './mocks/browser';
 
-if (process.env.NODE_ENV === 'development') {
+if (import.meta.env.MODE === 'development') {
   worker.start();
 }
 
