@@ -32,7 +32,7 @@ export default function ItemList({ type }: ItemListProps) {
       ) : (
         <Flex w={'full'} h="400px" align={'center'} justify={'center'}>
           <Flex direction={'column'} align={'center'} gap={2}>
-            <Text fontWeight={'bold'} fontSize={'1.4rem'}>
+            <Text fontWeight={'bold'} fontSize={{ base: '1.1rem', md: '1.4rem' }}>
               {type === 'search'
                 ? '키워드가 포함된 경매을 찾을 수 없습니다.'
                 : '현재 진행중인 경매가 없습니다.'}

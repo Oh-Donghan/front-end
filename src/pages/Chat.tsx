@@ -7,15 +7,17 @@ import {
   InputRightElement,
   Box,
   useDisclosure,
+  useToast,
 } from '@chakra-ui/react';
 import ChatList from '../components/chat/ChatList';
 import { MdLogout } from 'react-icons/md';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import default_profile from '../assets/image/chat/profile.png';
 import { IoMdSend } from 'react-icons/io';
 import ChatMessage from '../components/chat/ChatMessage';
 import { Link } from 'react-router-dom';
 import ConfirmPurchaseModal from '../components/chat/modals/ConfirmPurchaseModal';
+import { useForm } from 'react-hook-form';
 
 const chats = [
   { id: 1, name: '메시 국대 유니폼', message: '안녕하세요!', time: '19:49', unread: 1 },
@@ -37,6 +39,31 @@ const chats = [
 export default function Chat() {
   const [selectedChatId, setSelectedChatId] = useState(1);
   const ConfirmPurchaseDisclosure = useDisclosure();
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  const { register, handleSubmit } = useForm();
+  const toast = useToast();
+
+  const scrollBottom = () => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'instant' });
+    }
+  };
+
+  const onSubmit = data => {
+    if (!data.message.trim()) {
+      toast({
+        title: '메세지를 채워주세요',
+        status: 'error',
+        duration: 2000,
+        isClosable: true,
+      });
+      return;
+    }
+  };
+
+  useEffect(() => {
+    scrollBottom();
+  }, []);
 
   return (
     <>
@@ -53,8 +80,13 @@ export default function Chat() {
           overflow={'hidden'}
           boxShadow={'1px 1px 10px rgba(0,0,0,0.1)'}
         >
+          {/* 왼쪽 채팅 리스트 부분 */}
           <Flex flexDirection={'column'} flex={1.4}>
-            <ChatList selectedChatId={selectedChatId} setSelectedChatId={setSelectedChatId} />
+            <ChatList
+              selectedChatId={selectedChatId}
+              setSelectedChatId={setSelectedChatId}
+              scrollBottom={scrollBottom}
+            />
             <Flex
               alignItems={'center'}
               height={'70px'}
@@ -75,6 +107,7 @@ export default function Chat() {
               </Link>
             </Flex>
           </Flex>
+          {/* 오른쪽 채팅 메시지 부분 */}
           <Flex flex={3} direction={'column'} minWidth={'800px'}>
             <Flex
               justifyContent={'space-between'}
@@ -127,6 +160,7 @@ export default function Chat() {
                 height={'508px'}
                 width={'full'}
                 padding={'30px'}
+                paddingBottom={0}
                 overflowY="scroll"
                 sx={{
                   '&::-webkit-scrollbar': {
@@ -135,6 +169,7 @@ export default function Chat() {
                   '-ms-overflow-style': 'none' /* Internet Explorer 10+ */,
                   'scrollbar-width': 'none' /* Firefox */,
                 }}
+                gap={7}
               >
                 <ChatMessage
                   type={'me'}
@@ -175,6 +210,7 @@ export default function Chat() {
                   }
                   createdAt={'오후 18:18'}
                 />
+                <div ref={messagesEndRef} />
               </Flex>
               <Flex
                 background={'rgba(180,180,180,0.1)'}
@@ -183,23 +219,26 @@ export default function Chat() {
                 paddingBottom={'16px'}
                 paddingX={8}
               >
-                <InputGroup>
-                  <Input
-                    placeholder="메세지 입력"
-                    bgColor={'white'}
-                    border={'none'}
-                    boxShadow={'1px 1px 8px rgba(150,150,150,0.1)'}
-                  />
-                  <InputRightElement>
-                    <Box
-                      cursor="pointer"
-                      color="rgba(150,150,150,1)"
-                      _hover={{ color: 'blue.500' }}
-                    >
-                      <IoMdSend />
-                    </Box>
-                  </InputRightElement>
-                </InputGroup>
+                <form onSubmit={handleSubmit(onSubmit)} className="w-full">
+                  <InputGroup>
+                    <Input
+                      placeholder="메세지 입력"
+                      bgColor={'white'}
+                      border={'none'}
+                      boxShadow={'1px 1px 8px rgba(150,150,150,0.1)'}
+                      {...register('message')}
+                    />
+                    <InputRightElement>
+                      <Box
+                        cursor="pointer"
+                        color="rgba(150,150,150,1)"
+                        _hover={{ color: 'blue.500' }}
+                      >
+                        <IoMdSend />
+                      </Box>
+                    </InputRightElement>
+                  </InputGroup>
+                </form>
               </Flex>
             </Flex>
           </Flex>
