@@ -31,6 +31,7 @@ export default function PointChargeModal({ isOpen, onClose }) {
   const [chargePoint, setChargePoint] = useState(5000);
   const [inputValue, setInputValue] = useState('');
   const [directInputMode, setDirectInputMode] = useState(false);
+
   const [step, setStep] = useState(1);
   const [inputError, setInputError] = useState(false);
   const toast = useToast();
@@ -145,7 +146,7 @@ export default function PointChargeModal({ isOpen, onClose }) {
                     if (chargePoint && !inputError) {
                       setStep(2);
                     }
-                    if (!inputValue.trim()) {
+                    if (directInputMode && !inputValue.trim()) {
                       toast({
                         title: '입력란을 채워주세요.',
                         status: 'error',
