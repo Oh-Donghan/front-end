@@ -24,6 +24,7 @@ export default function PointOptionList({ setChargePoint, inputError, setDirectI
               if (value === '직접입력') {
                 setDirectInputMode(true);
                 setChargePoint(0);
+
                 return;
               } else {
                 setDirectInputMode(false);

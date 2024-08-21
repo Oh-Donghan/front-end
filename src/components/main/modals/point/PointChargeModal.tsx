@@ -5,7 +5,6 @@ import {
   Modal,
   ModalBody,
   ModalContent,
-  ModalFooter,
   ModalHeader,
   ModalOverlay,
   Input,
@@ -19,18 +18,45 @@ import {
   PopoverHeader,
   PopoverArrow,
   PopoverBody,
+  useToast,
 } from '@chakra-ui/react';
 import PointChargeModalStep from './PointChargeModalStep';
 import PointOptions from './PointOptionList';
 import PayOptionList from './PayOptionList';
 import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 
 export default function PointChargeModal({ isOpen, onClose }) {
+  const { register, handleSubmit, reset } = useForm();
   const [chargePoint, setChargePoint] = useState(5000);
+  const [inputValue, setInputValue] = useState('');
   const [directInputMode, setDirectInputMode] = useState(false);
+
   const [step, setStep] = useState(1);
   const [inputError, setInputError] = useState(false);
+  const toast = useToast();
+
   const currentPoint = '100,000P';
+
+  const onSubmit = data => {
+    if (!data.agree) {
+      toast({
+        title: '필수 약관에 동의해주세요.',
+        status: 'error',
+        duration: 1300,
+      });
+      return;
+    }
+
+    toast({
+      title: '결제가 완료되었습니다.',
+      status: 'info',
+      duration: 1300,
+    });
+
+    reset();
+    handleClose();
+  };
 
   const handleClose = () => {
     setChargePoint(5000);
@@ -89,7 +115,10 @@ export default function PointChargeModal({ isOpen, onClose }) {
                     border="1px solid rgba(210,210,210,1)"
                     focusBorderColor={inputError ? 'rgba(236, 38, 4,1)' : 'rgb(49, 130, 206)'}
                     marginBottom={'10px'}
-                    onChange={handleInputChange}
+                    onChange={e => {
+                      setInputValue(e.target.value);
+                      handleInputChange(e);
+                    }}
                   />
                 )}
 
@@ -101,9 +130,39 @@ export default function PointChargeModal({ isOpen, onClose }) {
                   {inputError ? '숫자만 입력 가능합니다.' : '*현금 1원은 1P입니다.'}
                 </Text>
               </Box>
+              <Flex justify={'center'} mt={4}>
+                <Button
+                  variant="ghost"
+                  border={'1px solid rgba(210,210,210,1)'}
+                  color={'rgba(120,120,120,1)'}
+                  onClick={handleClose}
+                >
+                  취소
+                </Button>
+                <Button
+                  colorScheme="blue"
+                  mr={3}
+                  onClick={() => {
+                    if (chargePoint && !inputError) {
+                      setStep(2);
+                    }
+                    if (directInputMode && !inputValue.trim()) {
+                      toast({
+                        title: '입력란을 채워주세요.',
+                        status: 'error',
+                        duration: 1300,
+                      });
+                    }
+                    return;
+                  }}
+                  marginLeft={'12px'}
+                >
+                  다음
+                </Button>
+              </Flex>
             </>
           ) : (
-            <>
+            <form onSubmit={handleSubmit(onSubmit)}>
               <InputGroup>
                 <InputLeftAddon fontSize={16} borderBottomRadius={'none'} width={'152px'}>
                   충전 예정 포인트
@@ -118,6 +177,7 @@ export default function PointChargeModal({ isOpen, onClose }) {
                   readOnly={true}
                   _focus={{ border: '1px solid rgba(220,220,220,1)' }}
                   borderBottomRadius={'none'}
+                  {...register('point')}
                 />
               </InputGroup>
               <InputGroup marginBottom={'30px'}>
@@ -137,7 +197,7 @@ export default function PointChargeModal({ isOpen, onClose }) {
               </InputGroup>
               <PayOptionList />
               <Flex alignItems={'center'} justifyContent={'space-between'}>
-                <Checkbox fontSize="18px" marginTop={'14px'}>
+                <Checkbox fontSize="18px" marginTop={'14px'} {...register('agree')}>
                   <Flex alignItems={'center'}>
                     <Text fontSize="sm" color={'rgba(100,100,100,1)'}>
                       구매조건을 확인했으며 동의합니다.
@@ -180,55 +240,33 @@ export default function PointChargeModal({ isOpen, onClose }) {
                   </PopoverContent>
                 </Popover>
               </Flex>
-            </>
+              <Flex justify={'center'} mt={4}>
+                {' '}
+                <Button
+                  variant="ghost"
+                  border={'1px solid rgba(210,210,210,1)'}
+                  color={'rgba(120,120,120,1)'}
+                  onClick={() => {
+                    setChargePoint(5000);
+                    setDirectInputMode(false);
+                    setStep(1);
+                  }}
+                >
+                  이전
+                </Button>
+                <Button
+                  colorScheme="blue"
+                  mr={3}
+                  onClick={() => {}}
+                  marginLeft={'12px'}
+                  type="submit"
+                >
+                  결제
+                </Button>
+              </Flex>
+            </form>
           )}
         </ModalBody>
-        <ModalFooter justifyContent={'center'}>
-          {step === 1 ? (
-            <>
-              {' '}
-              <Button
-                variant="ghost"
-                border={'1px solid rgba(210,210,210,1)'}
-                color={'rgba(120,120,120,1)'}
-                onClick={handleClose}
-              >
-                취소
-              </Button>
-              <Button
-                colorScheme="blue"
-                mr={3}
-                onClick={() => {
-                  if (chargePoint && !inputError) {
-                    setStep(2);
-                  }
-                }}
-                marginLeft={'12px'}
-              >
-                다음
-              </Button>
-            </>
-          ) : (
-            <>
-              {' '}
-              <Button
-                variant="ghost"
-                border={'1px solid rgba(210,210,210,1)'}
-                color={'rgba(120,120,120,1)'}
-                onClick={() => {
-                  setChargePoint(5000);
-                  setDirectInputMode(false);
-                  setStep(1);
-                }}
-              >
-                이전
-              </Button>
-              <Button colorScheme="blue" mr={3} onClick={() => {}} marginLeft={'12px'}>
-                결제
-              </Button>
-            </>
-          )}
-        </ModalFooter>
       </ModalContent>
     </Modal>
   );

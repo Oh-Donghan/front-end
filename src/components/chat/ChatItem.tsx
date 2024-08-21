@@ -7,7 +7,7 @@ export default function ChatItem({ chat, isSelected, onSelect }) {
       _hover={{ bgColor: 'rgba(245,245,245,1)' }}
       align="center"
       justify="space-between"
-      minWidth={'350px'}
+      minWidth={'390px'}
       cursor={'pointer'}
       paddingLeft={'16px'}
       paddingRight={'20px'}

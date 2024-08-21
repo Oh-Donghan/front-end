@@ -106,8 +106,7 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
       toast({
         title: '모든 필수 입력란을 채워주세요',
         status: 'error',
-        duration: 2000,
-        isClosable: true,
+        duration: 1300,
       });
       return;
     }
@@ -148,8 +147,7 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
       toast({
         title: '경매 만들기 성공',
         status: 'success',
-        duration: 2000,
-        isClosable: true,
+        duration: 1300,
       });
 
       // Reset form and state
@@ -180,8 +178,7 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
       toast({
         title: '경매 만들기 실패 (api 아직 없음)',
         status: 'error',
-        duration: 2000,
-        isClosable: true,
+        duration: 1300,
       });
     }
   };
