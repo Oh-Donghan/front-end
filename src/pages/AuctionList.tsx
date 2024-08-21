@@ -25,6 +25,7 @@ import plant from '../assets/image/category/plant.png';
 import ring from '../assets/image/category/ring.png';
 import more from '../assets/image/category/more.png';
 import all from '../assets/image/category/all.png';
+
 import CategorySortButton from '../components/listpage/sort/CategorySortButton';
 import TopButton from '../components/common/button/TopButton';
 
@@ -57,14 +58,14 @@ const categories = {
 export default function AuctionList() {
   const location = useLocation();
 
+  const showSearchInputBelow = useBreakpointValue({ base: true, lg: false });
+
   const searchParams = new URLSearchParams(location.search);
   const category = searchParams.get('category') || '전체';
   const subCategory = searchParams.get('sub');
   const sort = searchParams.get('sort');
   const search = searchParams.get('word');
   const subCategories = category ? categories[category]?.sub : [];
-
-  const showSearchInputBelow = useBreakpointValue({ base: true, lg: false });
 
   return (
     <Box minW="442px" px={8} overflowX="hidden">
@@ -160,6 +161,7 @@ export default function AuctionList() {
                       variant={sub === subCategory ? 'solid' : 'outline'}
                       colorScheme={sub === subCategory ? 'blue' : 'gray'}
                       leftIcon={sub === subCategory ? <FaCheck /> : null}
+                      borderColor={'rgba(210,210,210,1)'}
                     >
                       {sub}
                     </Button>

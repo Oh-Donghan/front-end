@@ -52,7 +52,7 @@ export default function Input() {
               type="search"
               placeholder="상품명으로 검색해주세요."
               fontSize={'0.95rem'}
-              borderColor="gray.300"
+              borderColor="rgba(210,210,210,1)"
               {...register('search')}
             />
           </InputGroup>

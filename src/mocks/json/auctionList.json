@@ -1,0 +1,1049 @@
+{
+  "totalElements": 20,
+  "totalPages": 2,
+  "size": 10,
+  "content": [
+    {
+      "id": 1,
+      "title": "Antique Vase Auction",
+      "auctionState": "OPEN",
+      "productName": "Antique Vase",
+      "productColor": "Blue",
+      "productStatus": 4.5,
+      "productDescription": "A beautiful blue antique vase from the 19th century.",
+      "receiveType": "ALL",
+      "contactPlace": "Seoul",
+      "deliveryType": "PREPAY",
+      "deliveryPrice": 5000,
+      "currentPrice": 10000,
+      "startPrice": 5000,
+      "instantPrice": 20000,
+      "memberCount": 10,
+      "endedAt": "2024-08-25 18:00",
+      "seller": {
+        "id": 1,
+        "memberId": "seller123",
+        "email": "seller123@example.com",
+        "siteAlarm": true,
+        "point": 50,
+        "createdAt": "2024-01-01T09:00:00"
+      },
+      "parentCategory": {
+        "id": 1,
+        "categoryName": "Antiques",
+        "parentId": null,
+        "createdAt": "2024-01-01T10:00:00"
+      },
+      "childCategory": {
+        "id": 2,
+        "categoryName": "Vases",
+        "parentId": 1,
+        "createdAt": "2024-01-01T10:30:00"
+      },
+      "bidList": [],
+      "askList": [],
+      "imageList": [
+        {
+          "id": 1,
+          "imageUrl": "https://example.com/images/antique_vase.jpg",
+          "imageName": "antique_vase.jpg",
+          "imageType": "THUMBNAIL",
+          "auctionId": 1,
+          "createdAt": "2024-08-10T12:00:00"
+        }
+      ],
+      "createdAt": "2024-08-01 10:00"
+    },
+    {
+      "id": 2,
+      "title": "Vintage Watch Auction",
+      "auctionState": "CLOSED",
+      "productName": "Vintage Rolex Watch",
+      "productColor": "Gold",
+      "productStatus": 4.0,
+      "productDescription": "A luxurious vintage Rolex watch in excellent condition.",
+      "receiveType": "DELIVERY",
+      "contactPlace": null,
+      "deliveryType": "NO_PREPAY",
+      "deliveryPrice": 0,
+      "currentPrice": 500000,
+      "startPrice": 300000,
+      "instantPrice": 800000,
+      "memberCount": 25,
+      "endedAt": "2024-08-15 20:00",
+      "seller": {
+        "id": 2,
+        "memberId": "luxuryseller",
+        "email": "luxury@example.com",
+        "siteAlarm": true,
+        "point": 150,
+        "createdAt": "2024-02-10T11:00:00"
+      },
+      "parentCategory": {
+        "id": 3,
+        "categoryName": "Watches",
+        "parentId": null,
+        "createdAt": "2024-02-11T12:00:00"
+      },
+      "childCategory": {
+        "id": 4,
+        "categoryName": "Luxury Watches",
+        "parentId": 3,
+        "createdAt": "2024-02-11T12:30:00"
+      },
+      "bidList": [],
+      "askList": [],
+      "imageList": [
+        {
+          "id": 2,
+          "imageUrl": "https://example.com/images/vintage_rolex_watch.jpg",
+          "imageName": "vintage_rolex_watch.jpg",
+          "imageType": "THUMBNAIL",
+          "auctionId": 2,
+          "createdAt": "2024-08-05T15:00:00"
+        }
+      ],
+      "createdAt": "2024-08-01 12:00"
+    },
+    {
+      "id": 3,
+      "title": "Gaming Laptop Auction",
+      "auctionState": "OPEN",
+      "productName": "Alienware Gaming Laptop",
+      "productColor": "Black",
+      "productStatus": 4.8,
+      "productDescription": "A high-performance gaming laptop with top specs.",
+      "receiveType": "CONTACT",
+      "contactPlace": "Busan",
+      "deliveryType": "NO_DELIVERY",
+      "deliveryPrice": null,
+      "currentPrice": 1200000,
+      "startPrice": 1000000,
+      "instantPrice": 1500000,
+      "memberCount": 5,
+      "endedAt": "2024-08-30 22:00",
+      "seller": {
+        "id": 3,
+        "memberId": "techguru",
+        "email": "techguru@example.com",
+        "siteAlarm": true,
+        "point": 80,
+        "createdAt": "2024-03-15T14:00:00"
+      },
+      "parentCategory": {
+        "id": 5,
+        "categoryName": "Electronics",
+        "parentId": null,
+        "createdAt": "2024-03-16T13:00:00"
+      },
+      "childCategory": {
+        "id": 6,
+        "categoryName": "Laptops",
+        "parentId": 5,
+        "createdAt": "2024-03-16T13:30:00"
+      },
+      "bidList": [],
+      "askList": [],
+      "imageList": [
+        {
+          "id": 3,
+          "imageUrl": "https://example.com/images/alienware_laptop.jpg",
+          "imageName": "alienware_laptop.jpg",
+          "imageType": "THUMBNAIL",
+          "auctionId": 3,
+          "createdAt": "2024-08-01T16:00:00"
+        }
+      ],
+      "createdAt": "2024-08-01 15:00"
+    },
+    {
+      "id": 4,
+      "title": "Diamond Necklace Auction",
+      "auctionState": "OPEN",
+      "productName": "Diamond Necklace",
+      "productColor": "Silver",
+      "productStatus": 5.0,
+      "productDescription": "A stunning diamond necklace with a silver chain.",
+      "receiveType": "ALL",
+      "contactPlace": "Seoul",
+      "deliveryType": "PREPAY",
+      "deliveryPrice": 7000,
+      "currentPrice": 200000,
+      "startPrice": 150000,
+      "instantPrice": 300000,
+      "memberCount": 15,
+      "endedAt": "2024-09-01 18:00",
+      "seller": {
+        "id": 4,
+        "memberId": "jewelqueen",
+        "email": "jewelqueen@example.com",
+        "siteAlarm": true,
+        "point": 200,
+        "createdAt": "2024-04-01T09:00:00"
+      },
+      "parentCategory": {
+        "id": 7,
+        "categoryName": "Jewelry",
+        "parentId": null,
+        "createdAt": "2024-04-01T10:00:00"
+      },
+      "childCategory": {
+        "id": 8,
+        "categoryName": "Necklaces",
+        "parentId": 7,
+        "createdAt": "2024-04-01T10:30:00"
+      },
+      "bidList": [],
+      "askList": [],
+      "imageList": [
+        {
+          "id": 4,
+          "imageUrl": "https://example.com/images/diamond_necklace.jpg",
+          "imageName": "diamond_necklace.jpg",
+          "imageType": "THUMBNAIL",
+          "auctionId": 4,
+          "createdAt": "2024-08-10T12:00:00"
+        }
+      ],
+      "createdAt": "2024-08-01 10:00"
+    },
+    {
+      "id": 5,
+      "title": "Vintage Car Auction",
+      "auctionState": "CLOSED",
+      "productName": "1967 Ford Mustang",
+      "productColor": "Red",
+      "productStatus": 4.7,
+      "productDescription": "A classic 1967 Ford Mustang in pristine condition.",
+      "receiveType": "CONTACT",
+      "contactPlace": "Busan",
+      "deliveryType": "NO_DELIVERY",
+      "deliveryPrice": null,
+      "currentPrice": 45000000,
+      "startPrice": 40000000,
+      "instantPrice": 55000000,
+      "memberCount": 8,
+      "endedAt": "2024-08-20 20:00",
+      "seller": {
+        "id": 5,
+        "memberId": "carenthusiast",
+        "email": "carenthusiast@example.com",
+        "siteAlarm": true,
+        "point": 500,
+        "createdAt": "2024-05-15T12:00:00"
+      },
+      "parentCategory": {
+        "id": 9,
+        "categoryName": "Vehicles",
+        "parentId": null,
+        "createdAt": "2024-05-15T13:00:00"
+      },
+      "childCategory": {
+        "id": 10,
+        "categoryName": "Cars",
+        "parentId": 9,
+        "createdAt": "2024-05-15T13:30:00"
+      },
+      "bidList": [],
+      "askList": [],
+      "imageList": [
+        {
+          "id": 5,
+          "imageUrl": "https://example.com/images/1967_ford_mustang.jpg",
+          "imageName": "1967_ford_mustang.jpg",
+          "imageType": "THUMBNAIL",
+          "auctionId": 5,
+          "createdAt": "2024-08-05T14:00:00"
+        }
+      ],
+      "createdAt": "2024-08-01 12:00"
+    },
+    {
+      "id": 6,
+      "title": "Antique Desk Auction",
+      "auctionState": "OPEN",
+      "productName": "Victorian Mahogany Desk",
+      "productColor": "Brown",
+      "productStatus": 4.3,
+      "productDescription": "An exquisite Victorian mahogany desk in excellent condition.",
+      "receiveType": "ALL",
+      "contactPlace": "Seoul",
+      "deliveryType": "PREPAY",
+      "deliveryPrice": 10000,
+      "currentPrice": 700000,
+      "startPrice": 600000,
+      "instantPrice": 900000,
+      "memberCount": 12,
+      "endedAt": "2024-09-05 18:00",
+      "seller": {
+        "id": 6,
+        "memberId": "antiquelover",
+        "email": "antiquelover@example.com",
+        "siteAlarm": true,
+        "point": 300,
+        "createdAt": "2024-06-01T11:00:00"
+      },
+      "parentCategory": {
+        "id": 1,
+        "categoryName": "Antiques",
+        "parentId": null,
+        "createdAt": "2024-01-01T10:00:00"
+      },
+      "childCategory": {
+        "id": 11,
+        "categoryName": "Furniture",
+        "parentId": 1,
+        "createdAt": "2024-01-01T10:30:00"
+      },
+      "bidList": [],
+      "askList": [],
+      "imageList": [
+        {
+          "id": 6,
+          "imageUrl": "https://example.com/images/victorian_desk.jpg",
+          "imageName": "victorian_desk.jpg",
+          "imageType": "THUMBNAIL",
+          "auctionId": 6,
+          "createdAt": "2024-08-10T12:00:00"
+        }
+      ],
+      "createdAt": "2024-08-01 10:00"
+    },
+    {
+      "id": 7,
+      "title": "Luxury Handbag Auction",
+      "auctionState": "OPEN",
+      "productName": "Louis Vuitton Handbag",
+      "productColor": "Brown",
+      "productStatus": 4.9,
+      "productDescription": "A luxury Louis Vuitton handbag in perfect condition.",
+      "receiveType": "DELIVERY",
+      "contactPlace": null,
+      "deliveryType": "NO_PREPAY",
+      "deliveryPrice": 0,
+      "currentPrice": 2500000,
+      "startPrice": 2000000,
+      "instantPrice": 3000000,
+      "memberCount": 20,
+      "endedAt": "2024-09-10 22:00",
+      "seller": {
+        "id": 7,
+        "memberId": "luxurylady",
+        "email": "luxurylady@example.com",
+        "siteAlarm": true,
+        "point": 400,
+        "createdAt": "2024-07-01T12:00:00"
+      },
+      "parentCategory": {
+        "id": 12,
+        "categoryName": "Fashion",
+        "parentId": null,
+        "createdAt": "2024-07-01T13:00:00"
+      },
+      "childCategory": {
+        "id": 13,
+        "categoryName": "Bags",
+        "parentId": 12,
+        "createdAt": "2024-07-01T13:30:00"
+      },
+      "bidList": [],
+      "askList": [],
+      "imageList": [
+        {
+          "id": 7,
+          "imageUrl": "https://example.com/images/lv_handbag.jpg",
+          "imageName": "lv_handbag.jpg",
+          "imageType": "THUMBNAIL",
+          "auctionId": 7,
+          "createdAt": "2024-08-01T16:00:00"
+        }
+      ],
+      "createdAt": "2024-08-01 15:00"
+    },
+    {
+      "id": 8,
+      "title": "Rare Book Auction",
+      "auctionState": "OPEN",
+      "productName": "First Edition 'Pride and Prejudice'",
+      "productColor": "Brown",
+      "productStatus": 4.5,
+      "productDescription": "A rare first edition of 'Pride and Prejudice' by Jane Austen.",
+      "receiveType": "ALL",
+      "contactPlace": "Seoul",
+      "deliveryType": "PREPAY",
+      "deliveryPrice": 3000,
+      "currentPrice": 1500000,
+      "startPrice": 1200000,
+      "instantPrice": 2000000,
+      "memberCount": 18,
+      "endedAt": "2024-09-15 20:00",
+      "seller": {
+        "id": 8,
+        "memberId": "bookworm",
+        "email": "bookworm@example.com",
+        "siteAlarm": true,
+        "point": 250,
+        "createdAt": "2024-06-15T14:00:00"
+      },
+      "parentCategory": {
+        "id": 14,
+        "categoryName": "Books",
+        "parentId": null,
+        "createdAt": "2024-06-15T15:00:00"
+      },
+      "childCategory": {
+        "id": 15,
+        "categoryName": "Rare Books",
+        "parentId": 14,
+        "createdAt": "2024-06-15T15:30:00"
+      },
+      "bidList": [],
+      "askList": [],
+      "imageList": [
+        {
+          "id": 8,
+          "imageUrl": "https://example.com/images/first_edition_pride_prejudice.jpg",
+          "imageName": "first_edition_pride_prejudice.jpg",
+          "imageType": "THUMBNAIL",
+          "auctionId": 8,
+          "createdAt": "2024-08-10T12:00:00"
+        }
+      ],
+      "createdAt": "2024-08-01 10:00"
+    },
+    {
+      "id": 9,
+      "title": "Modern Art Auction",
+      "auctionState": "OPEN",
+      "productName": "Abstract Painting by Famous Artist",
+      "productColor": "Multicolor",
+      "productStatus": 4.9,
+      "productDescription": "A stunning abstract painting by a well-known modern artist.",
+      "receiveType": "DELIVERY",
+      "contactPlace": null,
+      "deliveryType": "PREPAY",
+      "deliveryPrice": 8000,
+      "currentPrice": 5000000,
+      "startPrice": 4500000,
+      "instantPrice": 7000000,
+      "memberCount": 22,
+      "endedAt": "2024-09-20 18:00",
+      "seller": {
+        "id": 9,
+        "memberId": "artlover",
+        "email": "artlover@example.com",
+        "siteAlarm": true,
+        "point": 500,
+        "createdAt": "2024-05-01T12:00:00"
+      },
+      "parentCategory": {
+        "id": 16,
+        "categoryName": "Art",
+        "parentId": null,
+        "createdAt": "2024-05-01T13:00:00"
+      },
+      "childCategory": {
+        "id": 17,
+        "categoryName": "Paintings",
+        "parentId": 16,
+        "createdAt": "2024-05-01T13:30:00"
+      },
+      "bidList": [],
+      "askList": [],
+      "imageList": [
+        {
+          "id": 9,
+          "imageUrl": "https://example.com/images/abstract_painting.jpg",
+          "imageName": "abstract_painting.jpg",
+          "imageType": "THUMBNAIL",
+          "auctionId": 9,
+          "createdAt": "2024-08-01T16:00:00"
+        }
+      ],
+      "createdAt": "2024-08-01 15:00"
+    },
+    {
+      "id": 10,
+      "title": "Vintage Guitar Auction",
+      "auctionState": "CLOSED",
+      "productName": "Fender Stratocaster 1965",
+      "productColor": "Sunburst",
+      "productStatus": 4.8,
+      "productDescription": "A vintage 1965 Fender Stratocaster in excellent condition.",
+      "receiveType": "CONTACT",
+      "contactPlace": "Seoul",
+      "deliveryType": "NO_DELIVERY",
+      "deliveryPrice": null,
+      "currentPrice": 6000000,
+      "startPrice": 5500000,
+      "instantPrice": 7500000,
+      "memberCount": 12,
+      "endedAt": "2024-08-10 20:00",
+      "seller": {
+        "id": 10,
+        "memberId": "guitarhero",
+        "email": "guitarhero@example.com",
+        "siteAlarm": true,
+        "point": 400,
+        "createdAt": "2024-06-01T12:00:00"
+      },
+      "parentCategory": {
+        "id": 18,
+        "categoryName": "Instruments",
+        "parentId": null,
+        "createdAt": "2024-06-01T13:00:00"
+      },
+      "childCategory": {
+        "id": 19,
+        "categoryName": "Guitars",
+        "parentId": 18,
+        "createdAt": "2024-06-01T13:30:00"
+      },
+      "bidList": [],
+      "askList": [],
+      "imageList": [
+        {
+          "id": 10,
+          "imageUrl": "https://example.com/images/fender_stratocaster_1965.jpg",
+          "imageName": "fender_stratocaster_1965.jpg",
+          "imageType": "THUMBNAIL",
+          "auctionId": 10,
+          "createdAt": "2024-08-01T16:00:00"
+        }
+      ],
+      "createdAt": "2024-08-01 15:00"
+    },
+    {
+      "id": 11,
+      "title": "Luxury Yacht Auction",
+      "auctionState": "OPEN",
+      "productName": "Luxury Yacht",
+      "productColor": "White",
+      "productStatus": 4.9,
+      "productDescription": "A pristine luxury yacht with all the amenities.",
+      "receiveType": "CONTACT",
+      "contactPlace": "Busan",
+      "deliveryType": "NO_DELIVERY",
+      "deliveryPrice": null,
+      "currentPrice": 250000000,
+      "startPrice": 200000000,
+      "instantPrice": 300000000,
+      "memberCount": 3,
+      "endedAt": "2024-09-25 18:00",
+      "seller": {
+        "id": 11,
+        "memberId": "yachtowner",
+        "email": "yachtowner@example.com",
+        "siteAlarm": true,
+        "point": 1000,
+        "createdAt": "2024-03-01T09:00:00"
+      },
+      "parentCategory": {
+        "id": 20,
+        "categoryName": "Vehicles",
+        "parentId": null,
+        "createdAt": "2024-03-01T10:00:00"
+      },
+      "childCategory": {
+        "id": 21,
+        "categoryName": "Boats",
+        "parentId": 20,
+        "createdAt": "2024-03-01T10:30:00"
+      },
+      "bidList": [],
+      "askList": [],
+      "imageList": [
+        {
+          "id": 11,
+          "imageUrl": "https://example.com/images/luxury_yacht.jpg",
+          "imageName": "luxury_yacht.jpg",
+          "imageType": "THUMBNAIL",
+          "auctionId": 11,
+          "createdAt": "2024-08-01T16:00:00"
+        }
+      ],
+      "createdAt": "2024-08-01 15:00"
+    },
+    {
+      "id": 12,
+      "title": "Vintage Motorcycle Auction",
+      "auctionState": "CLOSED",
+      "productName": "1948 Harley-Davidson",
+      "productColor": "Black",
+      "productStatus": 4.7,
+      "productDescription": "A classic 1948 Harley-Davidson in excellent condition.",
+      "receiveType": "CONTACT",
+      "contactPlace": "Seoul",
+      "deliveryType": "NO_DELIVERY",
+      "deliveryPrice": null,
+      "currentPrice": 18000000,
+      "startPrice": 15000000,
+      "instantPrice": 22000000,
+      "memberCount": 10,
+      "endedAt": "2024-08-20 20:00",
+      "seller": {
+        "id": 12,
+        "memberId": "motorcyclemaniac",
+        "email": "motorcyclemaniac@example.com",
+        "siteAlarm": true,
+        "point": 300,
+        "createdAt": "2024-04-01T12:00:00"
+      },
+      "parentCategory": {
+        "id": 22,
+        "categoryName": "Vehicles",
+        "parentId": null,
+        "createdAt": "2024-04-01T13:00:00"
+      },
+      "childCategory": {
+        "id": 23,
+        "categoryName": "Motorcycles",
+        "parentId": 22,
+        "createdAt": "2024-04-01T13:30:00"
+      },
+      "bidList": [],
+      "askList": [],
+      "imageList": [
+        {
+          "id": 12,
+          "imageUrl": "https://example.com/images/1948_harley_davidson.jpg",
+          "imageName": "1948_harley_davidson.jpg",
+          "imageType": "THUMBNAIL",
+          "auctionId": 12,
+          "createdAt": "2024-08-01T16:00:00"
+        }
+      ],
+      "createdAt": "2024-08-01 15:00"
+    },
+    {
+      "id": 13,
+      "title": "Luxury Watch Auction",
+      "auctionState": "OPEN",
+      "productName": "Patek Philippe Nautilus",
+      "productColor": "Silver",
+      "productStatus": 5.0,
+      "productDescription": "A luxury Patek Philippe Nautilus in perfect condition.",
+      "receiveType": "DELIVERY",
+      "contactPlace": null,
+      "deliveryType": "PREPAY",
+      "deliveryPrice": 5000,
+      "currentPrice": 50000000,
+      "startPrice": 45000000,
+      "instantPrice": 60000000,
+      "memberCount": 7,
+      "endedAt": "2024-09-15 18:00",
+      "seller": {
+        "id": 13,
+        "memberId": "watchcollector",
+        "email": "watchcollector@example.com",
+        "siteAlarm": true,
+        "point": 700,
+        "createdAt": "2024-05-01T10:00:00"
+      },
+      "parentCategory": {
+        "id": 3,
+        "categoryName": "Watches",
+        "parentId": null,
+        "createdAt": "2024-02-11T12:00:00"
+      },
+      "childCategory": {
+        "id": 4,
+        "categoryName": "Luxury Watches",
+        "parentId": 3,
+        "createdAt": "2024-02-11T12:30:00"
+      },
+      "bidList": [],
+      "askList": [],
+      "imageList": [
+        {
+          "id": 13,
+          "imageUrl": "https://example.com/images/patek_philippe_nautilus.jpg",
+          "imageName": "patek_philippe_nautilus.jpg",
+          "imageType": "THUMBNAIL",
+          "auctionId": 13,
+          "createdAt": "2024-08-01T16:00:00"
+        }
+      ],
+      "createdAt": "2024-08-01 15:00"
+    },
+    {
+      "id": 14,
+      "title": "Vintage Piano Auction",
+      "auctionState": "OPEN",
+      "productName": "Steinway & Sons Grand Piano",
+      "productColor": "Black",
+      "productStatus": 4.9,
+      "productDescription": "A beautiful vintage Steinway & Sons grand piano.",
+      "receiveType": "CONTACT",
+      "contactPlace": "Seoul",
+      "deliveryType": "NO_DELIVERY",
+      "deliveryPrice": null,
+      "currentPrice": 70000000,
+      "startPrice": 65000000,
+      "instantPrice": 80000000,
+      "memberCount": 4,
+      "endedAt": "2024-09-30 20:00",
+      "seller": {
+        "id": 14,
+        "memberId": "pianist",
+        "email": "pianist@example.com",
+        "siteAlarm": true,
+        "point": 400,
+        "createdAt": "2024-06-01T12:00:00"
+      },
+      "parentCategory": {
+        "id": 18,
+        "categoryName": "Instruments",
+        "parentId": null,
+        "createdAt": "2024-06-01T13:00:00"
+      },
+      "childCategory": {
+        "id": 24,
+        "categoryName": "Pianos",
+        "parentId": 18,
+        "createdAt": "2024-06-01T13:30:00"
+      },
+      "bidList": [],
+      "askList": [],
+      "imageList": [
+        {
+          "id": 14,
+          "imageUrl": "https://example.com/images/steinway_grand_piano.jpg",
+          "imageName": "steinway_grand_piano.jpg",
+          "imageType": "THUMBNAIL",
+          "auctionId": 14,
+          "createdAt": "2024-08-01T16:00:00"
+        }
+      ],
+      "createdAt": "2024-08-01 15:00"
+    },
+    {
+      "id": 15,
+      "title": "Luxury Car Auction",
+      "auctionState": "CLOSED",
+      "productName": "2020 Ferrari Roma",
+      "productColor": "Red",
+      "productStatus": 4.8,
+      "productDescription": "A sleek and powerful 2020 Ferrari Roma in perfect condition.",
+      "receiveType": "CONTACT",
+      "contactPlace": "Busan",
+      "deliveryType": "NO_DELIVERY",
+      "deliveryPrice": null,
+      "currentPrice": 300000000,
+      "startPrice": 280000000,
+      "instantPrice": 350000000,
+      "memberCount": 6,
+      "endedAt": "2024-09-01 20:00",
+      "seller": {
+        "id": 15,
+        "memberId": "ferrarilover",
+        "email": "ferrarilover@example.com",
+        "siteAlarm": true,
+        "point": 1000,
+        "createdAt": "2024-07-01T10:00:00"
+      },
+      "parentCategory": {
+        "id": 9,
+        "categoryName": "Vehicles",
+        "parentId": null,
+        "createdAt": "2024-05-15T13:00:00"
+      },
+      "childCategory": {
+        "id": 10,
+        "categoryName": "Cars",
+        "parentId": 9,
+        "createdAt": "2024-05-15T13:30:00"
+      },
+      "bidList": [],
+      "askList": [],
+      "imageList": [
+        {
+          "id": 15,
+          "imageUrl": "https://example.com/images/ferrari_roma_2020.jpg",
+          "imageName": "ferrari_roma_2020.jpg",
+          "imageType": "THUMBNAIL",
+          "auctionId": 15,
+          "createdAt": "2024-08-01T16:00:00"
+        }
+      ],
+      "createdAt": "2024-08-01 15:00"
+    },
+    {
+      "id": 16,
+      "title": "Fine Art Auction",
+      "auctionState": "OPEN",
+      "productName": "Renaissance Masterpiece",
+      "productColor": "Multicolor",
+      "productStatus": 5.0,
+      "productDescription": "A rare and valuable Renaissance painting by a master artist.",
+      "receiveType": "DELIVERY",
+      "contactPlace": null,
+      "deliveryType": "PREPAY",
+      "deliveryPrice": 10000,
+      "currentPrice": 150000000,
+      "startPrice": 140000000,
+      "instantPrice": 200000000,
+      "memberCount": 5,
+      "endedAt": "2024-10-01 18:00",
+      "seller": {
+        "id": 16,
+        "memberId": "artcollector",
+        "email": "artcollector@example.com",
+        "siteAlarm": true,
+        "point": 2000,
+        "createdAt": "2024-04-01T09:00:00"
+      },
+      "parentCategory": {
+        "id": 16,
+        "categoryName": "Art",
+        "parentId": null,
+        "createdAt": "2024-05-01T13:00:00"
+      },
+      "childCategory": {
+        "id": 17,
+        "categoryName": "Paintings",
+        "parentId": 16,
+        "createdAt": "2024-05-01T13:30:00"
+      },
+      "bidList": [],
+      "askList": [],
+      "imageList": [
+        {
+          "id": 16,
+          "imageUrl": "https://example.com/images/renaissance_painting.jpg",
+          "imageName": "renaissance_painting.jpg",
+          "imageType": "THUMBNAIL",
+          "auctionId": 16,
+          "createdAt": "2024-08-01T16:00:00"
+        }
+      ],
+      "createdAt": "2024-08-01 15:00"
+    },
+    {
+      "id": 17,
+      "title": "Antique Clock Auction",
+      "auctionState": "OPEN",
+      "productName": "19th Century Grandfather Clock",
+      "productColor": "Brown",
+      "productStatus": 4.6,
+      "productDescription": "A beautiful 19th century grandfather clock in perfect working order.",
+      "receiveType": "ALL",
+      "contactPlace": "Seoul",
+      "deliveryType": "PREPAY",
+      "deliveryPrice": 15000,
+      "currentPrice": 3000000,
+      "startPrice": 2500000,
+      "instantPrice": 4000000,
+      "memberCount": 12,
+      "endedAt": "2024-10-05 18:00",
+      "seller": {
+        "id": 17,
+        "memberId": "clockcollector",
+        "email": "clockcollector@example.com",
+        "siteAlarm": true,
+        "point": 600,
+        "createdAt": "2024-03-15T09:00:00"
+      },
+      "parentCategory": {
+        "id": 1,
+        "categoryName": "Antiques",
+        "parentId": null,
+        "createdAt": "2024-01-01T10:00:00"
+      },
+      "childCategory": {
+        "id": 25,
+        "categoryName": "Clocks",
+        "parentId": 1,
+        "createdAt": "2024-01-01T10:30:00"
+      },
+      "bidList": [],
+      "askList": [],
+      "imageList": [
+        {
+          "id": 17,
+          "imageUrl": "https://example.com/images/grandfather_clock.jpg",
+          "imageName": "grandfather_clock.jpg",
+          "imageType": "THUMBNAIL",
+          "auctionId": 17,
+          "createdAt": "2024-08-01T16:00:00"
+        }
+      ],
+      "createdAt": "2024-08-01 15:00"
+    },
+    {
+      "id": 18,
+      "title": "Rare Wine Auction",
+      "auctionState": "OPEN",
+      "productName": "Chateau Margaux 1990",
+      "productColor": "Red",
+      "productStatus": 5.0,
+      "productDescription": "A bottle of rare 1990 Chateau Margaux in pristine condition.",
+      "receiveType": "DELIVERY",
+      "contactPlace": null,
+      "deliveryType": "PREPAY",
+      "deliveryPrice": 2000,
+      "currentPrice": 1500000,
+      "startPrice": 1200000,
+      "instantPrice": 2000000,
+      "memberCount": 20,
+      "endedAt": "2024-10-10 20:00",
+      "seller": {
+        "id": 18,
+        "memberId": "winelover",
+        "email": "winelover@example.com",
+        "siteAlarm": true,
+        "point": 100,
+        "createdAt": "2024-08-01T09:00:00"
+      },
+      "parentCategory": {
+        "id": 26,
+        "categoryName": "Collectibles",
+        "parentId": null,
+        "createdAt": "2024-06-01T13:00:00"
+      },
+      "childCategory": {
+        "id": 27,
+        "categoryName": "Wines",
+        "parentId": 26,
+        "createdAt": "2024-06-01T13:30:00"
+      },
+      "bidList": [],
+      "askList": [],
+      "imageList": [
+        {
+          "id": 18,
+          "imageUrl": "https://example.com/images/chateau_margaux_1990.jpg",
+          "imageName": "chateau_margaux_1990.jpg",
+          "imageType": "THUMBNAIL",
+          "auctionId": 18,
+          "createdAt": "2024-08-01T16:00:00"
+        }
+      ],
+      "createdAt": "2024-08-01 15:00"
+    },
+    {
+      "id": 19,
+      "title": "Vintage Jewelry Auction",
+      "auctionState": "OPEN",
+      "productName": "1920s Art Deco Diamond Ring",
+      "productColor": "Silver",
+      "productStatus": 4.8,
+      "productDescription": "A stunning 1920s Art Deco diamond ring in perfect condition.",
+      "receiveType": "ALL",
+      "contactPlace": "Busan",
+      "deliveryType": "PREPAY",
+      "deliveryPrice": 5000,
+      "currentPrice": 5000000,
+      "startPrice": 4500000,
+      "instantPrice": 6000000,
+      "memberCount": 8,
+      "endedAt": "2024-10-15 20:00",
+      "seller": {
+        "id": 19,
+        "memberId": "jewelrylover",
+        "email": "jewelrylover@example.com",
+        "siteAlarm": true,
+        "point": 200,
+        "createdAt": "2024-07-15T12:00:00"
+      },
+      "parentCategory": {
+        "id": 7,
+        "categoryName": "Jewelry",
+        "parentId": null,
+        "createdAt": "2024-04-01T10:00:00"
+      },
+      "childCategory": {
+        "id": 28,
+        "categoryName": "Rings",
+        "parentId": 7,
+        "createdAt": "2024-04-01T10:30:00"
+      },
+      "bidList": [],
+      "askList": [],
+      "imageList": [
+        {
+          "id": 19,
+          "imageUrl": "https://example.com/images/art_deco_ring.jpg",
+          "imageName": "art_deco_ring.jpg",
+          "imageType": "THUMBNAIL",
+          "auctionId": 19,
+          "createdAt": "2024-08-01T16:00:00"
+        }
+      ],
+      "createdAt": "2024-08-01 15:00"
+    },
+    {
+      "id": 20,
+      "title": "Classic Furniture Auction",
+      "auctionState": "OPEN",
+      "productName": "Chesterfield Sofa",
+      "productColor": "Brown",
+      "productStatus": 4.7,
+      "productDescription": "A classic Chesterfield sofa in excellent condition.",
+      "receiveType": "ALL",
+      "contactPlace": "Seoul",
+      "deliveryType": "PREPAY",
+      "deliveryPrice": 30000,
+      "currentPrice": 800000,
+      "startPrice": 700000,
+      "instantPrice": 1000000,
+      "memberCount": 10,
+      "endedAt": "2024-10-20 20:00",
+      "seller": {
+        "id": 20,
+        "memberId": "furniturefan",
+        "email": "furniturefan@example.com",
+        "siteAlarm": true,
+        "point": 300,
+        "createdAt": "2024-06-01T09:00:00"
+      },
+      "parentCategory": {
+        "id": 1,
+        "categoryName": "Antiques",
+        "parentId": null,
+        "createdAt": "2024-01-01T10:00:00"
+      },
+      "childCategory": {
+        "id": 11,
+        "categoryName": "Furniture",
+        "parentId": 1,
+        "createdAt": "2024-01-01T10:30:00"
+      },
+      "bidList": [],
+      "askList": [],
+      "imageList": [
+        {
+          "id": 20,
+          "imageUrl": "https://example.com/images/chesterfield_sofa.jpg",
+          "imageName": "chesterfield_sofa.jpg",
+          "imageType": "THUMBNAIL",
+          "auctionId": 20,
+          "createdAt": "2024-08-01T16:00:00"
+        }
+      ],
+      "createdAt": "2024-08-01 15:00"
+    }
+  ],
+  "number": 1,
+  "sort": {
+    "empty": true,
+    "sorted": false,
+    "unsorted": true
+  },
+  "first": true,
+  "last": false,
+  "numberOfElements": 10,
+  "pageable": {
+    "pageNumber": 1,
+    "pageSize": 10,
+    "sort": {
+      "empty": true,
+      "sorted": false,
+      "unsorted": true
+    },
+    "offset": 0,
+    "paged": true,
+    "unpaged": false
+  },
+  "empty": false
+}

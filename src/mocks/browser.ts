@@ -3,6 +3,6 @@ import { handlers } from './handlers';
 
 export const worker = setupWorker(...handlers);
 
-// worker.start({
-//   onUnhandledRequest: 'bypass',
-// });
+worker.start({
+  onUnhandledRequest: 'bypass',
+});
