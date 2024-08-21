@@ -1,5 +1,5 @@
 import { Text, Flex, Grid, GridItem, useBreakpointValue, Button } from '@chakra-ui/react';
-import ItemCard from '../main/item/ItemCard';
+import ItemCard from '../../main/item/ItemCard';
 import { Link } from 'react-router-dom';
 
 interface ItemListProps {

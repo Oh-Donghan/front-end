@@ -8,12 +8,12 @@ import {
   useDisclosure,
   useToast,
 } from '@chakra-ui/react';
-import ChatList from '../components/chat/ChatList';
+import ChatList from '../components/chat/item/ChatList';
 import { MdLogout } from 'react-icons/md';
 import { useEffect, useRef, useState } from 'react';
-import default_profile from '../assets/image/chat/profile.png';
+import default_profile from '../assets/image/modal/chat/profile.png';
 import { IoMdSend } from 'react-icons/io';
-import ChatMessage from '../components/chat/ChatMessage';
+import ChatMessage from '../components/chat/item/ChatMessage';
 import { Link } from 'react-router-dom';
 import ConfirmPurchaseModal from '../components/chat/modals/ConfirmPurchaseModal';
 import { useForm } from 'react-hook-form';

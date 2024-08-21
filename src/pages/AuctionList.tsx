@@ -2,11 +2,11 @@ import { Box, Button, Flex, Text, useBreakpointValue } from '@chakra-ui/react';
 import { useLocation, Link } from 'react-router-dom';
 import { FaCheck } from 'react-icons/fa';
 import { GoChevronRight } from 'react-icons/go';
-import ItemList from '../components/listpage/ItemList';
+import ItemList from '../components/listpage/item/ItemList';
 import SwiperItemList from '../components/main/item/ItemList';
 import ChatModal from '../components/main/modals/chat/ChatModal';
-import SortButton from '../components/listpage/SortButton';
-import Input from '../components/listpage/input';
+import SortButton from '../components/listpage/sort/SortButton';
+import Input from '../components/listpage/input/input';
 
 import book from '../assets/image/category/book.png';
 import man_cloth from '../assets/image/category/man_cloth.png';
@@ -25,7 +25,8 @@ import plant from '../assets/image/category/plant.png';
 import ring from '../assets/image/category/ring.png';
 import more from '../assets/image/category/more.png';
 import all from '../assets/image/category/all.png';
-import CategorySortButton from '../components/listpage/CategorySortButton';
+import CategorySortButton from '../components/listpage/sort/CategorySortButton';
+import TopButton from '../components/common/button/TopButton';
 
 const categories = {
   전체: {
@@ -67,6 +68,7 @@ export default function AuctionList() {
 
   return (
     <Box minW="442px" px={8} overflowX="hidden">
+      <TopButton />
       <ChatModal />
       {/* 카테고리와 서브카테고리 네비게이션 */}
       <Box pt="30px">
