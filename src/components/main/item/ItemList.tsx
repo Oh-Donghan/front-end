@@ -1,4 +1,4 @@
-import { Grid, GridItem, useBreakpointValue, Text } from '@chakra-ui/react';
+import { Grid, GridItem, useBreakpointValue, Flex, Spinner } from '@chakra-ui/react';
 import ItemCard from './ItemCard';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
@@ -7,7 +7,6 @@ import 'swiper/css/pagination';
 import { EffectCards, Pagination } from 'swiper/modules';
 import { fetchItems } from '../../../api/auction/fetchAuctionItems';
 import { useQuery } from '@tanstack/react-query';
-import { useEffect } from 'react';
 
 interface ItemListProps {
   type?: string;
@@ -23,12 +22,12 @@ export default function SwiperItemList({ type }: ItemListProps) {
     queryFn: () => fetchItems({ type }),
   });
 
-  useEffect(() => {
-    console.log(items);
-  }, [items]);
-
   if (isLoading) {
-    return <Text>loding...</Text>;
+    return (
+      <Flex align={'center'} justify={'center'} h={'180px'} pt={4}>
+        <Spinner size="xl" />
+      </Flex>
+    );
   }
 
   return isSlider ? (

@@ -261,7 +261,23 @@ export const handlers = [
 
   // 대분류 카테고리 조회
   rest.get('https://fake-server.com/api/categories', (req, res, ctx) => {
-    const response = categories;
+    const categoryName = req.url.searchParams.get('categoryName');
+
+    let response;
+
+    if (categoryName) {
+      {
+        /* params로 parentId를 받으면 해당하는 대분류의 소분류 카테고리 반환 */
+      }
+      response = categories.filter(category => {
+        return category.categoryName === categoryName;
+      })[0];
+    } else {
+      {
+        /* 받지않으면 대분류 카테고리 반환 */
+      }
+      response = categories;
+    }
 
     return res(ctx.status(200), ctx.json(response));
   }),

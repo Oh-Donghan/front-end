@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Menu, MenuButton, MenuList, MenuItem, Button } from '@chakra-ui/react';
 import { MdKeyboardArrowDown } from 'react-icons/md';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -11,10 +11,16 @@ export default function SortButton() {
   const sort = searchParams.get('sort');
   const currentUrl = location.pathname + location.search;
 
+  useEffect(() => {
+    if (sort) {
+      setSelectedOption(EtoK(sort));
+    }
+  }, [sort]);
+
   const EtoK = option => {
     let res = '';
 
-    if (option === 'recetnt') {
+    if (option === 'recent') {
       res = '최신순';
     } else if (option === 'date') {
       res = '기간임박순';
@@ -30,6 +36,11 @@ export default function SortButton() {
   };
 
   const handleMenuItemClick = option => {
+    // 선택된 옵션이 이미 현재 선택된 옵션과 같으면 아무것도 하지 않음
+    if (EtoK(option) === selectedOption) {
+      return;
+    }
+
     setSelectedOption(EtoK(option));
 
     if (!sort) {
@@ -60,7 +71,7 @@ export default function SortButton() {
       </MenuButton>
       <MenuList zIndex={99} fontSize={15} paddingY={'0px'} color={'rgba(30,30,30,1)'}>
         <MenuItem paddingY={'10px'} onClick={() => handleMenuItemClick('recent')}>
-          최근순
+          최신순
         </MenuItem>
         <MenuItem paddingY={'10px'} onClick={() => handleMenuItemClick('date')}>
           기간 임박순

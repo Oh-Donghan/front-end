@@ -1,66 +1,498 @@
 [
   {
     "id": 1,
-    "categoryName": "남성의류"
+    "categoryName": "남성의류",
+    "categories": [
+      {
+        "id": 17,
+        "categoryName": "셔츠",
+        "parentId": 1
+      },
+      {
+        "id": 18,
+        "categoryName": "바지",
+        "parentId": 1
+      },
+      {
+        "id": 19,
+        "categoryName": "자켓",
+        "parentId": 1
+      },
+      {
+        "id": 20,
+        "categoryName": "코트",
+        "parentId": 1
+      },
+      {
+        "id": 21,
+        "categoryName": "액세서리",
+        "parentId": 1
+      }
+    ]
   },
   {
     "id": 2,
-    "categoryName": "여성의류"
+    "categoryName": "여성의류",
+    "categories": [
+      {
+        "id": 22,
+        "categoryName": "드레스",
+        "parentId": 2
+      },
+      {
+        "id": 23,
+        "categoryName": "블라우스",
+        "parentId": 2
+      },
+      {
+        "id": 24,
+        "categoryName": "스커트",
+        "parentId": 2
+      },
+      {
+        "id": 25,
+        "categoryName": "코트",
+        "parentId": 2
+      },
+      {
+        "id": 26,
+        "categoryName": "가방",
+        "parentId": 2
+      }
+    ]
   },
   {
     "id": 3,
-    "categoryName": "키덜트"
+    "categoryName": "키덜트",
+    "categories": [
+      {
+        "id": 27,
+        "categoryName": "피규어",
+        "parentId": 3
+      },
+      {
+        "id": 28,
+        "categoryName": "레고",
+        "parentId": 3
+      },
+      {
+        "id": 29,
+        "categoryName": "보드게임",
+        "parentId": 3
+      },
+      {
+        "id": 30,
+        "categoryName": "모형",
+        "parentId": 3
+      },
+      {
+        "id": 31,
+        "categoryName": "퍼즐",
+        "parentId": 3
+      }
+    ]
   },
   {
     "id": 4,
-    "categoryName": "가전제품"
+    "categoryName": "가전제품",
+    "categories": [
+      {
+        "id": 32,
+        "categoryName": "노트북",
+        "parentId": 4
+      },
+      {
+        "id": 33,
+        "categoryName": "스마트폰",
+        "parentId": 4
+      },
+      {
+        "id": 34,
+        "categoryName": "TV",
+        "parentId": 4
+      },
+      {
+        "id": 35,
+        "categoryName": "카메라",
+        "parentId": 4
+      },
+      {
+        "id": 36,
+        "categoryName": "오디오",
+        "parentId": 4
+      }
+    ]
   },
   {
     "id": 5,
-    "categoryName": "도서제품"
+    "categoryName": "도서제품",
+    "categories": [
+      {
+        "id": 37,
+        "categoryName": "소설",
+        "parentId": 5
+      },
+      {
+        "id": 38,
+        "categoryName": "자기계발서",
+        "parentId": 5
+      },
+      {
+        "id": 39,
+        "categoryName": "만화책",
+        "parentId": 5
+      },
+      {
+        "id": 40,
+        "categoryName": "전문서적",
+        "parentId": 5
+      },
+      {
+        "id": 41,
+        "categoryName": "전자책",
+        "parentId": 5
+      }
+    ]
   },
   {
     "id": 6,
-    "categoryName": "유아용품"
+    "categoryName": "유아용품",
+    "categories": [
+      {
+        "id": 42,
+        "categoryName": "기저귀",
+        "parentId": 6
+      },
+      {
+        "id": 43,
+        "categoryName": "아기옷",
+        "parentId": 6
+      },
+      {
+        "id": 44,
+        "categoryName": "유모차",
+        "parentId": 6
+      },
+      {
+        "id": 45,
+        "categoryName": "장난감",
+        "parentId": 6
+      },
+      {
+        "id": 46,
+        "categoryName": "아기침대",
+        "parentId": 6
+      }
+    ]
   },
   {
     "id": 7,
-    "categoryName": "굿즈"
+    "categoryName": "굿즈",
+    "categories": [
+      {
+        "id": 47,
+        "categoryName": "아이돌 굿즈",
+        "parentId": 7
+      },
+      {
+        "id": 48,
+        "categoryName": "애니메이션 굿즈",
+        "parentId": 7
+      },
+      {
+        "id": 49,
+        "categoryName": "게임 굿즈",
+        "parentId": 7
+      },
+      {
+        "id": 50,
+        "categoryName": "영화 굿즈",
+        "parentId": 7
+      },
+      {
+        "id": 51,
+        "categoryName": "기타 굿즈",
+        "parentId": 7
+      }
+    ]
   },
   {
     "id": 8,
-    "categoryName": "식품"
+    "categoryName": "식품",
+    "categories": [
+      {
+        "id": 52,
+        "categoryName": "과자",
+        "parentId": 8
+      },
+      {
+        "id": 53,
+        "categoryName": "음료수",
+        "parentId": 8
+      },
+      {
+        "id": 54,
+        "categoryName": "반찬",
+        "parentId": 8
+      },
+      {
+        "id": 55,
+        "categoryName": "즉석식품",
+        "parentId": 8
+      },
+      {
+        "id": 56,
+        "categoryName": "과일",
+        "parentId": 8
+      }
+    ]
   },
   {
     "id": 9,
-    "categoryName": "뷰티"
+    "categoryName": "뷰티",
+    "categories": [
+      {
+        "id": 57,
+        "categoryName": "화장품",
+        "parentId": 9
+      },
+      {
+        "id": 58,
+        "categoryName": "헤어케어",
+        "parentId": 9
+      },
+      {
+        "id": 59,
+        "categoryName": "바디케어",
+        "parentId": 9
+      },
+      {
+        "id": 60,
+        "categoryName": "향수",
+        "parentId": 9
+      },
+      {
+        "id": 61,
+        "categoryName": "네일",
+        "parentId": 9
+      }
+    ]
   },
   {
     "id": 10,
-    "categoryName": "반려동물"
+    "categoryName": "반려동물",
+    "categories": [
+      {
+        "id": 62,
+        "categoryName": "사료",
+        "parentId": 10
+      },
+      {
+        "id": 63,
+        "categoryName": "장난감",
+        "parentId": 10
+      },
+      {
+        "id": 64,
+        "categoryName": "목욕용품",
+        "parentId": 10
+      },
+      {
+        "id": 65,
+        "categoryName": "옷",
+        "parentId": 10
+      },
+      {
+        "id": 66,
+        "categoryName": "훈련용품",
+        "parentId": 10
+      }
+    ]
   },
   {
     "id": 11,
-    "categoryName": "가구"
+    "categoryName": "가구",
+    "categories": [
+      {
+        "id": 67,
+        "categoryName": "의자",
+        "parentId": 11
+      },
+      {
+        "id": 68,
+        "categoryName": "책상",
+        "parentId": 11
+      },
+      {
+        "id": 69,
+        "categoryName": "침대",
+        "parentId": 11
+      },
+      {
+        "id": 70,
+        "categoryName": "소파",
+        "parentId": 11
+      },
+      {
+        "id": 71,
+        "categoryName": "수납장",
+        "parentId": 11
+      }
+    ]
   },
   {
     "id": 12,
-    "categoryName": "스포츠"
+    "categoryName": "스포츠",
+    "categories": [
+      {
+        "id": 72,
+        "categoryName": "운동기구",
+        "parentId": 12
+      },
+      {
+        "id": 73,
+        "categoryName": "운동복",
+        "parentId": 12
+      },
+      {
+        "id": 74,
+        "categoryName": "신발",
+        "parentId": 12
+      },
+      {
+        "id": 75,
+        "categoryName": "야외활동 용품",
+        "parentId": 12
+      },
+      {
+        "id": 76,
+        "categoryName": "스포츠 용품",
+        "parentId": 12
+      }
+    ]
   },
   {
     "id": 13,
-    "categoryName": "생활용품"
+    "categoryName": "생활용품",
+    "categories": [
+      {
+        "id": 77,
+        "categoryName": "청소도구",
+        "parentId": 13
+      },
+      {
+        "id": 78,
+        "categoryName": "조리도구",
+        "parentId": 13
+      },
+      {
+        "id": 79,
+        "categoryName": "세제",
+        "parentId": 13
+      },
+      {
+        "id": 80,
+        "categoryName": "조명",
+        "parentId": 13
+      },
+      {
+        "id": 81,
+        "categoryName": "소형가전",
+        "parentId": 13
+      }
+    ]
   },
   {
     "id": 14,
-    "categoryName": "식물"
+    "categoryName": "식물",
+    "categories": [
+      {
+        "id": 82,
+        "categoryName": "화분",
+        "parentId": 14
+      },
+      {
+        "id": 83,
+        "categoryName": "씨앗",
+        "parentId": 14
+      },
+      {
+        "id": 84,
+        "categoryName": "비료",
+        "parentId": 14
+      },
+      {
+        "id": 85,
+        "categoryName": "정원도구",
+        "parentId": 14
+      },
+      {
+        "id": 86,
+        "categoryName": "인테리어 식물",
+        "parentId": 14
+      }
+    ]
   },
   {
     "id": 15,
-    "categoryName": "악세사리"
+    "categoryName": "악세사리",
+    "categories": [
+      {
+        "id": 87,
+        "categoryName": "목걸이",
+        "parentId": 15
+      },
+      {
+        "id": 88,
+        "categoryName": "귀걸이",
+        "parentId": 15
+      },
+      {
+        "id": 89,
+        "categoryName": "반지",
+        "parentId": 15
+      },
+      {
+        "id": 90,
+        "categoryName": "팔찌",
+        "parentId": 15
+      },
+      {
+        "id": 91,
+        "categoryName": "시계",
+        "parentId": 15
+      }
+    ]
   },
   {
     "id": 16,
-    "categoryName": "기타"
+    "categoryName": "기타",
+    "categories": [
+      {
+        "id": 92,
+        "categoryName": "기타1",
+        "parentId": 16
+      },
+      {
+        "id": 93,
+        "categoryName": "기타2",
+        "parentId": 16
+      },
+      {
+        "id": 94,
+        "categoryName": "기타3",
+        "parentId": 16
+      },
+      {
+        "id": 95,
+        "categoryName": "기타4",
+        "parentId": 16
+      },
+      {
+        "id": 96,
+        "categoryName": "기타5",
+        "parentId": 16
+      }
+    ]
   }
 ]

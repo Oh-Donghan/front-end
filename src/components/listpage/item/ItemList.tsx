@@ -1,4 +1,13 @@
-import { Text, Flex, Grid, GridItem, useBreakpointValue, Button, Box } from '@chakra-ui/react';
+import {
+  Text,
+  Flex,
+  Grid,
+  GridItem,
+  useBreakpointValue,
+  Button,
+  Box,
+  Spinner,
+} from '@chakra-ui/react';
 import ItemCard from '../../main/item/ItemCard';
 import { Link } from 'react-router-dom';
 import { useInView } from 'react-intersection-observer';
@@ -53,7 +62,7 @@ export default function ItemList({ type }: ItemListProps) {
     '2xl': 'repeat(5, 1fr)', // 초대형 화면에서 한 줄에 5개의 아이템
   });
 
-  const { data, fetchNextPage, hasNextPage, isPending } = useInfiniteQuery({
+  const { data, fetchNextPage, hasNextPage, isLoading } = useInfiniteQuery({
     queryKey: ['items', category, subCategory, sort, search],
     queryFn: fetchItems,
     getNextPageParam: lastPage => {
@@ -68,11 +77,15 @@ export default function ItemList({ type }: ItemListProps) {
     }
   }, [inView, fetchNextPage, hasNextPage]);
 
-  if (isPending) {
+  if (isLoading) {
     {
       /* 스켈레톤 추가 */
     }
-    return <div>loading..</div>;
+    return (
+      <Flex align={'center'} justify={'center'} h={'180px'} pt={4}>
+        <Spinner size="xl" />
+      </Flex>
+    );
   }
 
   return (

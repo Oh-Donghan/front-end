@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Text, useBreakpointValue } from '@chakra-ui/react';
+import { Box, Button, Flex, Spinner, Text, useBreakpointValue } from '@chakra-ui/react';
 import { useLocation, Link } from 'react-router-dom';
 import { FaCheck } from 'react-icons/fa';
 import { GoChevronRight } from 'react-icons/go';
@@ -8,52 +8,13 @@ import ChatModal from '../components/main/modals/chat/ChatModal';
 import SortButton from '../components/listpage/sort/SortButton';
 import Input from '../components/listpage/input/input';
 
-import book from '../assets/image/category/book.png';
-import man_cloth from '../assets/image/category/man_cloth.png';
-import woman_cloth from '../assets/image/category/woman_cloth.png';
-import kidult from '../assets/image/category/kidult.png';
 import computer from '../assets/image/category/computer.png';
-import baby from '../assets/image/category/baby.png';
-import goods from '../assets/image/category/goods.png';
-import food from '../assets/image/category/food.png';
-import beauty from '../assets/image/category/beauty.png';
-import pet from '../assets/image/category/pet.png';
-import bed from '../assets/image/category/bed.png';
-import sport from '../assets/image/category/sport.png';
-import house from '../assets/image/category/house.png';
-import plant from '../assets/image/category/plant.png';
-import ring from '../assets/image/category/ring.png';
-import more from '../assets/image/category/more.png';
-import all from '../assets/image/category/all.png';
 
 import CategorySortButton from '../components/listpage/sort/CategorySortButton';
 import TopButton from '../components/common/button/TopButton';
-
-const categories = {
-  전체: {
-    sub: [],
-    img: all,
-  },
-  남성의류: { sub: ['셔츠', '바지', '자켓', '코트', '액세서리'], img: man_cloth },
-  여성의류: { sub: ['드레스', '블라우스', '스커트', '코트', '가방'], img: woman_cloth },
-  키덜트: { sub: ['피규어', '레고', '보드게임', '모형', '퍼즐'], img: kidult },
-  가전제품: { sub: ['노트북', '스마트폰', 'TV', '카메라', '오디오'], img: computer },
-  도서제품: { sub: ['소설', '자기계발서', '만화책', '전문서적', '전자책'], img: book },
-  유아용품: { sub: ['기저귀', '아기옷', '유모차', '장난감', '아기침대'], img: baby },
-  굿즈: {
-    sub: ['아이돌 굿즈', '애니메이션 굿즈', '게임 굿즈', '영화 굿즈', '기타 굿즈'],
-    img: goods,
-  },
-  식품: { sub: ['과자', '음료수', '반찬', '즉석식품', '과일'], img: food },
-  뷰티: { sub: ['화장품', '헤어케어', '바디케어', '향수', '네일'], img: beauty },
-  반려동물: { sub: ['사료', '장난감', '목욕용품', '옷', '훈련용품'], img: pet },
-  가구: { sub: ['의자', '책상', '침대', '소파', '수납장'], img: bed },
-  스포츠: { sub: ['운동기구', '운동복', '신발', '야외활동 용품', '스포츠 용품'], img: sport },
-  생활용품: { sub: ['청소도구', '조리도구', '세제', '조명', '소형가전'], img: house },
-  식물: { sub: ['화분', '씨앗', '비료', '정원도구', '인테리어 식물'], img: plant },
-  악세사리: { sub: ['목걸이', '귀걸이', '반지', '팔찌', '시계'], img: ring },
-  기타: { sub: ['기타1', '기타2', '기타3', '기타4', '기타5'], img: more },
-};
+import { useQuery } from '@tanstack/react-query';
+import { fetchCategories } from '../api/category/fetchCategories';
+import { useEffect } from 'react';
 
 export default function AuctionList() {
   const location = useLocation();
@@ -61,11 +22,27 @@ export default function AuctionList() {
   const showSearchInputBelow = useBreakpointValue({ base: true, lg: false });
 
   const searchParams = new URLSearchParams(location.search);
-  const category = searchParams.get('category') || '전체';
+  const category = searchParams.get('category');
   const subCategory = searchParams.get('sub');
   const sort = searchParams.get('sort');
   const search = searchParams.get('word');
-  const subCategories = category ? categories[category]?.sub : [];
+
+  const { data: categoryData, isLoading } = useQuery({
+    queryKey: [category],
+    queryFn: () => fetchCategories({ categoryName: category }),
+  });
+
+  useEffect(() => {
+    console.log(category);
+  }, [category]);
+
+  if (isLoading) {
+    return (
+      <Flex align={'center'} justify={'center'} h={'180px'} pt={4}>
+        <Spinner size="xl" />
+      </Flex>
+    );
+  }
 
   return (
     <Box minW="442px" px={8} overflowX="hidden">
@@ -85,7 +62,7 @@ export default function AuctionList() {
             <>
               <Text>전체 경매</Text>
               <GoChevronRight className="mx-1" />
-              <Text>{category}</Text>
+              <Text>{categoryData.categoryName}</Text>
               {subCategory && (
                 <>
                   <GoChevronRight className="mx-1" />
@@ -102,15 +79,9 @@ export default function AuctionList() {
         </Flex>
         {!search && (
           <Flex alignItems={'center'} marginTop={'20px'}>
-            <img
-              src={categories[category].img}
-              alt=""
-              width={'28px'}
-              height={'28px'}
-              className="ml-1 mb-0.5"
-            />
+            <img src={computer} alt="" width={'28px'} height={'28px'} className="ml-1 mb-0.5" />
             <Text fontSize="26px" fontWeight="bold" pl="6px" ml="3px">
-              {search ? `'${search}'에 대한 검색 결과` : category}
+              {search ? `'${search}'에 대한 검색 결과` : categoryData.categoryName}
             </Text>
           </Flex>
         )}
@@ -143,13 +114,13 @@ export default function AuctionList() {
             ) : (
               <Flex>
                 <CategorySortButton /> {/* 대분류 변경 핸들러 */}
-                {subCategories?.map((sub, i) => (
+                {categoryData.categories?.map((sub, i) => (
                   <Link
                     to={{
                       pathname: '/auctions',
                       search: new URLSearchParams({
                         category,
-                        sub,
+                        sub: sub.categoryName,
                         ...(sort && { sort }), // sort가 있으면 포함
                       }).toString(),
                     }}
@@ -158,12 +129,12 @@ export default function AuctionList() {
                   >
                     <Button
                       size={{ base: 'xs', sm: 'sm' }}
-                      variant={sub === subCategory ? 'solid' : 'outline'}
-                      colorScheme={sub === subCategory ? 'blue' : 'gray'}
-                      leftIcon={sub === subCategory ? <FaCheck /> : null}
+                      variant={sub.categoryName === subCategory ? 'solid' : 'outline'}
+                      colorScheme={sub.categoryName === subCategory ? 'blue' : 'gray'}
+                      leftIcon={sub.categoryName === subCategory ? <FaCheck /> : null}
                       borderColor={'rgba(210,210,210,1)'}
                     >
-                      {sub}
+                      {sub.categoryName}
                     </Button>
                   </Link>
                 ))}

@@ -10,45 +10,15 @@ import {
   MenuItem,
   Image,
   Text,
+  Spinner,
 } from '@chakra-ui/react';
-import man_cloth from '../../../assets/image/category/man_cloth.png';
-import woman_cloth from '../../../assets/image/category/woman_cloth.png';
-import kidult from '../../../assets/image/category/kidult.png';
 import computer from '../../../assets/image/category/computer.png';
-import book from '../../../assets/image/category/book.png';
-import baby from '../../../assets/image/category/baby.png';
-import goods from '../../../assets/image/category/goods.png';
-import food from '../../../assets/image/category/food.png';
-import beauty from '../../../assets/image/category/beauty.png';
-import pet from '../../../assets/image/category/pet.png';
-import bed from '../../../assets/image/category/bed.png';
-import sport from '../../../assets/image/category/sport.png';
-import house from '../../../assets/image/category/house.png';
-import plant from '../../../assets/image/category/plant.png';
-import ring from '../../../assets/image/category/ring.png';
-import more from '../../../assets/image/category/more.png';
+
 import { IoChevronDownSharp } from 'react-icons/io5';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-
-const data = [
-  { id: 1, title: '남성의류', image: man_cloth },
-  { id: 2, title: '여성의류', image: woman_cloth },
-  { id: 3, title: '키덜트', image: kidult },
-  { id: 4, title: '가전제품', image: computer },
-  { id: 5, title: '도서제품', image: book },
-  { id: 6, title: '유아용품', image: baby },
-  { id: 7, title: '굿즈', image: goods },
-  { id: 8, title: '식품', image: food },
-  { id: 9, title: '뷰티', image: beauty },
-  { id: 10, title: '반려동물', image: pet },
-  { id: 11, title: '가구', image: bed },
-  { id: 12, title: '스포츠', image: sport },
-  { id: 13, title: '생활용품', image: house },
-  { id: 14, title: '식물', image: plant },
-  { id: 15, title: '악세사리', image: ring },
-  { id: 16, title: '기타', image: more },
-];
+import { useQuery } from '@tanstack/react-query';
+import { fetchCategories } from '../../../api/category/fetchCategories';
 
 export default function Categories() {
   const [selectedOption, setSelectedOption] = useState({
@@ -56,12 +26,25 @@ export default function Categories() {
     image: null,
   });
 
+  const { data: categories, isLoading } = useQuery({
+    queryKey: ['categories'],
+    queryFn: () => fetchCategories({ categoryName: undefined }),
+  });
+
   const navigate = useNavigate();
 
   const handleSelect = item => {
-    setSelectedOption(prev => ({ ...prev, title: item.title, image: item.image }));
-    navigate(`/auctions?category=${item.title}`);
+    setSelectedOption(prev => ({ ...prev, title: item.title, image: computer }));
+    navigate(`/auctions?category=${item.categoryName}`);
   };
+
+  if (isLoading) {
+    return (
+      <Flex align={'center'} justify={'center'} h={'180px'} pt={4}>
+        <Spinner size="xl" />
+      </Flex>
+    );
+  }
 
   return (
     <>
@@ -93,7 +76,7 @@ export default function Categories() {
             </Flex>
           </MenuButton>
           <MenuList maxH="220px" overflowY="auto" width={'100%'}>
-            {data.map(item => (
+            {categories.map(item => (
               <MenuItem
                 key={item.id}
                 value={item.title}
@@ -102,14 +85,15 @@ export default function Categories() {
                 }}
               >
                 <Flex align="center">
-                  <Image src={item.image} alt="" boxSize="1.3rem" mr="9px" marginLeft={'-2px'} />
-                  <Text>{item.title}</Text>
+                  <Image src={computer} alt="" boxSize="1.3rem" mr="9px" marginLeft={'-2px'} />
+                  <Text>{item.categoryName}</Text>
                 </Flex>
               </MenuItem>
             ))}
           </MenuList>
         </Menu>
       </div>
+      {/* 가로 너비 sm 이상일 때 카테고리 */}
       <Box
         className="hidden sm:block"
         width={'100%'}
@@ -122,13 +106,17 @@ export default function Categories() {
           templateColumns={{ base: 'repeat(4, 1fr)', md: 'repeat(6, 1fr)', lg: 'repeat(8, 1fr)' }}
           gap={{ base: '6', md: '8', lg: '10' }}
         >
-          {data.map(item => {
+          {categories.map(item => {
             return (
-              <Link to={`/auctions?category=${item.title}`} key={item.id}>
+              <Link to={`/auctions?category=${item.categoryName}`} key={item.id}>
                 <GridItem w="100%" h="10" cursor={'pointer'}>
                   <Flex align="center">
-                    <img src={item.image} alt="카테고리 로고" className="w-8 lg:w-9 xl:w-10 mr-2" />
-                    <span className="flex-shrink-0 text-sm lg:text-md">{item.title}</span>
+                    <img
+                      src={computer}
+                      alt={item.categoryName}
+                      className="w-8 lg:w-9 xl:w-10 mr-2"
+                    />
+                    <span className="flex-shrink-0 text-sm lg:text-md">{item.categoryName}</span>
                   </Flex>
                 </GridItem>
               </Link>

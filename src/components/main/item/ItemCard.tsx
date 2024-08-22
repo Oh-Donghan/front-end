@@ -48,6 +48,7 @@ interface ItemCardProps {
   rank?: number;
   item?: AuctionItem;
   type?: string;
+  isLoading?: boolean;
 }
 
 export default function ItemCard({ rank, item, type }: ItemCardProps) {
