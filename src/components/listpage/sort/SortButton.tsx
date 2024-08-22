@@ -11,8 +11,26 @@ export default function SortButton() {
   const sort = searchParams.get('sort');
   const currentUrl = location.pathname + location.search;
 
+  const EtoK = option => {
+    let res = '';
+
+    if (option === 'recetnt') {
+      res = '최신순';
+    } else if (option === 'date') {
+      res = '기간임박순';
+    } else if (option === 'view') {
+      res = '조회순';
+    } else if (option === 'low') {
+      res = '낮은가격순';
+    } else if (option === 'high') {
+      res = '높은가격순';
+    }
+
+    return res;
+  };
+
   const handleMenuItemClick = option => {
-    setSelectedOption(option);
+    setSelectedOption(EtoK(option));
 
     if (!sort) {
       navigate(`${currentUrl}&sort=${option}`);

@@ -1,0 +1,66 @@
+[
+  {
+    "id": 1,
+    "categoryName": "남성의류"
+  },
+  {
+    "id": 2,
+    "categoryName": "여성의류"
+  },
+  {
+    "id": 3,
+    "categoryName": "키덜트"
+  },
+  {
+    "id": 4,
+    "categoryName": "가전제품"
+  },
+  {
+    "id": 5,
+    "categoryName": "도서제품"
+  },
+  {
+    "id": 6,
+    "categoryName": "유아용품"
+  },
+  {
+    "id": 7,
+    "categoryName": "굿즈"
+  },
+  {
+    "id": 8,
+    "categoryName": "식품"
+  },
+  {
+    "id": 9,
+    "categoryName": "뷰티"
+  },
+  {
+    "id": 10,
+    "categoryName": "반려동물"
+  },
+  {
+    "id": 11,
+    "categoryName": "가구"
+  },
+  {
+    "id": 12,
+    "categoryName": "스포츠"
+  },
+  {
+    "id": 13,
+    "categoryName": "생활용품"
+  },
+  {
+    "id": 14,
+    "categoryName": "식물"
+  },
+  {
+    "id": 15,
+    "categoryName": "악세사리"
+  },
+  {
+    "id": 16,
+    "categoryName": "기타"
+  }
+]

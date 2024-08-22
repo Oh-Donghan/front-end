@@ -15,6 +15,7 @@ import {
 import Timer from '../timer/Timer';
 import { HiUser } from 'react-icons/hi';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
 interface AuctionItem {
   id: number;
@@ -46,16 +47,23 @@ interface AuctionItem {
 interface ItemCardProps {
   rank?: number;
   item?: AuctionItem;
+  type?: string;
 }
 
-export default function ItemCard({ rank, item }: ItemCardProps) {
+export default function ItemCard({ rank, item, type }: ItemCardProps) {
   const navigate = useNavigate();
+  const [isFinished, setIsFinished] = useState(false);
 
   const moveDetail = () => {
+    if (isFinished) return;
     navigate(`/detail`);
   };
 
-  if (!item) {
+  const formatMemberCount = (count: number) => {
+    return count >= 1000 ? `${(count / 1000).toFixed(1)}k` : count.toString();
+  };
+
+  if (type === 'hot') {
     return (
       <Card
         borderWidth="1px"
@@ -69,13 +77,13 @@ export default function ItemCard({ rank, item }: ItemCardProps) {
           <Box position={'relative'}>
             <Image
               src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
-              alt="Green double couch with wooden legs"
+              alt={item.imageList[0].imageName}
               borderRadius="lg"
             />
             <Badge position={'absolute'} top={2} right={2} bgColor={'rgba(200,200,200,0.2)'}>
               <Flex alignItems={'center'}>
                 <HiUser className="mr-1" />
-                <Text>2.lk</Text>
+                <Text>{formatMemberCount(item.memberCount)}</Text>
               </Flex>
             </Badge>
             {rank &&
@@ -94,35 +102,40 @@ export default function ItemCard({ rank, item }: ItemCardProps) {
           </Box>
           <Stack mt="6" spacing="3">
             <Stack direction="row">
-              <Badge colorScheme="green">직거래</Badge>
-              <Badge colorScheme="blue">택배</Badge>
+              {item.receiveType === 'CONTACT' && <Badge colorScheme="green">직거래</Badge>}
+              {item.receiveType === 'DELIVERY' && <Badge colorScheme="blue">택배</Badge>}
+              {item.receiveType === 'ALL' && (
+                <>
+                  <Badge colorScheme="green">직거래</Badge> <Badge colorScheme="blue">택배</Badge>
+                </>
+              )}
             </Stack>
             <Heading size="md" marginBottom={'8px'}>
-              Vitage Sofa
+              {item.title}
             </Heading>
             <Flex justifyContent={'space-between'} alignItems={'center'} height={'25px'}>
               <Text fontSize="sm">현제 입찰가</Text>
               <Text color="blue.600" fontSize="1.4rem" fontWeight={'bold'} marginRight={'3px'}>
-                95,000원
+                {item.currentPrice.toLocaleString()}원
               </Text>
             </Flex>
 
             <Flex justifyContent={'space-between'} alignItems={'center'} height={'25px'}>
               <Text fontSize="sm">즉시 구매가</Text>
               <Text fontSize="medium" fontWeight={'bold'} marginRight={'3px'}>
-                100,000원
+                {item.instantPrice.toLocaleString()}원
               </Text>
             </Flex>
             <Flex justifyContent={'space-between'} alignItems={'center'} height={'25px'}>
               <Text fontSize="sm">남은 기간</Text>
-              <Timer />
+              <Timer endedAt={item.endedAt} setIsFinished={setIsFinished} />
             </Flex>
           </Stack>
         </CardBody>
         <Divider />
         <CardFooter>
-          <Button variant="solid" colorScheme="blue" width={'full'}>
-            경매 참여하기
+          <Button variant="solid" colorScheme={isFinished ? 'gray' : 'blue'} width={'full'}>
+            {isFinished ? '경매 참여 불가' : '경매 참여하기'}
           </Button>
         </CardFooter>
       </Card>
@@ -142,13 +155,13 @@ export default function ItemCard({ rank, item }: ItemCardProps) {
         <Box position={'relative'}>
           <Image
             src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
-            alt="Green double couch with wooden legs"
+            alt={item.imageList[0].imageName}
             borderRadius="lg"
           />
           <Badge position={'absolute'} top={2} right={2} bgColor={'rgba(200,200,200,0.2)'}>
             <Flex alignItems={'center'}>
               <HiUser className="mr-1" />
-              <Text>2.lk</Text>
+              <Text>{formatMemberCount(item.memberCount)}</Text>
             </Flex>
           </Badge>
           {rank &&
@@ -167,35 +180,51 @@ export default function ItemCard({ rank, item }: ItemCardProps) {
         </Box>
         <Stack mt="6" spacing="3">
           <Stack direction="row">
-            <Badge colorScheme="green">직거래</Badge>
-            <Badge colorScheme="blue">택배</Badge>
+            {item.receiveType === 'CONTACT' && <Badge colorScheme="green">직거래</Badge>}
+            {item.receiveType === 'DELIVERY' && <Badge colorScheme="blue">택배</Badge>}
+            {item.receiveType === 'ALL' && (
+              <>
+                <Badge colorScheme="green">직거래</Badge> <Badge colorScheme="blue">택배</Badge>
+              </>
+            )}
           </Stack>
-          <Heading size="md" marginBottom={'8px'}>
+          <Heading size="md" marginBottom={'8px'} noOfLines={1}>
             {item.title}
           </Heading>
           <Flex justifyContent={'space-between'} alignItems={'center'} height={'25px'}>
-            <Text fontSize="sm">현제 입찰가</Text>
-            <Text color="blue.600" fontSize="1.4rem" fontWeight={'bold'} marginRight={'3px'}>
+            <Text fontSize="sm" flexShrink={0}>
+              현제 입찰가
+            </Text>
+            <Text
+              color="blue.600"
+              fontSize={{ base: '1.3rem' }}
+              fontWeight={'bold'}
+              marginRight={'3px'}
+              noOfLines={1}
+              pl={4}
+            >
               {item.currentPrice.toLocaleString()}원
             </Text>
           </Flex>
 
           <Flex justifyContent={'space-between'} alignItems={'center'} height={'25px'}>
-            <Text fontSize="sm">즉시 구매가</Text>
-            <Text fontSize="medium" fontWeight={'bold'} marginRight={'3px'}>
+            <Text fontSize="sm" flexShrink={0}>
+              즉시 구매가
+            </Text>
+            <Text fontSize="medium" fontWeight={'bold'} marginRight={'3px'} noOfLines={1} pl={4}>
               {item.instantPrice.toLocaleString()}원
             </Text>
           </Flex>
           <Flex justifyContent={'space-between'} alignItems={'center'} height={'25px'}>
             <Text fontSize="sm">남은 기간</Text>
-            <Timer />
+            <Timer endedAt={item.endedAt} setIsFinished={setIsFinished} />
           </Flex>
         </Stack>
       </CardBody>
       <Divider />
       <CardFooter>
-        <Button variant="solid" colorScheme="blue" width={'full'}>
-          경매 참여하기
+        <Button variant="solid" colorScheme={isFinished ? 'gray' : 'blue'} width={'full'}>
+          {isFinished ? '경매 참여 불가' : '경매 참여하기'}
         </Button>
       </CardFooter>
     </Card>

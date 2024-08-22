@@ -142,7 +142,7 @@ export default function AuctionList() {
               </Text>
             ) : (
               <Flex>
-                <CategorySortButton /> {/* 대분류 변경 핸들러 추가 */}
+                <CategorySortButton /> {/* 대분류 변경 핸들러 */}
                 {subCategories?.map((sub, i) => (
                   <Link
                     to={{

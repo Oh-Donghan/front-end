@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { useInView } from 'react-intersection-observer';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
-import axios from 'axios';
+import { fetchItems } from '../../../api/auction/fetchAuctionItems';
 
 interface AuctionItem {
   id: number;
@@ -38,15 +38,6 @@ interface ItemListProps {
   data?: AuctionItem[];
 }
 
-const fetchItems = async ({ pageParam = 0 }) => {
-  const res = await axios.get(`https://fake-server.com/api/auctions`, {
-    params: {
-      page: pageParam,
-    },
-  });
-  return res.data;
-};
-
 export default function ItemList({ type }: ItemListProps) {
   const searchParams = new URLSearchParams(location.search);
   const category = searchParams.get('category') || '전체';
@@ -72,16 +63,10 @@ export default function ItemList({ type }: ItemListProps) {
   });
 
   useEffect(() => {
-    console.log(inView);
-
     if (inView && hasNextPage) {
       fetchNextPage();
     }
   }, [inView, fetchNextPage, hasNextPage]);
-
-  useEffect(() => {
-    console.log(data?.pages);
-  }, [data]);
 
   if (isPending) {
     {
