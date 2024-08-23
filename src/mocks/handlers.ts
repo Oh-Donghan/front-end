@@ -4,6 +4,7 @@ import sellHistory from './json/sellHistory.json';
 import rechargeHistory from './json/rechargeHistory.json';
 import auctionData from './json/auctionList.json';
 import categories from './json/category.json';
+import { CreateAuctionType } from 'src/interface/auction/actionInterface';
 
 export const handlers = [
   // 판매 목록 조회
@@ -280,5 +281,95 @@ export const handlers = [
     }
 
     return res(ctx.status(200), ctx.json(response));
+  }),
+
+  // 경매 만들기
+  rest.post('https://fake-server.com/api/auctions', (req, res, ctx) => {
+    const body = req.body as any;
+
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res(ctx.status(401), ctx.json({ message: 'Unauthorized: Invalid or missing token' }));
+    }
+
+    const thumbnail = body.thumbnail;
+    const imageList = body.imageList || [];
+
+    if (!thumbnail) {
+      return res(ctx.status(400), ctx.json({ message: 'Bad Request: Thumbnail is required' }));
+    }
+
+    const createDtoString = body.createDto;
+    if (typeof createDtoString !== 'string') {
+      return res(ctx.status(400), ctx.json({ message: 'Bad Request: Invalid createDto' }));
+    }
+
+    let createDto: CreateAuctionType;
+    try {
+      createDto = JSON.parse(createDtoString);
+    } catch (error) {
+      return res(ctx.status(400), ctx.json({ message: 'Bad Request: Invalid JSON in createDto' }));
+    }
+
+    // 타입 가드 함수
+    function isValidCreateAuctionDto(obj: any): obj is CreateAuctionType {
+      return (
+        typeof obj.title === 'string' &&
+        typeof obj.transactionType === 'string' &&
+        typeof obj.deliveryType === 'string' &&
+        typeof obj.startPrice === 'number' &&
+        typeof obj.instantPrice === 'number' &&
+        typeof obj.endedAt === 'string' &&
+        typeof obj.parentCategoryId === 'number' &&
+        typeof obj.childCategoryId === 'number' &&
+        typeof obj.productName === 'string' &&
+        typeof obj.productStatus === 'string'
+      );
+    }
+
+    if (!isValidCreateAuctionDto(createDto)) {
+      return res(
+        ctx.status(400),
+        ctx.json({ message: 'Bad Request: Invalid data types in createDto' }),
+      );
+    }
+
+    const {
+      title,
+      transactionType,
+      deliveryType,
+      startPrice,
+      instantPrice,
+      endedAt,
+      parentCategoryId,
+      childCategoryId,
+      productName,
+      productStatus,
+    } = createDto;
+
+    if (
+      !title ||
+      !transactionType ||
+      !deliveryType ||
+      !startPrice ||
+      !instantPrice ||
+      !endedAt ||
+      !parentCategoryId ||
+      !childCategoryId ||
+      !productName ||
+      !productStatus
+    ) {
+      return res(ctx.status(400), ctx.json({ message: 'Bad Request: Missing required fields' }));
+    }
+
+    const auctionId = Math.floor(Math.random() * 1000) + 1;
+
+    return res(
+      ctx.status(200),
+      ctx.json({
+        id: auctionId,
+        title: title,
+      }),
+    );
   }),
 ];

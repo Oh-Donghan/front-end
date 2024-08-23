@@ -72,9 +72,9 @@ export default function Categories() {
             templateColumns={{ base: 'repeat(4, 1fr)', md: 'repeat(6, 1fr)', lg: 'repeat(8, 1fr)' }}
             gap={{ base: '6', md: '8', lg: '10' }}
           >
-            {categorySkeletonArray.map(() => {
+            {categorySkeletonArray.map((_, i) => {
               return (
-                <Flex align={'center'}>
+                <Flex align={'center'} key={i}>
                   <Box
                     borderRadius={'50%'}
                     w={'40px'}

@@ -14,13 +14,16 @@ import {
   Button,
   Select,
   useToast,
+  Spinner,
 } from '@chakra-ui/react';
 import { useForm, FormProvider } from 'react-hook-form';
 import CategorySection from './CategorySection';
 import ImageSection from './ImageSection';
 import RatingSection from './RatingSection';
 import SelectDateSection from './SelectDateSection';
-import axios from 'axios';
+import { createAuction } from '../../../../api/auction/createAuction';
+import { useMutation } from '@tanstack/react-query';
+import { CreateAuctionType } from '../../../../interface/auction/actionInterface';
 
 export default function CreateAuctionModal({ isOpen, onClose }) {
   const methods = useForm();
@@ -89,6 +92,37 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
     setValue('shippingMethod', method);
   };
 
+  const createAuctionMutation = useMutation({
+    mutationFn: ({
+      createDto,
+      thumbnail,
+      imageList,
+      token,
+    }: {
+      createDto: CreateAuctionType;
+      thumbnail: File;
+      imageList: File[];
+      token: string;
+    }) => createAuction(createDto, thumbnail, imageList, token),
+    onSuccess: data => {
+      console.log(data);
+      toast({
+        title: '경매 만들기 성공',
+        status: 'success',
+        duration: 1300,
+      });
+      handleClose();
+    },
+    onError: error => {
+      console.error('Error submitting form:', error);
+      toast({
+        title: `경매 만들기 실패`,
+        status: 'error',
+        duration: 1300,
+      });
+    },
+  });
+
   const onSubmit = async data => {
     if (
       !data.title ||
@@ -111,76 +145,64 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
       return;
     }
 
-    const formData = new FormData();
-    formData.append('title', data.title);
-    formData.append('transactionType', tradeMethod);
-    formData.append('deliveryType', shippingMethod || 'nodelivery');
-    if (tradeMethod === '직접 만나서' || tradeMethod === '모두 가능') {
-      formData.append('contactPlace', contactPlace);
-    }
-    formData.append('startPrice', data.startPrice);
-    formData.append('instantPrice', data.instantPrice);
-    formData.append('endedAt', formatDateToDatetime(endDate));
-    formData.append('parentCategoryId', selectedCategory);
-    formData.append('childCategoryId', selectedSubCategory);
-    formData.append('productName', data.productName);
-    formData.append('productStatus', rating.toString());
-    formData.append('productColor', data.color || '');
-    formData.append('productDescription', data.description || '');
-    if (shippingMethod !== 'nodelivery') {
-      formData.append('deliveryPrice', data.shippingCost || '');
-    }
-
-    files.forEach((file, index) => {
-      formData.append(`images[${index}]`, file);
-    });
-
-    try {
-      // axios POST 요청
-      await axios.post('/', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-
-      // 성공 시 알림 표시
+    if (isNaN(data.startPrice)) {
       toast({
-        title: '경매 만들기 성공',
-        status: 'success',
-        duration: 1300,
-      });
-
-      // Reset form and state
-      reset({
-        title: '',
-        productName: '',
-        category: '',
-        subCategory: '',
-        color: '',
-        shippingCost: '',
-        startPrice: '',
-        instantPrice: '',
-        description: '',
-        tradeMethod: '',
-        shippingMethod: '',
-      });
-      setTradeMethod('');
-      setShippingMethod('');
-      setSelectedCategory('');
-      setSelectedSubCategory('');
-      setSubCategories([]);
-      setFiles([]);
-      setEndDate(null);
-      setContactPlace('');
-      onClose();
-    } catch (error) {
-      console.error('Error submitting form:', error);
-      toast({
-        title: '경매 만들기 실패 (api 아직 없음)',
+        title: '입찰 시작가는 숫자만 입력 가능합니다.',
         status: 'error',
         duration: 1300,
       });
+      return;
     }
+
+    if (isNaN(data.instantPrice)) {
+      toast({
+        title: '즉시 구매가는 숫자만 입력 가능합니다.',
+        status: 'error',
+        duration: 1300,
+      });
+      return;
+    }
+
+    if (data.startPrice >= data.instantPrice) {
+      toast({
+        title: '입찰 시작가 보다 즉시 구매가가 더 높아야 합니다.',
+        status: 'error',
+        duration: 1300,
+      });
+      return;
+    }
+
+    if (files.length > 6) {
+      toast({
+        title: '이미지는 최대 6개까지만 입력 가능합니다.',
+        status: 'error',
+        duration: 1300,
+      });
+      return;
+    }
+
+    const createDto = {
+      title: data.title,
+      transactionType: tradeMethod,
+      deliveryType: shippingMethod || 'nodelivery',
+      startPrice: parseInt(data.startPrice),
+      instantPrice: parseInt(data.instantPrice),
+      endedAt: formatDateToDatetime(endDate),
+      parentCategoryId: parseInt(selectedCategory),
+      childCategoryId: parseInt(selectedSubCategory),
+      productName: data.productName,
+      productStatus: rating.toString(),
+      productColor: data.color || '',
+      productDescription: data.description || '',
+      deliveryPrice: shippingMethod !== 'nodelivery' ? parseInt(data.shippingCost) : undefined,
+      contactPlace:
+        tradeMethod === '직접 만나서' || tradeMethod === '모두 가능' ? contactPlace : undefined,
+    };
+
+    const thumbnail = files[0]; // 첫 번째 이미지를 썸네일로 사용
+    const imageList = files.slice(1); // 나머지 이미지들
+
+    createAuctionMutation.mutate({ createDto, thumbnail, imageList, token: 'AccessToken' });
   };
 
   return (
@@ -429,8 +451,17 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
                 >
                   취소
                 </Button>
-                <Button colorScheme="blue" marginLeft={'12px'} type="submit">
-                  만들기
+                <Button
+                  colorScheme="blue"
+                  marginLeft={'12px'}
+                  type="submit"
+                  display={'flex'}
+                  alignItems={'center'}
+                  justifyContent={'center'}
+                  w={'80px'}
+                  disabled={createAuctionMutation.isPending}
+                >
+                  {createAuctionMutation.isPending ? <Spinner size={'sm'} /> : <Text>만들기</Text>}
                 </Button>
               </ModalFooter>
             </form>

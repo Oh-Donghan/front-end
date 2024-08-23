@@ -18,6 +18,8 @@ import PointChargeModal from '../main/modals/point/PointChargeModal';
 import AlarmModal from '../main/modals/alarm/AlarmModal';
 import ViewedAuctionModal from '../main/modals/viewed/ViewedAuctionModal';
 import CreateAuctionModal from '../main/modals/auction/CreateAuctionModal';
+import { useRecoilState } from 'recoil';
+import { authState } from '../../recoil/atom/authAtom';
 
 export default function Nav() {
   const signinDisclosure = useDisclosure();
@@ -25,12 +27,12 @@ export default function Nav() {
   const pointChargeDisclosure = useDisclosure();
   const createAuctionDisclosure = useDisclosure();
   const drawerDisclosure = useDisclosure();
+  const [isLoggedIn, setIsLoggedIn] = useRecoilState(authState);
 
   const navigate = useNavigate();
 
   const initialRef = useRef(null);
   const toast = useToast();
-  const loggedIn = true;
 
   const handleSignupOpen = () => {
     signinDisclosure.onClose();
@@ -76,7 +78,7 @@ export default function Nav() {
         />
         <div className="hidden lg:block">
           <ul className="flex justify-between items-center font-semibold w-full gap-3">
-            {loggedIn ? (
+            {isLoggedIn ? (
               <>
                 <li className="mr-4 cursor-pointer">
                   <AlarmModal />
@@ -87,7 +89,15 @@ export default function Nav() {
                 <li className="mr-4 cursor-pointer" onClick={moveToMypage}>
                   마이페이지
                 </li>
-                <li className="mr-4 cursor-pointer">로그아웃</li>
+                <li
+                  className="mr-4 cursor-pointer"
+                  onClick={() => {
+                    setIsLoggedIn(false);
+                    localStorage.removeItem('user');
+                  }}
+                >
+                  로그아웃
+                </li>
                 <li>
                   <Button
                     colorScheme="blue"
@@ -160,7 +170,7 @@ export default function Nav() {
 
           <DrawerBody>
             <ul className="flex flex-col font-semibold text-lg gap-2">
-              {loggedIn ? (
+              {isLoggedIn ? (
                 <>
                   <li className="mb-4 cursor-pointer mt-4" onClick={drawerDisclosure.onClose}>
                     <AlarmModal />
