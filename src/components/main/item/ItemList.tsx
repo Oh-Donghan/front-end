@@ -1,4 +1,4 @@
-import { Grid, GridItem, useBreakpointValue, Flex, Spinner } from '@chakra-ui/react';
+import { Grid, GridItem, useBreakpointValue } from '@chakra-ui/react';
 import ItemCard from './ItemCard';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
@@ -7,6 +7,7 @@ import 'swiper/css/pagination';
 import { EffectCards, Pagination } from 'swiper/modules';
 import { fetchItems } from '../../../api/auction/fetchAuctionItems';
 import { useQuery } from '@tanstack/react-query';
+import ItemCardSkeleton from '../../../components/common/item/ItemCardSkeleton';
 
 interface ItemListProps {
   type?: string;
@@ -16,6 +17,7 @@ export default function SwiperItemList({ type }: ItemListProps) {
   const isSlider = useBreakpointValue({ base: true, sm2: false, md: false });
   const searchParams = new URLSearchParams(location.search);
   const category = searchParams.get('category') || '전체';
+  const skeletonArray = new Array(5).fill(null);
 
   const { data: items, isLoading } = useQuery({
     queryKey: ['items', category, type],
@@ -24,9 +26,21 @@ export default function SwiperItemList({ type }: ItemListProps) {
 
   if (isLoading) {
     return (
-      <Flex align={'center'} justify={'center'} h={'180px'} pt={4}>
-        <Spinner size="xl" />
-      </Flex>
+      <Grid
+        templateColumns={{
+          base: 'repeat(1, 1fr)',
+          sm2: 'repeat(2, 1fr)',
+          lg: 'repeat(3, 1fr)',
+          '2xl': 'repeat(5, 1fr)',
+        }}
+        gap={6}
+      >
+        {skeletonArray.map((item, i) => (
+          <GridItem key={i}>
+            <ItemCardSkeleton />
+          </GridItem>
+        ))}
+      </Grid>
     );
   }
 

@@ -1,19 +1,11 @@
-import {
-  Text,
-  Flex,
-  Grid,
-  GridItem,
-  useBreakpointValue,
-  Button,
-  Box,
-  Spinner,
-} from '@chakra-ui/react';
+import { Text, Flex, Grid, GridItem, useBreakpointValue, Button, Box } from '@chakra-ui/react';
 import ItemCard from '../../main/item/ItemCard';
 import { Link } from 'react-router-dom';
 import { useInView } from 'react-intersection-observer';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { fetchItems } from '../../../api/auction/fetchAuctionItems';
+import ItemCardSkeleton from '../../../components/common/item/ItemCardSkeleton';
 
 interface AuctionItem {
   id: number;
@@ -54,6 +46,7 @@ export default function ItemList({ type }: ItemListProps) {
   const sort = searchParams.get('sort');
   const search = searchParams.get('word');
   const { ref, inView } = useInView();
+  const skeletonArray = new Array(5).fill(null);
 
   const gridTemplateColumns = useBreakpointValue({
     base: 'repeat(1, 1fr)', // 모바일에서 한 줄에 2개의 아이템
@@ -78,13 +71,22 @@ export default function ItemList({ type }: ItemListProps) {
   }, [inView, fetchNextPage, hasNextPage]);
 
   if (isLoading) {
-    {
-      /* 스켈레톤 추가 */
-    }
     return (
-      <Flex align={'center'} justify={'center'} h={'180px'} pt={4}>
-        <Spinner size="xl" />
-      </Flex>
+      <Grid
+        templateColumns={{
+          base: 'repeat(1, 1fr)',
+          sm2: 'repeat(2, 1fr)',
+          lg: 'repeat(3, 1fr)',
+          '2xl': 'repeat(5, 1fr)',
+        }}
+        gap={6}
+      >
+        {skeletonArray.map((item, i) => (
+          <GridItem key={i}>
+            <ItemCardSkeleton />
+          </GridItem>
+        ))}
+      </Grid>
     );
   }
 

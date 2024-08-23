@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Spinner, Text, useBreakpointValue } from '@chakra-ui/react';
+import { Box, Button, Flex, Text, useBreakpointValue } from '@chakra-ui/react';
 import { useLocation, Link } from 'react-router-dom';
 import { FaCheck } from 'react-icons/fa';
 import { GoChevronRight } from 'react-icons/go';
@@ -7,14 +7,12 @@ import SwiperItemList from '../components/main/item/ItemList';
 import ChatModal from '../components/main/modals/chat/ChatModal';
 import SortButton from '../components/listpage/sort/SortButton';
 import Input from '../components/listpage/input/input';
-
-import computer from '../assets/image/category/computer.png';
-
+import all from '../assets/image/category/all.png';
+import searchico from '../assets/image/common/search.png';
 import CategorySortButton from '../components/listpage/sort/CategorySortButton';
 import TopButton from '../components/common/button/TopButton';
 import { useQuery } from '@tanstack/react-query';
 import { fetchCategories } from '../api/category/fetchCategories';
-import { useEffect } from 'react';
 
 export default function AuctionList() {
   const location = useLocation();
@@ -32,16 +30,8 @@ export default function AuctionList() {
     queryFn: () => fetchCategories({ categoryName: category }),
   });
 
-  useEffect(() => {
-    console.log(category);
-  }, [category]);
-
   if (isLoading) {
-    return (
-      <Flex align={'center'} justify={'center'} h={'180px'} pt={4}>
-        <Spinner size="xl" />
-      </Flex>
-    );
+    return <Flex align={'center'} justify={'center'} h={'100vh'} pt={4}></Flex>;
   }
 
   return (
@@ -51,6 +41,7 @@ export default function AuctionList() {
       {/* 카테고리와 서브카테고리 네비게이션 */}
       <Box pt="30px">
         <Flex alignItems="center" fontSize="14px" color="rgba(90,90,90,1)" pl="6px">
+          {/*검색 키워드가 있을 때*/}
           {search && (
             <>
               <Text>전체 경매</Text>
@@ -58,6 +49,7 @@ export default function AuctionList() {
               <Text>{search}</Text>
             </>
           )}
+          {/*검색 키워드가 없고 카테고리가 전체가 아닐 때*/}
           {category !== '전체' && !search && (
             <>
               <Text>전체 경매</Text>
@@ -71,17 +63,40 @@ export default function AuctionList() {
               )}
             </>
           )}
+          {/*검색 키워드가 없고 카테고리가 전체일 때*/}
           {category === '전체' && !search && (
             <>
               <Text>전체 경매</Text>
             </>
           )}
         </Flex>
-        {!search && (
+        {/*검색 키워드가 없고 카테고리가 전체가 아닐 때 타이틀*/}
+        {category !== '전체' && !search && (
           <Flex alignItems={'center'} marginTop={'20px'}>
-            <img src={computer} alt="" width={'28px'} height={'28px'} className="ml-1 mb-0.5" />
+            <img
+              src={categoryData.imgUrl}
+              alt="all.png"
+              width={'28px'}
+              height={'28px'}
+              className="ml-1 mb-0.5"
+            />
             <Text fontSize="26px" fontWeight="bold" pl="6px" ml="3px">
-              {search ? `'${search}'에 대한 검색 결과` : categoryData.categoryName}
+              {categoryData.categoryName}
+            </Text>
+          </Flex>
+        )}
+        {/*검색 키워드가 없고 카테고리가 전체일 때 타이틀*/}
+        {category === '전체' && !search && (
+          <Flex alignItems={'center'} marginTop={'20px'}>
+            <img
+              src={all}
+              alt="전체 아이콘"
+              width={'28px'}
+              height={'28px'}
+              className="ml-1 mb-0.5"
+            />
+            <Text fontSize="26px" fontWeight="bold" pl="6px" ml="3px">
+              {'전체'}
             </Text>
           </Flex>
         )}
@@ -108,12 +123,43 @@ export default function AuctionList() {
         >
           <Flex alignItems="center" justifyContent={'space-between'} width={'full'}>
             {search ? (
-              <Text fontSize="26px" fontWeight="bold" pl="6px" ml="3px">
-                {search ? `'${search}'에 대한 검색 결과'` : category}
-              </Text>
+              <Flex align={'center'}>
+                <img
+                  src={searchico}
+                  alt="검색 아이콘"
+                  width={'28px'}
+                  height={'28px'}
+                  className="ml-1 mr-3 mb-0.5 mt-1.5"
+                />
+                <Text fontSize="26px" fontWeight="bold" ml="3px" mt={'4px'}>
+                  {`${search}'에 대한 검색 결과`}
+                </Text>
+              </Flex>
             ) : (
               <Flex>
                 <CategorySortButton /> {/* 대분류 변경 핸들러 */}
+                {category !== '전체' && (
+                  <Link
+                    to={{
+                      pathname: '/auctions',
+                      search: new URLSearchParams({
+                        category,
+                        ...(sort && { sort }), // sort가 있으면 포함
+                      }).toString(),
+                    }}
+                    className="mr-2"
+                  >
+                    <Button
+                      size={{ base: 'xs', sm: 'sm' }}
+                      variant={!subCategory ? 'solid' : 'outline'}
+                      colorScheme={!subCategory ? 'blue' : 'gray'}
+                      leftIcon={!subCategory ? <FaCheck /> : null}
+                      borderColor={'rgba(210,210,210,1)'}
+                    >
+                      {'전체'}
+                    </Button>
+                  </Link>
+                )}
                 {categoryData.categories?.map((sub, i) => (
                   <Link
                     to={{
@@ -166,7 +212,7 @@ export default function AuctionList() {
       {search ? (
         <>
           {/* 검색된 경매 섹션 */}
-          <Box mb={{ base: '12', sm: '20' }} mt={{ base: '12', sm: '4' }}>
+          <Box mb={{ base: '12', sm: '20' }} mt={{ base: '12', sm: '6' }}>
             <Flex
               alignItems="center"
               justifyContent="space-between"
@@ -181,7 +227,12 @@ export default function AuctionList() {
           <Box mt={{ base: '12', sm: '60px' }}>
             <Flex alignItems="center" mb={{ base: '4', sm: '5' }}>
               <Text fontSize={{ base: '1.3rem', md: '1.5rem' }} fontWeight="bold">
-                {category !== '전체' ? `지금 핫한 ${category} Top5` : '지금 핫한 Top5'}
+                {/* 카테고리가 전체 일 때 hot5 타이틀 */}
+                {category === '전체' && '지금 핫한 경매 Top5'}
+                {/* 카테고리가 전체가 아니고 서브 카테고리가 없을 때 hot5 타이틀 */}
+                {category !== '전체' && !subCategory && `지금 핫한 ${category} Top5`}
+                {/* 카테고리가 전체가 아니고 서브 카테고리가 있을 때 hot5 타이틀 */}
+                {category !== '전체' && subCategory && `지금 핫한 ${subCategory} Top5`}
               </Text>
             </Flex>
             <SwiperItemList type="hot" />

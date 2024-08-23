@@ -10,7 +10,6 @@ import {
   MenuItem,
   Image,
   Text,
-  Spinner,
 } from '@chakra-ui/react';
 import computer from '../../../assets/image/category/computer.png';
 
@@ -26,6 +25,8 @@ export default function Categories() {
     image: null,
   });
 
+  const categorySkeletonArray = new Array(16).fill(null);
+
   const { data: categories, isLoading } = useQuery({
     queryKey: ['categories'],
     queryFn: () => fetchCategories({ categoryName: undefined }),
@@ -40,9 +41,62 @@ export default function Categories() {
 
   if (isLoading) {
     return (
-      <Flex align={'center'} justify={'center'} h={'180px'} pt={4}>
-        <Spinner size="xl" />
-      </Flex>
+      <>
+        <div className="flex sm:hidden mt-4  relative z-50 justify-center">
+          <Menu isLazy matchWidth>
+            <MenuButton
+              as={Button}
+              rightIcon={<IoChevronDownSharp />}
+              bg={'white'}
+              border={'1px'}
+              borderColor="gray.400"
+              width={'88%'}
+              justifyContent="flex-start"
+              textAlign="left"
+            >
+              <Flex align="start">
+                {selectedOption.image && (
+                  <Image
+                    src={selectedOption.image}
+                    alt="category image"
+                    boxSize="1.3rem"
+                    mr="9px"
+                    marginLeft={'-6px'}
+                  />
+                )}
+                <Text color={'rgba(150,150,150,1)'} fontWeight={'normal'}></Text>
+              </Flex>
+            </MenuButton>
+            <MenuList maxH="220px" overflowY="auto" width={'100%'}>
+              {categorySkeletonArray.map(() => (
+                <MenuItem value={'d'}>
+                  <Flex align="center">
+                    <Text></Text>
+                  </Flex>
+                </MenuItem>
+              ))}
+            </MenuList>
+          </Menu>
+        </div>
+        {/* 가로 너비 sm 이상일 때 카테고리 */}
+        <Box
+          className="hidden sm:block"
+          width={'100%'}
+          minWidth={{ base: '100%', md: '700px' }}
+          maxWidth={{ base: '800px', lg: '1200px' }}
+          margin="60px auto 0"
+          padding={{ base: '0px 25px 0px 55px', md: '0px 50px' }}
+        >
+          <Grid
+            templateColumns={{ base: 'repeat(4, 1fr)', md: 'repeat(6, 1fr)', lg: 'repeat(8, 1fr)' }}
+            gap={{ base: '6', md: '8', lg: '10' }}
+          >
+            {categorySkeletonArray.map(() => {
+              return <Box></Box>;
+            })}
+          </Grid>
+        </Box>
+      </>
     );
   }
 
@@ -85,7 +139,13 @@ export default function Categories() {
                 }}
               >
                 <Flex align="center">
-                  <Image src={computer} alt="" boxSize="1.3rem" mr="9px" marginLeft={'-2px'} />
+                  <Image
+                    src={item.imgUrl}
+                    alt={item.categoryName}
+                    boxSize="1.3rem"
+                    mr="9px"
+                    marginLeft={'-2px'}
+                  />
                   <Text>{item.categoryName}</Text>
                 </Flex>
               </MenuItem>
@@ -112,7 +172,7 @@ export default function Categories() {
                 <GridItem w="100%" h="10" cursor={'pointer'}>
                   <Flex align="center">
                     <img
-                      src={computer}
+                      src={item.imgUrl}
                       alt={item.categoryName}
                       className="w-8 lg:w-9 xl:w-10 mr-2"
                     />
