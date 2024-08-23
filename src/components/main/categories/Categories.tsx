@@ -53,29 +53,10 @@ export default function Categories() {
               width={'88%'}
               justifyContent="flex-start"
               textAlign="left"
+              color={'rgba(180,180,180,1)'}
             >
-              <Flex align="start">
-                {selectedOption.image && (
-                  <Image
-                    src={selectedOption.image}
-                    alt="category image"
-                    boxSize="1.3rem"
-                    mr="9px"
-                    marginLeft={'-6px'}
-                  />
-                )}
-                <Text color={'rgba(150,150,150,1)'} fontWeight={'normal'}></Text>
-              </Flex>
+              {'카테고리를 선택해 주세요'}
             </MenuButton>
-            <MenuList maxH="220px" overflowY="auto" width={'100%'}>
-              {categorySkeletonArray.map(() => (
-                <MenuItem value={'d'}>
-                  <Flex align="center">
-                    <Text></Text>
-                  </Flex>
-                </MenuItem>
-              ))}
-            </MenuList>
           </Menu>
         </div>
         {/* 가로 너비 sm 이상일 때 카테고리 */}
@@ -92,7 +73,17 @@ export default function Categories() {
             gap={{ base: '6', md: '8', lg: '10' }}
           >
             {categorySkeletonArray.map(() => {
-              return <Box></Box>;
+              return (
+                <Flex align={'center'}>
+                  <Box
+                    borderRadius={'50%'}
+                    w={'40px'}
+                    h={'40px'}
+                    bgColor={'rgba(230,230,230,1)'}
+                  ></Box>
+                  <Box w={'44px'} h={'12px'} bgColor={'rgba(230,230,230,1)'} ml={3}></Box>
+                </Flex>
+              );
             })}
           </Grid>
         </Box>
