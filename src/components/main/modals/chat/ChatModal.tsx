@@ -8,7 +8,7 @@ import {
   Button,
   useToast,
 } from '@chakra-ui/react';
-import ChatButton from './ChatModalButton';
+import ChatButton from '../../../common/button/ChatModalButton';
 import ChatModalInput from './ChatModalInput';
 import { useState } from 'react';
 import ChatList from '../../chat/ChatList';
@@ -31,7 +31,7 @@ export default function ChatModal() {
   };
 
   return (
-    <div className="fixed bottom-12 right-7 z-[100]">
+    <div className="fixed bottom-12 right-3 z-[100]">
       <Popover placement="top-start" closeOnBlur={false} isOpen={loggedIn && isChatModalOpen}>
         <span onClick={handleButtonClick}>
           <PopoverTrigger>

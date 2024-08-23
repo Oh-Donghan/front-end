@@ -5,10 +5,12 @@ import ChatModal from '../components/main/modals/chat/ChatModal';
 import { Box, Flex, Text } from '@chakra-ui/react';
 import Input from '../components/main/input/input';
 import { Link } from 'react-router-dom';
+import TopButton from '../components/common/button/TopButton';
 
 export default function Home() {
   return (
     <Box minW="375px">
+      <TopButton />
       <ChatModal />
       <Banner />
       <Input />

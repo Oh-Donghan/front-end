@@ -1,5 +1,5 @@
 import { Flex, Text } from '@chakra-ui/react';
-import default_profile from '../../assets/image/chat/profile.png';
+import default_profile from '../../../assets/image/modal/chat/profile.png';
 
 export default function ChatItem({ chat, isSelected, onSelect }) {
   return (
