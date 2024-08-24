@@ -16,8 +16,7 @@ export default function ImageSection({ files, setFiles, maxFiles = 6 }: ImageSec
       toast({
         title: `최대 ${maxFiles}개의 파일만 첨부할 수 있습니다.`,
         status: 'error',
-        duration: 3000,
-        isClosable: true,
+        duration: 1300,
       });
       return;
     }
@@ -33,7 +32,6 @@ export default function ImageSection({ files, setFiles, maxFiles = 6 }: ImageSec
     accept: {
       'image/*': [],
     },
-    maxFiles,
   });
 
   return (

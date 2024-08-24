@@ -4,6 +4,7 @@ import App from './App';
 import { ChakraProvider, customTheme } from './config/ChakraProvider';
 import './index.css';
 import { worker } from './mocks/browser';
+import RecoilProvider from './recoil/store';
 
 if (import.meta.env.MODE === 'development') {
   worker.start();
@@ -11,8 +12,10 @@ if (import.meta.env.MODE === 'development') {
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <ChakraProvider theme={customTheme}>
-      <App />
-    </ChakraProvider>
+    <RecoilProvider>
+      <ChakraProvider theme={customTheme}>
+        <App />
+      </ChakraProvider>
+    </RecoilProvider>
   </React.StrictMode>,
 );

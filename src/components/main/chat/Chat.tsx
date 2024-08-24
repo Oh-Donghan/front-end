@@ -1,9 +1,10 @@
-import { Flex, Text, Link } from '@chakra-ui/react';
+import { Flex, Text } from '@chakra-ui/react';
 import defaul_profile from '../../../assets/image/modal/chat/profile.png';
+import { Link } from 'react-router-dom';
 
 export default function Chat() {
   return (
-    <Link href="/chat" _hover={{ textDecoration: 'none' }}>
+    <Link to="/chat">
       <Flex
         _hover={{ bgColor: 'rgba(240,240,240,1)' }}
         align="center"
