@@ -15,7 +15,8 @@ import {
 import Timer from '../timer/Timer';
 import { HiUser } from 'react-icons/hi';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { formatMemberCount } from '../../../utils/formatMemberCount';
 
 interface AuctionItem {
   id: number;
@@ -60,9 +61,23 @@ export default function ItemCard({ rank, item, type }: ItemCardProps) {
     navigate(`/detail`);
   };
 
-  const formatMemberCount = (count: number) => {
-    return count >= 1000 ? `${(count / 1000).toFixed(1)}k` : count.toString();
-  };
+  // useEffect(() => {
+  //   const eventSource = new EventSource(`/api/auction/${item.id}/price-updates`);
+
+  //   eventSource.onmessage = function (event) {
+  //     const data = JSON.parse(event.data);
+  //     setCurrentPrice(data.currentPrice);
+  //   };
+
+  //   eventSource.onerror = function (error) {
+  //     console.error('Error with SSE:', error);
+  //     eventSource.close();
+  //   };
+
+  //   return () => {
+  //     eventSource.close();
+  //   };
+  // }, [item.id]);
 
   if (type === 'hot') {
     return (

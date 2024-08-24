@@ -281,4 +281,25 @@ export const handlers = [
 
     return res(ctx.status(200), ctx.json(response));
   }),
+
+  // 주기적으로 가격 데이터 받아오기
+  rest.get('/events', (req, res, ctx) => {
+    const stream = new ReadableStream({
+      async start(controller) {
+        let count = 0;
+        // eslint-disable-next-line no-constant-condition
+        while (true) {
+          const message = `data: {"message": "Event ${count}"}\n\n`;
+          controller.enqueue(new TextEncoder().encode(message)); // 스트림에 데이터 추가
+          count++;
+          await new Promise(resolve => setTimeout(resolve, 3000)); // 3초 대기
+        }
+      },
+      cancel() {
+        console.log('Stream cancelled');
+      },
+    });
+
+    return res(ctx.set('Content-Type', 'text/event-stream'), ctx.body(stream));
+  }),
 ];
