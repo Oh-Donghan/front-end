@@ -61,7 +61,7 @@ export default function MypageInput({ setSearchWord, onSearch }) {
               <IoSearch color="rgba(190,190,190,1)" size={16} />
             </InputLeftAddon>
             <Input
-              type="search"
+              type="text"
               placeholder="상품명으로 검색해주세요."
               borderColor="gray.300"
               width="300px"
