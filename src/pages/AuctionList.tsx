@@ -12,7 +12,7 @@ import searchico from '../assets/image/common/search.png';
 import CategorySortButton from '../components/listpage/sort/CategorySortButton';
 import TopButton from '../components/common/button/TopButton';
 import { useQuery } from '@tanstack/react-query';
-import { fetchCategories } from '../api/category/fetchCategories';
+import { getCategories } from '../axios/category/categories';
 
 export default function AuctionList() {
   const location = useLocation();
@@ -27,7 +27,7 @@ export default function AuctionList() {
 
   const { data: categoryData, isLoading } = useQuery({
     queryKey: [category],
-    queryFn: () => fetchCategories({ categoryName: category }),
+    queryFn: () => getCategories({ categoryName: category }),
   });
 
   if (isLoading) {

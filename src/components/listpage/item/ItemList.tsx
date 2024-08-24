@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { useInView } from 'react-intersection-observer';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
-import { fetchItems } from '../../../api/auction/fetchAuctionItems';
+import { getAuctionItems } from '../../../axios/auction/auctionItems';
 import ItemCardSkeleton from '../../../components/common/item/ItemCardSkeleton';
 
 interface AuctionItem {
@@ -57,7 +57,7 @@ export default function ItemList({ type }: ItemListProps) {
 
   const { data, fetchNextPage, hasNextPage, isLoading } = useInfiniteQuery({
     queryKey: ['items', category, subCategory, sort, search],
-    queryFn: fetchItems,
+    queryFn: getAuctionItems,
     getNextPageParam: lastPage => {
       return lastPage.number + 1 < lastPage.totalPages ? lastPage.number + 1 : undefined;
     },

@@ -21,7 +21,7 @@ import CategorySection from './CategorySection';
 import ImageSection from './ImageSection';
 import RatingSection from './RatingSection';
 import SelectDateSection from './SelectDateSection';
-import { createAuction } from '../../../../api/auction/createAuction';
+import { createAuction } from '../../../../axios/auction/auction';
 import { useMutation } from '@tanstack/react-query';
 import { CreateAuctionType } from '../../../../interface/auction/actionInterface';
 

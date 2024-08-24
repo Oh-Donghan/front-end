@@ -43,8 +43,6 @@ export default function Nav() {
     navigate('/mypage');
   };
 
-  console.log('1');
-
   return (
     <>
       <CreateAuctionModal

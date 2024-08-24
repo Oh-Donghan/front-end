@@ -5,7 +5,7 @@ import 'swiper/css';
 import 'swiper/css/effect-cards';
 import 'swiper/css/pagination';
 import { EffectCards, Pagination } from 'swiper/modules';
-import { fetchItems } from '../../../api/auction/fetchAuctionItems';
+import { getAuctionItems } from '../../../axios/auction/auctionItems';
 import { useQuery } from '@tanstack/react-query';
 import ItemCardSkeleton from '../../../components/common/item/ItemCardSkeleton';
 
@@ -21,7 +21,7 @@ export default function SwiperItemList({ type }: ItemListProps) {
 
   const { data: items, isLoading } = useQuery({
     queryKey: ['items', category, type],
-    queryFn: () => fetchItems({ type }),
+    queryFn: () => getAuctionItems({ type }),
   });
 
   if (isLoading) {

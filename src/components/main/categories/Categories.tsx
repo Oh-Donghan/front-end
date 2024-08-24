@@ -17,7 +17,7 @@ import { IoChevronDownSharp } from 'react-icons/io5';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { fetchCategories } from '../../../api/category/fetchCategories';
+import { getCategories } from '../../../axios/category/categories';
 
 export default function Categories() {
   const [selectedOption, setSelectedOption] = useState({
@@ -29,7 +29,7 @@ export default function Categories() {
 
   const { data: categories, isLoading } = useQuery({
     queryKey: ['categories'],
-    queryFn: () => fetchCategories({ categoryName: undefined }),
+    queryFn: () => getCategories({ categoryName: undefined }),
   });
 
   const navigate = useNavigate();
