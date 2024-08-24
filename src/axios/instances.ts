@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_BASE_URL || 'https://fake-server.com',
-  // baseURL: 'https://dddang.store',
+  // baseURL: import.meta.env.VITE_BASE_URL || 'https://fake-server.com',
+  baseURL: 'https://dddang.store',
 });
 
 axiosInstance.interceptors.request.use(
