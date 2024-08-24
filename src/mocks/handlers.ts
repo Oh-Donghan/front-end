@@ -25,8 +25,13 @@ export const handlers = [
       );
     }
 
+    // 거래 상태로 필터링 (continue, end)
     if (transTypeString) {
-      filteredData = filteredData.filter(item => item.transType === transTypeString);
+      const mappedTransType =
+        transTypeString === 'continue' ? 'CONTINUE' : transTypeString === 'end' ? 'SUCCESS' : '';
+      if (mappedTransType) {
+        filteredData = filteredData.filter(item => item.transType === mappedTransType);
+      }
     }
 
     // 정렬 처리
@@ -82,14 +87,20 @@ export const handlers = [
 
     let filteredData = purchaseHistory.content;
 
+    // 검색어로 필터링
     if (word) {
       filteredData = filteredData.filter(item =>
         item.productName.toLowerCase().includes(word.toLowerCase()),
       );
     }
 
+    // 거래 상태로 필터링 (continue, end)
     if (transTypeString) {
-      filteredData = filteredData.filter(item => item.transType === transTypeString);
+      const mappedTransType =
+        transTypeString === 'continue' ? 'CONTINUE' : transTypeString === 'end' ? 'SUCCESS' : '';
+      if (mappedTransType) {
+        filteredData = filteredData.filter(item => item.transType === mappedTransType);
+      }
     }
 
     // 정렬 처리

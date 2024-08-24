@@ -25,7 +25,7 @@ export default function OrderTable({ posts }) {
   }
 
   return (
-    <div className="overflow-y-scroll no-scrollbar h-full">
+    <div className="overflow-y-scroll no-scrollbar h-full mt-6">
       <Table
         variant="simple"
         width="full"
@@ -74,7 +74,11 @@ export default function OrderTable({ posts }) {
                         {item.buyerId}
                       </Box>
                       <Box flex="1" textAlign="left" paddingX={'12px'} paddingY={'20px'}>
-                        {item.transType}
+                        {item.transType === 'SUCCESS'
+                          ? '거래 종료'
+                          : item.transType === 'CONTINUE'
+                            ? '거래 진행중'
+                            : item.transType === 'NONE' && '구매자 없이 거래 종료'}
                       </Box>
                       <Box flex="1" textAlign="left" paddingX={'12px'} paddingY={'20px'}>
                         {item.saleDate}

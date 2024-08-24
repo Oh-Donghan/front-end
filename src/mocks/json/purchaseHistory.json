@@ -85,7 +85,7 @@
       "sellerEmail": "seller@naver.com",
       "buyerId": "test",
       "salePrice": 8000,
-      "transType": "NONE",
+      "transType": "SUCCESS",
       "buyType": "INSTANT",
       "receiveType": "ALL",
       "saleDate": "2024-08-19"
@@ -153,7 +153,7 @@
       "sellerEmail": "seller@naver.com",
       "buyerId": "test",
       "salePrice": 12000,
-      "transType": "NONE",
+      "transType": "SUCCESS",
       "buyType": "INSTANT",
       "receiveType": "ALL",
       "saleDate": "2024-08-12"
@@ -204,7 +204,7 @@
       "sellerEmail": "seller@naver.com",
       "buyerId": "test",
       "salePrice": 57000,
-      "transType": "NONE",
+      "transType": "SUCCESS",
       "buyType": "INSTANT",
       "receiveType": "ALL",
       "saleDate": "2024-08-17"

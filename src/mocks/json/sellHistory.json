@@ -17,7 +17,7 @@
       "sellerEmail": "seller1@example.com",
       "buyerId": "buyer1",
       "salePrice": 2000,
-      "transType": "END",
+      "transType": "NONE",
       "buyType": "INSTANT",
       "receiveType": "ALL",
       "saleDate": "2024-08-16"
@@ -34,7 +34,7 @@
       "sellerEmail": "seller2@example.com",
       "buyerId": "buyer2",
       "salePrice": 3000,
-      "transType": "END",
+      "transType": "NONE",
       "buyType": "BID",
       "receiveType": "DELIVERY",
       "saleDate": "2024-08-15"
@@ -85,7 +85,7 @@
       "sellerEmail": "seller5@example.com",
       "buyerId": "buyer5",
       "salePrice": 5000,
-      "transType": "END",
+      "transType": "SUCCESS",
       "buyType": "INSTANT",
       "receiveType": "DELIVERY",
       "saleDate": "2024-08-12"
@@ -102,7 +102,7 @@
       "sellerEmail": "seller5@example.com",
       "buyerId": "buyer5",
       "salePrice": 5000,
-      "transType": "END",
+      "transType": "SUCCESS",
       "buyType": "INSTANT",
       "receiveType": "DELIVERY",
       "saleDate": "2024-08-12"
@@ -119,7 +119,7 @@
       "sellerEmail": "seller5@example.com",
       "buyerId": "buyer5",
       "salePrice": 5000,
-      "transType": "END",
+      "transType": "NONE",
       "buyType": "INSTANT",
       "receiveType": "DELIVERY",
       "saleDate": "2024-08-12"

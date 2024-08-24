@@ -1,50 +1,55 @@
-import {
-  Box,
-  Button,
-  Flex,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  Spinner,
-  Table,
-  Tbody,
-  Td,
-  Tr,
-} from '@chakra-ui/react';
+import { Box, Button, Flex, Menu, MenuButton, MenuItem, MenuList, Spinner } from '@chakra-ui/react';
 import { IoChevronDownSharp } from 'react-icons/io5';
 import HistoryPagination from './HistoryPagination';
 import Calendar from '../calendar/Calendar';
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { fetchRechargeHistoryData } from '../../../axios/mocks/order/rechargeHistory';
-import { formatDate } from '../../../utils/dateFormat';
+import RechargeTable from './RechargeTable';
 
 export default function RechargeHistory() {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [startDate, setStartDate] = useState(null);
-  const [sorted, setSorted] = useState('recent'); // 정렬 기준 상태 추가
-  const [endDate, setEndDate] = useState(null);
+  const [params, setParams] = useState({
+    currentPage: 1,
+    sorted: 'recent',
+    startDate: null,
+    endDate: null,
+  });
+
   const itemsPerPage = 7;
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['api/members/points/history', currentPage, sorted, startDate, endDate],
-    queryFn: () => fetchRechargeHistoryData(currentPage, itemsPerPage, sorted, startDate, endDate),
+    queryKey: [
+      'api/members/points/history',
+      params.currentPage,
+      params.sorted,
+      params.startDate,
+      params.endDate,
+    ],
+    queryFn: () =>
+      fetchRechargeHistoryData(
+        params.currentPage,
+        itemsPerPage,
+        params.sorted,
+        params.startDate,
+        params.endDate,
+      ),
   });
 
   const handlePageChange = (page: number) => {
-    setCurrentPage(page);
+    setParams(prev => ({ ...prev, currentPage: page }));
   };
 
   const handleSortChange = (sortOption: string) => {
-    setSorted(sortOption);
-    setCurrentPage(1); // 정렬이 변경될 때 페이지 초기화
+    setParams(prev => ({ ...prev, sorted: sortOption, currentPage: 1 }));
   };
 
   const handleDateChange = (start: Date | null, end: Date | null) => {
-    setStartDate(start);
-    setEndDate(end);
-    setCurrentPage(1); // 날짜 변경 시 페이지 초기화
+    setParams(prev => ({
+      ...prev,
+      startDate: start,
+      endDate: end,
+      currentPage: 1,
+    }));
   };
 
   if (isLoading) {
@@ -70,7 +75,7 @@ export default function RechargeHistory() {
             as={Button}
             rightIcon={<IoChevronDownSharp />}
           >
-            {sorted === 'recent' ? '최신순' : sorted === 'old' && '오래된순'}
+            {params.sorted === 'recent' ? '최신순' : params.sorted === 'old' && '오래된순'}
           </MenuButton>
           <MenuList>
             <MenuItem fontSize="sm" onClick={() => handleSortChange('recent')}>
@@ -95,41 +100,10 @@ export default function RechargeHistory() {
           <div className="text-4xl">200,000P</div>
         </Flex>
       </Box>
-      <div className="overflow-y-scroll no-scrollbar h-full">
-        <Table variant="simple" width="full" sx={{ tableLayout: 'fixed' }}>
-          <Tbody>
-            {data.content.map(item => (
-              <Tr key={item.id}>
-                <Td
-                  className={`w-20 text-center font-bold ${item.pointType === 'USE' ? 'bg-white text-black' : item.pointType === 'CHARGE' && 'bg-black text-white'}`}
-                >
-                  {item.pointType === 'USE' ? '사용' : item.pointType === 'CHARGE' && '충전'}
-                </Td>
-                <Td>
-                  <Box display="flex" justifyContent="space-between">
-                    <Box>
-                      <span>{formatDate(item.createdAt)}</span>
-                    </Box>
-                    <Box textAlign="right" className="flex gap-8">
-                      <span className="block">{item.curPointAmount}P</span>
-                      <span
-                        className={`block w-24 ${
-                          item.pointAmount > 0 ? 'text-blue-600' : 'text-red-600'
-                        }`}
-                      >
-                        {item.pointAmount > 0 ? `+${item.pointAmount}` : item.pointAmount}P
-                      </span>
-                    </Box>
-                  </Box>
-                </Td>
-              </Tr>
-            ))}
-          </Tbody>
-        </Table>
-      </div>
+      <RechargeTable posts={data?.content || []} />
       <HistoryPagination
         totalPages={data.totalPages}
-        currentPage={currentPage}
+        currentPage={params.currentPage}
         onPageChange={handlePageChange}
       />
     </Box>

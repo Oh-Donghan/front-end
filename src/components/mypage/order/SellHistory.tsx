@@ -5,60 +5,77 @@ import OrderTable from './OrderTable';
 import HistoryPagination from './HistoryPagination';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-import { fetchSellHistoryData } from '../../../axios/mocks/order/sellHistory';
+import { fetchSellHistoryData, ITransTypeSell } from '../../../axios/mocks/order/sellHistory';
 import MypageInput from './MypageInput';
+import { IoMdRefresh } from 'react-icons/io';
 
 export default function SellHistory() {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchWord, setSearchWord] = useState('');
-  const [transType, setTransType] = useState(''); // 추가된 상태
-  const [sorted, setSorted] = useState('recent'); // 정렬 기준 상태 추가
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
+  // 객체로 상태 관리
+  const [params, setParams] = useState({
+    currentPage: 1,
+    searchWord: '',
+    transType: ITransTypeSell.ALL,
+    sorted: 'recent',
+    startDate: null,
+    endDate: null,
+  });
   const itemsPerPage = 5;
 
   // Tanstack Query를 사용하여 데이터를 패칭
   const { data, isLoading, isError } = useQuery({
     queryKey: [
       '/api/transactions/sales',
-      currentPage,
-      searchWord,
-      transType,
-      sorted,
-      startDate,
-      endDate,
+      params.currentPage,
+      params.searchWord,
+      params.transType,
+      params.sorted,
+      params.startDate,
+      params.endDate,
     ],
     queryFn: () =>
       fetchSellHistoryData(
-        currentPage,
+        params.currentPage,
         itemsPerPage,
-        searchWord,
-        transType,
-        sorted,
-        startDate,
-        endDate,
+        params.searchWord,
+        params.transType,
+        params.sorted,
+        params.startDate,
+        params.endDate,
       ),
     placeholderData: keepPreviousData,
   });
 
+  // 핸들러 함수들
   const handlePageChange = (page: number) => {
-    setCurrentPage(page);
+    setParams(prev => ({ ...prev, currentPage: page }));
   };
 
-  const handleTransTypeChange = (type: string) => {
-    setTransType(type);
-    setCurrentPage(1);
+  const handleTransTypeChange = (type: ITransTypeSell) => {
+    setParams(prev => ({ ...prev, transType: type, currentPage: 1 }));
   };
 
   const handleSortChange = (sortOption: string) => {
-    setSorted(sortOption);
-    setCurrentPage(1); // 정렬이 변경될 때 페이지 초기화
+    setParams(prev => ({ ...prev, sorted: sortOption, currentPage: 1 }));
   };
 
   const handleDateChange = (start: Date | null, end: Date | null) => {
-    setStartDate(start);
-    setEndDate(end);
-    setCurrentPage(1); // 날짜 변경 시 페이지 초기화
+    setParams(prev => ({
+      ...prev,
+      startDate: start,
+      endDate: end,
+      currentPage: 1,
+    }));
+  };
+
+  const handleRefresh = () => {
+    setParams({
+      currentPage: 1,
+      searchWord: '',
+      transType: ITransTypeSell.ALL,
+      sorted: 'recent',
+      startDate: null,
+      endDate: null,
+    });
   };
 
   if (isLoading) {
@@ -75,7 +92,7 @@ export default function SellHistory() {
 
   return (
     <Box flex={1} flexDirection={'column'} className="p-4 flex">
-      <Flex gap={4}>
+      <Flex gap={4} height={'34px'}>
         {/* 정렬 기준 */}
         <Menu>
           <MenuButton
@@ -85,11 +102,11 @@ export default function SellHistory() {
             as={Button}
             rightIcon={<IoChevronDownSharp />}
           >
-            {sorted === 'recent'
+            {params.sorted === 'recent'
               ? '최신순'
-              : sorted === 'old'
+              : params.sorted === 'old'
                 ? '오래된순'
-                : sorted === 'low'
+                : params.sorted === 'low'
                   ? '가격 낮은 순'
                   : '가격 높은 순'}
           </MenuButton>
@@ -118,32 +135,38 @@ export default function SellHistory() {
             as={Button}
             rightIcon={<IoChevronDownSharp />}
           >
-            {transType === ''
+            {params.transType === ITransTypeSell.ALL
               ? '전체'
-              : transType === 'continue'
+              : params.transType === ITransTypeSell.CONTINUE
                 ? '진행중'
-                : transType === 'end' && '종료'}
+                : '종료'}
           </MenuButton>
           <MenuList>
-            <MenuItem fontSize="sm" onClick={() => handleTransTypeChange('')}>
+            <MenuItem fontSize="sm" onClick={() => handleTransTypeChange(ITransTypeSell.ALL)}>
               전체
             </MenuItem>
-            <MenuItem fontSize="sm" onClick={() => handleTransTypeChange('continue')}>
+            <MenuItem fontSize="sm" onClick={() => handleTransTypeChange(ITransTypeSell.CONTINUE)}>
               진행 중
             </MenuItem>
-            <MenuItem fontSize="sm" onClick={() => handleTransTypeChange('end')}>
+            <MenuItem fontSize="sm" onClick={() => handleTransTypeChange(ITransTypeSell.SUCCESS)}>
               종료
             </MenuItem>
           </MenuList>
         </Menu>
 
         <Calendar isInfo={false} onDateChange={handleDateChange} />
-        <MypageInput setSearchWord={setSearchWord} onSearch={handlePageChange} />
+        <MypageInput
+          setSearchWord={(word: string) => setParams(prev => ({ ...prev, searchWord: word }))}
+          onSearch={handlePageChange}
+        />
+        <Box className="cursor-pointer flex items-center" onClick={handleRefresh}>
+          <IoMdRefresh fontSize={'22px'} />
+        </Box>
       </Flex>
       <OrderTable posts={data?.content || []} />
       <HistoryPagination
         totalPages={data.totalPages}
-        currentPage={currentPage}
+        currentPage={params.currentPage}
         onPageChange={handlePageChange}
       />
     </Box>
