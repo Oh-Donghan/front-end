@@ -50,7 +50,6 @@ export default function MyInfo() {
             <ListItem>소셜로그인 계정은 정보를 수정할 수 없습니다.</ListItem>
             <ListItem>이메일과 동일한 아이디는 사용이 불가능합니다.</ListItem>
           </UnorderedList>
-          {/* <Calendar isInfo={true} /> */}
           <List spacing={1}>
             <ListItem className="p-3 border border-black">메시 국대 유니폼 입찰</ListItem>
             <ListItem className="p-3 border border-black">메시 국대 유니폼 입찰</ListItem>
