@@ -12,15 +12,8 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(authState);
 
   useEffect(() => {
-    if (localStorage.getItem('user')) {
-      setIsLoggedIn(true);
-    } else {
-      setIsLoggedIn(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    console.log(isLoggedIn);
+    const user = localStorage.getItem('user');
+    setIsLoggedIn(!!user);
   }, [isLoggedIn]);
 
   return (
