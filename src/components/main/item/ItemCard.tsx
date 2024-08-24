@@ -15,51 +15,36 @@ import {
 import Timer from '../timer/Timer';
 import { HiUser } from 'react-icons/hi';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { formatMemberCount } from '../../../utils/formatMemberCount';
-
-interface AuctionItem {
-  id: number;
-  title: string;
-  productName: string;
-  productStatus: number;
-  receiveType: string;
-  deliveryType: string;
-  currentPrice: number;
-  instantPrice: number;
-  memberCount: number;
-  endedAt: string;
-  childCategory: {
-    id: number;
-    categoryName: string;
-    parentId: number;
-    createdAt: string;
-  };
-  imageList: Array<{
-    id: number;
-    imageUrl: string;
-    imageName: string;
-    imageType: string;
-    auctionId: number;
-    createdAt: string;
-  }>;
-}
-
-interface ItemCardProps {
-  rank?: number;
-  item?: AuctionItem;
-  type?: string;
-  isLoading?: boolean;
-}
+import { ItemCardProps } from '../../../interface/auction/actionItemInterface';
+import { fetchCurrentPrice } from '../../../api/auction/fetchCurrentPrice';
 
 export default function ItemCard({ rank, item, type }: ItemCardProps) {
   const navigate = useNavigate();
   const [isFinished, setIsFinished] = useState(false);
+  const [currentPrice, setCurrentPrice] = useState(item.currentPrice);
 
   const moveDetail = () => {
     if (isFinished) return;
     navigate(`/detail`);
   };
+
+  useEffect(() => {
+    const fetchPrice = async () => {
+      try {
+        const data = await fetchCurrentPrice({ currentPrice });
+        if (data.currentPrice > currentPrice) {
+          // 가격이 올랐을 때만 업데이트
+          setCurrentPrice(data.currentPrice);
+        }
+      } catch (error) {
+        console.error('Error fetching current price:', error);
+      }
+    };
+
+    fetchPrice();
+  }, [item.id, currentPrice]);
 
   if (type === 'hot') {
     return (
@@ -114,7 +99,7 @@ export default function ItemCard({ rank, item, type }: ItemCardProps) {
             <Flex justifyContent={'space-between'} alignItems={'center'} height={'25px'}>
               <Text fontSize="sm">현제 입찰가</Text>
               <Text color="blue.600" fontSize="1.4rem" fontWeight={'bold'} marginRight={'3px'}>
-                {item.currentPrice.toLocaleString()}원
+                {currentPrice.toLocaleString()}원
               </Text>
             </Flex>
 
@@ -137,7 +122,7 @@ export default function ItemCard({ rank, item, type }: ItemCardProps) {
           </Button>
         </CardFooter>
       </Card>
-    ); // 혹은 스켈레톤 또는 로딩 UI 반환
+    );
   }
 
   return (
@@ -201,7 +186,7 @@ export default function ItemCard({ rank, item, type }: ItemCardProps) {
               noOfLines={1}
               pl={4}
             >
-              {item.currentPrice.toLocaleString()}원
+              {currentPrice.toLocaleString()}원
             </Text>
           </Flex>
 

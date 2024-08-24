@@ -284,24 +284,27 @@ export const handlers = [
   }),
 
   // 주기적으로 가격 데이터 받아오기
-  rest.get('/events', (req, res, ctx) => {
-    const stream = new ReadableStream({
-      async start(controller) {
-        let count = 0;
-        // eslint-disable-next-line no-constant-condition
-        while (true) {
-          const message = `data: {"message": "Event ${count}"}\n\n`;
-          controller.enqueue(new TextEncoder().encode(message)); // 스트림에 데이터 추가
-          count++;
-          await new Promise(resolve => setTimeout(resolve, 3000)); // 3초 대기
-        }
-      },
-      cancel() {
-        console.log('Stream cancelled');
-      },
-    });
+  rest.get('https://fake-server.com/api/price-updates', (req, res, ctx) => {
+    const currentPrice = Number(req.url.searchParams.get('currentPrice'));
 
-    return res(ctx.set('Content-Type', 'text/event-stream'), ctx.body(stream));
+    // currentPrice가 유효한 숫자인지 확인
+    if (isNaN(currentPrice)) {
+      return res(ctx.status(400), ctx.json({ error: 'Invalid currentPrice value' }));
+    }
+
+    // 10,000원에서 100,000원 사이의 랜덤 값 생성 (100원 단위)
+    const randomIncrease = Math.floor(Math.random() * 91) * 100 + 10000; // 10,000원 ~ 100,000원 사이
+    const updatedPrice = currentPrice + randomIncrease;
+
+    // 랜덤 지연 추가
+    const randomDelay = Math.floor(Math.random() * 4000) + 1000;
+
+    // 응답을 클라이언트에 전송
+    return res(
+      ctx.delay(randomDelay),
+      ctx.status(200),
+      ctx.json({ currentPrice: updatedPrice }), // 항상 증가된 가격을 반환
+    );
   }),
 
   // 경매 만들기
