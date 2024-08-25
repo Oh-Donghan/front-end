@@ -27,7 +27,7 @@ export default function Home() {
           </Flex>
         </Flex>
       ) : (
-        <Box minW="375px" px={8} overflowX="hidden">
+        <Box minW="345px" px={8} overflowX="hidden">
           {/* 지금 핫한 Top5 섹션 */}
           <Box minW="375px" mt={{ base: '12', sm: '75px' }}>
             <Flex alignItems="center" mb={{ base: '4', sm: '5' }}>
