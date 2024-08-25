@@ -361,7 +361,7 @@ export const handlers = [
         typeof obj.parentCategoryId === 'number' &&
         typeof obj.childCategoryId === 'number' &&
         typeof obj.productName === 'string' &&
-        typeof obj.productStatus === 'string'
+        typeof obj.productStatus === 'number'
       );
     }
 

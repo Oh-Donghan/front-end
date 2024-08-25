@@ -11,9 +11,9 @@ import all from '../assets/image/category/all.png';
 import searchico from '../assets/image/common/search.png';
 import CategorySortButton from '../components/listpage/sort/CategorySortButton';
 import TopButton from '../components/common/button/TopButton';
-import { useQuery } from '@tanstack/react-query';
-import { getCategories } from '../axios/category/categories';
+import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
+import { CategoryList } from '../interface/category/categoryInterface';
 
 export default function AuctionList() {
   const location = useLocation();
@@ -27,19 +27,21 @@ export default function AuctionList() {
   const sort = searchParams.get('sort');
   const search = searchParams.get('word');
 
-  const { data: categoryData, isLoading } = useQuery({
-    queryKey: [category],
-    queryFn: () => getCategories({ categoryName: category }),
-  });
+  const queryClient = useQueryClient();
+  const categories: CategoryList | undefined = queryClient.getQueryData(['categories']);
 
-  if (isLoading) {
-    return <Flex align={'center'} justify={'center'} h={'100vh'} pt={4}></Flex>;
-  }
+  const currentCategoryData = categories.find(cat => {
+    return cat.categoryName === category;
+  });
 
   const renderNoItemsMessage = () => (
     <Flex w={'full'} h="668px" align={'center'} justify={'center'}>
       <Flex direction={'column'} align={'center'} gap={2}>
-        <Text fontWeight={'bold'} fontSize={{ base: '1.1rem', md: '1.4rem' }}>
+        <Text
+          fontWeight={'bold'}
+          fontSize={{ base: '1.1rem', md: '1.4rem' }}
+          color={'rgba(60,60,60,1)'}
+        >
           {'현재 진행중인 경매가 없습니다.'}
         </Text>
         <Link to={'/'}>
@@ -89,6 +91,11 @@ export default function AuctionList() {
     </>
   );
 
+  if (!categories) {
+    console.error('Categories data is not available.');
+    return;
+  }
+
   return (
     <Box minW="442px" px={8} overflowX="hidden">
       <TopButton />
@@ -109,7 +116,7 @@ export default function AuctionList() {
             <>
               <Text>전체 경매</Text>
               <GoChevronRight className="mx-1" />
-              <Text>{categoryData.categoryName}</Text>
+              <Text>{currentCategoryData[0].categoryName}</Text>
               {subCategory && (
                 <>
                   <GoChevronRight className="mx-1" />
@@ -129,14 +136,14 @@ export default function AuctionList() {
         {category !== '전체' && !search && (
           <Flex alignItems={'center'} marginTop={'20px'}>
             <img
-              src={categoryData.imgUrl}
+              src={currentCategoryData[0].imgUrl}
               alt="all.png"
               width={'28px'}
               height={'28px'}
               className="ml-1 mb-0.5"
             />
             <Text fontSize="26px" fontWeight="bold" pl="6px" ml="3px">
-              {categoryData.categoryName}
+              {currentCategoryData[0].categoryName}
             </Text>
           </Flex>
         )}
@@ -215,7 +222,7 @@ export default function AuctionList() {
                     </Button>
                   </Link>
                 )}
-                {categoryData.categories?.map((sub, i) => (
+                {currentCategoryData[0].categories?.map((sub, i) => (
                   <Link
                     to={{
                       pathname: '/auctions',

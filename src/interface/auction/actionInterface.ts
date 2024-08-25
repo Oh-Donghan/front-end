@@ -11,7 +11,7 @@ export interface CreateAuctionType {
   parentCategoryId: number;
   childCategoryId: number;
   productName: string;
-  productStatus: string;
+  productStatus: number;
   contactPlace?: string;
   productColor?: string;
   productDescription?: string;
