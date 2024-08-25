@@ -9,7 +9,11 @@ export default function Layout() {
   const hideNav =
     location.pathname === '/chat' ||
     location.pathname === '/members/payment/approve' ||
-    location.pathname === '/members/payment/cancle';
+    location.pathname === '/members/payment/cancle' ||
+    location.pathname === '/mypage/myinfo' ||
+    location.pathname === '/mypage/buy' ||
+    location.pathname === '/mypage/sell' ||
+    location.pathname === '/mypage/charge';
 
   const hideFooter =
     location.pathname === '/mypage/myinfo' ||
