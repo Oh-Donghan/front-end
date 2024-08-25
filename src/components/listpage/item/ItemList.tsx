@@ -8,15 +8,15 @@ import { getAuctionItems } from '../../../axios/auction/auctionItems';
 import ItemCardSkeleton from '../../../components/common/item/ItemCardSkeleton';
 
 interface ItemListProps {
-  type?: string;
+  setIsNoItem?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function ItemList({ type }: ItemListProps) {
+export default function ItemList({ setIsNoItem }: ItemListProps) {
   const searchParams = new URLSearchParams(location.search);
   const category = searchParams.get('category') || '전체';
-  const subCategory = searchParams.get('sub');
-  const sort = searchParams.get('sort');
-  const search = searchParams.get('word');
+  const subCategory = searchParams.get('sub') || undefined;
+  const sorted = searchParams.get('sorted') || 'recent';
+  const search = searchParams.get('word') || undefined;
   const { ref, inView } = useInView();
   const skeletonArray = new Array(5).fill(null);
 
@@ -27,9 +27,9 @@ export default function ItemList({ type }: ItemListProps) {
     '2xl': 'repeat(5, 1fr)', // 초대형 화면에서 한 줄에 5개의 아이템
   });
 
-  const { data, fetchNextPage, hasNextPage, isLoading } = useInfiniteQuery({
-    queryKey: ['items', category, subCategory, sort, search],
-    queryFn: () => getAuctionItems({ pageParam: 0 }),
+  const { data, fetchNextPage, hasNextPage, isLoading, error } = useInfiniteQuery({
+    queryKey: ['items', category, subCategory, sorted, search],
+    queryFn: () => getAuctionItems({ word: search, category, sorted, sub: subCategory }),
     getNextPageParam: lastPage => {
       return lastPage.number + 1 < lastPage.totalPages ? lastPage.number + 1 : undefined;
     },
@@ -41,6 +41,20 @@ export default function ItemList({ type }: ItemListProps) {
       fetchNextPage();
     }
   }, [inView, fetchNextPage, hasNextPage]);
+
+  useEffect(() => {
+    if (isLoading) return;
+    if (data.pages[0].content.length === 0) {
+      setIsNoItem(true);
+    }
+    if (data.pages[0].content.length > 0) {
+      setIsNoItem(false);
+    }
+  }, [data]);
+
+  if (error) {
+    return <Box>Fetching error</Box>;
+  }
 
   if (isLoading) {
     return (
@@ -64,44 +78,18 @@ export default function ItemList({ type }: ItemListProps) {
 
   return (
     <>
-      {data.pages.length > 0 ? (
-        <>
-          <Grid templateColumns={gridTemplateColumns} gap={7} position={'relative'} zIndex={'40'}>
-            {data.pages.map(page =>
-              page.content.map(item => {
-                return (
-                  <GridItem key={item.id}>
-                    <ItemCard item={item} />
-                  </GridItem>
-                );
-              }),
-            )}
-          </Grid>
-          <Box ref={ref} textAlign="center" py={0}></Box>
-        </>
-      ) : (
-        <Flex w={'full'} h="400px" align={'center'} justify={'center'}>
-          <Flex direction={'column'} align={'center'} gap={2}>
-            <Text fontWeight={'bold'} fontSize={{ base: '1.1rem', md: '1.4rem' }}>
-              {type === 'search'
-                ? '키워드가 포함된 경매을 찾을 수 없습니다.'
-                : '현재 진행중인 경매가 없습니다.'}
-            </Text>
-            <Text fontWeight={'bold'} fontSize={'1rem'} color={'rgba(140,140,140,1)'}>
-              {type === 'search' ? '검색어를 바르게 입력했는지 확인해 보세요' : ''}
-            </Text>
-            <Link to={'/'} className="mt-8">
-              <Button
-                color={'white'}
-                bgColor={'rgba(49, 130, 206,1)'}
-                _hover={{ bgColor: 'rgba(49, 120, 170,1)' }}
-              >
-                홈으로 이동
-              </Button>
-            </Link>
-          </Flex>
-        </Flex>
-      )}
+      <Grid templateColumns={gridTemplateColumns} gap={7} position={'relative'} zIndex={'40'}>
+        {data.pages.map(page =>
+          page.content.map(item => {
+            return (
+              <GridItem key={item.id}>
+                <ItemCard item={item} />
+              </GridItem>
+            );
+          }),
+        )}
+      </Grid>
+      <Box ref={ref} textAlign="center" py={0}></Box>
     </>
   );
 }

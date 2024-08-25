@@ -8,14 +8,14 @@ export default function SortButton() {
   const navigate = useNavigate();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const sort = searchParams.get('sort');
+  const sorted = searchParams.get('sorted');
   const currentUrl = location.pathname + location.search;
 
   useEffect(() => {
-    if (sort) {
-      setSelectedOption(EtoK(sort));
+    if (sorted) {
+      setSelectedOption(EtoK(sorted));
     }
-  }, [sort]);
+  }, [sorted]);
 
   const EtoK = option => {
     let res = '';
@@ -43,13 +43,13 @@ export default function SortButton() {
 
     setSelectedOption(EtoK(option));
 
-    if (!sort) {
-      navigate(`${currentUrl}&sort=${option}`);
+    if (!sorted) {
+      navigate(`${currentUrl}&sorted=${option}`);
     } else {
       if (option === 'recent') {
-        searchParams.delete('sort');
+        searchParams.delete('sorted');
       } else {
-        searchParams.set('sort', option);
+        searchParams.set('sorted', option);
       }
       navigate(`${location.pathname}?${searchParams.toString()}`);
     }

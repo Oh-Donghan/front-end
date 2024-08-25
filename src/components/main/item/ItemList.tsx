@@ -8,21 +8,34 @@ import { EffectCards, Pagination } from 'swiper/modules';
 import { getAuctionItems } from '../../../axios/auction/auctionItems';
 import { useQuery } from '@tanstack/react-query';
 import ItemCardSkeleton from '../../../components/common/item/ItemCardSkeleton';
+import { useEffect } from 'react';
 
 interface ItemListProps {
   type?: string;
+  setIsNoItem?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function SwiperItemList({ type }: ItemListProps) {
+export default function SwiperItemList({ type, setIsNoItem }: ItemListProps) {
   const isSlider = useBreakpointValue({ base: true, sm2: false, md: false });
   const searchParams = new URLSearchParams(location.search);
   const category = searchParams.get('category') || '전체';
   const skeletonArray = new Array(5).fill(null);
 
-  const { data: items, isLoading } = useQuery({
-    queryKey: ['items', category, type],
-    queryFn: () => getAuctionItems({ type }),
+  const { data, isLoading } = useQuery({
+    queryKey: ['items', category],
+    queryFn: () =>
+      getAuctionItems({ word: undefined, category, sorted: undefined, sub: undefined }),
   });
+
+  useEffect(() => {
+    if (isLoading) return;
+    if (!type && data.content.length === 0) {
+      setIsNoItem(true);
+    }
+    if (!type && data.content.length > 0) {
+      setIsNoItem(false);
+    }
+  }, [data]);
 
   if (isLoading) {
     return (
@@ -53,7 +66,7 @@ export default function SwiperItemList({ type }: ItemListProps) {
       className="mySwiper"
       style={{ marginTop: '25px' }}
     >
-      {items.content.map((item, i) => (
+      {data.content.map((item, i) => (
         <SwiperSlide key={item.id}>
           <ItemCard type={type} item={item} rank={i + 1} />
         </SwiperSlide>
@@ -69,7 +82,7 @@ export default function SwiperItemList({ type }: ItemListProps) {
       }}
       gap={6}
     >
-      {items.content.map((item, i) => (
+      {data.content.map((item, i) => (
         <GridItem key={item.id}>
           <ItemCard type={type} item={item} rank={i + 1} />
         </GridItem>

@@ -13,9 +13,11 @@ import CategorySortButton from '../components/listpage/sort/CategorySortButton';
 import TopButton from '../components/common/button/TopButton';
 import { useQuery } from '@tanstack/react-query';
 import { getCategories } from '../axios/category/categories';
+import { useState } from 'react';
 
 export default function AuctionList() {
   const location = useLocation();
+  const [isNoItem, setIsNoItem] = useState(false);
 
   const showSearchInputBelow = useBreakpointValue({ base: true, lg: false });
 
@@ -33,6 +35,59 @@ export default function AuctionList() {
   if (isLoading) {
     return <Flex align={'center'} justify={'center'} h={'100vh'} pt={4}></Flex>;
   }
+
+  const renderNoItemsMessage = () => (
+    <Flex w={'full'} h="668px" align={'center'} justify={'center'}>
+      <Flex direction={'column'} align={'center'} gap={2}>
+        <Text fontWeight={'bold'} fontSize={{ base: '1.1rem', md: '1.4rem' }}>
+          {'현재 진행중인 경매가 없습니다.'}
+        </Text>
+        <Link to={'/'}>
+          <Button
+            color={'white'}
+            bgColor={'rgba(49, 130, 206,1)'}
+            _hover={{ bgColor: 'rgba(49, 120, 170,1)' }}
+            mt={8}
+          >
+            홈으로 이동
+          </Button>
+        </Link>
+      </Flex>
+    </Flex>
+  );
+
+  const renderItemList = () => (
+    <>
+      {search ? (
+        <Box mb={{ base: '12', sm: '20' }} mt={{ base: '12', sm: '6' }}>
+          <ItemList setIsNoItem={setIsNoItem} />
+        </Box>
+      ) : (
+        <>
+          <Box mt={{ base: '12', sm: '60px' }}>
+            <Flex alignItems="center" mb={{ base: '4', sm: '5' }}>
+              <Text fontSize={{ base: '1.3rem', md: '1.5rem' }} fontWeight="bold">
+                {category === '전체' && '지금 핫한 경매 Top5'}
+                {category !== '전체' && !subCategory && `지금 핫한 ${category} Top5`}
+                {category !== '전체' && subCategory && `지금 핫한 ${subCategory} Top5`}
+              </Text>
+            </Flex>
+            <SwiperItemList type="hot" setIsNoItem={setIsNoItem} />
+          </Box>
+          <Box mb={{ base: '12', sm: '20' }} mt={{ base: '12', sm: '20' }}>
+            <Flex alignItems="center" justifyContent="space-between" mb={{ base: '4', sm: '5' }}>
+              <Text fontSize={{ base: '1.3rem', md: '1.5rem' }} fontWeight="bold">
+                {category !== '전체'
+                  ? `전체 ${subCategory === null ? category : subCategory} 경매`
+                  : '전체 경매'}
+              </Text>
+            </Flex>
+            <ItemList setIsNoItem={setIsNoItem} />
+          </Box>
+        </>
+      )}
+    </>
+  );
 
   return (
     <Box minW="442px" px={8} overflowX="hidden">
@@ -209,48 +264,8 @@ export default function AuctionList() {
         </Box>
       )}
 
-      {search ? (
-        <>
-          {/* 검색된 경매 섹션 */}
-          <Box mb={{ base: '12', sm: '20' }} mt={{ base: '12', sm: '6' }}>
-            <Flex
-              alignItems="center"
-              justifyContent="space-between"
-              mb={{ base: '4', sm: '5' }}
-            ></Flex>
-            <ItemList type="search" />
-          </Box>
-        </>
-      ) : (
-        <>
-          {/* 지금 핫한 Top5 섹션 */}
-          <Box mt={{ base: '12', sm: '60px' }}>
-            <Flex alignItems="center" mb={{ base: '4', sm: '5' }}>
-              <Text fontSize={{ base: '1.3rem', md: '1.5rem' }} fontWeight="bold">
-                {/* 카테고리가 전체 일 때 hot5 타이틀 */}
-                {category === '전체' && '지금 핫한 경매 Top5'}
-                {/* 카테고리가 전체가 아니고 서브 카테고리가 없을 때 hot5 타이틀 */}
-                {category !== '전체' && !subCategory && `지금 핫한 ${category} Top5`}
-                {/* 카테고리가 전체가 아니고 서브 카테고리가 있을 때 hot5 타이틀 */}
-                {category !== '전체' && subCategory && `지금 핫한 ${subCategory} Top5`}
-              </Text>
-            </Flex>
-            <SwiperItemList type="hot" />
-          </Box>
-
-          {/* 전체 경매 섹션 */}
-          <Box mb={{ base: '12', sm: '20' }} mt={{ base: '12', sm: '20' }}>
-            <Flex alignItems="center" justifyContent="space-between" mb={{ base: '4', sm: '5' }}>
-              <Text fontSize={{ base: '1.3rem', md: '1.5rem' }} fontWeight="bold">
-                {category !== '전체'
-                  ? `전체 ${subCategory === null ? category : subCategory} 경매`
-                  : '전체 경매'}
-              </Text>
-            </Flex>
-            <ItemList />
-          </Box>
-        </>
-      )}
+      {/* 아이템 목록 렌더링 */}
+      {isNoItem ? renderNoItemsMessage() : renderItemList()}
     </Box>
   );
 }
