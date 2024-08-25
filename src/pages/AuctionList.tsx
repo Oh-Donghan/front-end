@@ -218,7 +218,7 @@ export default function AuctionList() {
               justifyContent="space-between"
               mb={{ base: '4', sm: '5' }}
             ></Flex>
-            <ItemList />
+            <ItemList type="search" />
           </Box>
         </>
       ) : (

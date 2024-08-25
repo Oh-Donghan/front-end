@@ -48,7 +48,8 @@
     "prettier": "^3.3.3",
     "tailwindcss": "^3.4.7",
     "typescript": "^5.2.2",
-    "vite": "^5.3.4"
+    "vite": "^5.3.4",
+    "vite-plugin-mkcert": "^1.17.6"
   },
   "msw": {
     "workerDirectory": "public"

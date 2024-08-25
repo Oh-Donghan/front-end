@@ -1,19 +1,15 @@
-import axiosInstance from '../instances';
+import axios from 'axios';
 
 interface fetchItemsProps {
-  word?: string;
-  category?: string;
-  sorted?: string;
-  sub?: string;
+  pageParam?: number;
+  type?: string;
 }
 
-export const getAuctionItems = async ({ word, category, sorted, sub }: fetchItemsProps) => {
-  const res = await axiosInstance.get(`/api/auctions`, {
+export const getAuctionItems = async ({ pageParam = 0, type }: fetchItemsProps) => {
+  const res = await axios.get(`https://fake-server.com/api/auctions`, {
     params: {
-      word,
-      category,
-      sorted: sorted || 'recent',
-      sub,
+      page: pageParam,
+      type: type,
     },
   });
 
