@@ -7,43 +7,11 @@ import { useEffect } from 'react';
 import { getAuctionItems } from '../../../axios/auction/auctionItems';
 import ItemCardSkeleton from '../../../components/common/item/ItemCardSkeleton';
 
-interface AuctionItem {
-  id: number;
-  title: string;
-  productName: string;
-  productStatus: number;
-  receiveType: string;
-  deliveryType: string;
-  currentPrice: number;
-  instantPrice: number;
-  memberCount: number;
-  endedAt: string;
-  childCategory: {
-    id: number;
-    categoryName: string;
-    parentId: number;
-    createdAt: string;
-  };
-  imageList: Array<{
-    id: number;
-    imageUrl: string;
-    imageName: string;
-    imageType: string;
-    auctionId: number;
-    createdAt: string;
-  }>;
-}
-
-interface ItemListProps {
-  type?: string;
-  data?: AuctionItem[];
-}
-
-export default function ItemList({ type }: ItemListProps) {
+export default function ItemList() {
   const searchParams = new URLSearchParams(location.search);
   const category = searchParams.get('category') || '전체';
   const subCategory = searchParams.get('sub');
-  const sort = searchParams.get('sort');
+  const sorted = searchParams.get('sort');
   const search = searchParams.get('word');
   const { ref, inView } = useInView();
   const skeletonArray = new Array(5).fill(null);
@@ -56,8 +24,8 @@ export default function ItemList({ type }: ItemListProps) {
   });
 
   const { data, fetchNextPage, hasNextPage, isLoading } = useInfiniteQuery({
-    queryKey: ['items', category, subCategory, sort, search],
-    queryFn: getAuctionItems,
+    queryKey: ['items', category, subCategory, sorted, search],
+    queryFn: () => getAuctionItems({ word: search, category, sorted, sub: subCategory }),
     getNextPageParam: lastPage => {
       return lastPage.number + 1 < lastPage.totalPages ? lastPage.number + 1 : undefined;
     },
@@ -111,12 +79,10 @@ export default function ItemList({ type }: ItemListProps) {
         <Flex w={'full'} h="400px" align={'center'} justify={'center'}>
           <Flex direction={'column'} align={'center'} gap={2}>
             <Text fontWeight={'bold'} fontSize={{ base: '1.1rem', md: '1.4rem' }}>
-              {type === 'search'
-                ? '키워드가 포함된 경매을 찾을 수 없습니다.'
-                : '현재 진행중인 경매가 없습니다.'}
+              {'현재 진행중인 경매가 없습니다.'}
             </Text>
             <Text fontWeight={'bold'} fontSize={'1rem'} color={'rgba(140,140,140,1)'}>
-              {type === 'search' ? '검색어를 바르게 입력했는지 확인해 보세요' : ''}
+              {'검색어를 바르게 입력했는지 확인해 보세요'}
             </Text>
             <Link to={'/'} className="mt-8">
               <Button

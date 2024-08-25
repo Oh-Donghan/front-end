@@ -3,7 +3,7 @@ import axiosInstance from '../instances';
 interface fetchItemsProps {
   word?: string;
   category?: string;
-  sorted?: 'date' | 'view' | 'low' | 'high';
+  sorted?: string;
   sub?: string;
 }
 
@@ -12,7 +12,7 @@ export const getAuctionItems = async ({ word, category, sorted, sub }: fetchItem
     params: {
       word,
       category,
-      sorted,
+      sorted: sorted || 'recent',
       sub,
     },
   });
