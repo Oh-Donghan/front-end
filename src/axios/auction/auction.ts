@@ -1,6 +1,5 @@
-import axiosInstance from '../instances';
-import { CreateAuctionType } from '../../interface/auction/actionInterface';
 import axios from 'axios';
+import { CreateAuctionType } from '../../interface/auction/actionInterface';
 
 export const createAuction = async (
   createDto: CreateAuctionType,
@@ -22,9 +21,10 @@ export const createAuction = async (
   formData.append('createDto', JSON.stringify(createDto));
 
   try {
-    const res = await axiosInstance.post('/api/auctions', formData, {
+    const res = await axios.post('https://fake-server.com/api/auctions', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
       },
     });
 
