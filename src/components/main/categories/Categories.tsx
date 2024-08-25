@@ -29,7 +29,9 @@ export default function Categories() {
 
   const { data: categories, isLoading } = useQuery({
     queryKey: ['categories'],
-    queryFn: () => getCategories({ categoryName: undefined }),
+    queryFn: () => getCategories(),
+    staleTime: Infinity,
+    gcTime: Infinity,
   });
 
   const navigate = useNavigate();
@@ -121,23 +123,23 @@ export default function Categories() {
             </Flex>
           </MenuButton>
           <MenuList maxH="220px" overflowY="auto" width={'100%'}>
-            {categories.map(item => (
+            {categories.map(category => (
               <MenuItem
-                key={item.id}
-                value={item.title}
+                key={category.id}
+                value={category.title}
                 onClick={() => {
-                  handleSelect(item);
+                  handleSelect(category);
                 }}
               >
                 <Flex align="center">
                   <Image
-                    src={item.imgUrl}
-                    alt={item.categoryName}
+                    src={category.imgUrl}
+                    alt={category.categoryName}
                     boxSize="1.3rem"
                     mr="9px"
                     marginLeft={'-2px'}
                   />
-                  <Text>{item.categoryName}</Text>
+                  <Text>{category.categoryName}</Text>
                 </Flex>
               </MenuItem>
             ))}

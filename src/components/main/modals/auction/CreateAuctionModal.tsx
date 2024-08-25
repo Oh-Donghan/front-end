@@ -28,9 +28,9 @@ import { CreateAuctionType } from '../../../../interface/auction/actionInterface
 export default function CreateAuctionModal({ isOpen, onClose }) {
   const methods = useForm();
   const { register, handleSubmit, reset, setValue } = methods;
-  const [rating, setRating] = useState(0);
-  const [selectedCategory, setSelectedCategory] = useState('');
-  const [selectedSubCategory, setSelectedSubCategory] = useState('');
+  const [rating, setRating] = useState<number>(0);
+  const [selectedCategory, setSelectedCategory] = useState<number>(0);
+  const [selectedSubCategory, setSelectedSubCategory] = useState<number>(0);
   const [subCategories, setSubCategories] = useState([]);
   const [tradeMethod, setTradeMethod] = useState('');
   const [shippingMethod, setShippingMethod] = useState('');
@@ -55,8 +55,6 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
     reset({
       title: '',
       productName: '',
-      category: '',
-      subCategory: '',
       color: '',
       shippingCost: '',
       startPrice: '',
@@ -67,12 +65,13 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
     });
     setTradeMethod('');
     setShippingMethod('');
-    setSelectedCategory('');
-    setSelectedSubCategory('');
+    setSelectedCategory(0);
+    setSelectedSubCategory(0);
     setSubCategories([]);
     setFiles([]);
     setEndDate(null);
     setContactPlace('');
+    setRating(0);
     onClose();
   };
 
@@ -188,10 +187,10 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
       startPrice: parseInt(data.startPrice),
       instantPrice: parseInt(data.instantPrice),
       endedAt: formatDateToDatetime(endDate),
-      parentCategoryId: parseInt(selectedCategory),
-      childCategoryId: parseInt(selectedSubCategory),
+      parentCategoryId: selectedCategory,
+      childCategoryId: selectedSubCategory,
       productName: data.productName,
-      productStatus: rating.toString(),
+      productStatus: rating,
       productColor: data.color || '',
       productDescription: data.description || '',
       deliveryPrice: shippingMethod !== 'nodelivery' ? parseInt(data.shippingCost) : undefined,

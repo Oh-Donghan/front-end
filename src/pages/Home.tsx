@@ -21,7 +21,11 @@ export default function Home() {
       {isNoItem ? (
         <Flex w={'full'} h="450px" align={'center'} justify={'center'}>
           <Flex direction={'column'} align={'center'} gap={2}>
-            <Text fontWeight={'bold'} fontSize={{ base: '1.1rem', md: '1.4rem' }}>
+            <Text
+              fontWeight={'bold'}
+              fontSize={{ base: '1.1rem', md: '1.4rem' }}
+              color={'rgba(60,60,60,1)'}
+            >
               {'현재 진행중인 경매가 없습니다.'}
             </Text>
           </Flex>
