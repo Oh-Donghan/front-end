@@ -1,7 +1,17 @@
 import axiosInstance from '../instances';
 
-export const getChat = async () => {
-  const res = await axiosInstance.get(`/api/rooms`);
+interface memberId {
+  memberId: number;
+}
 
-  return res.data;
+export const getChat = async ({ memberId }) => {
+  const response = await axiosInstance.get(`/api/rooms`, {
+    params: {
+      memberId,
+    },
+  });
+
+  console.log(response.data);
+
+  return response.data;
 };

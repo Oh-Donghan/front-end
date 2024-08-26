@@ -10,29 +10,74 @@ import {
 } from '@chakra-ui/react';
 import ChatButton from '../../../common/button/ChatModalButton';
 import ChatModalInput from './ChatModalInput';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import ChatList from '../../chat/ChatList';
 import { useQuery } from '@tanstack/react-query';
 import { getChat } from '../../../../axios/chat/chat';
 import { useRecoilValue } from 'recoil';
 import { authState } from '../../../../recoil/atom/authAtom';
 
+const data = [
+  {
+    id: 10,
+    seller: [
+      {
+        id: 1,
+        member_id: 'user1',
+        email: 'user1@gmail.com',
+        social: 'google',
+        social_provider_id: '12678237749412345',
+      },
+    ],
+    buyer: [
+      {
+        id: 2,
+        member_id: 'user2',
+        email: 'user2@naver.com',
+        social: 'naver',
+        social_provider_id: 't734fd@5f8d@%56(&24',
+      },
+    ],
+    category: [
+      {
+        category_name: '청바지',
+      },
+    ],
+    auction: [
+      {
+        id: 4,
+        title: ' **** 휴먼메이드 청바지 제품 팝니다',
+        auction_status: '경매종료',
+        product_name: '휴먼메이드 청바지',
+        product_color: '연청',
+        product_status: '거의 새상품',
+        product_description: '2~3번 밖에 안입은 제품입니다.',
+        contact: true,
+        delivery: true,
+        delivery_type: '착불',
+        delivery_price: 3500,
+        start_price: 50000,
+        instance_price: 160000,
+        ended_at: '2024-08-04T11:12:17',
+        created_at: '2024-08-03T11:12:17',
+      },
+    ],
+  },
+];
+
 export default function ChatModal() {
   const [isChatModalOpen, setIsChatModalOpen] = useState(false);
-  const isLoggedIn = useRecoilValue(authState);
+  // const isLoggedIn = useRecoilValue(authState);
+  const isLoggedIn = true;
   const toast = useToast();
 
-  const { data, isLoading } = useQuery({
-    queryKey: ['chat'],
-    queryFn: () => getChat(),
-    staleTime: 2 * 60 * 1000,
-    gcTime: 30 * 60 * 1000,
-    enabled: isChatModalOpen,
-  });
-
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
+  // const { data, isLoading } = useQuery({
+  //   queryKey: ['chat'],
+  //   queryFn: () => getChat({ memberId: 1 }),
+  //   staleTime: 5 * 60 * 1000,
+  //   gcTime: 30 * 60 * 1000,
+  //   enabled: isChatModalOpen,
+  // });
 
   const handleButtonClick = () => {
     if (!isLoggedIn) {
@@ -63,7 +108,7 @@ export default function ChatModal() {
             </PopoverHeader>
             <PopoverArrow />
             <PopoverBody padding={'0px'}>
-              <ChatList isLoading={isLoading} />
+              <ChatList />
             </PopoverBody>
           </PopoverContent>
         )}

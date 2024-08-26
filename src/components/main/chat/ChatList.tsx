@@ -5,18 +5,18 @@ interface ChatListPropsType {
   isLoading?: boolean;
 }
 
-export default function ChatList({ isLoading }: ChatListPropsType) {
+export default function ChatList() {
   const chatSkeletonArray = new Array(5).fill(null);
 
-  if (isLoading) {
-    return (
-      <Flex direction={'column'} maxHeight={'410px'}>
-        {chatSkeletonArray.map((_, i) => {
-          return <Chat key={i} />;
-        })}
-      </Flex>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <Flex direction={'column'} maxHeight={'410px'}>
+  //       {chatSkeletonArray.map((_, i) => {
+  //         return <Chat key={i} />;
+  //       })}
+  //     </Flex>
+  //   );
+  // }
 
   return (
     <Flex

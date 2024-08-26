@@ -9,12 +9,21 @@ import {
   Text,
   useMediaQuery,
 } from '@chakra-ui/react';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import AlarmList from './AlarmList';
 
 export default function AlarmModal() {
   const initialRef = useRef(null);
   const [isLargerThan480] = useMediaQuery('(min-width: 480px)');
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleOpen = () => {
+    setIsOpen(true);
+  };
+
+  const handleClose = () => {
+    setIsOpen(false);
+  };
 
   return (
     <Box ref={initialRef} position={'relative'} zIndex={'50'}>
@@ -22,6 +31,8 @@ export default function AlarmModal() {
         placement={isLargerThan480 ? 'bottom-end' : 'bottom'}
         closeOnBlur={true}
         trigger={'hover'}
+        onOpen={handleOpen}
+        onClose={handleClose}
       >
         <PopoverTrigger>
           <span>알림</span>
@@ -43,9 +54,7 @@ export default function AlarmModal() {
               *최근 30일 동안의 알림만 보관되며, 이후 자동 삭제됩니다.
             </Text>
           </PopoverHeader>
-          <PopoverBody padding={'0px'}>
-            <AlarmList />
-          </PopoverBody>
+          <PopoverBody padding={'0px'}>{isOpen && <AlarmList />}</PopoverBody>
         </PopoverContent>
       </Popover>
     </Box>

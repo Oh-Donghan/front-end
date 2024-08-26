@@ -27,7 +27,8 @@ export default function Nav() {
   const pointChargeDisclosure = useDisclosure();
   const createAuctionDisclosure = useDisclosure();
   const drawerDisclosure = useDisclosure();
-  const [isLoggedIn, setIsLoggedIn] = useRecoilState(authState);
+  // const [isLoggedIn, setIsLoggedIn] = useRecoilState(authState);
+  const isLoggedIn = true;
 
   const navigate = useNavigate();
 
@@ -92,7 +93,7 @@ export default function Nav() {
                 <li
                   className="mr-4 cursor-pointer"
                   onClick={() => {
-                    setIsLoggedIn(false);
+                    // setIsLoggedIn(false);
                     localStorage.removeItem('user');
                   }}
                 >
