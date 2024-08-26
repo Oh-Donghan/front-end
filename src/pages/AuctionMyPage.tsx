@@ -112,7 +112,7 @@ export default function AuctionMyPage() {
         <Flex
           direction={{ base: 'column', md: 'row' }}
           w={{ base: '90%', lg: '1200px' }}
-          h={'95vh'}
+          h={{ base: '95vh', lg: '672px' }}
           bg="white"
           borderRadius="10px"
           overflow="auto"
@@ -126,7 +126,7 @@ export default function AuctionMyPage() {
           }}
         >
           {menuList}
-          <Flex flex="1" direction="column" p="16px">
+          <Flex flex="1" direction="column" p="24px">
             <Outlet />
           </Flex>
         </Flex>
