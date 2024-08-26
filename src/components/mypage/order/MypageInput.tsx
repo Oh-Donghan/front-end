@@ -54,30 +54,31 @@ export default function MypageInput({ setSearchWord, onSearch }) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Box display="flex" justifyContent="center">
-        <Stack spacing={4} width="300px">
-          <InputGroup>
+      <Box display="flex" justifyContent="center" width="100%">
+        <Stack spacing={4} width="100%">
+          <InputGroup width="100%">
             <InputLeftAddon borderColor="gray.300" height="34px" padding="0 10px">
               <IoSearch color="rgba(190,190,190,1)" size={16} />
             </InputLeftAddon>
             <Input
               type="text"
               placeholder="상품명으로 검색해주세요."
+              fontSize={{ base: 'xs', md: '16px' }}
               borderColor="gray.300"
-              width="300px"
               height="34px"
+              flexGrow={1} // Input 요소가 남은 공간을 차지하도록 설정
               {...register('search')}
               disabled={formState.isSubmitting}
             />
             <InputRightElement height="34px">
               <Button
-                width="20px"
+                width="60px"
                 height="26px"
                 marginRight={'8px'}
                 color="rgba(130,130,130,1)"
                 disabled={formState.isSubmitting}
                 type="submit"
-                fontSize="14px"
+                fontSize={{ base: 'xs', lg: '14px' }}
               >
                 {formState.isSubmitting ? <Spinner size="sm" /> : '조회'}
               </Button>
