@@ -1,6 +1,8 @@
-import { Button, Link, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
-import { FaFacebook, FaInstagram, FaYoutube } from 'react-icons/fa';
+import { Button, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
+import { FaGithub } from 'react-icons/fa';
+import { RiNotionFill } from 'react-icons/ri';
 import { IoChevronDownSharp } from 'react-icons/io5';
+import { Link } from 'react-router-dom';
 
 export default function Footer() {
   return (
@@ -9,23 +11,20 @@ export default function Footer() {
         <div className="flex items-center justify-between">
           <div className="text-3xl font-bold min-w-[200px]">Logo</div>
           <div className="flex items-center justify-between min-w-[550px] underline">
-            <Link>Link One</Link>
-            <Link>Link Two</Link>
-            <Link>Link Three</Link>
-            <Link>Link Four</Link>
-            <Link>Link Five</Link>
-            <Link>Link Six</Link>
+            <Link to={'https://github.com/JinhwanB'}>BE 배진환</Link>
+            <Link to={'https://github.com/Cathunder'}>BE 박민규</Link>
+            <Link to={'https://github.com/sh035'}>BE 엄석현</Link>
+            <Link to={'https://github.com/seungh22'}>BE 양승희</Link>
+            <Link to={'https://github.com/Oh-Donghan'}>FE 오동환</Link>
+            <Link to={'https://github.com/choiinyoung13'}>FE 최인영</Link>
           </div>
           <div className="flex justify-end items-center min-w-[200px]">
-            <span className="mr-3">
-              <FaFacebook size={23} />
-            </span>
-            <span className="mr-3">
-              <FaInstagram size={25} />
-            </span>
-            <span>
-              <FaYoutube size={25} />
-            </span>
+            <Link to={'https://github.com/UsedAuction'} className="mr-2">
+              <FaGithub size={26} />
+            </Link>
+            <Link to={'https://www.notion.so/2-0754ba713fe14f9c8c883323d7f45452'}>
+              <RiNotionFill size={30} />
+            </Link>
           </div>
         </div>
         <div className="w-full border border-gray-400 mt-[70px]"></div>
@@ -50,26 +49,26 @@ export default function Footer() {
                 textAlign="left"
                 fontWeight="bold"
               >
-                LINKS
+                팀원 소개
               </MenuButton>
               <MenuList position={'relative'} zIndex={'40'} fontSize={'0.9rem'}>
-                <MenuItem as="a" href="#">
-                  Link One
+                <MenuItem as="a" href="https://github.com/JinhwanB">
+                  BE 배진환
                 </MenuItem>
-                <MenuItem as="a" href="#">
-                  Link Two
+                <MenuItem as="a" href="https://github.com/Cathunder">
+                  BE 박민규
                 </MenuItem>
-                <MenuItem as="a" href="#">
-                  Link Three
+                <MenuItem as="a" href="https://github.com/sh035">
+                  BE 엄석현
                 </MenuItem>
-                <MenuItem as="a" href="#">
-                  Link Four
+                <MenuItem as="a" href="https://github.com/seungh22">
+                  BE 양승희
                 </MenuItem>
-                <MenuItem as="a" href="#">
-                  Link Five
+                <MenuItem as="a" href="https://github.com/Oh-Donghan">
+                  FE 오동환
                 </MenuItem>
-                <MenuItem as="a" href="#">
-                  Link Six
+                <MenuItem as="a" href="https://github.com/choiinyoung13">
+                  FE 최인영
                 </MenuItem>
               </MenuList>
             </div>
@@ -121,14 +120,11 @@ export default function Footer() {
                 CONTECT
               </MenuButton>
               <MenuList position={'relative'} zIndex={'50'} fontSize={'0.9rem'}>
-                <MenuItem as="a" href="https://www.facebook.com/">
-                  facebook
+                <MenuItem as="a" href="https://github.com/UsedAuction">
+                  github
                 </MenuItem>
-                <MenuItem as="a" href="https://www.instagram.com/">
-                  instagram
-                </MenuItem>
-                <MenuItem as="a" href="https://www.youtube.com/">
-                  youtube
+                <MenuItem as="a" href="https://www.notion.so/2-0754ba713fe14f9c8c883323d7f45452">
+                  notion
                 </MenuItem>
               </MenuList>
             </>

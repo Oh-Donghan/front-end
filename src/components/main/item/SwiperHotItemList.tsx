@@ -8,7 +8,6 @@ import { EffectCards, Pagination } from 'swiper/modules';
 import { getAuctionHotItems } from '../../../axios/auction/auctionItems';
 import { useQuery } from '@tanstack/react-query';
 import ItemCardSkeleton from '../../common/item/ItemCardSkeleton';
-import { useEffect } from 'react';
 
 export default function SwiperHotItemList() {
   const isSlider = useBreakpointValue({ base: true, sm2: false, md: false });
@@ -21,10 +20,6 @@ export default function SwiperHotItemList() {
     queryKey: ['items', category],
     queryFn: () => getAuctionHotItems({ category, sub: subCategory }),
   });
-
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
 
   if (isLoading) {
     return (

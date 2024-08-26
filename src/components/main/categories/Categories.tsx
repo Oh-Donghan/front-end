@@ -31,7 +31,7 @@ export default function Categories() {
     queryKey: ['categories'],
     queryFn: () => getCategories(),
     staleTime: Infinity,
-    gcTime: Infinity,
+    gcTime: 30 * 60 * 1000,
   });
 
   const navigate = useNavigate();
