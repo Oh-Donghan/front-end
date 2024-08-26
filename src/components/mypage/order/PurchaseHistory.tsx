@@ -92,14 +92,26 @@ export default function PurchaseHistory() {
   }
 
   return (
-    <Box flex={1} flexDirection={'column'} className="p-4 flex">
-      <Flex gap={4} height={'34px'}>
+    <Box
+      className="flex flex-col"
+      w="100%"
+      h="100vh"
+      overflow="hidden"
+      textColor={'rgba(70,70,70,1)'}
+    >
+      <Flex
+        direction={{ base: 'column', lg: 'row' }}
+        wrap={'wrap'}
+        gap={4}
+        mb={4}
+        alignItems={'center'}
+      >
         {/* 정렬 기준 */}
         <Menu>
           <MenuButton
-            w="120px"
             h="34px"
             fontSize="sm"
+            w={{ base: '100%', lg: '122px' }}
             as={Button}
             rightIcon={<IoChevronDownSharp />}
           >
@@ -130,8 +142,8 @@ export default function PurchaseHistory() {
         {/* 분류 필터링 */}
         <Menu>
           <MenuButton
-            w="90px"
             h="34px"
+            w={{ base: '100%', lg: '90px' }}
             fontSize="sm"
             as={Button}
             rightIcon={<IoChevronDownSharp />}
@@ -155,14 +167,16 @@ export default function PurchaseHistory() {
           </MenuList>
         </Menu>
 
-        <Calendar isInfo={false} onDateChange={handleDateChange} />
-        <MypageInput
-          setSearchWord={(word: string) => setParams(prev => ({ ...prev, searchWord: word }))}
-          onSearch={handlePageChange}
-        />
-        <Box className="cursor-pointer flex items-center" onClick={handleRefresh}>
-          <IoMdRefresh fontSize={'22px'} />
-        </Box>
+        <Calendar onDateChange={handleDateChange} />
+        <Flex gap={{ base: '1', lg: '4' }} flex={1}>
+          <MypageInput
+            setSearchWord={(word: string) => setParams(prev => ({ ...prev, searchWord: word }))}
+            onSearch={handlePageChange}
+          />
+          <Box className="cursor-pointer flex items-center" onClick={handleRefresh}>
+            <IoMdRefresh fontSize={'22px'} />
+          </Box>
+        </Flex>
       </Flex>
       <OrderTable posts={data?.content || []} />
       <HistoryPagination
