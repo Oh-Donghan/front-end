@@ -1,29 +1,19 @@
 import { Flex } from '@chakra-ui/react';
 import Chat from './Chat';
-import { useQuery } from '@tanstack/react-query';
-import { getChat } from '../../../axios/chat/chat';
-import { useEffect } from 'react';
 
-export default function ChatList() {
-  const { data, isLoading } = useQuery({
-    queryKey: ['chat'],
-    queryFn: () => getChat(),
-    staleTime: 2 * 60 * 1000,
-    gcTime: 30 * 60 * 1000,
-  });
+interface ChatListPropsType {
+  isLoading?: boolean;
+}
 
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
+export default function ChatList({ isLoading }: ChatListPropsType) {
+  const chatSkeletonArray = new Array(5).fill(null);
 
   if (isLoading) {
     return (
       <Flex direction={'column'} maxHeight={'410px'}>
-        <Chat />
-        <Chat />
-        <Chat />
-        <Chat />
-        <Chat />
+        {chatSkeletonArray.map((_, i) => {
+          return <Chat key={i} />;
+        })}
       </Flex>
     );
   }

@@ -1,4 +1,4 @@
-import axios from '../instances';
+import axiosInstance from '../instances';
 
 interface fetchItemsProps {
   word?: string;
@@ -8,12 +8,12 @@ interface fetchItemsProps {
 }
 
 export const getAuctionItems = async ({ word, category, sorted, sub }: fetchItemsProps) => {
-  const res = await axios.get(`/api/auctions`, {
+  const res = await axiosInstance.get(`/api/auctions`, {
     params: {
       word,
-      category: category === '전체' ? undefined : category,
+      mainCategory: category === '전체' ? undefined : category,
+      subCategory: sub,
       sorted,
-      sub,
     },
   });
 
@@ -21,10 +21,10 @@ export const getAuctionItems = async ({ word, category, sorted, sub }: fetchItem
 };
 
 export const getAuctionHotItems = async ({ category, sub }: fetchItemsProps) => {
-  const res = await axios.get(`/api/auctions/hot5`, {
+  const res = await axiosInstance.get(`/api/auctions/hot5`, {
     params: {
-      category: category === '전체' ? undefined : category,
-      sub,
+      mainCategory: category === '전체' ? undefined : category,
+      subCategory: sub,
     },
   });
 

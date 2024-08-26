@@ -14,7 +14,7 @@ import {
 import computer from '../../../assets/image/category/computer.png';
 
 import { IoChevronDownSharp } from 'react-icons/io5';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { getCategories } from '../../../axios/category/categories';
@@ -40,6 +40,10 @@ export default function Categories() {
     setSelectedOption(prev => ({ ...prev, title: item.title, image: computer }));
     navigate(`/auctions?category=${item.categoryName}`);
   };
+
+  useEffect(() => {
+    console.log(categories);
+  }, [categories]);
 
   if (isLoading) {
     return (
