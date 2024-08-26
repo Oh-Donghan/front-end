@@ -7,7 +7,7 @@ import 'swiper/css/pagination';
 import { EffectCards, Pagination } from 'swiper/modules';
 import { getAuctionItems } from '../../../axios/auction/auctionItems';
 import { useQuery } from '@tanstack/react-query';
-import ItemCardSkeleton from '../../../components/common/item/ItemCardSkeleton';
+import ItemCardSkeleton from '../../common/item/ItemCardSkeleton';
 import { useEffect } from 'react';
 
 interface ItemListProps {

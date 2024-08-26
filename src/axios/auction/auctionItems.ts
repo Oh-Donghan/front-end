@@ -19,3 +19,14 @@ export const getAuctionItems = async ({ word, category, sorted, sub }: fetchItem
 
   return res.data;
 };
+
+export const getAuctionHotItems = async ({ category, sub }: fetchItemsProps) => {
+  const res = await axios.get(`/api/auctions/hot5`, {
+    params: {
+      category: category === '전체' ? undefined : category,
+      sub,
+    },
+  });
+
+  return res.data;
+};

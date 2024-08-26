@@ -1,8 +1,9 @@
 import Banner from '../components/main/banner/Banner';
 import Categories from '../components/main/categories/Categories';
-import SwiperItemList from '../components/main/item/ItemList';
+import SwiperItemList from '../components/main/item/SwiperItemList';
+import SwiperHotItemList from '../components/main/item/SwiperHotItemList';
 import ChatModal from '../components/main/modals/chat/ChatModal';
-import { Box, Button, Flex, Text } from '@chakra-ui/react';
+import { Box, Flex, Text } from '@chakra-ui/react';
 import Input from '../components/main/input/input';
 import { Link } from 'react-router-dom';
 import TopButton from '../components/common/button/TopButton';
@@ -39,7 +40,7 @@ export default function Home() {
                 지금 핫한 경매 Top5
               </Text>
             </Flex>
-            <SwiperItemList type="hot" setIsNoItem={setIsNoItem} />
+            <SwiperHotItemList />
           </Box>
 
           {/* 전체 매물 섹션 */}

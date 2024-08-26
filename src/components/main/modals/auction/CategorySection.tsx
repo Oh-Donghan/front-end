@@ -1,7 +1,6 @@
 import { Flex, Select, Text } from '@chakra-ui/react';
-import { useQueryClient } from '@tanstack/react-query';
-import { useFormContext } from 'react-hook-form';
-import { CategoryList } from '../../../../interface/category/categoryInterface';
+// import { useQueryClient } from '@tanstack/react-query';
+// import { CategoryList } from '../../../../interface/category/categoryInterface';
 
 const categories = [
   {

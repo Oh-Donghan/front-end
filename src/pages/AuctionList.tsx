@@ -3,7 +3,7 @@ import { useLocation, Link } from 'react-router-dom';
 import { FaCheck } from 'react-icons/fa';
 import { GoChevronRight } from 'react-icons/go';
 import ItemList from '../components/listpage/item/ItemList';
-import SwiperItemList from '../components/main/item/ItemList';
+import SwiperHotItemList from '../components/main/item/SwiperHotItemList';
 import ChatModal from '../components/main/modals/chat/ChatModal';
 import SortButton from '../components/listpage/sort/SortButton';
 import Input from '../components/listpage/input/input';
@@ -11,9 +11,9 @@ import all from '../assets/image/category/all.png';
 import searchico from '../assets/image/common/search.png';
 import CategorySortButton from '../components/listpage/sort/CategorySortButton';
 import TopButton from '../components/common/button/TopButton';
-import { useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-import { CategoryList } from '../interface/category/categoryInterface';
+import { getCategories } from '../axios/category/categories';
 
 export default function AuctionList() {
   const location = useLocation();
@@ -27,10 +27,14 @@ export default function AuctionList() {
   const sort = searchParams.get('sort');
   const search = searchParams.get('word');
 
-  const queryClient = useQueryClient();
-  const categories: CategoryList | undefined = queryClient.getQueryData(['categories']);
+  // 메인 페이지에서 캐싱한 카테고리 데이터 사용
+  // url을 직접 수정해서 들어오는 경우도 고려해서 queryClient.getQueryData(['categories'])는 사용하지 않음
+  const { data: categories } = useQuery({
+    queryKey: ['categories'],
+    queryFn: () => getCategories(),
+  });
 
-  const currentCategoryData = categories.find(cat => {
+  const currentCategoryData = categories?.find(cat => {
     return cat.categoryName === category;
   });
 
@@ -74,7 +78,7 @@ export default function AuctionList() {
                 {category !== '전체' && subCategory && `지금 핫한 ${subCategory} Top5`}
               </Text>
             </Flex>
-            <SwiperItemList type="hot" setIsNoItem={setIsNoItem} />
+            <SwiperHotItemList />
           </Box>
           <Box mb={{ base: '12', sm: '20' }} mt={{ base: '12', sm: '20' }}>
             <Flex alignItems="center" justifyContent="space-between" mb={{ base: '4', sm: '5' }}>
@@ -90,11 +94,6 @@ export default function AuctionList() {
       )}
     </>
   );
-
-  if (!categories) {
-    console.error('Categories data is not available.');
-    return;
-  }
 
   return (
     <Box minW="442px" px={8} overflowX="hidden">
@@ -116,7 +115,7 @@ export default function AuctionList() {
             <>
               <Text>전체 경매</Text>
               <GoChevronRight className="mx-1" />
-              <Text>{currentCategoryData[0].categoryName}</Text>
+              <Text>{currentCategoryData?.categoryName}</Text>
               {subCategory && (
                 <>
                   <GoChevronRight className="mx-1" />
@@ -136,14 +135,14 @@ export default function AuctionList() {
         {category !== '전체' && !search && (
           <Flex alignItems={'center'} marginTop={'20px'}>
             <img
-              src={currentCategoryData[0].imgUrl}
+              src={currentCategoryData?.imgUrl}
               alt="all.png"
               width={'28px'}
               height={'28px'}
               className="ml-1 mb-0.5"
             />
             <Text fontSize="26px" fontWeight="bold" pl="6px" ml="3px">
-              {currentCategoryData[0].categoryName}
+              {currentCategoryData?.categoryName}
             </Text>
           </Flex>
         )}
@@ -222,7 +221,7 @@ export default function AuctionList() {
                     </Button>
                   </Link>
                 )}
-                {currentCategoryData[0].categories?.map((sub, i) => (
+                {currentCategoryData?.categories?.map((sub, i) => (
                   <Link
                     to={{
                       pathname: '/auctions',
