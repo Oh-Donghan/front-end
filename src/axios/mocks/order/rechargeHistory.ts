@@ -19,3 +19,8 @@ export const fetchRechargeHistoryData = async (
 
   return response.data;
 };
+
+export const fetchCurrentPointData = async () => {
+  const response = await axiosInstance.get('api/members/points');
+  return response.data;
+};
