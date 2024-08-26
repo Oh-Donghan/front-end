@@ -11,6 +11,22 @@ export const customTheme = extendTheme({
     xl: '80em', // 1280px
     '2xl': '96em', // 1536px
   },
+  fontSizes: {
+    xxs: '10px', // 원하는 크기로 설정
+    xs: '12px',
+    sm: '14px',
+    md: '16px',
+    lg: '18px',
+    xl: '20px',
+    '2xl': '24px',
+    '3xl': '30px',
+    '4xl': '36px',
+    '5xl': '48px',
+    '6xl': '64px',
+    '7xl': '72px',
+    '8xl': '96px',
+    '9xl': '128px',
+  },
 });
 
 export { ChakraProvider } from '@chakra-ui/react';
