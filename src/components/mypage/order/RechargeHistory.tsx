@@ -1,10 +1,23 @@
-import { Box, Button, Flex, Menu, MenuButton, MenuItem, MenuList, Spinner } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Flex,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Spinner,
+  Text,
+} from '@chakra-ui/react';
 import { IoChevronDownSharp } from 'react-icons/io5';
 import HistoryPagination from './HistoryPagination';
 import Calendar from '../calendar/Calendar';
 import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { fetchRechargeHistoryData } from '../../../axios/mocks/order/rechargeHistory';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import {
+  fetchCurrentPointData,
+  fetchRechargeHistoryData,
+} from '../../../axios/mocks/order/rechargeHistory';
 import RechargeTable from './RechargeTable';
 
 export default function RechargeHistory() {
@@ -33,6 +46,12 @@ export default function RechargeHistory() {
         params.startDate,
         params.endDate,
       ),
+    placeholderData: keepPreviousData,
+  });
+
+  const { data: currentPoint } = useQuery({
+    queryKey: ['api/members/points'],
+    queryFn: fetchCurrentPointData,
   });
 
   const handlePageChange = (page: number) => {
@@ -65,13 +84,25 @@ export default function RechargeHistory() {
   }
 
   return (
-    <Box flex={1} flexDirection={'column'} className="p-4 flex">
-      <Flex gap={4}>
+    <Box
+      className="flex flex-col"
+      w="100%"
+      h="100vh"
+      overflow="hidden"
+      textColor={'rgba(70,70,70,1)'}
+    >
+      <Flex
+        direction={{ base: 'column', lg: 'row' }}
+        wrap={'wrap'}
+        gap={4}
+        mb={4}
+        alignItems={'center'}
+      >
         <Menu>
           <MenuButton
-            w="100px"
             h="34px"
             fontSize="sm"
+            w={{ base: '100%', lg: '122px' }}
             as={Button}
             rightIcon={<IoChevronDownSharp />}
           >
@@ -86,7 +117,7 @@ export default function RechargeHistory() {
             </MenuItem>
           </MenuList>
         </Menu>
-        <Calendar isInfo={false} onDateChange={handleDateChange} />
+        <Calendar onDateChange={handleDateChange} />
       </Flex>
       <Box>
         <Flex
@@ -96,8 +127,8 @@ export default function RechargeHistory() {
           marginRight={'24px'}
           marginBottom={'8px'}
         >
-          <span>보유 포인트</span>
-          <div className="text-4xl">200,000P</div>
+          <Text fontSize={{ base: 'sm', md: 'xl' }}>보유 포인트</Text>
+          <Box fontSize={{ base: 'lg', md: '3xl' }}>{currentPoint?.point}P</Box>
         </Flex>
       </Box>
       <RechargeTable posts={data?.content || []} />
