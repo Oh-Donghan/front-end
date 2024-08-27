@@ -1,4 +1,4 @@
-import { Flex, Spinner, useQuery } from '@chakra-ui/react';
+import { Flex, Spinner, Text } from '@chakra-ui/react';
 import Alarm from './Alarm';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { getAlarms } from '../../../../axios/alarm/alarm';
@@ -52,46 +52,55 @@ export default function AlarmList() {
     initialPageParam: 0,
   });
 
-  if (isLoading) {
-    return (
-      <Flex w={'100%'} h={['200px', '272px']} align={'center'} justify={'center'}>
-        {' '}
-        <Spinner size="xl" />
-      </Flex>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <Flex w={'100%'} h={['200px', '272px']} align={'center'} justify={'center'}>
+  //       {' '}
+  //       <Spinner size="xl" />
+  //     </Flex>
+  //   );
+  // }
 
   return (
-    <Flex
-      direction={'column'}
-      maxHeight={['200px', '272px']}
-      overflowY={'scroll'}
-      sx={{
-        '::-webkit-scrollbar': {
-          display: 'none',
-        },
-        '-ms-overflow-style': 'none',
-        'scrollbar-width': 'none',
-      }}
-      onScroll={e => {
-        const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
-        if (scrollTop + clientHeight >= scrollHeight && hasNextPage && !isFetchingNextPage) {
-          fetchNextPage();
-        }
-      }}
-    >
-      {data.pages.map(page =>
-        page.content.map(alarm => (
-          <Alarm
-            key={alarm.id}
-            type={alarm.notificationType}
-            content={alarm.content}
-            createdAt={alarm.createdAt}
-          />
-        )),
-      )}
+    <>
+      {/* {data?.content.length === 0 ? (
+        <Flex w={'100%'} h={['200px', '272px']} align={'center'} justify={'center'}>
+          {' '}
+          <Text>현재 존재하는 알림이 없습니다.</Text>
+        </Flex>
+      ) : (
+        <Flex
+          direction={'column'}
+          maxHeight={['200px', '272px']}
+          overflowY={'scroll'}
+          sx={{
+            '::-webkit-scrollbar': {
+              display: 'none',
+            },
+            '-ms-overflow-style': 'none',
+            'scrollbar-width': 'none',
+          }}
+          onScroll={e => {
+            const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
+            if (scrollTop + clientHeight >= scrollHeight && hasNextPage && !isFetchingNextPage) {
+              fetchNextPage();
+            }
+          }}
+        >
+          {data.pages.map(page =>
+            page.content.map(alarm => (
+              <Alarm
+                key={alarm.id}
+                type={alarm.notificationType}
+                content={alarm.content}
+                createdAt={alarm.createdAt}
+              />
+            )),
+          )}
 
-      {isFetchingNextPage && <Spinner size="lg" />}
-    </Flex>
+          {isFetchingNextPage && <Spinner size="lg" />}
+        </Flex>
+      )} */}
+    </>
   );
 }

@@ -27,8 +27,7 @@ export default function Nav() {
   const pointChargeDisclosure = useDisclosure();
   const createAuctionDisclosure = useDisclosure();
   const drawerDisclosure = useDisclosure();
-  // const [isLoggedIn, setIsLoggedIn] = useRecoilState(authState);
-  const isLoggedIn = true;
+  const [auth, setAuth] = useRecoilState(authState);
 
   const navigate = useNavigate();
 
@@ -79,7 +78,7 @@ export default function Nav() {
         />
         <div className="hidden lg:block">
           <ul className="flex justify-between items-center font-semibold w-full gap-3">
-            {isLoggedIn ? (
+            {auth ? (
               <>
                 <li className="mr-4 cursor-pointer">
                   <AlarmModal />
@@ -93,8 +92,9 @@ export default function Nav() {
                 <li
                   className="mr-4 cursor-pointer"
                   onClick={() => {
-                    // setIsLoggedIn(false);
-                    localStorage.removeItem('user');
+                    setAuth(false);
+                    localStorage.removeItem('accessToken');
+                    localStorage.removeItem('memberId');
                   }}
                 >
                   로그아웃
@@ -171,7 +171,7 @@ export default function Nav() {
 
           <DrawerBody>
             <ul className="flex flex-col font-semibold text-lg gap-2">
-              {isLoggedIn ? (
+              {auth ? (
                 <>
                   <li className="mb-4 cursor-pointer mt-4" onClick={drawerDisclosure.onClose}>
                     <AlarmModal />

@@ -35,6 +35,10 @@ export default function SwiperItemList({ type, setIsNoItem }: ItemListProps) {
     if (!type && data.content.length > 0) {
       setIsNoItem(false);
     }
+
+    if (data) {
+      console.log(data);
+    }
   }, [data]);
 
   if (isLoading) {
@@ -55,6 +59,10 @@ export default function SwiperItemList({ type, setIsNoItem }: ItemListProps) {
         ))}
       </Grid>
     );
+  }
+
+  if (!data || !data.content || data.content.length === 0) {
+    return <div>No items found</div>;
   }
 
   return isSlider ? (

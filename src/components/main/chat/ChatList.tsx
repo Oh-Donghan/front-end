@@ -1,13 +1,11 @@
 import { Flex } from '@chakra-ui/react';
 import Chat from './Chat';
 
-interface ChatListPropsType {
-  isLoading?: boolean;
-}
+// interface ChatListPropsType {
+//   isLoading?: boolean;
+// }
 
 export default function ChatList() {
-  const chatSkeletonArray = new Array(5).fill(null);
-
   // if (isLoading) {
   //   return (
   //     <Flex direction={'column'} maxHeight={'410px'}>

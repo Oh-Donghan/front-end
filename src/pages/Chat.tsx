@@ -7,6 +7,7 @@ import {
   InputRightElement,
   useDisclosure,
   useToast,
+  // useQuery,
 } from '@chakra-ui/react';
 import ChatList from '../components/chat/item/ChatList';
 import { MdLogout } from 'react-icons/md';
@@ -17,6 +18,7 @@ import ChatMessage from '../components/chat/item/ChatMessage';
 import { Link } from 'react-router-dom';
 import ConfirmPurchaseModal from '../components/chat/modals/ConfirmPurchaseModal';
 import { useForm } from 'react-hook-form';
+// import { getChat } from '../axios/chat/chat';
 
 const chats = [
   { id: 1, name: '메시 국대 유니폼', message: '안녕하세요!', time: '19:49', unread: 1 },
@@ -41,6 +43,13 @@ export default function Chat() {
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const { register, handleSubmit } = useForm();
   const toast = useToast();
+
+  // const { data, isLoading } = useQuery({
+  //   queryKey: ['chat'],
+  //   queryFn: () => getChat({ memberId: 1 }),
+  //   staleTime: 5 * 60 * 1000,
+  //   gcTime: 30 * 60 * 1000,
+  // });
 
   const scrollBottom = () => {
     if (messagesEndRef.current) {
