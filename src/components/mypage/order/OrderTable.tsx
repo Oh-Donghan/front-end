@@ -21,7 +21,7 @@ export default function OrderTable({ posts }) {
   const location = useLocation();
   const isBuyPage = location.pathname === '/mypage/buy';
 
-  const fontSize = useBreakpointValue({ base: 'xxs', md: 'sm', lg: 'md' });
+  const fontSize = useBreakpointValue({ base: 'xs', md: 'sm', lg: 'md' });
 
   if (!posts || posts.length === 0) {
     return <div>구매 목록이 없습니다.</div>;
