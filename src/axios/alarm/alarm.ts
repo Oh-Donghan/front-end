@@ -4,10 +4,10 @@ export const getAlarms = async ({ pageParam = 0 }) => {
   const token = localStorage.getItem('accessToken');
 
   try {
-    const response = await axios.get(`/api/members/notifications`, {
+    const response = await axios.get(`/api/members/notification`, {
       params: {
-        page: pageParam,
-        size: 10,
+        page: undefined,
+        size: undefined,
       },
       headers: {
         Authorization: `Bearer ${token}`,

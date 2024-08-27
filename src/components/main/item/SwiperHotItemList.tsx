@@ -41,6 +41,10 @@ export default function SwiperHotItemList() {
     );
   }
 
+  if (!data || !data.content || data.content.length === 0) {
+    return <div>No items found</div>;
+  }
+
   return isSlider ? (
     <Swiper
       effect={'cards'}
@@ -66,7 +70,7 @@ export default function SwiperHotItemList() {
       }}
       gap={6}
     >
-      {data.map((item, i) => (
+      {data.content.map((item, i) => (
         <GridItem key={item.id}>
           <ItemCard type={'hot'} item={item} rank={i + 1} />
         </GridItem>

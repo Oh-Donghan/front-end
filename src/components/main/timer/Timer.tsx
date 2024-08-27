@@ -14,10 +14,15 @@ export default function Timer({ endedAt, setIsFinished }: TimerProps) {
       return (
         <div className="text-center px-2 py-1 bg-gray-100 rounded-lg shadow-md">
           <span className="text-sm font-semibold">
-            {days}
-            <span className="text-gray-600">일 </span>
-            {String(hours).padStart(2, '0')} : {String(minutes).padStart(2, '0')} :{' '}
-            {String(seconds).padStart(2, '0')}
+            {days === 0 ? null : (
+              <>
+                <span>{days}</span> <span className="text-gray-600">일 </span>
+              </>
+            )}
+            <span className="text-gray-600">{String(hours).padStart(2, '0')}시간 </span>{' '}
+            {String(minutes).padStart(2, '0')}
+            <span className="text-gray-600">분 </span> {String(seconds).padStart(2, '0')}{' '}
+            <span className="text-gray-600">초 </span>
           </span>
         </div>
       );

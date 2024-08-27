@@ -165,7 +165,7 @@ export default function Categories() {
                 <GridItem w="100%" h="10" cursor={'pointer'}>
                   <Flex align="center">
                     <img
-                      src={item.imgUrl}
+                      src={item.imageUrl}
                       alt={item.categoryName}
                       className="w-8 lg:w-9 xl:w-10 mr-2"
                     />

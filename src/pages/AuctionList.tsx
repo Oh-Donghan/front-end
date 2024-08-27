@@ -135,7 +135,7 @@ export default function AuctionList() {
         {category !== '전체' && !search && (
           <Flex alignItems={'center'} marginTop={'20px'}>
             <img
-              src={currentCategoryData?.imgUrl}
+              src={currentCategoryData?.imageUrl}
               alt="all.png"
               width={'28px'}
               height={'28px'}

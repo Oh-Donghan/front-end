@@ -353,7 +353,7 @@ export const handlers = [
     function isValidCreateAuctionDto(obj: any): obj is CreateAuctionType {
       return (
         typeof obj.title === 'string' &&
-        typeof obj.transactionType === 'string' &&
+        typeof obj.receiveType === 'string' &&
         typeof obj.deliveryType === 'string' &&
         typeof obj.startPrice === 'number' &&
         typeof obj.instantPrice === 'number' &&
@@ -374,7 +374,7 @@ export const handlers = [
 
     const {
       title,
-      transactionType,
+      receiveType,
       deliveryType,
       startPrice,
       instantPrice,
@@ -387,7 +387,7 @@ export const handlers = [
 
     if (
       !title ||
-      !transactionType ||
+      !receiveType ||
       !deliveryType ||
       !startPrice ||
       !instantPrice ||
