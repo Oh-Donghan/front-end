@@ -12,7 +12,6 @@ export const getAlarms = async ({ pageParam = 0 }) => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      withCredentials: true,
     });
 
     return response.data;

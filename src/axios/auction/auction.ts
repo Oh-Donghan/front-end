@@ -19,15 +19,18 @@ export const createAuction = async (
   });
 
   // CreateAuctionDto를 JSON 문자열로 변환하여 추가
-  formData.append('createDto', JSON.stringify(createDto));
+
+  const json = JSON.stringify(createDto);
+  const blob = new Blob([json], { type: 'application/json' });
+
+  formData.append('createDto', blob);
 
   try {
-    const res = await axiosInstance.post('/api/auctions', formData, {
+    const res = await axios.post('https://dddang.store/api/auctions', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
         Authorization: `Bearer ${token}`,
       },
-      withCredentials: true,
     });
 
     return res.data;

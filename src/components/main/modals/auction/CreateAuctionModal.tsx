@@ -79,19 +79,17 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
   };
 
   const handleTradeMethodChange = e => {
+    setShippingMethod('');
     const method = e.target.value;
     setTradeMethod(method);
-    setValue('tradeMethod', method);
-    if (method !== '택배') {
-      setShippingMethod('');
-      setValue('shippingMethod', '');
+    if (method === 'contact') {
+      setShippingMethod('nodelivery');
     }
   };
 
   const handleShippingMethodChange = e => {
     const method = e.target.value;
     setShippingMethod(method);
-    setValue('shippingMethod', method);
   };
 
   const createAuctionMutation = useMutation({
@@ -103,7 +101,6 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
       createDto: CreateAuctionType;
       thumbnail: File;
       imageList: File[];
-      token: string;
     }) => createAuction(createDto, thumbnail, imageList),
     onSuccess: data => {
       console.log(data);
@@ -139,7 +136,7 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
       !instantPrice ||
       !endDate ||
       !tradeMethod ||
-      (tradeMethod === '택배' && !shippingMethod) ||
+      !shippingMethod ||
       rating === 0 ||
       files.length === 0
     ) {
@@ -171,8 +168,8 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
 
     const createDto = {
       title: data.title,
-      transactionType: tradeMethod,
-      deliveryType: shippingMethod || 'nodelivery',
+      receiveType: tradeMethod,
+      deliveryType: shippingMethod,
       startPrice: startPrice,
       instantPrice: instantPrice,
       endedAt: formatDateToDatetime(endDate),
@@ -190,7 +187,7 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
     const thumbnail = files[0]; // 첫 번째 이미지를 썸네일로 사용
     const imageList = files.slice(1); // 나머지 이미지들
 
-    createAuctionMutation.mutate({ createDto, thumbnail, imageList, token: 'AccessToken' });
+    createAuctionMutation.mutate({ createDto, thumbnail, imageList });
   };
 
   return (
@@ -400,10 +397,11 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
                         fontSize={'0.95rem'}
                         onChange={handleTradeMethodChange}
                         value={tradeMethod}
+                        placeholder="거래 방법 선택"
                       >
-                        <option value="">거래 방법 선택</option>
-                        <option value="직접 만나서">직접 만나서</option>
-                        <option value="택배">택배</option>
+                        <option value="contact">대면 거래</option>
+                        <option value="delivery">택배</option>
+                        <option value="all">모두 가능</option>
                       </Select>
                     </Flex>
                     <Flex flex={1} direction={'column'}>
@@ -420,11 +418,16 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
                         fontSize={'0.95rem'}
                         onChange={handleShippingMethodChange}
                         value={shippingMethod}
-                        isDisabled={tradeMethod !== '택배'}
+                        isDisabled={tradeMethod === 'contact'}
+                        placeholder={
+                          tradeMethod === 'contact' ? '택배 불가능' : '비용 지불 방법 선택'
+                        }
                       >
-                        <option value="">비용 지불 방법 선택</option>
-                        <option value="선불">선불</option>
-                        <option value="착불">착불</option>
+                        <option value="prepay">선불</option>
+                        <option value="noprepay">착불</option>
+                        {tradeMethod !== 'delivery' && (
+                          <option value="nodelivery">택배 불가능</option>
+                        )}
                       </Select>
                     </Flex>
                   </Flex>

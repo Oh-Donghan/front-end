@@ -12,7 +12,6 @@ export const getChats = async () => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      withCredentials: true,
     });
 
     return response.data;

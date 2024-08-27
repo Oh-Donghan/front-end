@@ -3,7 +3,7 @@
 }
 export interface CreateAuctionType {
   title: string;
-  transactionType: string;
+  receiveType: string;
   deliveryType: string;
   startPrice: number;
   instantPrice: number;
