@@ -19,6 +19,7 @@ import {
   fetchRechargeHistoryData,
 } from '../../../axios/mocks/order/rechargeHistory';
 import RechargeTable from './RechargeTable';
+import { IoMdRefresh } from 'react-icons/io';
 
 export default function RechargeHistory() {
   const [params, setParams] = useState({
@@ -71,6 +72,15 @@ export default function RechargeHistory() {
     }));
   };
 
+  const handleRefresh = () => {
+    setParams({
+      currentPage: 1,
+      sorted: 'recent',
+      startDate: null,
+      endDate: null,
+    });
+  };
+
   if (isLoading) {
     return (
       <Flex justifyContent="center" alignItems="center" height="100%" width="100%">
@@ -92,11 +102,12 @@ export default function RechargeHistory() {
       textColor={'rgba(70,70,70,1)'}
     >
       <Flex
-        direction={{ base: 'column', lg: 'row' }}
+        direction={{ base: 'row' }}
         wrap={'wrap'}
-        gap={4}
+        gap={{ base: '2', md: '4' }}
         mb={4}
         alignItems={'center'}
+        justifyContent={{ base: 'center', md: 'left' }}
       >
         <Menu>
           <MenuButton
@@ -118,6 +129,9 @@ export default function RechargeHistory() {
           </MenuList>
         </Menu>
         <Calendar onDateChange={handleDateChange} />
+        <Box className="cursor-pointer flex items-center" onClick={handleRefresh}>
+          <IoMdRefresh fontSize={'22px'} />
+        </Box>
       </Flex>
       <Box>
         <Flex

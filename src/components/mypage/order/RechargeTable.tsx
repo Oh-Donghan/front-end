@@ -2,7 +2,7 @@ import { Box, Table, Tbody, Td, Tr, useBreakpointValue } from '@chakra-ui/react'
 import { formatDate } from '../../../utils/dateFormat';
 
 export default function RechargeTable({ posts }) {
-  const fontSize = useBreakpointValue({ base: 'xxs', md: 'sm', lg: 'md' });
+  const fontSize = useBreakpointValue({ base: 'xs', md: 'sm', lg: 'md' });
   const tdPadding = useBreakpointValue({ base: '8px', md: '12px', lg: '16px' }); // 반응형 패딩 설정
 
   if (!posts || posts.length === 0) {
