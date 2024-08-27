@@ -1,17 +1,23 @@
 import axiosInstance from '../instances';
 
-interface memberId {
-  memberId: number;
-}
+export const getChats = async () => {
+  const token = localStorage.getItem('accessToken');
+  const memberId = localStorage.getItem('memberId');
 
-export const getChat = async ({ memberId }) => {
-  const response = await axiosInstance.get(`/api/rooms`, {
-    params: {
-      memberId,
-    },
-  });
+  try {
+    const response = await axiosInstance.get(`/api/rooms`, {
+      params: {
+        memberId: memberId,
+      },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      withCredentials: true,
+    });
 
-  console.log(response.data);
-
-  return response.data;
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching chats:', error);
+    throw error;
+  }
 };

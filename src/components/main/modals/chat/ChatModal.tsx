@@ -10,10 +10,10 @@ import {
 } from '@chakra-ui/react';
 import ChatButton from '../../../common/button/ChatModalButton';
 import ChatModalInput from './ChatModalInput';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ChatList from '../../chat/ChatList';
-// import { useQuery } from '@tanstack/react-query';
-// import { getChat } from '../../../../axios/chat/chat';
+import { useQuery } from '@tanstack/react-query';
+import { getChats } from '../../../../axios/chat/chat';
 import { useRecoilValue } from 'recoil';
 import { authState } from '../../../../recoil/atom/authAtom';
 
@@ -67,16 +67,23 @@ import { authState } from '../../../../recoil/atom/authAtom';
 
 export default function ChatModal() {
   const [isChatModalOpen, setIsChatModalOpen] = useState(false);
+  const [shouldFetch, setShouldFetch] = useState(false);
   const auth = useRecoilValue(authState);
   const toast = useToast();
 
-  // const { data, isLoading } = useQuery({
-  //   queryKey: ['chat'],
-  //   queryFn: () => getChat({ memberId: 1 }),
-  //   staleTime: 5 * 60 * 1000,
-  //   gcTime: 30 * 60 * 1000,
-  //   enabled: isChatModalOpen,
-  // });
+  useEffect(() => {
+    if (isChatModalOpen) {
+      setShouldFetch(true);
+    }
+  }, [isChatModalOpen]);
+
+  const { data, isLoading } = useQuery({
+    queryKey: ['chat'],
+    queryFn: () => getChats(),
+    staleTime: 5 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
+    enabled: shouldFetch,
+  });
 
   const handleButtonClick = () => {
     if (!auth) {

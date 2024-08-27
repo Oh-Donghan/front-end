@@ -22,7 +22,7 @@ import ImageSection from './ImageSection';
 import RatingSection from './RatingSection';
 import SelectDateSection from './SelectDateSection';
 import { createAuction } from '../../../../axios/auction/auction';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { CreateAuctionType } from '../../../../interface/auction/actionInterface';
 
 export default function CreateAuctionModal({ isOpen, onClose }) {
@@ -37,7 +37,10 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
   const [files, setFiles] = useState([]);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [contactPlace, setContactPlace] = useState('');
+  const [startPrice, setStartPrice] = useState<number>(0);
+  const [instantPrice, setInstantPrice] = useState<number>(0);
   const toast = useToast();
+  const queryClient = useQueryClient();
 
   function formatDateToDatetime(date) {
     if (!date) return '';
@@ -57,8 +60,6 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
       productName: '',
       color: '',
       shippingCost: '',
-      startPrice: '',
-      instantPrice: '',
       description: '',
       tradeMethod: '',
       shippingMethod: '',
@@ -72,6 +73,8 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
     setEndDate(null);
     setContactPlace('');
     setRating(0);
+    setStartPrice(0);
+    setInstantPrice(0);
     onClose();
   };
 
@@ -96,13 +99,12 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
       createDto,
       thumbnail,
       imageList,
-      token,
     }: {
       createDto: CreateAuctionType;
       thumbnail: File;
       imageList: File[];
       token: string;
-    }) => createAuction(createDto, thumbnail, imageList, token),
+    }) => createAuction(createDto, thumbnail, imageList),
     onSuccess: data => {
       console.log(data);
       toast({
@@ -110,6 +112,11 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
         status: 'success',
         duration: 1300,
       });
+
+      queryClient.invalidateQueries({
+        predicate: query => query.queryKey[0] === 'items',
+      });
+
       handleClose();
     },
     onError: error => {
@@ -128,8 +135,8 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
       !data.productName ||
       !selectedCategory || // Parent category PK
       !selectedSubCategory || // Child category PK
-      !data.startPrice ||
-      !data.instantPrice ||
+      !startPrice ||
+      !instantPrice ||
       !endDate ||
       !tradeMethod ||
       (tradeMethod === '택배' && !shippingMethod) ||
@@ -144,25 +151,7 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
       return;
     }
 
-    if (isNaN(data.startPrice)) {
-      toast({
-        title: '입찰 시작가는 숫자만 입력 가능합니다.',
-        status: 'error',
-        duration: 1300,
-      });
-      return;
-    }
-
-    if (isNaN(data.instantPrice)) {
-      toast({
-        title: '즉시 구매가는 숫자만 입력 가능합니다.',
-        status: 'error',
-        duration: 1300,
-      });
-      return;
-    }
-
-    if (data.startPrice >= data.instantPrice) {
+    if (startPrice >= instantPrice) {
       toast({
         title: '입찰 시작가 보다 즉시 구매가가 더 높아야 합니다.',
         status: 'error',
@@ -184,8 +173,8 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
       title: data.title,
       transactionType: tradeMethod,
       deliveryType: shippingMethod || 'nodelivery',
-      startPrice: parseInt(data.startPrice),
-      instantPrice: parseInt(data.instantPrice),
+      startPrice: startPrice,
+      instantPrice: instantPrice,
       endedAt: formatDateToDatetime(endDate),
       parentCategoryId: selectedCategory,
       childCategoryId: selectedSubCategory,
@@ -286,8 +275,8 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
                           </Text>
                         </Flex>
                         <Input
+                          type={'number'}
                           borderColor={'rgba(200,200,200,1)'}
-                          type="text"
                           fontSize={'0.95rem'}
                           {...register('shippingCost')}
                         />
@@ -310,10 +299,12 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
                           </Text>
                         </Flex>
                         <Input
+                          type={'number'}
                           borderColor={'rgba(200,200,200,1)'}
-                          type="text"
                           fontSize={'0.95rem'}
-                          {...register('startPrice')}
+                          onChange={e => {
+                            setStartPrice(Number(e.target.value));
+                          }}
                         />
                       </Flex>
                     </InputGroup>
@@ -328,10 +319,12 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
                           </Text>
                         </Flex>
                         <Input
+                          type={'number'}
                           borderColor={'rgba(200,200,200,1)'}
-                          type="text"
                           fontSize={'0.95rem'}
-                          {...register('instantPrice')}
+                          onChange={e => {
+                            setInstantPrice(Number(e.target.value));
+                          }}
                         />
                       </Flex>
                     </InputGroup>

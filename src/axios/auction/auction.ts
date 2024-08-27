@@ -1,12 +1,13 @@
 import axios from 'axios';
 import { CreateAuctionType } from '../../interface/auction/actionInterface';
+import axiosInstance from '../instances';
 
 export const createAuction = async (
   createDto: CreateAuctionType,
   thumbnail: File,
   imageList: File[],
-  token: string,
 ) => {
+  const token = localStorage.getItem('accessToken');
   const formData = new FormData();
 
   // 썸네일 추가
@@ -21,11 +22,12 @@ export const createAuction = async (
   formData.append('createDto', JSON.stringify(createDto));
 
   try {
-    const res = await axios.post('https://fake-server.com/api/auctions', formData, {
+    const res = await axiosInstance.post('/api/auctions', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
         Authorization: `Bearer ${token}`,
       },
+      withCredentials: true,
     });
 
     return res.data;
