@@ -74,6 +74,7 @@ export default function MyInfo() {
         <Text>포인트 사용 내역</Text>
         {/* <Calendar /> */}
       </Flex>
+
       {/* 테이블 */}
       <div className="overflow-y-scroll no-scrollbar h-full">
         <Table variant="simple" width="full" sx={{ tableLayout: 'fixed' }}>
