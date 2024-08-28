@@ -1,4 +1,4 @@
-import { Text } from '@chakra-ui/react';
+import { Flex, Text } from '@chakra-ui/react';
 import Countdown from 'react-countdown';
 
 interface TimerProps {
@@ -13,27 +13,57 @@ export default function Timer({ endedAt, setIsFinished }: TimerProps) {
       return <span className="text-red-500 font-bold">경매가 종료되었습니다.</span>;
     } else {
       return (
-        <div className="text-center px-2 py-1 bg-gray-100 rounded-lg shadow-md">
-          <span className="text-sm font-semibold">
-            {days === 0 ? null : (
-              <>
-                <span>{days}</span> <span className="text-gray-600">일 </span>
-              </>
-            )}
-            <span className="text-gray-600">
-              {String(hours).padStart(2, '0')}
-              <Text>시간</Text>{' '}
-            </span>{' '}
-            <span className="text-gray-600">
-              {String(minutes).padStart(2, '0')}
-              <Text>분</Text>
-            </span>{' '}
-            <span className="text-gray-600">
-              {String(seconds).padStart(2, '0')}
-              <Text>초</Text>
-            </span>
-          </span>
-        </div>
+        <Flex
+          fontWeight={'semibold'}
+          fontSize={{ base: '1rem', md: '1.2rem' }}
+          gap={3}
+          isTruncated
+          padding={'2px'}
+          paddingX={'6px'}
+        >
+          {days === 0 ? null : (
+            <Flex align={'end'}>
+              <Text>{days}</Text>{' '}
+              <Text
+                fontSize={{ base: '0.7rem', md: '0.8rem' }}
+                marginBottom={{ base: '1px', md: '2px' }}
+                color={'rgba(90,90,90,1)'}
+              >
+                일{' '}
+              </Text>
+            </Flex>
+          )}
+          <Flex align={'end'}>
+            <Text> {String(hours).padStart(2, '0')}</Text>{' '}
+            <Text
+              fontSize={{ base: '0.7rem', md: '0.8rem' }}
+              marginBottom={{ base: '1px', md: '2px' }}
+              color={'rgba(90,90,90,1)'}
+            >
+              시간{' '}
+            </Text>
+          </Flex>
+          <Flex align={'end'}>
+            <Text> {String(minutes).padStart(2, '0')}</Text>{' '}
+            <Text
+              fontSize={{ base: '0.7rem', md: '0.8rem' }}
+              marginBottom={{ base: '1px', md: '2px' }}
+              color={'rgba(90,90,90,1)'}
+            >
+              분{' '}
+            </Text>
+          </Flex>
+          <Flex align={'end'}>
+            <Text> {String(seconds).padStart(2, '0')}</Text>{' '}
+            <Text
+              fontSize={{ base: '0.7rem', md: '0.8rem' }}
+              marginBottom={{ base: '1px', md: '2px' }}
+              color={'rgba(90,90,90,1)'}
+            >
+              초{' '}
+            </Text>
+          </Flex>
+        </Flex>
       );
     }
   };

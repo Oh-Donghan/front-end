@@ -110,7 +110,7 @@ export default function ItemCard({ rank, item, type }: ItemCardProps) {
               </Text>
             </Flex>
             <Flex justifyContent={'space-between'} alignItems={'center'} height={'25px'}>
-              <Text fontSize="sm">남은 기간</Text>
+              <Text fontSize="sm">기간</Text>
               <Timer endedAt={item.endedAt} setIsFinished={setIsFinished} />
             </Flex>
           </Stack>
@@ -180,7 +180,7 @@ export default function ItemCard({ rank, item, type }: ItemCardProps) {
             </Text>
             <Text
               color="blue.600"
-              fontSize={{ base: '1.3rem' }}
+              fontSize={{ base: '1.4rem' }}
               fontWeight={'bold'}
               marginRight={'3px'}
               noOfLines={1}
@@ -199,7 +199,7 @@ export default function ItemCard({ rank, item, type }: ItemCardProps) {
             </Text>
           </Flex>
           <Flex justifyContent={'space-between'} alignItems={'center'} height={'25px'}>
-            <Text fontSize="sm">남은 기간</Text>
+            <Text fontSize="sm">기간</Text>
             <Timer endedAt={item.endedAt} setIsFinished={setIsFinished} />
           </Flex>
         </Stack>
