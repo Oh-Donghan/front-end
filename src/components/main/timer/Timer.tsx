@@ -1,3 +1,4 @@
+import { Text } from '@chakra-ui/react';
 import Countdown from 'react-countdown';
 
 interface TimerProps {
@@ -19,10 +20,18 @@ export default function Timer({ endedAt, setIsFinished }: TimerProps) {
                 <span>{days}</span> <span className="text-gray-600">일 </span>
               </>
             )}
-            <span className="text-gray-600">{String(hours).padStart(2, '0')}시간 </span>{' '}
-            {String(minutes).padStart(2, '0')}
-            <span className="text-gray-600">분 </span> {String(seconds).padStart(2, '0')}{' '}
-            <span className="text-gray-600">초 </span>
+            <span className="text-gray-600">
+              {String(hours).padStart(2, '0')}
+              <Text>시간</Text>{' '}
+            </span>{' '}
+            <span className="text-gray-600">
+              {String(minutes).padStart(2, '0')}
+              <Text>분</Text>
+            </span>{' '}
+            <span className="text-gray-600">
+              {String(seconds).padStart(2, '0')}
+              <Text>초</Text>
+            </span>
           </span>
         </div>
       );

@@ -1,10 +1,11 @@
-import axios from 'axios';
+import { json } from 'react-router-dom';
+import axiosInstance from '../instances';
 
 export const getAlarms = async ({ pageParam = 0 }) => {
   const token = localStorage.getItem('accessToken');
 
   try {
-    const response = await axios.get(`/api/members/notification`, {
+    const response = await axiosInstance.get(`/api/members/notification`, {
       params: {
         page: undefined,
         size: undefined,

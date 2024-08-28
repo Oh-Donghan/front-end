@@ -74,9 +74,9 @@ export default function SwiperItemList({ type, setIsNoItem }: ItemListProps) {
       className="mySwiper"
       style={{ marginTop: '25px' }}
     >
-      {data.content.map((item, i) => (
+      {data.content.map(item => (
         <SwiperSlide key={item.id}>
-          <ItemCard type={type} item={item} rank={i + 1} />
+          <ItemCard item={item} />
         </SwiperSlide>
       ))}
     </Swiper>
@@ -90,9 +90,9 @@ export default function SwiperItemList({ type, setIsNoItem }: ItemListProps) {
       }}
       gap={6}
     >
-      {data.content.map((item, i) => (
+      {data.content.map(item => (
         <GridItem key={item.id}>
-          <ItemCard type={type} item={item} rank={i + 1} />
+          <ItemCard item={item} />
         </GridItem>
       ))}
     </Grid>
