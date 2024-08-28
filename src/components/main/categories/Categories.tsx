@@ -19,20 +19,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { getCategories } from '../../../axios/category/categories';
 
-export default function Categories() {
+export default function Categories({ categories, isCategoryLoading }) {
   const [selectedOption, setSelectedOption] = useState({
     title: '카테고리를 선택해 주세요',
     image: null,
   });
 
   const categorySkeletonArray = new Array(16).fill(null);
-
-  const { data: categories, isLoading } = useQuery({
-    queryKey: ['categories'],
-    queryFn: () => getCategories(),
-    staleTime: Infinity,
-    gcTime: 30 * 60 * 1000,
-  });
 
   const navigate = useNavigate();
 
@@ -41,7 +34,7 @@ export default function Categories() {
     navigate(`/auctions?mainCategory=${item.categoryName}`);
   };
 
-  if (isLoading) {
+  if (isCategoryLoading) {
     return (
       <>
         <div className="flex sm:hidden mt-4  relative z-50 justify-center">

@@ -10,6 +10,8 @@ import TopButton from '../components/common/button/TopButton';
 import { useEffect, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { authState } from '../recoil/atom/authAtom';
+import { getCategories } from '../axios/category/categories';
+import { useQuery } from '@tanstack/react-query';
 
 export default function Home() {
   const [isProcessingAuth, setIsProcessingAuth] = useState(false);
@@ -41,6 +43,14 @@ export default function Home() {
     }
   }, [location, navigate]);
 
+  // getCategories의 isLoading을 ItemList에도 전달하기 위해 home에서 카테고리 패칭
+  const { data: categories, isLoading } = useQuery({
+    queryKey: ['categories'],
+    queryFn: () => getCategories(),
+    staleTime: Infinity,
+    gcTime: 30 * 60 * 1000,
+  });
+
   if (isProcessingAuth) {
     {
       /* 유저 정보 localStorage에 저장중엔 안 보이게 처리*/
@@ -54,17 +64,17 @@ export default function Home() {
       <ChatModal />
       <Banner />
       <Input />
-      <Categories />
+      <Categories categories={categories} isCategoryLoading={isLoading} />
 
       <Box minW="345px" px={8} overflowX="hidden">
         {/* 지금 핫한 Top5 섹션 */}
         <section>
-          <SwiperHotItemList />
+          <SwiperHotItemList isCategoryLoading={isLoading} />
         </section>
 
         {/* 전체 매물 섹션 */}
         <section>
-          <SwiperItemList />
+          <SwiperItemList isCategoryLoading={isLoading} />
         </section>
       </Box>
     </Box>

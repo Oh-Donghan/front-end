@@ -10,7 +10,11 @@ import { useQuery } from '@tanstack/react-query';
 import ItemCardSkeleton from '../../common/item/ItemCardSkeleton';
 import { Link } from 'react-router-dom';
 
-export default function SwiperItemList() {
+interface SwiperHotItemListProps {
+  isCategoryLoading?: boolean;
+}
+
+export default function SwiperItemList({ isCategoryLoading }: SwiperHotItemListProps) {
   const isSlider = useBreakpointValue({ base: true, sm2: false, md: false });
   const searchParams = new URLSearchParams(location.search);
   const category = searchParams.get('category') || '전체';
@@ -24,7 +28,7 @@ export default function SwiperItemList() {
     gcTime: 30 * 60 * 1000,
   });
 
-  if (isLoading) {
+  if (isCategoryLoading || isLoading) {
     return (
       <Box minW="375px" mb={{ base: '12', sm: '20' }} mt={{ base: '12', sm: '20' }}>
         <Grid

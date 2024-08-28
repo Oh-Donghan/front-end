@@ -9,7 +9,11 @@ import { getAuctionHotItems } from '../../../axios/auction/auctionItems';
 import { useQuery } from '@tanstack/react-query';
 import ItemCardSkeleton from '../../common/item/ItemCardSkeleton';
 
-export default function SwiperHotItemList() {
+interface SwiperHotItemListProps {
+  isCategoryLoading?: boolean;
+}
+
+export default function SwiperHotItemList({ isCategoryLoading }: SwiperHotItemListProps) {
   const isSlider = useBreakpointValue({ base: true, sm2: false, md: false });
   const searchParams = new URLSearchParams(location.search);
   const category = searchParams.get('mainCategory') || '전체';
@@ -21,9 +25,10 @@ export default function SwiperHotItemList() {
     queryFn: () => getAuctionHotItems({ category, subCategory }),
   });
 
-  if (isLoading) {
+  if (isCategoryLoading || isLoading) {
     return (
-      <Box minW="375px" mt={'100px'}>
+      <Box minW="375px" mt={'85px'}>
+        <Box w={'160px'} h={'35px'} bgColor={'rgba(230,230,230,1)'} mb={'30px'}></Box>
         <Grid
           templateColumns={{
             base: 'repeat(1, 1fr)',

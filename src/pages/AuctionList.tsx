@@ -64,18 +64,18 @@ export default function AuctionList() {
     <>
       {search ? (
         <Box mb={{ base: '12', sm: '20' }} mt={{ base: '12', sm: '6' }}>
-          <ItemList />
+          <ItemList isCategoryLoading={isLoading} />
         </Box>
       ) : (
         <>
           {/* 지금 핫한 Top5 섹션 */}
           <Box mt={{ base: '12', sm: '60px' }}>
-            <SwiperHotItemList />
+            <SwiperHotItemList isCategoryLoading={isLoading} />
           </Box>
 
           {/* 전체 매물 섹션 */}
           <section>
-            <ItemList />
+            <ItemList isCategoryLoading={isLoading} />
           </section>
         </>
       )}
