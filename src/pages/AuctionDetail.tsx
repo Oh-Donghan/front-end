@@ -11,12 +11,20 @@ import { fetchAuctionDetailData } from '../axios/auctionDetail/auctionDetail';
 const AuctionDetail = () => {
   const { id: auctionId } = useParams();
 
-  const { data } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ['detail', auctionId],
     queryFn: () => fetchAuctionDetailData(auctionId),
   });
 
   console.log(data);
+
+  if (isLoading) {
+    <div>Data Loading...</div>;
+  }
+
+  if (isError) {
+    <div>fetch Error...</div>;
+  }
 
   return (
     <Flex
@@ -33,13 +41,13 @@ const AuctionDetail = () => {
           <BreadcrumbLink href="/">전체</BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbItem>
-          <BreadcrumbLink href="#">{data.parentCategory.categoryName}</BreadcrumbLink>
+          <BreadcrumbLink href="#">{data?.parentCategory?.categoryName}</BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbItem>
-          <BreadcrumbLink href="#">{data.childCategory.categoryName}</BreadcrumbLink>
+          <BreadcrumbLink href="#">{data?.childCategory?.categoryName}</BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbItem isCurrentPage>
-          <BreadcrumbLink href="#">{data.productName}</BreadcrumbLink>
+          <BreadcrumbLink href="#">{data?.productName}</BreadcrumbLink>
         </BreadcrumbItem>
       </Breadcrumb>
 
