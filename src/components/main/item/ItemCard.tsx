@@ -15,10 +15,10 @@ import {
 import Timer from '../timer/Timer';
 import { HiUser } from 'react-icons/hi';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { formatMemberCount } from '../../../utils/formatMemberCount';
 import { ItemCardProps } from '../../../interface/auction/actionItemInterface';
-import { getCurrentPrice } from '../../../axios/auction/currentPrice';
+// import { getCurrentPrice } from '../../../axios/auction/currentPrice';
 
 export default function ItemCard({ rank, item, type }: ItemCardProps) {
   const navigate = useNavigate();
@@ -30,21 +30,21 @@ export default function ItemCard({ rank, item, type }: ItemCardProps) {
     navigate(`/detail/${item.id}`);
   };
 
-  useEffect(() => {
-    const fetchPrice = async () => {
-      try {
-        const data = await getCurrentPrice({ currentPrice });
-        if (data.currentPrice > currentPrice) {
-          // 가격이 올랐을 때만 업데이트
-          setCurrentPrice(data.currentPrice);
-        }
-      } catch (error) {
-        console.error('Error fetching current price:', error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchPrice = async () => {
+  //     try {
+  //       const data = await getCurrentPrice({ currentPrice });
+  //       if (data.currentPrice > currentPrice) {
+  //         // 가격이 올랐을 때만 업데이트
+  //         setCurrentPrice(data.currentPrice);
+  //       }
+  //     } catch (error) {
+  //       console.error('Error fetching current price:', error);
+  //     }
+  //   };
 
-    fetchPrice();
-  }, [item.id, currentPrice]);
+  //   fetchPrice();
+  // }, [item.id, currentPrice]);
 
   if (type === 'hot') {
     return (
