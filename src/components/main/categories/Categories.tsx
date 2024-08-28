@@ -38,7 +38,7 @@ export default function Categories() {
 
   const handleSelect = item => {
     setSelectedOption(prev => ({ ...prev, title: item.title, image: computer }));
-    navigate(`/auctions?category=${item.categoryName}`);
+    navigate(`/auctions?mainCategory=${item.categoryName}`);
   };
 
   if (isLoading) {
@@ -161,7 +161,7 @@ export default function Categories() {
         >
           {categories.map(item => {
             return (
-              <Link to={`/auctions?category=${item.categoryName}`} key={item.id}>
+              <Link to={`/auctions?mainCategory=${item.categoryName}`} key={item.id}>
                 <GridItem w="100%" h="10" cursor={'pointer'}>
                   <Flex align="center">
                     <img

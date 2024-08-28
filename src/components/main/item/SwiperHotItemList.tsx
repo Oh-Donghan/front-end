@@ -18,7 +18,7 @@ export default function SwiperHotItemList() {
 
   const { data, isLoading } = useQuery({
     queryKey: ['items', category, 'top5'],
-    queryFn: () => getAuctionHotItems({ category, sub: subCategory }),
+    queryFn: () => getAuctionHotItems({ category, subCategory }),
   });
 
   if (isLoading) {
@@ -41,10 +41,6 @@ export default function SwiperHotItemList() {
     );
   }
 
-  if (!data || !data.content || data.content.length === 0) {
-    return <div>No items found</div>;
-  }
-
   return isSlider ? (
     <Swiper
       effect={'cards'}
@@ -54,7 +50,7 @@ export default function SwiperHotItemList() {
       className="mySwiper"
       style={{ marginTop: '25px' }}
     >
-      {data.content.map((item, i) => (
+      {data?.map((item, i) => (
         <SwiperSlide key={item.id}>
           <ItemCard type={'hot'} item={item} rank={i + 1} />
         </SwiperSlide>
@@ -70,44 +66,11 @@ export default function SwiperHotItemList() {
       }}
       gap={6}
     >
-      {data.content.map((item, i) => (
+      {data?.map((item, i) => (
         <GridItem key={item.id}>
           <ItemCard type={'hot'} item={item} rank={i + 1} />
         </GridItem>
       ))}
     </Grid>
   );
-
-  // return isSlider ? (
-  //   <Swiper
-  //     effect={'cards'}
-  //     grabCursor={true}
-  //     pagination={{ clickable: true }}
-  //     modules={[EffectCards, Pagination]}
-  //     className="mySwiper"
-  //     style={{ marginTop: '25px' }}
-  //   >
-  //     {data.content.map((item, i) => (
-  //       <SwiperSlide key={item.id}>
-  //         <ItemCard type={'hot'} item={item} rank={i + 1} />
-  //       </SwiperSlide>
-  //     ))}
-  //   </Swiper>
-  // ) : (
-  //   <Grid
-  //     templateColumns={{
-  //       base: 'repeat(1, 1fr)',
-  //       sm2: 'repeat(2, 1fr)',
-  //       lg: 'repeat(3, 1fr)',
-  //       '2xl': 'repeat(5, 1fr)',
-  //     }}
-  //     gap={6}
-  //   >
-  //     {data.content.map((item, i) => (
-  //       <GridItem key={item.id}>
-  //         <ItemCard type={'hot'} item={item} rank={i + 1} />
-  //       </GridItem>
-  //     ))}
-  //   </Grid>
-  // );
 }

@@ -1,20 +1,17 @@
-import { Text, Flex, Grid, GridItem, useBreakpointValue, Button, Box } from '@chakra-ui/react';
+import { Grid, GridItem, useBreakpointValue, Box } from '@chakra-ui/react';
 import ItemCard from '../../main/item/ItemCard';
-import { Link } from 'react-router-dom';
 import { useInView } from 'react-intersection-observer';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { getAuctionItems } from '../../../axios/auction/auctionItems';
 import ItemCardSkeleton from '../../../components/common/item/ItemCardSkeleton';
+import { useLocation } from 'react-router-dom';
 
-interface ItemListProps {
-  setIsNoItem?: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-export default function ItemList({ setIsNoItem }: ItemListProps) {
+export default function ItemList() {
+  const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const category = searchParams.get('category') || '전체';
-  const subCategory = searchParams.get('sub') || undefined;
+  const category = searchParams.get('mainCategory') || '전체';
+  const subCategory = searchParams.get('subCategory') || undefined;
   const sorted = searchParams.get('sorted') || 'recent';
   const search = searchParams.get('word') || undefined;
   const { ref, inView } = useInView();
@@ -29,9 +26,10 @@ export default function ItemList({ setIsNoItem }: ItemListProps) {
 
   const { data, fetchNextPage, hasNextPage, isLoading, error } = useInfiniteQuery({
     queryKey: ['items', category, subCategory, sorted, search],
-    queryFn: () => getAuctionItems({ word: search, category, sorted, sub: subCategory }),
+    queryFn: ({ pageParam = 0 }) =>
+      getAuctionItems({ word: search, category, sorted, subCategory, page: pageParam }),
     getNextPageParam: lastPage => {
-      return lastPage.number + 1 < lastPage.totalPages ? lastPage.number + 1 : undefined;
+      return lastPage.last ? undefined : lastPage.number + 1;
     },
     initialPageParam: 0,
   });
@@ -41,16 +39,6 @@ export default function ItemList({ setIsNoItem }: ItemListProps) {
       fetchNextPage();
     }
   }, [inView, fetchNextPage, hasNextPage]);
-
-  useEffect(() => {
-    if (isLoading) return;
-    if (data.pages[0].content.length === 0) {
-      setIsNoItem(true);
-    }
-    if (data.pages[0].content.length > 0) {
-      setIsNoItem(false);
-    }
-  }, [data]);
 
   if (error) {
     return <Box>Fetching error</Box>;
@@ -67,13 +55,18 @@ export default function ItemList({ setIsNoItem }: ItemListProps) {
         }}
         gap={6}
       >
-        {skeletonArray.map((item, i) => (
+        {skeletonArray.map((_, i) => (
           <GridItem key={i}>
             <ItemCardSkeleton />
           </GridItem>
         ))}
       </Grid>
     );
+  }
+
+  // 데이터가 빈값일 때 캐싱되면 skeleton이 안 보이는경우 처리
+  if (data.pages[0].content.length === 0) {
+    return <Box w={'100%'} h={'2000px'}></Box>;
   }
 
   return (

@@ -8,14 +8,8 @@ import { EffectCards, Pagination } from 'swiper/modules';
 import { getAuctionItems } from '../../../axios/auction/auctionItems';
 import { useQuery } from '@tanstack/react-query';
 import ItemCardSkeleton from '../../common/item/ItemCardSkeleton';
-import { useEffect } from 'react';
 
-interface ItemListProps {
-  type?: string;
-  setIsNoItem?: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-export default function SwiperItemList({ type, setIsNoItem }: ItemListProps) {
+export default function SwiperItemList() {
   const isSlider = useBreakpointValue({ base: true, sm2: false, md: false });
   const searchParams = new URLSearchParams(location.search);
   const category = searchParams.get('category') || '전체';
@@ -24,22 +18,10 @@ export default function SwiperItemList({ type, setIsNoItem }: ItemListProps) {
   const { data, isLoading } = useQuery({
     queryKey: ['items', category],
     queryFn: () =>
-      getAuctionItems({ word: undefined, category, sorted: undefined, sub: undefined }),
+      getAuctionItems({ word: undefined, category, sorted: undefined, subCategory: undefined }),
+    staleTime: 3 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
   });
-
-  useEffect(() => {
-    if (isLoading) return;
-    if (!type && data.content.length === 0) {
-      setIsNoItem(true);
-    }
-    if (!type && data.content.length > 0) {
-      setIsNoItem(false);
-    }
-
-    if (data) {
-      console.log(data);
-    }
-  }, [data]);
 
   if (isLoading) {
     return (
