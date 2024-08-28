@@ -37,7 +37,7 @@ export default function CategorySortButton() {
 
     const params = new URLSearchParams();
     params.set('mainCategory', selectedCategory);
-    if (sort !== 'recent') {
+    if (sort !== null) {
       params.set('sort', sort);
     }
 

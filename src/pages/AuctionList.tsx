@@ -17,7 +17,7 @@ import { getCategories } from '../axios/category/categories';
 export default function AuctionList() {
   const location = useLocation();
 
-  const showSearchInputBelow = useBreakpointValue({ base: true, lg: false });
+  const showSearchInputBelow = useBreakpointValue({ base: true, lg: false }, { fallback: 'lg' });
 
   const searchParams = new URLSearchParams(location.search);
   const category = searchParams.get('mainCategory') || '전체';
@@ -27,7 +27,7 @@ export default function AuctionList() {
 
   // 메인 페이지에서 캐싱한 카테고리 데이터 사용
   // url을 직접 수정해서 들어오는 경우도 고려해서 queryClient.getQueryData(['categories'])는 사용하지 않음
-  const { data: categories } = useQuery({
+  const { data: categories, isLoading } = useQuery({
     queryKey: ['categories'],
     queryFn: () => getCategories(),
   });
@@ -68,28 +68,15 @@ export default function AuctionList() {
         </Box>
       ) : (
         <>
+          {/* 지금 핫한 Top5 섹션 */}
           <Box mt={{ base: '12', sm: '60px' }}>
-            <Flex alignItems="center" mb={{ base: '4', sm: '5' }}>
-              <Text fontSize={{ base: '1.3rem', md: '1.5rem' }} fontWeight="bold">
-                {category === '전체' && '지금 핫한 경매 Top5'}
-                {category !== '전체' && !subCategory && `지금 핫한 ${category} Top5`}
-                {category !== '전체' && subCategory && `지금 핫한 ${subCategory} Top5`}
-              </Text>
-            </Flex>
             <SwiperHotItemList />
           </Box>
 
           {/* 전체 매물 섹션 */}
-          <Box mb={{ base: '12', sm: '20' }} mt={{ base: '12', sm: '20' }}>
-            <Flex alignItems="center" justifyContent="space-between" mb={{ base: '4', sm: '5' }}>
-              <Text fontSize={{ base: '1.3rem', md: '1.5rem' }} fontWeight="bold">
-                {category !== '전체'
-                  ? `전체 ${subCategory === undefined ? category : subCategory} 경매`
-                  : '전체 경매'}
-              </Text>
-            </Flex>
+          <section>
             <ItemList />
-          </Box>
+          </section>
         </>
       )}
     </>
@@ -132,20 +119,32 @@ export default function AuctionList() {
           )}
         </Flex>
         {/*검색 키워드가 없고 카테고리가 전체가 아닐 때 타이틀*/}
-        {category !== '전체' && !search && (
-          <Flex alignItems={'center'} marginTop={'20px'}>
-            <img
-              src={currentCategoryData?.imageUrl}
-              alt="all.png"
-              width={'28px'}
-              height={'28px'}
-              className="ml-1 mb-0.5"
-            />
-            <Text fontSize="26px" fontWeight="bold" pl="6px" ml="3px">
-              {currentCategoryData?.categoryName}
-            </Text>
-          </Flex>
+        {isLoading ? (
+          <>
+            <Flex align={'center'} mt={'20px'}>
+              <Box borderRadius={'50%'} w={'40px'} h={'40px'} bgColor={'rgba(230,230,230,1)'}></Box>
+              <Box w={'44px'} h={'12px'} bgColor={'rgba(230,230,230,1)'} ml={3}></Box>
+            </Flex>
+          </>
+        ) : (
+          <>
+            {category !== '전체' && !search && (
+              <Flex alignItems={'center'} marginTop={'20px'}>
+                <img
+                  src={currentCategoryData?.imageUrl}
+                  alt="all.png"
+                  width={'28px'}
+                  height={'28px'}
+                  className="ml-1 mb-0.5"
+                />
+                <Text fontSize="26px" fontWeight="bold" pl="6px" ml="3px">
+                  {currentCategoryData?.categoryName}
+                </Text>
+              </Flex>
+            )}
+          </>
         )}
+
         {/*검색 키워드가 없고 카테고리가 전체일 때 타이틀*/}
         {category === '전체' && !search && (
           <Flex alignItems={'center'} marginTop={'20px'}>

@@ -1,4 +1,4 @@
-import { Grid, GridItem, useBreakpointValue, Box } from '@chakra-ui/react';
+import { Grid, GridItem, useBreakpointValue, Box, Flex, Text } from '@chakra-ui/react';
 import ItemCard from '../../main/item/ItemCard';
 import { useInView } from 'react-intersection-observer';
 import { useInfiniteQuery } from '@tanstack/react-query';
@@ -15,7 +15,7 @@ export default function ItemList() {
   const sorted = searchParams.get('sorted') || 'recent';
   const search = searchParams.get('word') || undefined;
   const { ref, inView } = useInView();
-  const skeletonArray = new Array(5).fill(null);
+  const skeletonArray = new Array(10).fill(null);
 
   const gridTemplateColumns = useBreakpointValue({
     base: 'repeat(1, 1fr)', // 모바일에서 한 줄에 2개의 아이템
@@ -64,25 +64,29 @@ export default function ItemList() {
     );
   }
 
-  // 데이터가 빈값일 때 캐싱되면 skeleton이 안 보이는경우 처리
-  if (data.pages[0].content.length === 0) {
-    return <Box w={'100%'} h={'2000px'}></Box>;
-  }
-
   return (
     <>
-      <Grid templateColumns={gridTemplateColumns} gap={7} position={'relative'} zIndex={'40'}>
-        {data.pages.map(page =>
-          page.content.map(item => {
-            return (
-              <GridItem key={item.id}>
-                <ItemCard item={item} />
-              </GridItem>
-            );
-          }),
-        )}
-      </Grid>
-      <Box ref={ref} textAlign="center" py={0}></Box>
+      <Box mb={{ base: '12', sm: '20' }} mt={{ base: '12', sm: '20' }}>
+        <Flex alignItems="center" justifyContent="space-between" mb={{ base: '4', sm: '5' }}>
+          <Text fontSize={{ base: '1.3rem', md: '1.5rem' }} fontWeight="bold">
+            {category !== '전체'
+              ? `전체 ${subCategory === undefined ? category : subCategory} 경매`
+              : '전체 경매'}
+          </Text>
+        </Flex>
+        <Grid templateColumns={gridTemplateColumns} gap={7} position={'relative'} zIndex={'40'}>
+          {data.pages.map(page =>
+            page.content.map(item => {
+              return (
+                <GridItem key={item.id}>
+                  <ItemCard item={item} />
+                </GridItem>
+              );
+            }),
+          )}
+        </Grid>
+        <Box ref={ref} textAlign="center" py={0}></Box>
+      </Box>
     </>
   );
 }
