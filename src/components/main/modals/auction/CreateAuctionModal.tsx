@@ -27,7 +27,7 @@ import { CreateAuctionType } from '../../../../interface/auction/actionInterface
 
 export default function CreateAuctionModal({ isOpen, onClose }) {
   const methods = useForm();
-  const { register, handleSubmit, reset, setValue } = methods;
+  const { register, handleSubmit, reset } = methods;
   const [rating, setRating] = useState<number>(0);
   const [selectedCategory, setSelectedCategory] = useState<number>(0);
   const [selectedSubCategory, setSelectedSubCategory] = useState<number>(0);
@@ -180,8 +180,8 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
       productColor: data.color || '',
       productDescription: data.description || '',
       deliveryPrice: shippingMethod !== 'nodelivery' ? parseInt(data.shippingCost) : undefined,
-      contactPlace:
-        tradeMethod === '직접 만나서' || tradeMethod === '모두 가능' ? contactPlace : undefined,
+      // contactPlace: tradeMethod === 'contact' || tradeMethod === 'all' ? contactPlace : undefined,
+      contactPlace: contactPlace,
     };
 
     const thumbnail = files[0]; // 첫 번째 이미지를 썸네일로 사용
