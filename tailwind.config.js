@@ -6,6 +6,7 @@ export default {
       fontSize: {
         '18px': '18px',
         '16px': '16px',
+        xxs: '10px',
       },
       aspectRatio: {
         '4/5': '4/5',

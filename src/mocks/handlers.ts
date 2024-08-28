@@ -191,6 +191,16 @@ export const handlers = [
     return res(ctx.status(200), ctx.json(response));
   }),
 
+  // 보유 포인트 API 모킹
+  rest.get('https://fake-server.com/api/members/points', (req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.json({
+        point: 1000, // 모킹된 포인트 값
+      }),
+    );
+  }),
+
   // 경매 목록 조회
   rest.get('https://fake-server.com/api/auctions', (req, res, ctx) => {
     const page = parseInt(req.url.searchParams.get('page') || '0', 10);
