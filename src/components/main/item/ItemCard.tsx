@@ -27,7 +27,7 @@ export default function ItemCard({ rank, item, type }: ItemCardProps) {
 
   const moveDetail = () => {
     if (isFinished) return;
-    navigate(`/detail`);
+    navigate(`/detail/${item.id}`);
   };
 
   // useEffect(() => {
