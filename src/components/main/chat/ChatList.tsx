@@ -7,7 +7,7 @@ import Chat from './Chat';
 //   data?: ChatResponseType
 // }
 
-export default function ChatList({ data, isLoading }) {
+export default function ChatList({ datas, isLoading }) {
   if (isLoading) {
     return (
       <Flex height={'410px'} align={'center'} justify={'center'}>
@@ -16,7 +16,7 @@ export default function ChatList({ data, isLoading }) {
     );
   }
 
-  if (!data || data.length === 0 || data.data[4].auction.length === 0) {
+  if (!datas || datas.length === 0) {
     return (
       <Flex height={'410px'} align={'center'} justify={'center'}>
         <Text fontSize={'1.05rem'} color={'rgba(90,90,90,1)'} letterSpacing={'0.07rem'}>
@@ -39,8 +39,8 @@ export default function ChatList({ data, isLoading }) {
         'scrollbar-width': 'none', // Firefox
       }}
     >
-      {data?.data[4]?.map(auction => {
-        return <Chat key={auction.id} />;
+      {datas?.map(data => {
+        return <Chat key={data.id} data={data} />;
       })}
     </Flex>
   );

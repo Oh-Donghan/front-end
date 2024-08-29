@@ -1,28 +1,31 @@
 import ChatItem from './ChatItem';
-import { Flex } from '@chakra-ui/react';
+import { Flex, Spinner, Text } from '@chakra-ui/react';
 
-const chats = [
-  { id: 1, name: '메시 국대 유니폼', message: '안녕하세요!', time: '19:49', unread: 1 },
-  { id: 2, name: '호날두 국대 유니폼', message: '안녕하세요!', time: '18:32', unread: 3 },
-  { id: 3, name: '산악 자전거', message: '안녕하세요!', time: '19:49', unread: 1 },
-  { id: 4, name: '호날두 국대 유니폼', message: '안녕하세요!', time: '18:32', unread: 1 },
-  { id: 5, name: '다이소 청소기', message: '안녕하세요!', time: '19:49', unread: 1 },
-  { id: 6, name: '유니클로 바지', message: '안녕하세요!', time: '18:32', unread: 2 },
-  { id: 7, name: '자라 가방', message: '안녕하세요!', time: '19:49', unread: 1 },
-  { id: 8, name: '호날두 국대 유니폼', message: '안녕하세요!', time: '18:32', unread: 2 },
-  { id: 9, name: '메시 국대 유니폼', message: '안녕하세요!', time: '19:49', unread: 1 },
-  { id: 10, name: '호날두 국대 유니폼', message: '안녕하세요!', time: '18:32', unread: 2 },
-  { id: 11, name: '메시 국대 유니폼', message: '안녕하세요!', time: '19:49', unread: 1 },
-  { id: 12, name: '호날두 국대 유니폼', message: '안녕하세요!', time: '18:32', unread: 2 },
-  { id: 13, name: '메시 국대 유니폼', message: '안녕하세요!', time: '19:49', unread: 1 },
-  { id: 14, name: '호날두 국대 유니폼', message: '안녕하세요!', time: '18:32', unread: 2 },
-];
-
-export default function ChatList({ selectedChatId, setSelectedChatId, scrollBottom }) {
+export default function ChatList({
+  selectedChatId,
+  setSelectedChatId,
+  scrollBottom,
+  isLoading,
+  chats,
+}) {
   const handleSelect = id => {
     setSelectedChatId(id);
     scrollBottom();
   };
+
+  if (isLoading) {
+    <Flex>
+      <Spinner size={'md'} />
+    </Flex>;
+  }
+
+  if (chats === undefined || chats.length === 0) {
+    return (
+      <Flex height={'100%'} justify={'center'} align={'center'} color={'rgba(70,70,70,1)'}>
+        <Text>현재 존재하는 채팅이 없습니다.</Text>
+      </Flex>
+    );
+  }
 
   return (
     <Flex

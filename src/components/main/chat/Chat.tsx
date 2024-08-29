@@ -2,9 +2,11 @@ import { Flex, Text } from '@chakra-ui/react';
 import defaul_profile from '../../../assets/image/modal/chat/profile.png';
 import { Link } from 'react-router-dom';
 
-export default function Chat() {
+export default function Chat({ data }) {
+  const auction = data.aution;
+
   return (
-    <Link to="/chat">
+    <Link to={`/rooms?id=${auction.id}`}>
       <Flex
         _hover={{ bgColor: 'rgba(240,240,240,1)' }}
         align="center"
@@ -14,7 +16,11 @@ export default function Chat() {
         paddingY={'16px'}
       >
         <Flex align={'center'}>
-          <img src={defaul_profile} alt="기본 프로필 이미지" className="w-[50px] h-[50px]" />
+          <img
+            src={auction.imageList[0].imageUrl ? auction.imageList[0].imageUrl : defaul_profile}
+            alt={auction.imageList[0].imageName}
+            className="w-[50px] h-[50px]"
+          />
           <div className="ml-2.5">
             <Text
               fontSize={16}
@@ -22,7 +28,7 @@ export default function Chat() {
               fontWeight={'bold'}
               marginBottom={'3px'}
             >
-              메시 국대 유니폼
+              {auction.title}
             </Text>
             <Text fontSize={12} textColor={'rgba(160,160,160,1)'}>
               안녕하세요!

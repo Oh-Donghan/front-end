@@ -7,7 +7,7 @@ export default function Layout() {
 
   // mypage 경로에 있을 때 Footer를 제외
   const hideNav =
-    location.pathname === '/chat' ||
+    location.pathname === '/rooms' ||
     location.pathname === '/members/payment/approve' ||
     location.pathname === '/members/payment/cancle' ||
     location.pathname === '/mypage/myinfo' ||
@@ -20,7 +20,7 @@ export default function Layout() {
     location.pathname === '/mypage/buy' ||
     location.pathname === '/mypage/sell' ||
     location.pathname === '/mypage/charge' ||
-    location.pathname === '/chat' ||
+    location.pathname === '/rooms' ||
     location.pathname === '/payment' ||
     location.pathname === '/members/payment/approve' ||
     location.pathname === '/members/payment/cancle';
