@@ -11,11 +11,9 @@ if (import.meta.env.MODE === 'development') {
 }
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <RecoilProvider>
-      <ChakraProvider theme={customTheme}>
-        <App />
-      </ChakraProvider>
-    </RecoilProvider>
-  </React.StrictMode>,
+  <RecoilProvider>
+    <ChakraProvider theme={customTheme}>
+      <App />
+    </ChakraProvider>
+  </RecoilProvider>,
 );

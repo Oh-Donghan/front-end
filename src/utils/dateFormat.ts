@@ -24,3 +24,22 @@ export const formatDate = dateString => {
 
   return `${formattedDate} ${weekDay} ${formattedTime}`;
 };
+
+export const formatDateToKorean = (dateString: string): string => {
+  // 주어진 문자열을 Date 객체로 변환
+  const date = new Date(dateString);
+
+  // 날짜 옵션
+  const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric', // 'numeric'으로 설정
+    month: 'long', // 'long'으로 설정하면 "8월" 형식으로 출력됩니다.
+    day: 'numeric', // 'numeric'으로 설정
+    hour: '2-digit', // '2-digit'으로 설정
+    minute: '2-digit', // '2-digit'으로 설정
+    second: '2-digit', // '2-digit'으로 설정
+    hour12: true, // 12시간제로 설정 (오전/오후 포함)
+  };
+
+  // 로케일을 'ko-KR'로 설정하여 한글로 출력
+  return date.toLocaleDateString('ko-KR', options);
+};

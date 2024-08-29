@@ -29,6 +29,13 @@ export default function StepOneUi({
 }) {
   const toast = useToast();
 
+  const { data, isLoading } = useQuery({
+    queryKey: ['point'],
+    queryFn: () => getChargdePoint(),
+    staleTime: 0,
+    gcTime: 10 * 60 * 1000,
+  });
+
   const onNextClick = async () => {
     if (directInputMode && !inputValue.trim()) {
       toast({
@@ -46,13 +53,6 @@ export default function StepOneUi({
       return;
     }
   };
-
-  const { data, isLoading } = useQuery({
-    queryKey: ['point'],
-    queryFn: () => getChargdePoint(),
-    staleTime: 2 * 60 * 1000,
-    gcTime: 10 * 60 * 1000,
-  });
 
   if (isLoading) {
     return (

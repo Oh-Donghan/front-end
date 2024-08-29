@@ -9,7 +9,7 @@ export default function Layout() {
   const hideNav =
     location.pathname === '/rooms' ||
     location.pathname === '/members/payment/approve' ||
-    location.pathname === '/members/payment/cancle' ||
+    location.pathname === '/members/payment/cancel' ||
     location.pathname === '/mypage/myinfo' ||
     location.pathname === '/mypage/buy' ||
     location.pathname === '/mypage/sell' ||
@@ -23,7 +23,7 @@ export default function Layout() {
     location.pathname === '/rooms' ||
     location.pathname === '/payment' ||
     location.pathname === '/members/payment/approve' ||
-    location.pathname === '/members/payment/cancle';
+    location.pathname === '/members/payment/cancel';
 
   return (
     <>

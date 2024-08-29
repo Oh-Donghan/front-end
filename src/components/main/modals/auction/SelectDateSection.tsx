@@ -26,6 +26,9 @@ export default function SelectDateSection({ endDate, setEndDate }: SelectDateSec
           minDate={new Date()}
           maxDate={new Date(new Date().setDate(new Date().getDate() + 7))}
           dateFormat="yyyy/MM/dd"
+          // showTimeSelect
+          // timeFormat="HH:mm"
+          // timeIntervals={2} // 2분 간격으로 설정
           placeholderText="날짜를 선택해주세요"
           customInput={<Input borderColor={'rgba(200,200,200,1)'} fontSize={'0.95rem'} readOnly />}
           popperClassName="zIndexFix"

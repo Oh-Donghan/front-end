@@ -19,7 +19,7 @@ export const getChargdePoint = async () => {
   }
 };
 
-// 포인트 충전하기 1단계
+// 카카오 충전 포인트 선택 api
 export const crateChargeOrder = async (price: number) => {
   const token = localStorage.getItem('accessToken');
 
@@ -41,12 +41,12 @@ export const crateChargeOrder = async (price: number) => {
 
     return response.data;
   } catch (error) {
-    console.error('Error fetching charged Point (step1):', error);
+    console.error('Error fetching crate Charge Order:', error);
     throw error;
   }
 };
 
-// 포인트 충전하기 2단계
+// 카카오 충전 유저 인증 api
 export const createPayment = async ({
   orderId,
   memberId,
@@ -78,7 +78,24 @@ export const createPayment = async ({
 
     return response.data;
   } catch (error) {
-    console.error('Error fetching charged Point (step1):', error);
+    console.error('Error fetching create Payment:', error);
+    throw error;
+  }
+};
+
+// 카카오 포인트 충전 승인 api
+export const approvePayment = async ({ partner_order_id, pg_token }) => {
+  try {
+    const response = await axios.get('https://dddang.store/api/members/payment/approve', {
+      params: {
+        partner_order_id,
+        pg_token,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching approve Payment:', error);
     throw error;
   }
 };

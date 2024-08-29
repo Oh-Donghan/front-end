@@ -1,3 +1,4 @@
+import axios from 'axios';
 import axiosInstance from '../instances';
 
 export const signIn = async (id: string, password: string) => {
@@ -11,6 +12,89 @@ export const signIn = async (id: string, password: string) => {
   // 로그인 성공시 토큰을 localStorage에 저장
   localStorage.setItem('accessToken', accessToken);
   localStorage.setItem('refreshToken', refreshToken);
+
+  return response.data;
+};
+
+export const signOut = async () => {
+  const token = localStorage.getItem('accessToken');
+
+  const response = await axios.post(
+    'https://dddang.store/api/auth/logout',
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      withCredentials: true,
+    },
+  );
+
+  return response.data;
+};
+
+export const signUp = async ({
+  email,
+  id,
+  password,
+  confirmPassword,
+  authNum,
+}: {
+  email: string;
+  id: string;
+  password: string;
+  confirmPassword: string;
+  authNum: string;
+}) => {
+  const token = localStorage.getItem('accessToken');
+  const requestBody = {
+    email,
+    id,
+    password,
+    confirmPassword,
+    authNum,
+  };
+
+  const response = await axios.post('https://dddang.store/api/auth/signup', requestBody, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    withCredentials: true,
+  });
+
+  return response.data;
+};
+
+// 아이디 중복 확인 api
+export const idDuplicateCheck = async ({ id }: { id: string }) => {
+  const requestBody = {
+    memberId: id,
+  };
+
+  const response = await axios.post('https://dddang.store/api/auth/check/id', requestBody);
+
+  return response.data;
+};
+
+// 이메일 인증 코드 발송 api
+export const RequestAuthenticationEmailCode = async ({ email }: { email: string }) => {
+  const requestBody = {
+    email,
+  };
+
+  const response = await axios.post('https://dddang.store/api/mail/send', requestBody);
+
+  return response.data;
+};
+
+// 이메일 인증 코드 발송 api
+export const confirmEmail = async ({ email, authNum }: { email: string; authNum: string }) => {
+  const requestBody = {
+    email,
+    authNum,
+  };
+
+  const response = await axios.post('https://dddang.store/api/mail/check', requestBody);
 
   return response.data;
 };

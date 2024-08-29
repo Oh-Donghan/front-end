@@ -20,6 +20,7 @@ import ViewedAuctionModal from '../main/modals/viewed/ViewedAuctionModal';
 import CreateAuctionModal from '../main/modals/auction/CreateAuctionModal';
 import { useRecoilState } from 'recoil';
 import { authState } from '../../recoil/atom/authAtom';
+import { signOut } from '../../axios/auth/user';
 
 export default function Nav() {
   const signinDisclosure = useDisclosure();
@@ -91,8 +92,9 @@ export default function Nav() {
                 </li>
                 <li
                   className="mr-4 cursor-pointer"
-                  onClick={() => {
-                    setAuth(false);
+                  onClick={async () => {
+                    await setAuth(false);
+                    await signOut();
                     localStorage.removeItem('accessToken');
                     localStorage.removeItem('memberId');
                   }}

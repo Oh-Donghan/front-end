@@ -32,14 +32,17 @@ import { IoIosEye } from 'react-icons/io';
 import { IoIosEyeOff } from 'react-icons/io';
 import { RiLockPasswordFill } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
+import {
+  confirmEmail,
+  idDuplicateCheck,
+  RequestAuthenticationEmailCode,
+} from '../../../../axios/auth/user';
 
 export default function SignupModal({ onClose, isOpen, initialRef }) {
   const [verificationMode, setVerificationMode] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [confirmPassword, setConfirmPassword] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
   const [isIdValid, setIsIdValid] = useState(true);
@@ -153,11 +156,13 @@ export default function SignupModal({ onClose, isOpen, initialRef }) {
               fontSize={'xs'}
               cursor={'pointer'}
               border={'1px solid rgba(200,200,200,1)'}
-              onClick={() => {
-                if (isIdAvailable && isIdValid) {
-                  setIdMessage('사용 가능한 아이디입니다.');
-                  setIdMessageColor('rgba(0, 119, 255, 0.9)');
+              onClick={async () => {
+                if (!isIdValid) {
+                  return;
                 }
+                const response = await idDuplicateCheck({ id });
+                // setIdMessage('사용 가능한 아이디입니다.');
+                // setIdMessageColor('rgba(0, 119, 255, 0.9)');
               }}
             >
               중복확인
@@ -285,9 +290,13 @@ export default function SignupModal({ onClose, isOpen, initialRef }) {
               fontSize={'xs'}
               cursor={'pointer'}
               border={'1px solid rgba(200,200,200,1)'}
-              onClick={() => {
-                if (email.length > 0 && isEmailValid) {
-                  alert('인증번호는 1234입니다.');
+              onClick={async () => {
+                // if (email.length > 0 && isEmailValid) {
+                //   alert('인증번호는 1234입니다.');
+                //   setVerificationMode(true);
+                // }
+                const response = await RequestAuthenticationEmailCode({ email });
+                if (response === '인증번호가 전송되었습니다.') {
                   setVerificationMode(true);
                 }
               }}
@@ -323,6 +332,17 @@ export default function SignupModal({ onClose, isOpen, initialRef }) {
                 borderColor={'rgba(200,200,200,1)'}
                 focusBorderColor={isEmailValid ? 'rgba(0, 119, 255, 0.9)' : 'rgba(255, 0, 0, 0.8)'}
               />
+              <InputRightAddon
+                fontSize={'xs'}
+                cursor={'pointer'}
+                border={'1px solid rgba(200,200,200,1)'}
+                borderRadius={'0'}
+                onClick={async () => {
+                  const response = await confirmEmail({ email, authNum: verificationCode });
+                }}
+              >
+                확인
+              </InputRightAddon>
               <InputRightAddon
                 fontSize={'xs'}
                 cursor={'pointer'}
