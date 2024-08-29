@@ -36,30 +36,6 @@ export default function AuctionList() {
     return cat.categoryName === category;
   });
 
-  // const renderNoItemsMessage = () => (
-  //   <Flex w={'full'} h="668px" align={'center'} justify={'center'}>
-  //     <Flex direction={'column'} align={'center'} gap={2}>
-  //       <Text
-  //         fontWeight={'bold'}
-  //         fontSize={{ base: '1.1rem', md: '1.4rem' }}
-  //         color={'rgba(60,60,60,1)'}
-  //       >
-  //         {'현재 진행중인 경매가 없습니다.'}
-  //       </Text>
-  //       <Link to={'/'}>
-  //         <Button
-  //           color={'white'}
-  //           bgColor={'rgba(49, 130, 206,1)'}
-  //           _hover={{ bgColor: 'rgba(49, 120, 170,1)' }}
-  //           mt={8}
-  //         >
-  //           홈으로 이동
-  //         </Button>
-  //       </Link>
-  //     </Flex>
-  //   </Flex>
-  // );
-
   const renderItemList = () => (
     <>
       {search ? (

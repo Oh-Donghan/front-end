@@ -29,7 +29,7 @@ export default function ItemList({ isCategoryLoading }: SwiperHotItemListProps) 
     '2xl': 'repeat(5, 1fr)', // 초대형 화면에서 한 줄에 5개의 아이템
   });
 
-  const { data, fetchNextPage, hasNextPage, isLoading, error } = useInfiniteQuery({
+  const { data, fetchNextPage, hasNextPage, isLoading } = useInfiniteQuery({
     queryKey: ['items', category, subCategory, sorted, search],
     queryFn: ({ pageParam = 0 }) =>
       getAuctionItems({ word: search, category, sorted, subCategory, page: pageParam }),

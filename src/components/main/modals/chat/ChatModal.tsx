@@ -114,7 +114,7 @@ export default function ChatModal() {
             </PopoverHeader>
             <PopoverArrow />
             <PopoverBody padding={'0px'}>
-              <ChatList />
+              <ChatList data={data} isLoading={isLoading} />
             </PopoverBody>
           </PopoverContent>
         )}
