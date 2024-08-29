@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { CreateAuctionType } from '../../interface/auction/actionInterface';
-import axiosInstance from '../instances';
 
 export const createAuction = async (
   createDto: CreateAuctionType,
