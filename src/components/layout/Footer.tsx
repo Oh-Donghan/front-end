@@ -123,7 +123,10 @@ export default function Footer() {
                 <MenuItem as="a" href="https://github.com/UsedAuction">
                   github
                 </MenuItem>
-                <MenuItem as="a" href="https://www.notion.so/2-0754ba713fe14f9c8c883323d7f45452">
+                <MenuItem
+                  as="a"
+                  href="https://sky-blue-900.notion.site/2-0754ba713fe14f9c8c883323d7f45452?pvs=4"
+                >
                   notion
                 </MenuItem>
               </MenuList>

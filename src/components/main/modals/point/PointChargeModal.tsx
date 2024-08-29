@@ -25,6 +25,8 @@ import PointOptions from './PointOptionList';
 import PayOptionList from './PayOptionList';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useQuery } from '@tanstack/react-query';
+import { getChargePoint } from '../../../../axios/point/point';
 
 export default function PointChargeModal({ isOpen, onClose }) {
   const { register, handleSubmit, reset } = useForm();
@@ -36,7 +38,12 @@ export default function PointChargeModal({ isOpen, onClose }) {
   const [inputError, setInputError] = useState(false);
   const toast = useToast();
 
-  const currentPoint = '100,000P';
+  const { data: poinData, isLoading } = useQuery({
+    queryKey: ['point'],
+    queryFn: () => getChargePoint(),
+    staleTime: 2 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+  });
 
   const onSubmit = data => {
     if (!data.agree) {
@@ -77,6 +84,10 @@ export default function PointChargeModal({ isOpen, onClose }) {
     }
   };
 
+  if (isLoading) {
+    return null;
+  }
+
   return (
     <Modal isOpen={isOpen} onClose={handleClose} isCentered blockScrollOnMount={false}>
       <ModalOverlay />
@@ -90,7 +101,7 @@ export default function PointChargeModal({ isOpen, onClose }) {
               <InputGroup marginBottom={'30px'}>
                 <InputLeftAddon fontSize={16}>보유한 포인트</InputLeftAddon>
                 <Input
-                  placeholder={currentPoint}
+                  placeholder={poinData.point}
                   border={'1px solid rgba(220,220,220,1)'}
                   textAlign="right"
                   fontSize={19}
@@ -108,6 +119,7 @@ export default function PointChargeModal({ isOpen, onClose }) {
                 />
                 {directInputMode && (
                   <Input
+                    type="number"
                     placeholder={'충전할 금액을 입력해 주세요'}
                     textAlign="right"
                     fontSize={16}
