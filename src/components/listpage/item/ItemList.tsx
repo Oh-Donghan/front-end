@@ -1,24 +1,26 @@
-import { Text, Flex, Grid, GridItem, useBreakpointValue, Button, Box } from '@chakra-ui/react';
+import { Grid, GridItem, useBreakpointValue, Box, Flex, Text, Button } from '@chakra-ui/react';
 import ItemCard from '../../main/item/ItemCard';
-import { Link } from 'react-router-dom';
 import { useInView } from 'react-intersection-observer';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { getAuctionItems } from '../../../axios/auction/auctionItems';
 import ItemCardSkeleton from '../../../components/common/item/ItemCardSkeleton';
+import { useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-interface ItemListProps {
-  setIsNoItem?: React.Dispatch<React.SetStateAction<boolean>>;
+interface SwiperHotItemListProps {
+  isCategoryLoading?: boolean;
 }
 
-export default function ItemList({ setIsNoItem }: ItemListProps) {
+export default function ItemList({ isCategoryLoading }: SwiperHotItemListProps) {
+  const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const category = searchParams.get('category') || '전체';
-  const subCategory = searchParams.get('sub') || undefined;
+  const category = searchParams.get('mainCategory') || '전체';
+  const subCategory = searchParams.get('subCategory') || undefined;
   const sorted = searchParams.get('sorted') || 'recent';
   const search = searchParams.get('word') || undefined;
   const { ref, inView } = useInView();
-  const skeletonArray = new Array(5).fill(null);
+  const skeletonArray = new Array(10).fill(null);
 
   const gridTemplateColumns = useBreakpointValue({
     base: 'repeat(1, 1fr)', // 모바일에서 한 줄에 2개의 아이템
@@ -29,9 +31,10 @@ export default function ItemList({ setIsNoItem }: ItemListProps) {
 
   const { data, fetchNextPage, hasNextPage, isLoading, error } = useInfiniteQuery({
     queryKey: ['items', category, subCategory, sorted, search],
-    queryFn: () => getAuctionItems({ word: search, category, sorted, sub: subCategory }),
+    queryFn: ({ pageParam = 0 }) =>
+      getAuctionItems({ word: search, category, sorted, subCategory, page: pageParam }),
     getNextPageParam: lastPage => {
-      return lastPage.number + 1 < lastPage.totalPages ? lastPage.number + 1 : undefined;
+      return lastPage.last ? undefined : lastPage.number + 1;
     },
     initialPageParam: 0,
   });
@@ -42,54 +45,76 @@ export default function ItemList({ setIsNoItem }: ItemListProps) {
     }
   }, [inView, fetchNextPage, hasNextPage]);
 
-  useEffect(() => {
-    if (isLoading) return;
-    if (data.pages[0].content.length === 0) {
-      setIsNoItem(true);
-    }
-    if (data.pages[0].content.length > 0) {
-      setIsNoItem(false);
-    }
-  }, [data]);
-
-  if (error) {
-    return <Box>Fetching error</Box>;
-  }
-
-  if (isLoading) {
+  if (isCategoryLoading || isLoading) {
     return (
-      <Grid
-        templateColumns={{
-          base: 'repeat(1, 1fr)',
-          sm2: 'repeat(2, 1fr)',
-          lg: 'repeat(3, 1fr)',
-          '2xl': 'repeat(5, 1fr)',
-        }}
-        gap={6}
-      >
-        {skeletonArray.map((item, i) => (
-          <GridItem key={i}>
-            <ItemCardSkeleton />
-          </GridItem>
-        ))}
-      </Grid>
+      <Box minW="375px" mt={'85px'}>
+        <Box w={'160px'} h={'35px'} bgColor={'rgba(230,230,230,1)'} mb={'30px'}></Box>
+        <Grid
+          templateColumns={{
+            base: 'repeat(1, 1fr)',
+            sm2: 'repeat(2, 1fr)',
+            lg: 'repeat(3, 1fr)',
+            '2xl': 'repeat(5, 1fr)',
+          }}
+          gap={6}
+        >
+          {skeletonArray.map((_, i) => (
+            <GridItem key={i}>
+              <ItemCardSkeleton />
+            </GridItem>
+          ))}
+        </Grid>
+      </Box>
     );
   }
 
   return (
     <>
-      <Grid templateColumns={gridTemplateColumns} gap={7} position={'relative'} zIndex={'40'}>
-        {data.pages.map(page =>
-          page.content.map(item => {
-            return (
-              <GridItem key={item.id}>
-                <ItemCard item={item} />
-              </GridItem>
-            );
-          }),
+      <Box mb={{ base: '12', sm: '20' }} mt={{ base: '12', sm: '20' }}>
+        {data.pages[0].content.length === 0 ? (
+          <Flex direction={'column'} justify={'center'} align={'center'} gap={2} height={'500px'}>
+            <Text
+              fontWeight={'bold'}
+              fontSize={{ base: '1.1rem', md: '1.4rem' }}
+              color={'rgba(60,60,60,1)'}
+            >
+              {'현재 진행중인 경매가 없습니다.'}
+            </Text>
+            <Link to={'/'}>
+              <Button
+                color={'white'}
+                bgColor={'rgba(49, 130, 206,1)'}
+                _hover={{ bgColor: 'rgba(49, 120, 170,1)' }}
+                mt={8}
+              >
+                홈으로 이동
+              </Button>
+            </Link>
+          </Flex>
+        ) : (
+          <>
+            <Flex alignItems="center" justifyContent="space-between" mb={{ base: '4', sm: '5' }}>
+              <Text fontSize={{ base: '1.3rem', md: '1.5rem' }} fontWeight="bold">
+                {category !== '전체'
+                  ? `전체 ${subCategory === undefined ? category : subCategory} 경매`
+                  : '전체 경매'}
+              </Text>
+            </Flex>
+            <Grid templateColumns={gridTemplateColumns} gap={7} position={'relative'} zIndex={'40'}>
+              {data.pages.map(page =>
+                page.content.map(item => {
+                  return (
+                    <GridItem key={item.id}>
+                      <ItemCard item={item} />
+                    </GridItem>
+                  );
+                }),
+              )}
+            </Grid>
+            <Box ref={ref} textAlign="center" py={0}></Box>
+          </>
         )}
-      </Grid>
-      <Box ref={ref} textAlign="center" py={0}></Box>
+      </Box>
     </>
   );
 }

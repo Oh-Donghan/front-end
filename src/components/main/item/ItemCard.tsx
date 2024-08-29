@@ -23,7 +23,7 @@ import { ItemCardProps } from '../../../interface/auction/actionItemInterface';
 export default function ItemCard({ rank, item, type }: ItemCardProps) {
   const navigate = useNavigate();
   const [isFinished, setIsFinished] = useState(false);
-  const [currentPrice, setCurrentPrice] = useState(item.currentPrice);
+  // const [currentPrice, setCurrentPrice] = useState(item.currentPrice);
 
   const moveDetail = () => {
     if (isFinished) return;
@@ -58,11 +58,18 @@ export default function ItemCard({ rank, item, type }: ItemCardProps) {
       >
         <CardBody>
           <Box position={'relative'}>
-            <Image
-              src={item.imageList[0].imageUrl}
-              alt={item.imageList[0].imageName}
+            <Box
+              width={'100%'}
+              height={'300px'}
+              overflow={'hidden'}
               borderRadius="lg"
-            />
+              display={'flex'}
+              alignItems={'center'}
+              justifyContent={'center'}
+              boxShadow={'1px 1px 6px rgba(0,0,0,0.1)'}
+            >
+              <Image src={item.imageList[0].imageUrl} alt={item.imageList[0].imageName} />
+            </Box>
             <Badge position={'absolute'} top={2} right={2} bgColor={'rgba(200,200,200,0.2)'}>
               <Flex alignItems={'center'}>
                 <HiUser className="mr-1" />
@@ -99,7 +106,7 @@ export default function ItemCard({ rank, item, type }: ItemCardProps) {
             <Flex justifyContent={'space-between'} alignItems={'center'} height={'25px'}>
               <Text fontSize="sm">현제 입찰가</Text>
               <Text color="blue.600" fontSize="1.4rem" fontWeight={'bold'} marginRight={'3px'}>
-                {currentPrice.toLocaleString()}원
+                {item.currentPrice.toLocaleString()}원
               </Text>
             </Flex>
 
@@ -136,11 +143,18 @@ export default function ItemCard({ rank, item, type }: ItemCardProps) {
     >
       <CardBody>
         <Box position={'relative'}>
-          <Image
-            src={item.imageList[0].imageUrl}
-            alt={item.imageList[0].imageName}
+          <Box
+            width={'100%'}
+            height={'300px'}
+            overflow={'hidden'}
             borderRadius="lg"
-          />
+            display={'flex'}
+            alignItems={'center'}
+            justifyContent={'center'}
+            boxShadow={'1px 1px 6px rgba(0,0,0,0.1)'}
+          >
+            <Image src={item.imageList[0].imageUrl} alt={item.imageList[0].imageName} />
+          </Box>
           <Badge position={'absolute'} top={2} right={2} bgColor={'rgba(200,200,200,0.2)'}>
             <Flex alignItems={'center'}>
               <HiUser className="mr-1" />
@@ -186,7 +200,7 @@ export default function ItemCard({ rank, item, type }: ItemCardProps) {
               noOfLines={1}
               pl={4}
             >
-              {currentPrice.toLocaleString()}원
+              {item.currentPrice.toLocaleString()}원
             </Text>
           </Flex>
 

@@ -19,7 +19,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { getCategories } from '../../../axios/category/categories';
 
-export default function Categories() {
+export default function Categories({ categories, isCategoryLoading }) {
   const [selectedOption, setSelectedOption] = useState({
     title: '카테고리를 선택해 주세요',
     image: null,
@@ -27,21 +27,14 @@ export default function Categories() {
 
   const categorySkeletonArray = new Array(16).fill(null);
 
-  const { data: categories, isLoading } = useQuery({
-    queryKey: ['categories'],
-    queryFn: () => getCategories(),
-    staleTime: Infinity,
-    gcTime: 30 * 60 * 1000,
-  });
-
   const navigate = useNavigate();
 
   const handleSelect = item => {
     setSelectedOption(prev => ({ ...prev, title: item.title, image: computer }));
-    navigate(`/auctions?category=${item.categoryName}`);
+    navigate(`/auctions?mainCategory=${item.categoryName}`);
   };
 
-  if (isLoading) {
+  if (isCategoryLoading) {
     return (
       <>
         <div className="flex sm:hidden mt-4  relative z-50 justify-center">
@@ -161,7 +154,7 @@ export default function Categories() {
         >
           {categories.map(item => {
             return (
-              <Link to={`/auctions?category=${item.categoryName}`} key={item.id}>
+              <Link to={`/auctions?mainCategory=${item.categoryName}`} key={item.id}>
                 <GridItem w="100%" h="10" cursor={'pointer'}>
                   <Flex align="center">
                     <img

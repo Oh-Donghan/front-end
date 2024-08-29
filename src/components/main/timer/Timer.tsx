@@ -13,57 +13,44 @@ export default function Timer({ endedAt, setIsFinished }: TimerProps) {
       return <span className="text-red-500 font-bold">경매가 종료되었습니다.</span>;
     } else {
       return (
-        <Flex
-          fontWeight={'semibold'}
-          fontSize={{ base: '1rem', md: '1.2rem' }}
-          gap={3}
-          isTruncated
-          padding={'2px'}
-          paddingX={'6px'}
-        >
-          {days === 0 ? null : (
-            <Flex align={'end'}>
-              <Text>{days}</Text>{' '}
-              <Text
-                fontSize={{ base: '0.7rem', md: '0.8rem' }}
-                marginBottom={{ base: '1px', md: '2px' }}
-                color={'rgba(90,90,90,1)'}
-              >
-                일{' '}
+        <div className="text-center px-2 py-1 bg-gray-100 rounded-lg shadow-md">
+          <Flex align={'end'} gap={2}>
+            {days === 0 ? null : (
+              <Flex align={'center'}>
+                <Text color={'rgba(50,50,50,1)'} fontSize={'1rem'} fontWeight={'semibold'}>
+                  {days}
+                </Text>
+                <Text color={'rgba(50,50,50,1)'} mt={'2px'} ml={'1.5px'} fontSize={'0.8rem'}>
+                  일
+                </Text>
+              </Flex>
+            )}
+            <Flex align={'center'}>
+              <Text color={'rgba(50,50,50,1)'} fontSize={'1rem'} fontWeight={'semibold'}>
+                {String(hours).padStart(2, '0')}
+              </Text>
+              <Text color={'rgba(50,50,50,1)'} mt={'2px'} ml={'1.5px'} fontSize={'0.8rem'}>
+                시간
+              </Text>{' '}
+            </Flex>{' '}
+            <Flex align={'center'}>
+              <Text color={'rgba(50,50,50,1)'} fontSize={'1rem'} fontWeight={'semibold'}>
+                {String(minutes).padStart(2, '0')}
+              </Text>
+              <Text color={'rgba(50,50,50,1)'} mt={'2px'} ml={'1.5px'} fontSize={'0.8rem'}>
+                분
+              </Text>
+            </Flex>{' '}
+            <Flex align={'center'}>
+              <Text color={'rgba(50,50,50,1)'} fontSize={'1rem'} fontWeight={'semibold'}>
+                {String(seconds).padStart(2, '0')}
+              </Text>
+              <Text color={'rgba(50,50,50,1)'} mt={'2px'} ml={'1.5px'} fontSize={'0.8rem'}>
+                초
               </Text>
             </Flex>
-          )}
-          <Flex align={'end'}>
-            <Text> {String(hours).padStart(2, '0')}</Text>{' '}
-            <Text
-              fontSize={{ base: '0.7rem', md: '0.8rem' }}
-              marginBottom={{ base: '1px', md: '2px' }}
-              color={'rgba(90,90,90,1)'}
-            >
-              시간{' '}
-            </Text>
           </Flex>
-          <Flex align={'end'}>
-            <Text> {String(minutes).padStart(2, '0')}</Text>{' '}
-            <Text
-              fontSize={{ base: '0.7rem', md: '0.8rem' }}
-              marginBottom={{ base: '1px', md: '2px' }}
-              color={'rgba(90,90,90,1)'}
-            >
-              분{' '}
-            </Text>
-          </Flex>
-          <Flex align={'end'}>
-            <Text> {String(seconds).padStart(2, '0')}</Text>{' '}
-            <Text
-              fontSize={{ base: '0.7rem', md: '0.8rem' }}
-              marginBottom={{ base: '1px', md: '2px' }}
-              color={'rgba(90,90,90,1)'}
-            >
-              초{' '}
-            </Text>
-          </Flex>
-        </Flex>
+        </div>
       );
     }
   };

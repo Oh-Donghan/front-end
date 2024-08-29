@@ -39,6 +39,7 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
   const [contactPlace, setContactPlace] = useState('');
   const [startPrice, setStartPrice] = useState<number>(0);
   const [instantPrice, setInstantPrice] = useState<number>(0);
+  const [shippingCost, setShippingCost] = useState<string>(''); // 택배비 상태 추가
   const toast = useToast();
   const queryClient = useQueryClient();
 
@@ -75,15 +76,23 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
     setRating(0);
     setStartPrice(0);
     setInstantPrice(0);
+    setShippingCost(''); // 택배비 초기화
     onClose();
   };
 
   const handleTradeMethodChange = e => {
-    setShippingMethod('');
     const method = e.target.value;
     setTradeMethod(method);
+
     if (method === 'contact') {
+      // 대면 거래 선택 시, 택배비와 배송 방법 초기화
       setShippingMethod('nodelivery');
+      setShippingCost('');
+    }
+
+    if (method === 'delivery') {
+      // 택배 거래 선택 시, 직거래 주소 초기화
+      setContactPlace('');
     }
   };
 
@@ -130,15 +139,17 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
     if (
       !data.title ||
       !data.productName ||
-      !selectedCategory || // Parent category PK
-      !selectedSubCategory || // Child category PK
+      !selectedCategory ||
+      !selectedSubCategory ||
       !startPrice ||
       !instantPrice ||
       !endDate ||
       !tradeMethod ||
       !shippingMethod ||
       rating === 0 ||
-      files.length === 0
+      files.length === 0 ||
+      (tradeMethod === 'contact' && contactPlace === '') || // 직거래 방법 선택 시 주소 필수
+      ((tradeMethod === 'delivery' || tradeMethod === 'all') && !shippingCost) // 택배 방법 선택 시 택배비 필수
     ) {
       toast({
         title: '모든 필수 입력란을 채워주세요',
@@ -179,13 +190,12 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
       productStatus: rating,
       productColor: data.color || '',
       productDescription: data.description || '',
-      deliveryPrice: shippingMethod !== 'nodelivery' ? parseInt(data.shippingCost) : undefined,
-      // contactPlace: tradeMethod === 'contact' || tradeMethod === 'all' ? contactPlace : undefined,
-      contactPlace: contactPlace,
+      deliveryPrice: shippingMethod !== 'nodelivery' ? parseInt(shippingCost) : undefined,
+      contactPlace: tradeMethod === 'contact' || tradeMethod === 'all' ? contactPlace : undefined,
     };
 
-    const thumbnail = files[0]; // 첫 번째 이미지를 썸네일로 사용
-    const imageList = files.slice(1); // 나머지 이미지들
+    const thumbnail = files[0];
+    const imageList = files.slice(1);
 
     createAuctionMutation.mutate({ createDto, thumbnail, imageList });
   };
@@ -209,7 +219,7 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
                           <Text fontSize={16} fontWeight={'semibold'}>
                             경매명
                           </Text>
-                          <Text fontSize={14} color={'red'} marginLeft={1}>
+                          <Text fontSize={12} color={'red'} marginLeft={1}>
                             *필수
                           </Text>
                         </Flex>
@@ -227,7 +237,7 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
                           <Text fontSize={16} fontWeight={'semibold'}>
                             상품명
                           </Text>
-                          <Text fontSize={14} color={'red'} marginLeft={1}>
+                          <Text fontSize={12} color={'red'} marginLeft={1}>
                             *필수
                           </Text>
                         </Flex>
@@ -240,7 +250,6 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
                       </Flex>
                     </InputGroup>
                   </Flex>
-                  {/* 카테고리 선택 섹션 */}
                   <CategorySection
                     selectedCategory={selectedCategory}
                     setSelectedCategory={setSelectedCategory}
@@ -260,7 +269,6 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
                           borderColor={'rgba(200,200,200,1)'}
                           type="text"
                           fontSize={'0.95rem'}
-                          {...register('color')}
                         />
                       </Flex>
                     </InputGroup>
@@ -270,17 +278,21 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
                           <Text fontSize={16} fontWeight={'semibold'} color={'rgba(70,70,70,1)'}>
                             택배비
                           </Text>
+                          <Text fontSize={12} color={'red'} marginLeft={1}>
+                            *택배 거래 시 필수
+                          </Text>
                         </Flex>
                         <Input
                           type={'number'}
                           borderColor={'rgba(200,200,200,1)'}
                           fontSize={'0.95rem'}
-                          {...register('shippingCost')}
+                          value={shippingCost}
+                          onChange={e => setShippingCost(e.target.value)}
+                          isDisabled={tradeMethod === '' || tradeMethod === 'contact'}
                         />
                       </Flex>
                     </InputGroup>
                   </Flex>
-                  {/* Rating 섹션 */}
                   <Flex marginTop={'30px'}>
                     <RatingSection rating={rating} onRatingChange={setRating} />
                   </Flex>
@@ -291,7 +303,7 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
                           <Text fontSize={16} fontWeight={'semibold'}>
                             입찰 시작가
                           </Text>
-                          <Text fontSize={14} color={'red'} marginLeft={1}>
+                          <Text fontSize={12} color={'red'} marginLeft={1}>
                             *필수
                           </Text>
                         </Flex>
@@ -311,7 +323,7 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
                           <Text fontSize={16} fontWeight={'semibold'}>
                             즉시 구매가
                           </Text>
-                          <Text fontSize={14} color={'red'} marginLeft={1}>
+                          <Text fontSize={12} color={'red'} marginLeft={1}>
                             *필수
                           </Text>
                         </Flex>
@@ -334,7 +346,7 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
                         <Text fontSize={16} fontWeight={'semibold'}>
                           상품설명
                         </Text>
-                        <Text fontSize={14} color={'rgba(150,150,150,1)'} marginLeft={1}>
+                        <Text fontSize={12} color={'rgba(150,150,150,1)'} marginLeft={1}>
                           (500자 제한)
                         </Text>
                       </Flex>
@@ -363,13 +375,15 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
                   </InputGroup>
 
                   <Flex gap={6} marginTop={'30px'}>
-                    {/* 경매 종료 날짜 섹션 */}
                     <SelectDateSection endDate={endDate} setEndDate={setEndDate} />
                     <InputGroup flex={1}>
                       <Flex direction={'column'} width={'full'}>
                         <Flex alignItems={'center'} marginBottom={'4px'}>
                           <Text fontSize={16} fontWeight={'semibold'}>
                             직거래 주소
+                          </Text>
+                          <Text fontSize={12} color={'red'} marginLeft={1}>
+                            *직거래 시 필수
                           </Text>
                         </Flex>
                         <Input
@@ -378,6 +392,7 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
                           fontSize={'0.95rem'}
                           value={contactPlace}
                           onChange={e => setContactPlace(e.target.value)}
+                          isDisabled={tradeMethod === '' || tradeMethod === 'delivery'}
                         />
                       </Flex>
                     </InputGroup>
@@ -388,7 +403,7 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
                         <Text fontSize={16} fontWeight={'semibold'}>
                           거래 방법
                         </Text>
-                        <Text fontSize={14} color={'red'} marginLeft={1}>
+                        <Text fontSize={12} color={'red'} marginLeft={1}>
                           *필수
                         </Text>
                       </Flex>
@@ -409,7 +424,7 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
                         <Text fontSize={16} fontWeight={'semibold'}>
                           택배비 지불 방법
                         </Text>
-                        <Text fontSize={14} color={'red'} marginLeft={1}>
+                        <Text fontSize={12} color={'red'} marginLeft={1}>
                           *필수
                         </Text>
                       </Flex>
@@ -432,7 +447,6 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
                     </Flex>
                   </Flex>
                   <Flex marginTop={'30px'}>
-                    {/* 이미지 첨부 섹션 */}
                     <ImageSection files={files} setFiles={setFiles} />
                   </Flex>
                 </Flex>

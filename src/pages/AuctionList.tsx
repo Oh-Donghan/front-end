@@ -12,24 +12,22 @@ import searchico from '../assets/image/common/search.png';
 import CategorySortButton from '../components/listpage/sort/CategorySortButton';
 import TopButton from '../components/common/button/TopButton';
 import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
 import { getCategories } from '../axios/category/categories';
 
 export default function AuctionList() {
   const location = useLocation();
-  const [isNoItem, setIsNoItem] = useState(false);
 
-  const showSearchInputBelow = useBreakpointValue({ base: true, lg: false });
+  const showSearchInputBelow = useBreakpointValue({ base: true, lg: false }, { fallback: 'lg' });
 
   const searchParams = new URLSearchParams(location.search);
-  const category = searchParams.get('category');
-  const subCategory = searchParams.get('sub');
-  const sort = searchParams.get('sort');
-  const search = searchParams.get('word');
+  const category = searchParams.get('mainCategory') || '전체';
+  const subCategory = searchParams.get('subCategory') || undefined;
+  const sort = searchParams.get('sorted') || 'recent';
+  const search = searchParams.get('word') || undefined;
 
   // 메인 페이지에서 캐싱한 카테고리 데이터 사용
   // url을 직접 수정해서 들어오는 경우도 고려해서 queryClient.getQueryData(['categories'])는 사용하지 않음
-  const { data: categories } = useQuery({
+  const { data: categories, isLoading } = useQuery({
     queryKey: ['categories'],
     queryFn: () => getCategories(),
   });
@@ -38,58 +36,47 @@ export default function AuctionList() {
     return cat.categoryName === category;
   });
 
-  const renderNoItemsMessage = () => (
-    <Flex w={'full'} h="668px" align={'center'} justify={'center'}>
-      <Flex direction={'column'} align={'center'} gap={2}>
-        <Text
-          fontWeight={'bold'}
-          fontSize={{ base: '1.1rem', md: '1.4rem' }}
-          color={'rgba(60,60,60,1)'}
-        >
-          {'현재 진행중인 경매가 없습니다.'}
-        </Text>
-        <Link to={'/'}>
-          <Button
-            color={'white'}
-            bgColor={'rgba(49, 130, 206,1)'}
-            _hover={{ bgColor: 'rgba(49, 120, 170,1)' }}
-            mt={8}
-          >
-            홈으로 이동
-          </Button>
-        </Link>
-      </Flex>
-    </Flex>
-  );
+  // const renderNoItemsMessage = () => (
+  //   <Flex w={'full'} h="668px" align={'center'} justify={'center'}>
+  //     <Flex direction={'column'} align={'center'} gap={2}>
+  //       <Text
+  //         fontWeight={'bold'}
+  //         fontSize={{ base: '1.1rem', md: '1.4rem' }}
+  //         color={'rgba(60,60,60,1)'}
+  //       >
+  //         {'현재 진행중인 경매가 없습니다.'}
+  //       </Text>
+  //       <Link to={'/'}>
+  //         <Button
+  //           color={'white'}
+  //           bgColor={'rgba(49, 130, 206,1)'}
+  //           _hover={{ bgColor: 'rgba(49, 120, 170,1)' }}
+  //           mt={8}
+  //         >
+  //           홈으로 이동
+  //         </Button>
+  //       </Link>
+  //     </Flex>
+  //   </Flex>
+  // );
 
   const renderItemList = () => (
     <>
       {search ? (
         <Box mb={{ base: '12', sm: '20' }} mt={{ base: '12', sm: '6' }}>
-          <ItemList setIsNoItem={setIsNoItem} />
+          <ItemList isCategoryLoading={isLoading} />
         </Box>
       ) : (
         <>
+          {/* 지금 핫한 Top5 섹션 */}
           <Box mt={{ base: '12', sm: '60px' }}>
-            <Flex alignItems="center" mb={{ base: '4', sm: '5' }}>
-              <Text fontSize={{ base: '1.3rem', md: '1.5rem' }} fontWeight="bold">
-                {category === '전체' && '지금 핫한 경매 Top5'}
-                {category !== '전체' && !subCategory && `지금 핫한 ${category} Top5`}
-                {category !== '전체' && subCategory && `지금 핫한 ${subCategory} Top5`}
-              </Text>
-            </Flex>
-            <SwiperHotItemList />
+            <SwiperHotItemList isCategoryLoading={isLoading} />
           </Box>
-          <Box mb={{ base: '12', sm: '20' }} mt={{ base: '12', sm: '20' }}>
-            <Flex alignItems="center" justifyContent="space-between" mb={{ base: '4', sm: '5' }}>
-              <Text fontSize={{ base: '1.3rem', md: '1.5rem' }} fontWeight="bold">
-                {category !== '전체'
-                  ? `전체 ${subCategory === null ? category : subCategory} 경매`
-                  : '전체 경매'}
-              </Text>
-            </Flex>
-            <ItemList setIsNoItem={setIsNoItem} />
-          </Box>
+
+          {/* 전체 매물 섹션 */}
+          <section>
+            <ItemList isCategoryLoading={isLoading} />
+          </section>
         </>
       )}
     </>
@@ -132,20 +119,32 @@ export default function AuctionList() {
           )}
         </Flex>
         {/*검색 키워드가 없고 카테고리가 전체가 아닐 때 타이틀*/}
-        {category !== '전체' && !search && (
-          <Flex alignItems={'center'} marginTop={'20px'}>
-            <img
-              src={currentCategoryData?.imageUrl}
-              alt="all.png"
-              width={'28px'}
-              height={'28px'}
-              className="ml-1 mb-0.5"
-            />
-            <Text fontSize="26px" fontWeight="bold" pl="6px" ml="3px">
-              {currentCategoryData?.categoryName}
-            </Text>
-          </Flex>
+        {isLoading ? (
+          <>
+            <Flex align={'center'} mt={'20px'}>
+              <Box borderRadius={'50%'} w={'40px'} h={'40px'} bgColor={'rgba(230,230,230,1)'}></Box>
+              <Box w={'44px'} h={'12px'} bgColor={'rgba(230,230,230,1)'} ml={3}></Box>
+            </Flex>
+          </>
+        ) : (
+          <>
+            {category !== '전체' && !search && (
+              <Flex alignItems={'center'} marginTop={'20px'}>
+                <img
+                  src={currentCategoryData?.imageUrl}
+                  alt="all.png"
+                  width={'28px'}
+                  height={'28px'}
+                  className="ml-1 mb-0.5"
+                />
+                <Text fontSize="26px" fontWeight="bold" pl="6px" ml="3px">
+                  {currentCategoryData?.categoryName}
+                </Text>
+              </Flex>
+            )}
+          </>
         )}
+
         {/*검색 키워드가 없고 카테고리가 전체일 때 타이틀*/}
         {category === '전체' && !search && (
           <Flex alignItems={'center'} marginTop={'20px'}>
@@ -204,8 +203,8 @@ export default function AuctionList() {
                     to={{
                       pathname: '/auctions',
                       search: new URLSearchParams({
-                        category,
-                        ...(sort && { sort }), // sort가 있으면 포함
+                        mainCategory: category,
+                        ...(sort !== 'recent' && { sort }), // sort가 있으면 포함
                       }).toString(),
                     }}
                     className="mr-2"
@@ -226,9 +225,9 @@ export default function AuctionList() {
                     to={{
                       pathname: '/auctions',
                       search: new URLSearchParams({
-                        category,
-                        sub: sub.categoryName,
-                        ...(sort && { sort }), // sort가 있으면 포함
+                        mainCategory: category,
+                        subCategory: sub.categoryName,
+                        ...(sort !== 'recent' && { sort }), // sort가 있으면 포함
                       }).toString(),
                     }}
                     key={i}
@@ -271,7 +270,7 @@ export default function AuctionList() {
       )}
 
       {/* 아이템 목록 렌더링 */}
-      {isNoItem ? renderNoItemsMessage() : renderItemList()}
+      {renderItemList()}
     </Box>
   );
 }

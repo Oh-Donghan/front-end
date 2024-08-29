@@ -31,13 +31,13 @@ export default function CategorySortButton() {
   const [selectedOption, setSelectedOption] = useState(category);
   const navigate = useNavigate();
 
-  const handleMenuItemClick = e => {
+  const handleMenuItemClick = async e => {
     const selectedCategory = e.target.getAttribute('value');
     setSelectedOption(selectedCategory);
 
     const params = new URLSearchParams();
-    params.set('category', selectedCategory);
-    if (sort) {
+    params.set('mainCategory', selectedCategory);
+    if (sort !== null) {
       params.set('sort', sort);
     }
 
