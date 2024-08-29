@@ -9,11 +9,15 @@ import {
 } from '@chakra-ui/react';
 import ChatMessage from '../../../components/chat/item/ChatMessage';
 import { IoMdSend } from 'react-icons/io';
-import default_profile from '../../../assets/image/modal/chat/profile.png';
 import { useForm } from 'react-hook-form';
 
-export default function ChatRightSection({ ConfirmPurchaseDisclosure, messagesEndRef }) {
-  const { register, handleSubmit } = useForm();
+export default function ChatRightSection({
+  ConfirmPurchaseDisclosure,
+  messagesEndRef,
+  messages,
+  sendMessage,
+}) {
+  const { register, handleSubmit, reset } = useForm();
   const toast = useToast();
 
   const onSubmit = data => {
@@ -25,6 +29,12 @@ export default function ChatRightSection({ ConfirmPurchaseDisclosure, messagesEn
       });
       return;
     }
+
+    // 메시지 전송
+    sendMessage(data.message);
+
+    // 폼 리셋
+    reset();
   };
 
   return (
@@ -39,13 +49,8 @@ export default function ChatRightSection({ ConfirmPurchaseDisclosure, messagesEn
         paddingY={'20px'}
       >
         <Flex alignItems={'center'}>
-          <img src={default_profile} alt="기본 프로필 이미지" className="w-[45px] h-[45px]" />
           <Text marginLeft={'10px'} fontSize={'16px'} fontWeight={'bold'}>
-            {/* {
-          chats.filter(chat => {
-            return chat.id === selectedChatId;
-          })[0].name
-        } */}
+            {/* 상대방 이름 */}
           </Text>
         </Flex>
         <Flex gap={2}>
@@ -93,45 +98,15 @@ export default function ChatRightSection({ ConfirmPurchaseDisclosure, messagesEn
           }}
           gap={7}
         >
-          <ChatMessage
-            type={'me'}
-            text={'안녕하세요 구매해주셔서 감사합니다 ㅎㅎ'}
-            createdAt={'오후 18:12'}
-          />
-          <ChatMessage type={'you'} text={'안녕하세요!'} createdAt={'오후 18:14'} />
-          <ChatMessage
-            type={'me'}
-            text={'물건 확인하시면 거래종료 버튼 클릭 부탁드려요!'}
-            createdAt={'오후 18:18'}
-          />
-          <ChatMessage
-            type={'me'}
-            text={
-              '물건 확인하시면 거래종료 버튼 클릭 부탁드려요!물건 확인하시면 거래종료 버튼 클릭 부탁드려요!물건 확인하시면 거래종료 버튼 클릭 부탁드려요!물건 확인하시면 거래종료 버튼 클릭 부탁드려요!'
-            }
-            createdAt={'오후 18:18'}
-          />
-          <ChatMessage
-            type={'you'}
-            text={
-              '물건 확인하시면 거래종료 버튼 클릭 부탁드려요!물건 확인하시면 거래종료 버튼 클릭 부탁드려요!물건 확인하시면 거래종료 버튼 클릭 부탁드려요!물건 확인하시면 거래종료 버튼 클릭 부탁드려요!'
-            }
-            createdAt={'오후 18:18'}
-          />
-          <ChatMessage
-            type={'you'}
-            text={
-              '물건 확인하시면 거래종료 버튼 클릭 부탁드려요!물건 확인하시면 거래종료 버튼 클릭 부탁드려요!물건 확인하시면 거래종료 버튼 클릭 부탁드려요!물건 확인하시면 거래종료 버튼 클릭 부탁드려요!'
-            }
-            createdAt={'오후 18:18'}
-          />
-          <ChatMessage
-            type={'you'}
-            text={
-              '물건 확인하시면 거래종료 버튼 클릭 부탁드려요!물건 확인하시면 거래종료 버튼 클릭 부탁드려요!물건 확인하시면 거래종료 버튼 클릭 부탁드려요!물건 확인하시면 거래종료 버튼 클릭 부탁드려요!'
-            }
-            createdAt={'오후 18:18'}
-          />
+          {/* 메시지 표시 */}
+          {messages.map((message, index) => (
+            <ChatMessage
+              key={index}
+              type={message.type}
+              text={message.text}
+              createdAt={message.createdAt}
+            />
+          ))}
           <div ref={messagesEndRef} />
         </Flex>
         <Flex

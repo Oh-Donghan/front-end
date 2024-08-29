@@ -1,15 +1,19 @@
+import React, { useEffect, useRef, useState } from 'react';
 import { Flex, useDisclosure } from '@chakra-ui/react';
-
-import { useEffect, useRef, useState } from 'react';
-import ConfirmPurchaseModal from '../components/chat/modals/ConfirmPurchaseModal';
 import ChatLeftSection from '../components/main/chat/ChatLeftSection';
 import ChatRightSection from '../components/main/chat/ChatRightSection';
+import ConfirmPurchaseModal from '../components/chat/modals/ConfirmPurchaseModal';
+import { Client, IMessage } from '@stomp/stompjs';
 
 export default function Chat() {
+  const [messages, setMessages] = useState([]);
   const [selectedChatId, setSelectedChatId] = useState(1);
-
-  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  const [stompClient, setStompClient] = useState<Client | null>(null);
   const ConfirmPurchaseDisclosure = useDisclosure();
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+  const searchParams = new URLSearchParams(location.search);
+  const roomId = searchParams.get('id');
 
   const scrollBottom = () => {
     if (messagesEndRef.current) {
@@ -19,7 +23,48 @@ export default function Chat() {
 
   useEffect(() => {
     scrollBottom();
-  }, []);
+  }, [messages]);
+
+  useEffect(() => {
+    const client = new Client({
+      brokerURL: 'wss://your-server-url/chat-ws',
+      reconnectDelay: 5000,
+      heartbeatIncoming: 4000,
+      heartbeatOutgoing: 4000,
+      connectHeaders: {
+        Authorization: 'Bearer your-jwt-token',
+      },
+      onConnect: () => {
+        client.subscribe(`/sub/chat/room/${roomId}`, (message: IMessage) => {
+          const body = JSON.parse(message.body);
+          setMessages(prevMessages => [...prevMessages, body]);
+        });
+      },
+      onStompError: frame => {
+        console.error('STOMP error:', frame.headers['message']);
+      },
+    });
+
+    client.activate();
+    setStompClient(client);
+
+    return () => {
+      client.deactivate();
+    };
+  }, [roomId]);
+
+  const sendMessage = (message: string) => {
+    if (stompClient && stompClient.connected) {
+      stompClient.publish({
+        destination: '/pub/chat/message',
+        body: JSON.stringify({
+          room_id: roomId,
+          memberId: 'yourMemberId',
+          message,
+        }),
+      });
+    }
+  };
 
   return (
     <>
@@ -46,6 +91,8 @@ export default function Chat() {
           <ChatRightSection
             ConfirmPurchaseDisclosure={ConfirmPurchaseDisclosure}
             messagesEndRef={messagesEndRef}
+            messages={messages}
+            sendMessage={sendMessage}
           />
         </Flex>
       </Flex>
