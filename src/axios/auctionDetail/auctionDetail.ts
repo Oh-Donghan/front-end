@@ -1,6 +1,6 @@
 import axiosInstance from '../instances';
 
-interface Seller {
+interface IDetailSeller {
   id: number;
   memberId: string;
   passWord: string;
@@ -12,14 +12,14 @@ interface Seller {
   createdAt: string;
 }
 
-interface Category {
+interface IDetailCategory {
   id: number;
   categoryName: string;
   parentId: number | null;
   createdAt: string;
 }
 
-interface Image {
+export interface IDetailImage {
   id: number;
   imageUrl: string;
   imageName: string;
@@ -29,7 +29,7 @@ interface Image {
   createdAt: string;
 }
 
-interface AuctionItem {
+interface IAuctionItem {
   id: number;
   title: string;
   auctionState: string | null;
@@ -46,19 +46,19 @@ interface AuctionItem {
   instantPrice: number;
   memberCount: number;
   endedAt: string;
-  seller: Seller;
-  parentCategory: Category;
-  childCategory: Category;
+  seller: IDetailSeller;
+  parentCategory: IDetailCategory;
+  childCategory: IDetailCategory;
   bidList: Array<unknown>; // Define a specific type if you know the structure of bids
   askList: Array<unknown>; // Define a specific type if you know the structure of asks
-  imageList: Image[];
+  imageList: IDetailImage[];
   createdAt: string;
 }
 
-export const fetchAuctionDetailData = async (auctionId: string): Promise<AuctionItem> => {
+export const fetchAuctionDetailData = async (auctionId: string): Promise<IAuctionItem> => {
   try {
     // 경매 세부 정보를 가져오기 위한 API 호출
-    const response = await axiosInstance.get<AuctionItem>(`/api/auctions/${auctionId}`);
+    const response = await axiosInstance.get<IAuctionItem>(`/api/auctions/${auctionId}`);
 
     // API 호출 성공 시 데이터 반환
     return response.data;
