@@ -16,8 +16,6 @@ import computer from '../../../assets/image/category/computer.png';
 import { IoChevronDownSharp } from 'react-icons/io5';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-import { getCategories } from '../../../axios/category/categories';
 
 export default function Categories({ categories, isCategoryLoading }) {
   const [selectedOption, setSelectedOption] = useState({

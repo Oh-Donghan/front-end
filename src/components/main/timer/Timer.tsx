@@ -9,7 +9,8 @@ interface TimerProps {
 export default function Timer({ endedAt, setIsFinished }: TimerProps) {
   const renderer = ({ days, hours, minutes, seconds, completed }) => {
     if (completed) {
-      setIsFinished(true);
+      // 렌더링 중에 상태를 업데이트하는 대신, 렌더링 이후로 상태 업데이트를 미룸.
+      setTimeout(() => setIsFinished(true), 0);
       return <span className="text-red-500 font-bold">경매가 종료되었습니다.</span>;
     } else {
       return (

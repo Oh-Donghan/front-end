@@ -65,6 +65,7 @@ export default function AlarmList() {
             type={alarm.notificationType}
             content={alarm.content}
             createdAt={alarm.createdAt}
+            auctionId={alarm.auctionId}
           />
         )),
       )}

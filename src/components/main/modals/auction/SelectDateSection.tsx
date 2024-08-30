@@ -9,6 +9,21 @@ interface SelectDateSectionProps {
 }
 
 export default function SelectDateSection({ endDate, setEndDate }: SelectDateSectionProps) {
+  const handleDateChange = (date: Date) => {
+    if (!date) return;
+
+    // 현재 시간을 가져옵니다.
+    const now = new Date();
+
+    // 선택한 날짜에 현재 시간을 설정합니다.
+    date.setHours(now.getHours());
+    date.setMinutes(now.getMinutes());
+    date.setSeconds(now.getSeconds());
+    date.setMilliseconds(now.getMilliseconds());
+
+    setEndDate(date); // 설정된 날짜를 상태로 업데이트합니다.
+  };
+
   return (
     <Flex direction="column" flex={1} marginRight="3">
       <Flex alignItems="center" marginBottom="4px">
@@ -22,13 +37,10 @@ export default function SelectDateSection({ endDate, setEndDate }: SelectDateSec
       <InputGroup zIndex={10}>
         <DatePicker
           selected={endDate}
-          onChange={(date: Date) => setEndDate(date)}
+          onChange={(date: Date) => handleDateChange(date)}
           minDate={new Date()}
           maxDate={new Date(new Date().setDate(new Date().getDate() + 7))}
           dateFormat="yyyy/MM/dd"
-          // showTimeSelect
-          // timeFormat="HH:mm"
-          // timeIntervals={2} // 2분 간격으로 설정
           placeholderText="날짜를 선택해주세요"
           customInput={<Input borderColor={'rgba(200,200,200,1)'} fontSize={'0.95rem'} readOnly />}
           popperClassName="zIndexFix"

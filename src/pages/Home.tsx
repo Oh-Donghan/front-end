@@ -12,6 +12,7 @@ import { useSetRecoilState } from 'recoil';
 import { authState } from '../recoil/atom/authAtom';
 import { getCategories } from '../axios/category/categories';
 import { useQuery } from '@tanstack/react-query';
+import { Client } from '@stomp/stompjs';
 
 export default function Home() {
   const [isProcessingAuth, setIsProcessingAuth] = useState(false);
@@ -42,6 +43,40 @@ export default function Home() {
       setIsProcessingAuth(false);
     }
   }, [location, navigate]);
+
+  // 웹소켓 연결 및 구독 설정
+  useEffect(() => {
+    const stompClient = new Client({
+      brokerURL: 'wss://dddang.store/auction-websocket',
+      reconnectDelay: 5000,
+    });
+
+    stompClient.onConnect = () => {
+      console.log('Connected to WebSocket');
+
+      // 경매 입찰 성공 메시지 구독
+      stompClient.subscribe('/sub/auction-all', message => {
+        const bidData = JSON.parse(message.body);
+        console.log('Received bid data:', bidData);
+      });
+    };
+
+    stompClient.onStompError = frame => {
+      console.error('Broker reported error:', frame.headers['message']);
+      console.error('Additional details:', frame.body);
+    };
+
+    stompClient.onWebSocketClose = event => {
+      console.error('WebSocket connection closed:', event);
+    };
+
+    stompClient.activate();
+
+    return () => {
+      stompClient.deactivate();
+      console.log('WebSocket disconnected');
+    };
+  }, []);
 
   // getCategories의 isLoading을 ItemList에도 전달하기 위해 home에서 카테고리 패칭
   const { data: categories, isLoading } = useQuery({
