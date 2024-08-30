@@ -5,9 +5,9 @@ import OrderTable from './OrderTable';
 import HistoryPagination from './HistoryPagination';
 import { useState } from 'react';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import { fetchPurchaseHistoryData, ITransType } from '../../../axios/mocks/order/purchaseHistory';
 import MypageInput from './MypageInput';
 import { IoMdRefresh } from 'react-icons/io';
+import { fetchPurchaseData, ITransType } from '../../../axios/mypage/purchase';
 
 export default function PurchaseHistory() {
   // 객체로 상태 관리
@@ -25,7 +25,7 @@ export default function PurchaseHistory() {
   // Tanstack Query를 사용하여 데이터를 패칭
   const { data, isLoading, isError } = useQuery({
     queryKey: [
-      '/api/transactions/purchases',
+      'purchases',
       params.currentPage,
       params.searchWord,
       params.transType,
@@ -34,7 +34,7 @@ export default function PurchaseHistory() {
       params.endDate,
     ],
     queryFn: () =>
-      fetchPurchaseHistoryData(
+      fetchPurchaseData(
         params.currentPage,
         itemsPerPage,
         params.searchWord,

@@ -24,20 +24,20 @@ axiosInstance.interceptors.request.use(
 // 응답 인터셉터 - 서버로부터 응답을 받은 후 실행
 axiosInstance.interceptors.response.use(
   response => {
-    console.log('Response headers:', response.headers); // 서버 응답의 헤더를 로그에 출력
+    // console.log('Response headers:', response.headers); // 서버 응답의 헤더를 로그에 출력
     const newToken = response.headers['new-token']; // 응답 헤더에서 새로운 토큰을 확인
     if (newToken) {
-      console.log('New Token (success):', newToken); // 새로운 토큰이 있으면 로그에 출력
+      // console.log('New Token (success):', newToken); // 새로운 토큰이 있으면 로그에 출력
       localStorage.setItem('accessToken', newToken); // 새로운 토큰을 로컬 스토리지에 저장
       axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${newToken}`; // Axios의 기본 헤더에 새로운 토큰 설정
     }
     return response; // 응답 데이터를 그대로 반환
   },
   error => {
-    console.log('Error response headers:', error.response ? error.response.headers : 'No response'); // 오류 발생 시 응답 헤더를 로그에 출력
+    // console.log('Error response headers:', error.response ? error.response.headers : 'No response'); // 오류 발생 시 응답 헤더를 로그에 출력
     const newToken = error.response ? error.response.headers['new-token'] : null; // 오류 응답 헤더에서도 새로운 토큰을 확인
     if (newToken) {
-      console.log('New Token (error):', newToken); // 새로운 토큰이 있으면 로그에 출력
+      // console.log('New Token (error):', newToken); // 새로운 토큰이 있으면 로그에 출력
       localStorage.setItem('accessToken', newToken); // 새로운 토큰을 로컬 스토리지에 저장
       axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${newToken}`; // Axios의 기본 헤더에 새로운 토큰 설정
     }

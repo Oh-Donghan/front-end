@@ -1,30 +1,18 @@
-import {
-  Box,
-  Button,
-  Flex,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  Spinner,
-  Text,
-} from '@chakra-ui/react';
+import { Box, Button, Flex, Menu, MenuButton, MenuItem, MenuList, Spinner } from '@chakra-ui/react';
 import { IoChevronDownSharp } from 'react-icons/io5';
 import HistoryPagination from './HistoryPagination';
 import Calendar from '../calendar/Calendar';
 import { useState } from 'react';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import {
-  fetchCurrentPointData,
-  fetchRechargeHistoryData,
-} from '../../../axios/mocks/order/rechargeHistory';
 import RechargeTable from './RechargeTable';
 import { IoMdRefresh } from 'react-icons/io';
+import { fetchRechargeData } from '../../../axios/mypage/recharge';
+import RechargePoint from './RechargePoint';
 
 export default function RechargeHistory() {
   const [params, setParams] = useState({
     currentPage: 1,
-    sorted: 'recent',
+    sorted: 'latest',
     startDate: null,
     endDate: null,
   });
@@ -32,15 +20,9 @@ export default function RechargeHistory() {
   const itemsPerPage = 7;
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: [
-      'api/members/points/history',
-      params.currentPage,
-      params.sorted,
-      params.startDate,
-      params.endDate,
-    ],
+    queryKey: ['recharge', params.currentPage, params.sorted, params.startDate, params.endDate],
     queryFn: () =>
-      fetchRechargeHistoryData(
+      fetchRechargeData(
         params.currentPage,
         itemsPerPage,
         params.sorted,
@@ -48,11 +30,6 @@ export default function RechargeHistory() {
         params.endDate,
       ),
     placeholderData: keepPreviousData,
-  });
-
-  const { data: currentPoint } = useQuery({
-    queryKey: ['api/members/points'],
-    queryFn: fetchCurrentPointData,
   });
 
   const handlePageChange = (page: number) => {
@@ -75,7 +52,7 @@ export default function RechargeHistory() {
   const handleRefresh = () => {
     setParams({
       currentPage: 1,
-      sorted: 'recent',
+      sorted: 'latest',
       startDate: null,
       endDate: null,
     });
@@ -117,13 +94,13 @@ export default function RechargeHistory() {
             as={Button}
             rightIcon={<IoChevronDownSharp />}
           >
-            {params.sorted === 'recent' ? '최신순' : params.sorted === 'old' && '오래된순'}
+            {params.sorted === 'latest' ? '최신순' : params.sorted === 'oldest' && '오래된순'}
           </MenuButton>
           <MenuList>
-            <MenuItem fontSize="sm" onClick={() => handleSortChange('recent')}>
+            <MenuItem fontSize="sm" onClick={() => handleSortChange('latest')}>
               최신순
             </MenuItem>
-            <MenuItem fontSize="sm" onClick={() => handleSortChange('old')}>
+            <MenuItem fontSize="sm" onClick={() => handleSortChange('oldest')}>
               오래된순
             </MenuItem>
           </MenuList>
@@ -134,21 +111,12 @@ export default function RechargeHistory() {
         </Box>
       </Flex>
       <Box>
-        <Flex
-          justifyContent={'end'}
-          alignItems={'end'}
-          gap={4}
-          marginRight={'24px'}
-          marginBottom={'8px'}
-        >
-          <Text fontSize={{ base: 'sm', md: 'xl' }}>보유 포인트</Text>
-          <Box fontSize={{ base: 'lg', md: '3xl' }}>{currentPoint?.point}P</Box>
-        </Flex>
+        <RechargePoint />
       </Box>
       <RechargeTable posts={data?.content || []} />
       <HistoryPagination
-        totalPages={data.totalPages}
-        currentPage={params.currentPage}
+        totalPages={data?.totalPages}
+        currentPage={params?.currentPage}
         onPageChange={handlePageChange}
       />
     </Box>

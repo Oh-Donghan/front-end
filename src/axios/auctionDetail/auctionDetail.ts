@@ -29,6 +29,17 @@ export interface IDetailImage {
   createdAt: string;
 }
 
+export interface IAskList {
+  answerList: [];
+  auctionId: number;
+  auctionTitle: string;
+  content: string;
+  createdAt: string;
+  id: number;
+  title: string;
+  writerId: string;
+}
+
 interface IAuctionItem {
   id: number;
   title: string;
@@ -50,7 +61,7 @@ interface IAuctionItem {
   parentCategory: IDetailCategory;
   childCategory: IDetailCategory;
   bidList: Array<unknown>; // Define a specific type if you know the structure of bids
-  askList: Array<unknown>; // Define a specific type if you know the structure of asks
+  askList: IAskList[]; // Define a specific type if you know the structure of asks
   imageList: IDetailImage[];
   createdAt: string;
 }

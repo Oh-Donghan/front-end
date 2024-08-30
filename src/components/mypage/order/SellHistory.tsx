@@ -5,9 +5,9 @@ import OrderTable from './OrderTable';
 import HistoryPagination from './HistoryPagination';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-import { fetchSellHistoryData, ITransTypeSell } from '../../../axios/mocks/order/sellHistory';
 import MypageInput from './MypageInput';
 import { IoMdRefresh } from 'react-icons/io';
+import { fetchSellData, ITransTypeSell } from '../../../axios/mypage/sell';
 
 export default function SellHistory() {
   // 객체로 상태 관리
@@ -24,7 +24,7 @@ export default function SellHistory() {
   // Tanstack Query를 사용하여 데이터를 패칭
   const { data, isLoading, isError } = useQuery({
     queryKey: [
-      '/api/transactions/sales',
+      'sales',
       params.currentPage,
       params.searchWord,
       params.transType,
@@ -33,7 +33,7 @@ export default function SellHistory() {
       params.endDate,
     ],
     queryFn: () =>
-      fetchSellHistoryData(
+      fetchSellData(
         params.currentPage,
         itemsPerPage,
         params.searchWord,

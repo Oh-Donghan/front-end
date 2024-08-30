@@ -61,7 +61,7 @@ const AuctionDetail = () => {
         <BidList />
 
         {/* Q&A Section */}
-        <QnASection />
+        <QnASection qna={data?.askList} />
       </Flex>
     </Flex>
   );

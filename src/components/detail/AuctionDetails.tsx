@@ -18,8 +18,6 @@ const AuctionDetails = ({ auctionId }) => {
   const toastRef = useRef(toast);
   const stompClientRef = useRef(null);
 
-  console.log('auth', auth);
-
   const { data, isLoading, isError } = useQuery({
     queryKey: ['detail', auctionId],
     queryFn: () => fetchAuctionDetailData(auctionId),
@@ -168,7 +166,7 @@ const AuctionDetails = ({ auctionId }) => {
             현재 입찰가
           </Text>
           <Text fontSize={{ base: 'md', sm: 'lg', md: 'xl' }} fontWeight="bold" pl="10px">
-            95,000원
+            {data?.startPrice ? `${formatPrice(data.startPrice)}원` : '가격 정보 없음'}
           </Text>
         </Flex>
         <Flex alignItems="end">
