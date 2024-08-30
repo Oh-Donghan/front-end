@@ -41,15 +41,6 @@ export default function MyInfo() {
           <Flex direction={{ base: 'column', md: 'row' }} gap={8} flex="1">
             <Flex direction="column" gap={2} w="100%">
               <Flex justifyContent="space-between">
-                <div>아이디</div>
-                <div>수정</div>
-              </Flex>
-              <InputGroup>
-                <Input w="100%" />
-              </InputGroup>
-            </Flex>
-            <Flex direction="column" gap={2} w="100%">
-              <Flex justifyContent="space-between">
                 <div>이메일</div>
                 <div>수정</div>
               </Flex>
@@ -62,16 +53,14 @@ export default function MyInfo() {
             </Flex>
           </Flex>
           <UnorderedList className="text-sm mb-6" w="100%" flex="1">
-            <ListItem>
-              닉네임 또는 이메일은 최초 설정 또는 변경 후 30일이 지나야 바꿀 수 있습니다.
-            </ListItem>
+            <ListItem>이메일은 최초 설정 또는 변경 후 30일이 지나야 바꿀 수 있습니다.</ListItem>
             <ListItem>소셜로그인 계정은 정보를 수정할 수 없습니다.</ListItem>
             <ListItem>이메일과 동일한 아이디는 사용이 불가능합니다.</ListItem>
           </UnorderedList>
         </Flex>
       </Flex>
       <Flex direction="column" gap="2">
-        <Text>포인트 사용 내역</Text>
+        <Text>입찰 내역</Text>
         {/* <Calendar /> */}
       </Flex>
 
