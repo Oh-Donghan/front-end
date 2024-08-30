@@ -13,6 +13,8 @@ import CategorySortButton from '../components/listpage/sort/CategorySortButton';
 import TopButton from '../components/common/button/TopButton';
 import { useQuery } from '@tanstack/react-query';
 import { getCategories } from '../axios/category/categories';
+import { useEffect } from 'react';
+import { Client } from '@stomp/stompjs';
 
 export default function AuctionList() {
   const location = useLocation();
@@ -35,6 +37,40 @@ export default function AuctionList() {
   const currentCategoryData = categories?.find(cat => {
     return cat.categoryName === category;
   });
+
+  // 웹소켓 연결 및 구독 설정
+  useEffect(() => {
+    const stompClient = new Client({
+      brokerURL: 'wss://dddang.store/auction-websocket',
+      reconnectDelay: 5000,
+    });
+
+    stompClient.onConnect = () => {
+      console.log('Connected to WebSocket');
+
+      // 경매 입찰 성공 메시지 구독
+      stompClient.subscribe('/sub/auction-all', message => {
+        const bidData = JSON.parse(message.body);
+        console.log('Received bid data:', bidData);
+      });
+    };
+
+    stompClient.onStompError = frame => {
+      console.error('Broker reported error:', frame.headers['message']);
+      console.error('Additional details:', frame.body);
+    };
+
+    stompClient.onWebSocketClose = event => {
+      console.error('WebSocket connection closed:', event);
+    };
+
+    stompClient.activate();
+
+    return () => {
+      stompClient.deactivate();
+      console.log('WebSocket disconnected');
+    };
+  }, []);
 
   const renderItemList = () => (
     <>
