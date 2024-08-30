@@ -16,8 +16,6 @@ const AuctionDetail = () => {
     queryFn: () => fetchAuctionDetailData(auctionId),
   });
 
-  console.log(data);
-
   if (isLoading) {
     <div>Data Loading...</div>;
   }
@@ -53,10 +51,10 @@ const AuctionDetail = () => {
 
       <Flex mt="16px" gap="8" direction={{ base: 'column', md: 'row' }}>
         {/* Image Section */}
-        <AuctionImages />
+        <AuctionImages imageList={data?.imageList} />
 
         {/* Details Section */}
-        <AuctionDetails />
+        <AuctionDetails auctionId={auctionId} />
       </Flex>
       <Flex gap="8" direction={{ base: 'column', md: 'row' }}>
         {/* Bids Section */}
