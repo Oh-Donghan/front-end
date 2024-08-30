@@ -1,4 +1,5 @@
 import axios from 'axios';
+import axiosInstance from '../instance';
 import { CreateAuctionType } from '../../interface/auction/actionInterface';
 
 export const createAuction = async (
@@ -6,7 +7,6 @@ export const createAuction = async (
   thumbnail: File,
   imageList: File[],
 ) => {
-  const token = localStorage.getItem('accessToken');
   const formData = new FormData();
 
   // 썸네일 추가
@@ -25,10 +25,9 @@ export const createAuction = async (
   formData.append('createDto', blob);
 
   try {
-    const res = await axios.post('https://dddang.store/api/auctions', formData, {
+    const res = await axiosInstance.post('https://dddang.store/api/auctions', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
-        Authorization: `Bearer ${token}`,
       },
     });
 

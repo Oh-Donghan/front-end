@@ -19,9 +19,12 @@ import { SiNaver } from 'react-icons/si';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { logIn } from '../../../../axios/auth/user';
+import { useSetRecoilState } from 'recoil';
+import { authState } from '../../../../recoil/atom/authAtom';
 
 export default function SigninModal({ onClose, isOpen, initialRef, onSignupClick }) {
   const { register, handleSubmit, reset } = useForm();
+  const setAuth = useSetRecoilState(authState);
 
   const onSubmit = async data => {
     if (data.id.trim() === '' || data.password.trim() === '') {
@@ -31,6 +34,7 @@ export default function SigninModal({ onClose, isOpen, initialRef, onSignupClick
     try {
       const response = await logIn({ id: data.id, password: data.password });
       if (response.accessToken) {
+        setAuth(true);
         reset();
         onClose();
       }

@@ -11,6 +11,8 @@ export default function AlarmList() {
       return lastPage.last ? undefined : lastPage.number + 1;
     },
     initialPageParam: 0,
+    staleTime: 0,
+    gcTime: 0,
   });
 
   if (isLoading) {

@@ -184,7 +184,16 @@ export default function Nav() {
                   <li className="mb-4 cursor-pointer" onClick={drawerDisclosure.onClose}>
                     마이페이지
                   </li>
-                  <li className="mb-4 cursor-pointer" onClick={drawerDisclosure.onClose}>
+                  <li
+                    className="mb-4 cursor-pointer"
+                    onClick={async () => {
+                      drawerDisclosure.onClose;
+                      await setAuth(false);
+                      await signOut();
+                      localStorage.removeItem('accessToken');
+                      localStorage.removeItem('memberId');
+                    }}
+                  >
                     로그아웃
                   </li>
                 </>

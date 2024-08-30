@@ -396,6 +396,15 @@ export default function SignupModal({ onClose, isOpen, initialRef }) {
                     status: 'success',
                   });
                 }
+
+                if (response === '이미 존재하는 이메일입니다.') {
+                  handleClose();
+                  toast({
+                    title: response,
+                    duration: 1300,
+                    status: 'error',
+                  });
+                }
               } catch (error) {
                 console.error('회입가입 오류' + error);
               }

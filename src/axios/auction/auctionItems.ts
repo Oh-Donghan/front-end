@@ -1,4 +1,4 @@
-import axiosInstance from '../instances';
+import axiosInstance from '../instance';
 
 interface fetchItemsProps {
   word?: string;

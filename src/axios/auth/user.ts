@@ -1,5 +1,4 @@
-import axios from 'axios';
-import axiosInstance from '../instances';
+import axiosInstance from '../instance';
 
 export const signIn = async (id: string, password: string) => {
   const response = await axiosInstance.post('/api/members/login', {
@@ -17,18 +16,7 @@ export const signIn = async (id: string, password: string) => {
 };
 
 export const signOut = async () => {
-  const token = localStorage.getItem('accessToken');
-
-  const response = await axios.post(
-    'https://dddang.store/api/auth/logout',
-    {},
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      withCredentials: true,
-    },
-  );
+  const response = await axiosInstance.post('https://dddang.store/api/auth/logout', {});
 
   return response.data;
 };
@@ -55,7 +43,7 @@ export const signUp = async ({
     authNum,
   };
 
-  const response = await axios.post('https://dddang.store/api/auth/signup', requestBody);
+  const response = await axiosInstance.post('https://dddang.store/api/auth/signup', requestBody);
 
   return response.data;
 };
@@ -66,7 +54,7 @@ export const idDuplicateCheck = async ({ id }: { id: string }) => {
     memberId: id,
   };
 
-  const response = await axios.post('https://dddang.store/api/auth/check/id', requestBody);
+  const response = await axiosInstance.post('https://dddang.store/api/auth/check/id', requestBody);
 
   return response.data;
 };
@@ -77,7 +65,7 @@ export const RequestAuthenticationEmailCode = async ({ email }: { email: string 
     email,
   };
 
-  const response = await axios.post('https://dddang.store/api/mail/send', requestBody);
+  const response = await axiosInstance.post('https://dddang.store/api/mail/send', requestBody);
 
   return response.data;
 };
@@ -89,7 +77,7 @@ export const confirmEmail = async ({ email, authNum }: { email: string; authNum:
     authNum,
   };
 
-  const response = await axios.post('https://dddang.store/api/mail/check', requestBody);
+  const response = await axiosInstance.post('https://dddang.store/api/mail/check', requestBody);
 
   return response.data;
 };
@@ -101,7 +89,9 @@ export const logIn = async ({ id, password }: { id: string; password: string }) 
     password,
   };
 
-  const response = await axiosInstance.post('api/auth/login', requestBody);
+  const response = await axiosInstance.post('api/auth/login', requestBody, {
+    withCredentials: true,
+  });
 
   const { accessToken, memberId } = response.data;
 

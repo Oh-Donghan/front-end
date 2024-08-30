@@ -1,5 +1,4 @@
-import axiosInstance from '../instances';
-import axios from 'axios';
+import axiosInstance from '../instance';
 
 // 현재 포유중인 포인트 가져오기
 export const getChargdePoint = async () => {
@@ -28,7 +27,7 @@ export const crateChargeOrder = async (price: number) => {
   };
 
   try {
-    const response = await axios.post(
+    const response = await axiosInstance.post(
       'https://dddang.store/api/members/orders/create',
       requestBody,
       {
@@ -65,7 +64,7 @@ export const createPayment = async ({
   };
 
   try {
-    const response = await axios.post(
+    const response = await axiosInstance.post(
       'https://dddang.store/api/members/payment/ready',
       requestBody,
       {
@@ -86,7 +85,7 @@ export const createPayment = async ({
 // 카카오 포인트 충전 승인 api
 export const approvePayment = async ({ partner_order_id, pg_token }) => {
   try {
-    const response = await axios.get('https://dddang.store/api/members/payment/approve', {
+    const response = await axiosInstance.get('https://dddang.store/api/members/payment/approve', {
       params: {
         partner_order_id,
         pg_token,
