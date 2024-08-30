@@ -21,37 +21,32 @@ import {
   PopoverHeader,
   PopoverArrow,
   PopoverBody,
+  useToast,
 } from '@chakra-ui/react';
 import { RiLock2Fill } from 'react-icons/ri';
 import { FaCheck } from 'react-icons/fa';
 import { FaUser } from 'react-icons/fa';
 import { SiNaver } from 'react-icons/si';
-import { MdEmail } from 'react-icons/md';
 import { useState } from 'react';
 import { IoIosEye } from 'react-icons/io';
 import { IoIosEyeOff } from 'react-icons/io';
-import { RiLockPasswordFill } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
-import {
-  confirmEmail,
-  idDuplicateCheck,
-  RequestAuthenticationEmailCode,
-} from '../../../../axios/auth/user';
+import { idDuplicateCheck, signUp } from '../../../../axios/auth/user';
+import SignupEmailSection from './SignupEmailSection';
 
 export default function SignupModal({ onClose, isOpen, initialRef }) {
   const [verificationMode, setVerificationMode] = useState(false);
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
   const [isIdValid, setIsIdValid] = useState(true);
   const [isPasswordValid, setIsPasswordValid] = useState(true);
   const [isEmailValid, setIsEmailValid] = useState(true);
   const [isVerificationCodeValid, setIsVerificationCodeValid] = useState(false);
-  const [isPasswordConfirmed, setIsPasswordConfirmed] = useState(true);
   const [show, setShow] = useState(false);
-  const [isIdAvailable, setIsIdAvailable] = useState(false);
+  const [isCheckBoxChecked, setIsCheckBoxChecked] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordMessage, setPasswordMessage] = useState(
     '4자 ~ 16자 이내의 숫자, 특수문자, 영문자 중 2가지 이상을 조합',
   );
@@ -59,7 +54,11 @@ export default function SignupModal({ onClose, isOpen, initialRef }) {
   const [idMessageColor, setIdMessageColor] = useState('rgba(140,140,140,1)');
   const [passwordMessageColor, setPasswordMessageColor] = useState('rgba(140,140,140,1)');
 
-  const _verificationCode = 1234;
+  const [isIdConfirmed, setIsIdConfirmed] = useState(false);
+  const [isPasswordConfirmed, setIsPasswordConfirmed] = useState(false);
+  const [isEmailConfirmed, setIsEmailConfirmed] = useState(false);
+
+  const toast = useToast();
 
   const validateId = value => {
     const idPattern = /^[a-zA-Z0-9]{6,12}$/;
@@ -70,7 +69,6 @@ export default function SignupModal({ onClose, isOpen, initialRef }) {
       setIsIdValid(false);
     } else if (idPattern.test(value)) {
       setIsIdValid(true);
-      setIsIdAvailable(true);
     }
   };
 
@@ -105,20 +103,22 @@ export default function SignupModal({ onClose, isOpen, initialRef }) {
   const handleClose = () => {
     setIsIdValid(true);
     setIsPasswordValid(true);
-    setIsPasswordConfirmed(true);
+    setIsPasswordConfirmed(false);
     setShow(false);
     setId('');
     setPassword('');
-    setConfirmPassword('');
     setIsEmailValid(true);
     setVerificationCode('');
     setVerificationMode(false);
     setIsVerificationCodeValid(false);
-    setIsIdAvailable(false);
     setIdMessage('6자~12자의 영문 + 숫자만 사용 가능');
     setPasswordMessage('4자 ~ 16자 이내의 숫자, 특수문자, 영문자 중 2가지 이상을 조합');
     setIdMessageColor('rgba(140,140,140,1)');
     setPasswordMessageColor('rgba(140,140,140,1)');
+    setIsIdConfirmed(false);
+    setIsPasswordConfirmed(false);
+    setIsEmailConfirmed(false);
+    setIsCheckBoxChecked(false);
     onClose();
   };
 
@@ -147,6 +147,7 @@ export default function SignupModal({ onClose, isOpen, initialRef }) {
               onChange={e => {
                 setId(e.target.value);
                 validateId(e.target.value);
+                setIsIdConfirmed(false);
                 setIdMessage('6자~12자의 영문 + 숫자만 사용 가능');
                 setIdMessageColor('rgba(140,140,140,1)');
               }}
@@ -157,12 +158,19 @@ export default function SignupModal({ onClose, isOpen, initialRef }) {
               cursor={'pointer'}
               border={'1px solid rgba(200,200,200,1)'}
               onClick={async () => {
-                if (!isIdValid) {
+                if (!isIdValid || id.trim().length === 0) {
                   return;
                 }
-                const response = await idDuplicateCheck({ id });
-                // setIdMessage('사용 가능한 아이디입니다.');
-                // setIdMessageColor('rgba(0, 119, 255, 0.9)');
+                try {
+                  const response = await idDuplicateCheck({ id });
+                  setIdMessage(response);
+                  setIdMessageColor('rgba(0, 119, 255, 0.9)');
+                  if (response === '사용 가능한 아이디 입니다.') {
+                    setIsIdConfirmed(true);
+                  }
+                } catch (error) {
+                  console.error('아이디 중복 확인 오류 :' + error);
+                }
               }}
             >
               중복확인
@@ -213,7 +221,6 @@ export default function SignupModal({ onClose, isOpen, initialRef }) {
               onChange={e => {
                 setConfirmPassword(e.target.value);
                 if (e.target.value.length === 0) {
-                  setIsPasswordConfirmed(true);
                   setPasswordMessageColor('rgba(140,140,140,1)');
                   setPasswordMessage(
                     '4자 ~ 16자 이내의 숫자, 특수문자, 영문자 중 2가지 이상을 조합',
@@ -264,111 +271,37 @@ export default function SignupModal({ onClose, isOpen, initialRef }) {
           </InputGroup>
           <Text
             fontSize={'xs'}
-            color={!isPasswordValid || !isPasswordConfirmed ? 'red' : passwordMessageColor}
+            color={!isPasswordValid ? 'red' : passwordMessageColor}
             marginLeft={'6px'}
             marginBottom={'16px'}
           >
             {passwordMessage}
           </Text>
-          <InputGroup>
-            <InputLeftElement pointerEvents="none">
-              <MdEmail color="rgba(180,180,180,1)" />
-            </InputLeftElement>
-            <Input
-              disabled={verificationMode ? true : false}
-              type="email"
-              placeholder="이메일"
-              fontSize={'0.95rem'}
-              onChange={e => {
-                validateEmail(e.target.value);
-                setEmail(e.target.value);
-              }}
-              borderColor={'rgba(200,200,200,1)'}
-              focusBorderColor={isEmailValid ? 'rgba(0, 119, 255, 0.9)' : 'rgba(255, 0, 0, 0.8)'}
-            />
-            <InputRightAddon
-              fontSize={'xs'}
-              cursor={'pointer'}
-              border={'1px solid rgba(200,200,200,1)'}
-              onClick={async () => {
-                // if (email.length > 0 && isEmailValid) {
-                //   alert('인증번호는 1234입니다.');
-                //   setVerificationMode(true);
-                // }
-                const response = await RequestAuthenticationEmailCode({ email });
-                if (response === '인증번호가 전송되었습니다.') {
-                  setVerificationMode(true);
-                }
-              }}
-              pointerEvents={verificationMode ? 'none' : 'auto'}
-              opacity={verificationMode ? 0.5 : 1}
-            >
-              인증번호 받기
-            </InputRightAddon>
-          </InputGroup>
-          {!isEmailValid && (
-            <Text fontSize={'0.75rem'} marginLeft={'6px'} color={'red'}>
-              유효한 이메일 형식이 아닙니다.
-            </Text>
-          )}
-          {verificationMode && (
-            <InputGroup>
-              <InputLeftElement pointerEvents="none">
-                <RiLockPasswordFill color="rgba(180,180,180,1)" />
-              </InputLeftElement>
-              <Input
-                type="email"
-                placeholder="인증번호 4자리"
-                fontSize={'0.95rem'}
-                onChange={e => {
-                  setVerificationCode(e.target.value);
 
-                  if (parseInt(e.target.value) === _verificationCode) {
-                    setIsVerificationCodeValid(true);
-                  } else {
-                    setIsVerificationCodeValid(false);
-                  }
-                }}
-                borderColor={'rgba(200,200,200,1)'}
-                focusBorderColor={isEmailValid ? 'rgba(0, 119, 255, 0.9)' : 'rgba(255, 0, 0, 0.8)'}
-              />
-              <InputRightAddon
-                fontSize={'xs'}
-                cursor={'pointer'}
-                border={'1px solid rgba(200,200,200,1)'}
-                borderRadius={'0'}
-                onClick={async () => {
-                  const response = await confirmEmail({ email, authNum: verificationCode });
-                }}
-              >
-                확인
-              </InputRightAddon>
-              <InputRightAddon
-                fontSize={'xs'}
-                cursor={'pointer'}
-                border={'1px solid rgba(200,200,200,1)'}
-                onClick={() => {
-                  setVerificationMode(false);
-                  setVerificationCode('');
-                  setIsVerificationCodeValid(false);
-                }}
-              >
-                취소
-              </InputRightAddon>
-            </InputGroup>
-          )}
-          {!isVerificationCodeValid && verificationCode.length > 0 && (
-            <Text fontSize={'0.75rem'} marginLeft={'6px'} color={'red'}>
-              인증번호가 일치하지 않습니다.
-            </Text>
-          )}
-          {isVerificationCodeValid && (
-            <Text fontSize={'0.75rem'} marginLeft={'6px'} color={'rgba(0, 119, 255, 0.9)'}>
-              인증이 완료 되었습니다.
-            </Text>
-          )}
+          {/* 이메인 인증 및 인증 코드 적는 섹션 */}
+          <SignupEmailSection
+            verificationMode={verificationMode}
+            validateEmail={validateEmail}
+            setEmail={setEmail}
+            isEmailValid={isEmailValid}
+            email={email}
+            setVerificationMode={setVerificationMode}
+            setVerificationCode={setVerificationCode}
+            verificationCode={verificationCode}
+            setIsVerificationCodeValid={setIsVerificationCodeValid}
+            isVerificationCodeValid={isVerificationCodeValid}
+            setIsEmailConfirmed={setIsEmailConfirmed}
+          />
+
           <Flex alignItems={'center'} justifyContent={'space-between'}>
-            <Checkbox fontSize="18px" marginTop={'14px'}>
+            <Checkbox
+              fontSize="18px"
+              marginTop={'14px'}
+              isChecked={isCheckBoxChecked}
+              onChange={() => {
+                setIsCheckBoxChecked(prev => !prev);
+              }}
+            >
               <Flex alignItems={'center'}>
                 <Text fontSize="sm" color={'rgba(100,100,100,1)'}>
                   약관 동의
@@ -411,7 +344,63 @@ export default function SignupModal({ onClose, isOpen, initialRef }) {
               </PopoverContent>
             </Popover>
           </Flex>
-          <Button colorScheme="blue" size="md" marginTop={'16px'}>
+          <Button
+            colorScheme="blue"
+            size="md"
+            marginTop={'16px'}
+            onClick={async () => {
+              if (!isIdConfirmed) {
+                toast({
+                  title: '아이디 중복 확인해 주세요.',
+                  duration: 1300,
+                  status: 'error',
+                });
+                return;
+              } else if (!isPasswordConfirmed) {
+                toast({
+                  title: '비밀번호를 확인해 주세요.',
+                  duration: 1300,
+                  status: 'error',
+                });
+                return;
+              } else if (!isEmailConfirmed) {
+                toast({
+                  title: '이메일 인증을 완료해 주세요.',
+                  duration: 1300,
+                  status: 'error',
+                });
+                return;
+              } else if (!isCheckBoxChecked) {
+                toast({
+                  title: '약관을 동의해 주세요.',
+                  duration: 1300,
+                  status: 'error',
+                });
+                return;
+              }
+
+              try {
+                const response = await signUp({
+                  email,
+                  id,
+                  password,
+                  confirmPassword,
+                  authNum: verificationCode,
+                });
+
+                if (response === '회원가입이 완료되었습니다.') {
+                  handleClose();
+                  toast({
+                    title: response,
+                    duration: 1300,
+                    status: 'success',
+                  });
+                }
+              } catch (error) {
+                console.error('회입가입 오류' + error);
+              }
+            }}
+          >
             가입하기
           </Button>
 

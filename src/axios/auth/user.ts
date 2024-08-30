@@ -33,6 +33,7 @@ export const signOut = async () => {
   return response.data;
 };
 
+// 일반 회원가입 api
 export const signUp = async ({
   email,
   id,
@@ -46,21 +47,15 @@ export const signUp = async ({
   confirmPassword: string;
   authNum: string;
 }) => {
-  const token = localStorage.getItem('accessToken');
   const requestBody = {
     email,
-    id,
+    memberId: id,
     password,
     confirmPassword,
     authNum,
   };
 
-  const response = await axios.post('https://dddang.store/api/auth/signup', requestBody, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-    withCredentials: true,
-  });
+  const response = await axios.post('https://dddang.store/api/auth/signup', requestBody);
 
   return response.data;
 };
@@ -95,6 +90,24 @@ export const confirmEmail = async ({ email, authNum }: { email: string; authNum:
   };
 
   const response = await axios.post('https://dddang.store/api/mail/check', requestBody);
+
+  return response.data;
+};
+
+// 일반 로그인 api
+export const logIn = async ({ id, password }: { id: string; password: string }) => {
+  const requestBody = {
+    memberId: id,
+    password,
+  };
+
+  const response = await axiosInstance.post('api/auth/login', requestBody);
+
+  const { accessToken, memberId } = response.data;
+
+  // 로그인 성공시 토큰을 localStorage에 저장
+  localStorage.setItem('accessToken', accessToken);
+  localStorage.setItem('memberId', memberId);
 
   return response.data;
 };

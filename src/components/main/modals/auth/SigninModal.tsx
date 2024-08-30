@@ -12,37 +12,30 @@ import {
   Text,
   Flex,
   Divider,
-  useToast,
 } from '@chakra-ui/react';
 import { RiLock2Fill } from 'react-icons/ri';
 import { FaUser } from 'react-icons/fa';
 import { SiNaver } from 'react-icons/si';
 import { useForm } from 'react-hook-form';
-import { useSetRecoilState } from 'recoil';
-import { authState } from '../../../../recoil/atom/authAtom';
 import { Link } from 'react-router-dom';
+import { logIn } from '../../../../axios/auth/user';
 
 export default function SigninModal({ onClose, isOpen, initialRef, onSignupClick }) {
   const { register, handleSubmit, reset } = useForm();
-  const setIsLoggedIn = useSetRecoilState(authState);
-  const toast = useToast();
 
-  const onSubmit = data => {
+  const onSubmit = async data => {
     if (data.id.trim() === '' || data.password.trim() === '') {
       return;
     }
 
-    if (data.id === 'abcd123' && data.password === '123456') {
-      localStorage.setItem('user', 'test');
-      setIsLoggedIn(true);
-      reset();
-      onClose();
-    } else {
-      toast({
-        title: '등록된 유저가 아닙니다.',
-        status: 'error',
-        duration: 1300,
-      });
+    try {
+      const response = await logIn({ id: data.id, password: data.password });
+      if (response.accessToken) {
+        reset();
+        onClose();
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -50,7 +43,10 @@ export default function SigninModal({ onClose, isOpen, initialRef, onSignupClick
     <Modal
       initialFocusRef={initialRef}
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={() => {
+        reset();
+        onClose();
+      }}
       isCentered
       preserveScrollBarGap={true}
     >
@@ -67,7 +63,7 @@ export default function SigninModal({ onClose, isOpen, initialRef, onSignupClick
               <Input
                 borderColor={'rgba(200,200,200,1)'}
                 ref={initialRef}
-                placeholder="아이디 ( 테스트 계정 아이디 : abcd123 )"
+                placeholder="아이디"
                 fontSize={'0.95rem'}
                 {...register('id')}
               />
@@ -79,7 +75,7 @@ export default function SigninModal({ onClose, isOpen, initialRef, onSignupClick
               <Input
                 borderColor={'rgba(200,200,200,1)'}
                 type="password"
-                placeholder="비밀번호 ( 테스트 계정 비밀번호 : 123456 )"
+                placeholder="비밀번호"
                 fontSize={'0.95rem'}
                 {...register('password')}
               />
