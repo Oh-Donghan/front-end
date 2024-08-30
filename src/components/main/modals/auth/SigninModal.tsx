@@ -12,6 +12,7 @@ import {
   Text,
   Flex,
   Divider,
+  useToast,
 } from '@chakra-ui/react';
 import { RiLock2Fill } from 'react-icons/ri';
 import { FaUser } from 'react-icons/fa';
@@ -25,6 +26,7 @@ import { authState } from '../../../../recoil/atom/authAtom';
 export default function SigninModal({ onClose, isOpen, initialRef, onSignupClick }) {
   const { register, handleSubmit, reset } = useForm();
   const setAuth = useSetRecoilState(authState);
+  const toast = useToast();
 
   const onSubmit = async data => {
     if (data.id.trim() === '' || data.password.trim() === '') {
@@ -39,6 +41,11 @@ export default function SigninModal({ onClose, isOpen, initialRef, onSignupClick
         onClose();
       }
     } catch (error) {
+      toast({
+        title: '등록된 계정이 아닙니다.',
+        duration: 1300,
+        status: 'error',
+      });
       console.error(error);
     }
   };
