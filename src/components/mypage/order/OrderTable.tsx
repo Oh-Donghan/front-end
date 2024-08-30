@@ -24,7 +24,7 @@ export default function OrderTable({ posts }) {
   const fontSize = useBreakpointValue({ base: 'xs', md: 'sm', lg: 'md' });
 
   if (!posts || posts.length === 0) {
-    return <div>구매 목록이 없습니다.</div>;
+    return <div>{isBuyPage ? '구매' : '판매'} 목록이 없습니다.</div>;
   }
 
   return (
