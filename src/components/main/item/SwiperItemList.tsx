@@ -40,7 +40,7 @@ export default function SwiperItemList({ isCategoryLoading }: SwiperHotItemListP
           }}
           gap={6}
         >
-          {skeletonArray.map((item, i) => (
+          {skeletonArray.map((_, i) => (
             <GridItem key={i}>
               <ItemCardSkeleton />
             </GridItem>
@@ -52,7 +52,7 @@ export default function SwiperItemList({ isCategoryLoading }: SwiperHotItemListP
 
   return isSlider ? (
     <>
-      {data.content.length === 0 ? null : (
+      {data?.content.length === 0 ? null : (
         <Box minW="375px" mb={{ base: '12', sm: '20' }} mt={{ base: '12', sm: '20' }}>
           <Flex alignItems="end" justifyContent="space-between" mb={{ base: '4', sm: '5' }}>
             <Text fontSize={{ base: 'xl', sm: '1.5rem' }} fontWeight="bold">
@@ -73,7 +73,7 @@ export default function SwiperItemList({ isCategoryLoading }: SwiperHotItemListP
             className="mySwiper"
             style={{ marginTop: '25px' }}
           >
-            {data.content.map(item => (
+            {data?.content.map(item => (
               <SwiperSlide key={item.id}>
                 <ItemCard item={item} />
               </SwiperSlide>
@@ -84,7 +84,7 @@ export default function SwiperItemList({ isCategoryLoading }: SwiperHotItemListP
     </>
   ) : (
     <>
-      {data.content.length === 0 ? null : (
+      {data?.content.length === 0 ? null : (
         <Box minW="375px" mb={{ base: '12', sm: '20' }} mt={{ base: '12', sm: '20' }}>
           <Flex alignItems="end" justifyContent="space-between" mb={{ base: '4', sm: '5' }}>
             <Text fontSize={{ base: 'xl', sm: '1.5rem' }} fontWeight="bold">
@@ -106,7 +106,7 @@ export default function SwiperItemList({ isCategoryLoading }: SwiperHotItemListP
             }}
             gap={6}
           >
-            {data.content.map(item => (
+            {data?.content.map(item => (
               <GridItem key={item.id}>
                 <ItemCard item={item} />
               </GridItem>

@@ -37,7 +37,7 @@ export default function AlarmModal() {
         <PopoverTrigger>
           <span>알림</span>
         </PopoverTrigger>
-        <PopoverContent width={isLargerThan480 ? '550px' : '90vw'}>
+        <PopoverContent width={isLargerThan480 ? '650px' : '90vw'}>
           <PopoverArrow />
           <PopoverHeader
             display={'flex'}

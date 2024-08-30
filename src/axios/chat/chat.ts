@@ -1,19 +1,8 @@
 import axiosInstance from '../instance';
 
-export const getChats = async () => {
-  const token = localStorage.getItem('accessToken');
-  const memberId = localStorage.getItem('memberId');
-
+export const getAllChats = async () => {
   try {
-    const response = await axiosInstance.get(`/api/rooms`, {
-      params: {
-        memberId: memberId,
-      },
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    });
+    const response = await axiosInstance.get(`/api/rooms`);
 
     return response.data;
   } catch (error) {

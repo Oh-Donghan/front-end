@@ -38,7 +38,7 @@ export default function SwiperHotItemList({ isCategoryLoading }: SwiperHotItemLi
           }}
           gap={6}
         >
-          {skeletonArray.map((item, i) => (
+          {skeletonArray.map((_, i) => (
             <GridItem key={i}>
               <ItemCardSkeleton />
             </GridItem>

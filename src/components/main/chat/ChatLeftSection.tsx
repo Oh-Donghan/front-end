@@ -3,12 +3,12 @@ import { Link } from 'react-router-dom';
 import { MdLogout } from 'react-icons/md';
 import ChatList from '../../../components/chat/item/ChatList';
 import { useQuery } from '@tanstack/react-query';
-import { getChats } from '../../../axios/chat/chat';
+import { getAllChats } from '../../../axios/chat/chat';
 
 export default function ChatLeftSection({ selectedChatId, setSelectedChatId, scrollBottom }) {
   const { data: chats, isLoading } = useQuery({
     queryKey: ['chat'],
-    queryFn: () => getChats(),
+    queryFn: () => getAllChats(),
     staleTime: 5 * 60 * 1000,
     gcTime: 30 * 60 * 1000,
   });

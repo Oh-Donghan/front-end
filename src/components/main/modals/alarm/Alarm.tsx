@@ -18,11 +18,13 @@ export default function Alarm({ type, content, createdAt, auctionId }) {
       ? question
       : type === 'DONE'
         ? done
-        : type === 'CONFIRM'
-          ? confirm
-          : type === 'ANSWER'
-            ? answer
-            : undefined;
+        : type === 'DONE_INSTANT'
+          ? done
+          : type === 'CONFIRM'
+            ? confirm
+            : type === 'ANSWER'
+              ? answer
+              : undefined;
 
   return (
     <Link to={`/detail/${auctionId}`}>
