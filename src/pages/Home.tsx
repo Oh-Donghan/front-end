@@ -8,17 +8,19 @@ import Input from '../components/main/input/input';
 import { useLocation, useNavigate } from 'react-router-dom';
 import TopButton from '../components/common/button/TopButton';
 import { useEffect, useState } from 'react';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { authState } from '../recoil/atom/authAtom';
 import { getCategories } from '../axios/category/categories';
 import { useQuery } from '@tanstack/react-query';
 import { Client } from '@stomp/stompjs';
+import { auctionState } from '../recoil/atom/auctionPriceAtom';
 
 export default function Home() {
   const [isProcessingAuth, setIsProcessingAuth] = useState(false);
   const setAuth = useSetRecoilState(authState);
   const navigate = useNavigate();
   const location = useLocation();
+  const [auctionArray, setAuctionArray] = useRecoilState(auctionState);
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
@@ -58,6 +60,13 @@ export default function Home() {
       stompClient.subscribe('/sub/auction-all', message => {
         const bidData = JSON.parse(message.body);
         console.log('Received bid data:', bidData);
+        setAuctionArray(prev => {
+          // 기존 배열에서 동일한 auctionId를 가진 객체 제거
+          const updatedArray = prev.filter(item => item.auctionId !== bidData.auctionId);
+
+          // 새로운 bidData를 추가한 배열 반환
+          return [...updatedArray, bidData];
+        });
       });
     };
 
@@ -77,6 +86,10 @@ export default function Home() {
       console.log('WebSocket disconnected');
     };
   }, []);
+
+  useEffect(() => {
+    console.log('log:', JSON.stringify(auctionArray, null, 2));
+  }, [auctionArray]);
 
   // getCategories의 isLoading을 ItemList에도 전달하기 위해 home에서 카테고리 패칭
   const { data: categories, isLoading } = useQuery({

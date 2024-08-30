@@ -8,6 +8,8 @@ import { EffectCards, Pagination } from 'swiper/modules';
 import { getAuctionHotItems } from '../../../axios/auction/auctionItems';
 import { useQuery } from '@tanstack/react-query';
 import ItemCardSkeleton from '../../common/item/ItemCardSkeleton';
+import { useRecoilValue } from 'recoil';
+import { auctionState } from '../../../recoil/atom/auctionPriceAtom';
 
 interface SwiperHotItemListProps {
   isCategoryLoading?: boolean;
@@ -19,6 +21,7 @@ export default function SwiperHotItemList({ isCategoryLoading }: SwiperHotItemLi
   const category = searchParams.get('mainCategory') || '전체';
   const subCategory = searchParams.get('subCategory') || undefined;
   const skeletonArray = new Array(5).fill(null);
+  const auctionArray = useRecoilValue(auctionState);
 
   const { data, isLoading } = useQuery({
     queryKey: ['items', category, 'top5'],

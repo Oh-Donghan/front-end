@@ -11,22 +11,44 @@ import {
   Flex,
   Badge,
   Box,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import Timer from '../timer/Timer';
 import { HiUser } from 'react-icons/hi';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { formatMemberCount } from '../../../utils/formatMemberCount';
 import { ItemCardProps } from '../../../interface/auction/actionItemInterface';
+import FlipNumbers from 'react-flip-numbers';
 
-export default function ItemCard({ rank, item, type }: ItemCardProps) {
+export default function ItemCard({ rank, item, type, auctionArray }: ItemCardProps) {
   const navigate = useNavigate();
   const [isFinished, setIsFinished] = useState(false);
+  const [currentPrice, setCurrentPrice] = useState(item.currentPrice);
+  const [priceChanged, setPriceChanged] = useState(false);
 
   const moveDetail = () => {
     if (isFinished) return;
     navigate(`/detail/${item.id}`);
   };
+
+  useEffect(() => {
+    // auctionArray가 undefined이면 빈 배열을 사용
+    const auctionArraySafe = auctionArray || [];
+
+    // auctionArray에서 item.id와 auctionId가 일치하는 객체 찾기
+    const matchingAuction = auctionArraySafe.find(auction => auction.auctionId === item.id);
+
+    if (matchingAuction) {
+      // 현재 가격 업데이트
+      if (currentPrice !== matchingAuction.bidAmount) {
+        setCurrentPrice(matchingAuction.bidAmount);
+        setPriceChanged(true); // 가격 변경 표시
+      }
+    }
+  }, [auctionArray, item.id, currentPrice]);
+
+  // 가격 변경 애니메이션 효과
 
   if (type === 'hot') {
     return (
@@ -85,20 +107,41 @@ export default function ItemCard({ rank, item, type }: ItemCardProps) {
             <Heading size="md" marginBottom={'8px'}>
               {item.title}
             </Heading>
-            <Flex justifyContent={'space-between'} alignItems={'center'} height={'25px'}>
-              <Text fontSize="sm">현제 입찰가</Text>
-              <Text color="blue.600" fontSize="1.4rem" fontWeight={'bold'} marginRight={'3px'}>
-                {item.currentPrice.toLocaleString()}원
-              </Text>
+            <Flex justifyContent={'space-between'} alignItems={'center'} height={'28px'}>
+              <Text fontSize="sm">현재 입찰가</Text>
+              <Box fontSize="1.3rem" fontWeight={'bold'} marginRight={'3px'}>
+                <Flex color="rgb(49, 130, 206)">
+                  <FlipNumbers
+                    height={17.5}
+                    width={13}
+                    color="rgb(49, 130, 206)"
+                    background="white"
+                    play
+                    perspective={100}
+                    numbers={currentPrice.toLocaleString()}
+                  />
+                  <Text>원</Text>
+                </Flex>
+              </Box>
             </Flex>
 
-            <Flex justifyContent={'space-between'} alignItems={'center'} height={'25px'}>
+            <Flex justifyContent={'space-between'} alignItems={'center'} height={'28px'}>
               <Text fontSize="sm">즉시 구매가</Text>
-              <Text fontSize="medium" fontWeight={'bold'} marginRight={'3px'}>
-                {item.instantPrice.toLocaleString()}원
-              </Text>
+              <Flex>
+                <Text
+                  fontSize="medium"
+                  fontWeight={'semibold'}
+                  marginRight={'3px'}
+                  color={'rgba(80,80,80,1)'}
+                >
+                  {item.instantPrice.toLocaleString()}
+                </Text>
+                <Text fontWeight={'normal'} mr={1}>
+                  원
+                </Text>
+              </Flex>
             </Flex>
-            <Flex justifyContent={'space-between'} alignItems={'center'} height={'25px'}>
+            <Flex justifyContent={'space-between'} alignItems={'center'} height={'28px'}>
               <Text fontSize="sm">기간</Text>
               <Timer endedAt={item.endedAt} setIsFinished={setIsFinished} />
             </Flex>
@@ -172,27 +215,41 @@ export default function ItemCard({ rank, item, type }: ItemCardProps) {
           </Heading>
           <Flex justifyContent={'space-between'} alignItems={'center'} height={'25px'}>
             <Text fontSize="sm" flexShrink={0}>
-              현제 입찰가
+              현재 입찰가
             </Text>
-            <Text
-              color="blue.600"
-              fontSize={{ base: '1.4rem' }}
-              fontWeight={'bold'}
-              marginRight={'3px'}
-              noOfLines={1}
-              pl={4}
-            >
-              {item.currentPrice.toLocaleString()}원
-            </Text>
+            <Box fontSize="1.3rem" fontWeight={'bold'} marginRight={'3px'}>
+              <Flex color="rgb(49, 130, 206)">
+                <FlipNumbers
+                  height={17.5}
+                  width={13}
+                  color="rgb(49, 130, 206)"
+                  background="white"
+                  play
+                  perspective={100}
+                  numbers={currentPrice.toLocaleString()}
+                />
+                <Text>원</Text>
+              </Flex>
+            </Box>
           </Flex>
 
           <Flex justifyContent={'space-between'} alignItems={'center'} height={'25px'}>
             <Text fontSize="sm" flexShrink={0}>
               즉시 구매가
             </Text>
-            <Text fontSize="medium" fontWeight={'bold'} marginRight={'3px'} noOfLines={1} pl={4}>
-              {item.instantPrice.toLocaleString()}원
-            </Text>
+            <Flex>
+              <Text
+                fontSize="medium"
+                fontWeight={'semibold'}
+                marginRight={'3px'}
+                color={'rgba(80,80,80,1)'}
+              >
+                {item.instantPrice.toLocaleString()}
+              </Text>
+              <Text fontWeight={'normal'} mr={1}>
+                원
+              </Text>
+            </Flex>
           </Flex>
           <Flex justifyContent={'space-between'} alignItems={'center'} height={'25px'}>
             <Text fontSize="sm">기간</Text>

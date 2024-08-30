@@ -30,4 +30,10 @@ export interface ItemCardProps {
   item?: AuctionItem;
   type?: string;
   isLoading?: boolean;
+  auctionArray?: Array<{
+    bidStatus: string;
+    auctionId: number;
+    memberId: string;
+    bidAmount: number;
+  }>;
 }

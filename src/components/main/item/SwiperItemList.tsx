@@ -9,6 +9,8 @@ import { getAuctionItems } from '../../../axios/auction/auctionItems';
 import { useQuery } from '@tanstack/react-query';
 import ItemCardSkeleton from '../../common/item/ItemCardSkeleton';
 import { Link } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
+import { auctionState } from '../../../recoil/atom/auctionPriceAtom';
 
 interface SwiperHotItemListProps {
   isCategoryLoading?: boolean;
@@ -19,6 +21,22 @@ export default function SwiperItemList({ isCategoryLoading }: SwiperHotItemListP
   const searchParams = new URLSearchParams(location.search);
   const category = searchParams.get('category') || '전체';
   const skeletonArray = new Array(5).fill(null);
+  const auctionArray = useRecoilValue(auctionState);
+
+  // [
+  //   {
+  //     "bidStatus": "SUCCESS",
+  //     "auctionId": 43,
+  //     "memberId": "sdsd23",
+  //     "bidAmount": 5000
+  //   },
+  //   {
+  //     "bidStatus": "SUCCESS",
+  //     "auctionId": 42,
+  //     "memberId": "sdsd23",
+  //     "bidAmount": 4500
+  //   }
+  // ]
 
   const { data, isLoading } = useQuery({
     queryKey: ['items', category],
@@ -75,7 +93,7 @@ export default function SwiperItemList({ isCategoryLoading }: SwiperHotItemListP
           >
             {data?.content.map(item => (
               <SwiperSlide key={item.id}>
-                <ItemCard item={item} />
+                <ItemCard item={item} auctionArray={auctionArray} />
               </SwiperSlide>
             ))}
           </Swiper>
@@ -108,7 +126,7 @@ export default function SwiperItemList({ isCategoryLoading }: SwiperHotItemListP
           >
             {data?.content.map(item => (
               <GridItem key={item.id}>
-                <ItemCard item={item} />
+                <ItemCard item={item} auctionArray={auctionArray} />
               </GridItem>
             ))}
           </Grid>
