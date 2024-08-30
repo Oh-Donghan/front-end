@@ -11,7 +11,7 @@ import { useRecoilState } from 'recoil';
 import { authState } from '../../recoil/atom/authAtom';
 
 const AuctionDetails = ({ auctionId }) => {
-  const auth = useRecoilState(authState);
+  const [auth] = useRecoilState(authState);
   const memberId = localStorage.getItem('memberId');
   const bidPriceRef = useRef(null);
   const toast = useToast();
@@ -217,14 +217,15 @@ const AuctionDetails = ({ auctionId }) => {
             <Input
               ref={bidPriceRef}
               type="number"
-              placeholder="입찰할 포인트를 적어주세요."
+              placeholder={!auth ? '로그인 후 이용 가능합니다.' : '입찰할 포인트를 적어주세요.'}
               variant="outline"
               borderColor="gray.300"
               py={2}
               px={3}
               flex="1"
+              isDisabled={!auth}
             />
-            <Button type="submit" colorScheme="blackAlpha" variant="outline">
+            <Button type="submit" colorScheme="blue" variant="outline" isDisabled={!auth}>
               입찰하기
             </Button>
           </Flex>
