@@ -2,8 +2,11 @@ import { useMutation } from '@tanstack/react-query';
 import { fetchInstantBuyData } from '../../axios/auctionDetail/InstantBuy';
 import { Button, useToast } from '@chakra-ui/react';
 import { AxiosError } from 'axios';
+import { authState } from '../../recoil/atom/authAtom';
+import { useRecoilState } from 'recoil';
 
 const InstantBuyForm = ({ auctionId }) => {
+  const [auth] = useRecoilState(authState);
   const toast = useToast();
 
   // useMutation 훅을 사용하여 API 요청을 관리
@@ -37,7 +40,7 @@ const InstantBuyForm = ({ auctionId }) => {
   });
 
   return (
-    <Button colorScheme="blackAlpha" w="full" mt={2} onClick={() => mutate()}>
+    <Button colorScheme="blue" w="full" mt={2} onClick={() => mutate()} isDisabled={!auth}>
       즉시 구매
     </Button>
   );
