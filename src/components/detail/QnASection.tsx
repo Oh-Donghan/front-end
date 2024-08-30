@@ -11,13 +11,13 @@ import {
 } from '@chakra-ui/react';
 import { useRef } from 'react';
 import QnAModal from './modal/QnAModal';
-import QnAAnswer from './modal/QnAAnswer';
-import QnAAnswerFix from './modal/QnAAnswerFix';
+// import QnAAnswer from './modal/QnAAnswer';
+// import QnAAnswerFix from './modal/QnAAnswerFix';
 
 export default function QnaSection() {
   const qnaDisclosure = useDisclosure();
-  const qnaAnswer = useDisclosure();
-  const qnaAnswerFix = useDisclosure();
+  // const qnaAnswer = useDisclosure();
+  // const qnaAnswerFix = useDisclosure();
   const initialRef = useRef(null);
 
   return (
@@ -27,12 +27,12 @@ export default function QnaSection() {
         isOpen={qnaDisclosure.isOpen}
         initialRef={initialRef}
       />
-      <QnAAnswer onClose={qnaAnswer.onClose} isOpen={qnaAnswer.isOpen} initialRef={initialRef} />
+      {/* <QnAAnswer onClose={qnaAnswer.onClose} isOpen={qnaAnswer.isOpen} initialRef={initialRef} />
       <QnAAnswerFix
         onClose={qnaAnswerFix.onClose}
         isOpen={qnaAnswerFix.isOpen}
         initialRef={initialRef}
-      />
+      /> */}
 
       <Box flex={1}>
         <Flex justify="space-between" align="center" py={4}>
@@ -56,23 +56,6 @@ export default function QnaSection() {
                 <AccordionButton>
                   <Box flex="1" textAlign="left">
                     Section 1 title - 아이디1**
-                    <Text
-                      as="span"
-                      onClick={e => {
-                        e.stopPropagation();
-                        qnaAnswer.onOpen();
-                      }}
-                      fontSize="sm"
-                      border="1px solid"
-                      borderColor="black"
-                      borderRadius="4px"
-                      px="2"
-                      py="1"
-                      cursor="pointer"
-                      ml="6px"
-                    >
-                      답글 달기
-                    </Text>
                   </Box>
                   <AccordionIcon />
                 </AccordionButton>
@@ -89,23 +72,6 @@ export default function QnaSection() {
                 <AccordionButton>
                   <Box flex="1" textAlign="left">
                     Section 2 title - 아이디2**
-                    <Text
-                      as="span"
-                      onClick={e => {
-                        e.stopPropagation();
-                        qnaAnswerFix.onOpen();
-                      }}
-                      fontSize="sm"
-                      border="1px solid"
-                      borderColor="black"
-                      borderRadius="4px"
-                      px="2"
-                      py="1"
-                      cursor="pointer"
-                      ml="6"
-                    >
-                      답글 수정
-                    </Text>
                   </Box>
                   <AccordionIcon />
                 </AccordionButton>
