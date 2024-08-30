@@ -1,4 +1,4 @@
-import axiosInstance from '../../instances';
+import axiosInstance from '../../../axios/instance';
 
 export const fetchRechargeHistoryData = async (
   page: number,
