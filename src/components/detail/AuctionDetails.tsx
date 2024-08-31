@@ -1,6 +1,6 @@
 import { Box, Flex, Text, Button, Input, Badge, useToast } from '@chakra-ui/react';
 import Rating from './Rating';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { fetchAuctionDetailData } from '../../axios/auctionDetail/auctionDetail';
 import { formatPrice } from '../../utils/formatPrice';
 import { useEffect, useRef, useState } from 'react';
@@ -11,9 +11,11 @@ import { useRecoilState } from 'recoil';
 import { authState } from '../../recoil/atom/authAtom';
 import Timer from '../main/timer/Timer';
 import maskUserId from '../../utils/maskUserId';
+import FlipNumbers from 'react-flip-numbers';
 
 const AuctionDetails = ({ auctionId }) => {
   const [auth] = useRecoilState(authState);
+  const queryClient = useQueryClient();
   const memberId = localStorage.getItem('memberId');
   const bidPriceRef = useRef(null);
   const toast = useToast();
@@ -40,6 +42,8 @@ const AuctionDetails = ({ auctionId }) => {
       // 입찰 성공 수신
       stompClient.subscribe(`/sub/auction/${auctionId}`, message => {
         console.log('Bid successful:', message.body);
+        // 새로운 입찰 정보가 들어오면 쿼리를 무효화하여 데이터를 새로고침
+        queryClient.invalidateQueries({ queryKey: ['detail', auctionId] });
         return toastRef.current({
           title: '입찰 성공',
           description: '성공적으로 입찰 되었습니다.',
@@ -89,7 +93,7 @@ const AuctionDetails = ({ auctionId }) => {
     return () => {
       stompClient.deactivate(); // 컴포넌트 언마운트 시 WebSocket 연결 종료
     };
-  }, [auctionId, memberId]);
+  }, [auctionId, memberId, queryClient]);
 
   const handleBidSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -191,14 +195,23 @@ const AuctionDetails = ({ auctionId }) => {
           <Text fontSize={{ base: 'sm', sm: 'md', md: 'lg' }} color="gray.700">
             현재 입찰가
           </Text>
-          <Text
+          <Flex
             fontSize={{ base: 'md', sm: 'lg', md: '2xl' }}
             color={'#3182ce'}
             fontWeight="bold"
             pl="10px"
           >
-            {data?.currentPrice ? `${formatPrice(data.currentPrice)}원` : '가격 정보 없음'}
-          </Text>
+            <FlipNumbers
+              height={17.5}
+              width={13}
+              color="rgb(49, 130, 206)"
+              background="white"
+              play
+              perspective={100}
+              numbers={formatPrice(data.currentPrice)}
+            />
+            <Text>원</Text>
+          </Flex>
         </Flex>
         <Flex alignItems="end">
           <Text fontSize={{ base: 'sm', sm: 'md', md: 'lg' }} color="gray.700">
