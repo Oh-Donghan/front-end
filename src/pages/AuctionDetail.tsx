@@ -43,7 +43,7 @@ const AuctionDetail = () => {
       // 새로 본 경매를 리스트에 추가
       const updatedRecentAuctions = [
         recentAuction,
-        ...recentAuctions.filter(item => item.id !== id),
+        ...recentAuctions.filter((item: { id: number }) => item.id !== id),
       ].slice(0, 10); // 최대 10개까지만 저장
 
       localStorage.setItem(memberId, JSON.stringify(updatedRecentAuctions));
