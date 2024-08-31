@@ -6,11 +6,28 @@ export default function ViewedAuctionList() {
   const [datas, setDatas] = useState([]);
 
   useEffect(() => {
-    // localStorage에서 데이터 가져오기
-    const storedData = localStorage.getItem('null');
-    if (storedData) {
-      console.log(storedData);
-      setDatas(JSON.parse(storedData));
+    const memberId = localStorage.getItem('memberId');
+    let storedData;
+    if (memberId) {
+      storedData = localStorage.getItem(memberId);
+    } else {
+      storedData = localStorage.getItem('null');
+    }
+
+    // JSON 형식의 데이터만 파싱
+    try {
+      const parsedData = JSON.parse(storedData);
+
+      // parsedData가 배열인 경우에만 상태로 설정
+      if (Array.isArray(parsedData)) {
+        setDatas(parsedData);
+      } else {
+        // JSON 형식이 아닌 경우에는 처리하지 않음
+        console.error('Stored data is not a valid JSON array.');
+      }
+    } catch (error) {
+      console.error('Error parsing stored data:', error);
+      // JSON 파싱에 실패하면 그냥 처리하지 않음
     }
   }, []);
 

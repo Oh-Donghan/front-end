@@ -128,6 +128,9 @@ export default function Nav() {
                 <li className="mr-4 cursor-pointer" onClick={signupDisclosure.onOpen}>
                   회원가입
                 </li>
+                <li className="mr-4 cursor-pointer">
+                  <ViewedAuctionModal />
+                </li>
                 <li>
                   <Button
                     colorScheme="blue"
