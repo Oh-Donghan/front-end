@@ -92,7 +92,7 @@ const AuctionDetail = () => {
       </Flex>
       <Flex gap="8" direction={{ base: 'column', md: 'row' }}>
         {/* Bids Section */}
-        <BidList />
+        <BidList auctionId={auctionId} />
 
         {/* Q&A Section */}
         <QnASection qna={data?.askList} />
