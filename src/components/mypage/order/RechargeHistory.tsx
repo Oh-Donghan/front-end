@@ -32,6 +32,8 @@ export default function RechargeHistory() {
     placeholderData: keepPreviousData,
   });
 
+  console.log('dataa:', data);
+
   const handlePageChange = (page: number) => {
     setParams(prev => ({ ...prev, currentPage: page }));
   };

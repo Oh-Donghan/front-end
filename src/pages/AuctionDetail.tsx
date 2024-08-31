@@ -7,14 +7,48 @@ import QnASection from '../components/detail/QnASection';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { fetchAuctionDetailData } from '../axios/auctionDetail/auctionDetail';
+import { useEffect } from 'react';
 
 const AuctionDetail = () => {
   const { id: auctionId } = useParams();
+  const memberId = localStorage.getItem('memberId');
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['detail', auctionId],
     queryFn: () => fetchAuctionDetailData(auctionId),
   });
+
+  console.log('데이터', data);
+
+  // 로컬에 내가본 경매 정보 저장
+  useEffect(() => {
+    if (data) {
+      // 필요한 데이터 추출
+      const auctionState = data.auctionState;
+      const thumbnailImage = data.imageList.find(image => image.imageType === 'THUMBNAIL');
+      const title = data.productName;
+      const id = data.id;
+
+      // 로컬 스토리지에 저장
+      const recentAuction = {
+        auctionState,
+        thumbnailUrl: thumbnailImage.imageUrl, // 해당 이미지의 URL을 저장
+        title,
+        id,
+      };
+
+      // 기존 저장된 경매 리스트 불러오기
+      const recentAuctions = JSON.parse(localStorage.getItem(memberId)) || [];
+
+      // 새로 본 경매를 리스트에 추가
+      const updatedRecentAuctions = [
+        recentAuction,
+        ...recentAuctions.filter(item => item.id !== id),
+      ].slice(0, 10); // 최대 10개까지만 저장
+
+      localStorage.setItem(memberId, JSON.stringify(updatedRecentAuctions));
+    }
+  }, [data, memberId]);
 
   if (isLoading) {
     <div>Data Loading...</div>;
