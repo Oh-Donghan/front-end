@@ -1,5 +1,4 @@
 import {
-  Avatar,
   Box,
   Button,
   Flex,
@@ -11,7 +10,6 @@ import {
   Text,
 } from '@chakra-ui/react';
 import MyInfoTable from './MyInfoTable';
-// import Calendar from '../calendar/Calendar';
 
 export default function MyInfo() {
   return (
@@ -28,7 +26,6 @@ export default function MyInfo() {
         justifyContent="center"
         alignItems={{ base: 'center', md: 'flex-start' }}
       >
-        <Avatar width={{ base: '80px', md: '120px' }} height={{ base: '80px', md: '120px' }} />
         <Flex
           direction="column"
           gap={4}
@@ -62,7 +59,6 @@ export default function MyInfo() {
         <Text fontSize="lg" fontWeight="bold">
           입찰 내역
         </Text>
-        {/* <Calendar /> */}
       </Flex>
       {/* 테이블 */}
       <MyInfoTable />
