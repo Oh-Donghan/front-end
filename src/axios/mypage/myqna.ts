@@ -56,9 +56,15 @@ interface IQnAResponse {
   empty: boolean;
 }
 
-export const fetchQnAAskData = async (): Promise<IQnAResponse> => {
+export const fetchMyQnAData = async ({ page, size }): Promise<IQnAResponse> => {
   try {
-    const response = await axiosInstance.get<IQnAResponse>('api/asks');
+    const response = await axiosInstance.get<IQnAResponse>('api/asks', {
+      params: {
+        page,
+        size,
+      },
+    });
+    console.log('data::', response.data);
     return response.data;
   } catch (error) {
     console.error('Error fetching auction details:', error);

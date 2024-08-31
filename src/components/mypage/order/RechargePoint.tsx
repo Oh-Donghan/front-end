@@ -1,6 +1,7 @@
 import { Box, Flex, Spinner, Text } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import { fetchCurrentPoint } from '../../../axios/auctionDetail/currentPoint';
+import { formatPrice } from '../../../utils/formatPrice';
 
 export default function RechargePoint() {
   const { data, isLoading, isError } = useQuery({
@@ -31,7 +32,7 @@ export default function RechargePoint() {
       marginBottom={'8px'}
     >
       <Text fontSize={{ base: 'sm', md: 'xl' }}>보유 포인트</Text>
-      <Box fontSize={{ base: 'lg', md: '3xl' }}>{data?.pointAmount}P</Box>
+      <Box fontSize={{ base: 'lg', md: '3xl' }}>{formatPrice(data?.pointAmount)}P</Box>
     </Flex>
   );
 }

@@ -102,7 +102,7 @@ export default function OrderTable({ posts }) {
                         paddingY={{ base: '6px', md: '20px' }}
                         fontSize={fontSize}
                       >
-                        {item.buyerId}
+                        {isBuyPage ? item.sellerId : item.buyerId}
                       </Box>
                       <Box
                         flex="1"
@@ -162,8 +162,14 @@ export default function OrderTable({ posts }) {
                         </Box>
                         <Box className="flex flex-col gap-6">
                           <p className="flex flex-col gap-1">
-                            <strong>{isBuyPage ? '판매자' : '구매자'} 이메일</strong>{' '}
-                            {item.sellerEmail}
+                            <strong>거래 유형</strong>{' '}
+                            {item.buyType === 'SUCCESSFUL_BID'
+                              ? '낙찰'
+                              : item.buyType === 'NO_BUY'
+                                ? '구매자 없음'
+                                : item.buyType === 'INSTANT'
+                                  ? '즉시 구매'
+                                  : '알 수 없음'}
                           </p>
                           <p className="flex flex-col gap-1">
                             <strong>{isBuyPage ? '구매' : '판매'} 날짜</strong>{' '}

@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
-import { Text, Box } from '@chakra-ui/react';
+import { Text, Box, Flex } from '@chakra-ui/react';
 import { fetchCurrentPoint } from '../../axios/auctionDetail/currentPoint';
+import { formatPrice } from '../../utils/formatPrice';
 
 const CurrentPoint = () => {
   const { data, isLoading, isError } = useQuery({
@@ -20,9 +21,12 @@ const CurrentPoint = () => {
 
   // 데이터가 정상적으로 로드된 경우
   return (
-    <Text color="gray.600" fontSize={{ base: 'lg', md: 'xl' }}>
-      사용 가능 포인트: {data?.pointAmount}P
-    </Text>
+    <Flex gap={2} alignItems="center">
+      <Text color="gray.600">사용 가능 포인트:</Text>
+      <Text color="#3182ce" fontWeight="bold" fontSize={{ base: 'lg', md: '2xl' }}>
+        {formatPrice(data?.pointAmount)}P
+      </Text>
+    </Flex>
   );
 };
 
