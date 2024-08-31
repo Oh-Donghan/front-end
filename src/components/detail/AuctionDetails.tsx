@@ -193,6 +193,10 @@ const AuctionDetails = ({ auctionId }) => {
         <Text fontSize="lg" mb={2}>
           {data?.productName}
         </Text>
+        {/* 컬러값 */}
+        <Text fontSize="md" color="gray.600">
+          {data?.productColor}
+        </Text>
         <Text fontSize="md" color="gray.600">
           {data?.productDescription}
         </Text>
