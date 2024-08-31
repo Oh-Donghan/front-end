@@ -24,8 +24,7 @@ export default function AuctionMyPage() {
     { icon: <FaShoppingCart />, label: '구매 내역', path: '/mypage/buy' },
     { icon: <RiDiscountPercentFill />, label: '판매 내역', path: '/mypage/sell' },
     { icon: <SiLightning />, label: '충전 내역', path: '/mypage/charge' },
-    { icon: <SiLightning />, label: '질문 내역', path: '/mypage/ask' },
-    { icon: <SiLightning />, label: '답변 내역', path: '/mypage/answer' },
+    { icon: <SiLightning />, label: 'QnA', path: '/mypage/QnA' },
   ];
 
   const handleItemClick = (path: string) => {
