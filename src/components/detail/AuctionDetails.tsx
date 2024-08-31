@@ -3,12 +3,14 @@ import Rating from './Rating';
 import { useQuery } from '@tanstack/react-query';
 import { fetchAuctionDetailData } from '../../axios/auctionDetail/auctionDetail';
 import { formatPrice } from '../../utils/formatPrice';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Client } from '@stomp/stompjs';
 import InstantBuyForm from './InstantBuyForm';
 import CurrentPoint from './CurrentPoint';
 import { useRecoilState } from 'recoil';
 import { authState } from '../../recoil/atom/authAtom';
+import Timer from '../main/timer/Timer';
+import maskUserId from '../../utils/maskUserId';
 
 const AuctionDetails = ({ auctionId }) => {
   const [auth] = useRecoilState(authState);
@@ -17,11 +19,14 @@ const AuctionDetails = ({ auctionId }) => {
   const toast = useToast();
   const toastRef = useRef(toast);
   const stompClientRef = useRef(null);
+  const [isFinished, setIsFinished] = useState(false);
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['detail', auctionId],
     queryFn: () => fetchAuctionDetailData(auctionId),
   });
+
+  console.log('data!!:', data);
 
   useEffect(() => {
     const stompClient = new Client({
@@ -159,57 +164,77 @@ const AuctionDetails = ({ auctionId }) => {
     <div>fetch Error...</div>;
   }
 
-  return (
+  if (isFinished) {
+    toast({
+      description: '경매가 종료 되었습니다.',
+      status: 'error',
+      duration: 3000,
+      isClosable: true,
+    });
+  }
+
+  return isLoading ? (
+    '로딩'
+  ) : (
     <Box flex="1">
-      <Flex gap={4} alignItems="center">
+      <Flex gap={4} alignItems="center" wrap="wrap">
         <Text fontSize={{ base: '2xl', md: '3xl' }} fontWeight="bold">
           {data?.title}
         </Text>
         <Text fontSize={{ base: 'lg', md: 'xl' }} color="gray.600">
-          6:22:42:21
+          <Timer endedAt={data?.endedAt} setIsFinished={setIsFinished} />
         </Text>
       </Flex>
 
       <Flex gap={{ base: '4', md: '8' }} mt={4}>
         <Flex alignItems="end">
-          <Text fontSize={{ base: 'sm', sm: 'md', md: 'lg' }} color="gray.500">
+          <Text fontSize={{ base: 'sm', sm: 'md', md: 'lg' }} color="gray.700">
             현재 입찰가
           </Text>
-          <Text fontSize={{ base: 'md', sm: 'lg', md: 'xl' }} fontWeight="bold" pl="10px">
+          <Text
+            fontSize={{ base: 'md', sm: 'lg', md: '2xl' }}
+            color={'#3182ce'}
+            fontWeight="bold"
+            pl="10px"
+          >
             {data?.currentPrice ? `${formatPrice(data.currentPrice)}원` : '가격 정보 없음'}
           </Text>
         </Flex>
         <Flex alignItems="end">
-          <Text fontSize={{ base: 'sm', sm: 'md', md: 'lg' }} color="gray.500">
+          <Text fontSize={{ base: 'sm', sm: 'md', md: 'lg' }} color="gray.700">
             즉시 구매가
           </Text>
-          <Text fontSize={{ base: 'md', sm: 'lg', md: 'xl' }} fontWeight="bold" pl="10px">
+          <Text
+            fontSize={{ base: 'md', sm: 'lg', md: '2xl' }}
+            color={'#3182ce'}
+            fontWeight="bold"
+            pl="10px"
+          >
             {data?.instantPrice ? `${formatPrice(data.instantPrice)}원` : '가격 정보 없음'}
           </Text>
         </Flex>
       </Flex>
 
-      <Box mt={4}>
-        <Text fontSize="lg" mb={2}>
-          {data?.productName}
+      <Flex direction="column" gap={2} mt={4}>
+        <Text fontSize="lg">상품명: {data?.productName}</Text>
+        <Text>판매자: {maskUserId(data?.seller.memberId)}</Text>
+        <Text fontSize="md" color="gray.600">
+          {data?.productDescription}
         </Text>
         {/* 컬러값 */}
         <Text fontSize="md" color="gray.600">
-          {data?.productColor}
-        </Text>
-        <Text fontSize="md" color="gray.600">
-          {data?.productDescription}
+          색상: {data?.productColor}
         </Text>
         <Flex mt={4} gap={4} direction="column">
           <Flex gap={6}>
             <Box>
-              <Text fontWeight="bold">거래 방법</Text>
-              <Badge fontSize="16px" variant="outline" colorScheme="green">
+              <Text>거래 방법</Text>
+              <Badge fontSize="16px" colorScheme="blue">
                 {getReceiveTypeText(data?.receiveType)}
               </Badge>
             </Box>
             <Box>
-              <Text fontWeight="bold">택배비 지불 방법</Text>
+              <Text>택배비 지불 방법</Text>
               <Badge fontSize="16px" variant="outline" colorScheme="green">
                 {getDeliveryTypeText(data?.deliveryType)}
               </Badge>
@@ -218,7 +243,7 @@ const AuctionDetails = ({ auctionId }) => {
           {/* 별점 컴포넌트 */}
           <Rating rate={data?.productStatus} />
         </Flex>
-      </Box>
+      </Flex>
 
       <Box mt={4}>
         <Flex justifyContent="end">
