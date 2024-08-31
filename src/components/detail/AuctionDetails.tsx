@@ -89,6 +89,16 @@ const AuctionDetails = ({ auctionId }) => {
   const handleBidSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
+    if (data.seller.memberId === memberId) {
+      toast({
+        description: '본인의 경매는 입찰할 수 없습니다.',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
     const bidPrice = bidPriceRef.current?.value;
     console.log('입력된 입찰 금액:', bidPrice);
 
@@ -166,7 +176,7 @@ const AuctionDetails = ({ auctionId }) => {
             현재 입찰가
           </Text>
           <Text fontSize={{ base: 'md', sm: 'lg', md: 'xl' }} fontWeight="bold" pl="10px">
-            {data?.startPrice ? `${formatPrice(data.startPrice)}원` : '가격 정보 없음'}
+            {data?.currentPrice ? `${formatPrice(data.currentPrice)}원` : '가격 정보 없음'}
           </Text>
         </Flex>
         <Flex alignItems="end">
