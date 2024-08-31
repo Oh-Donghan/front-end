@@ -28,7 +28,7 @@ interface IPageable {
 }
 
 // 전체 응답 구조의 인터페이스 정의
-interface IBidHistoryResponse {
+export interface IBidHistoryResponse {
   totalPages: number;
   totalElements: number;
   first: boolean;
@@ -42,9 +42,16 @@ interface IBidHistoryResponse {
   empty: boolean;
 }
 
-export const fetchBidData = async (): Promise<IBidHistoryResponse> => {
+export const fetchBidData = async ({ page, size }): Promise<IBidHistoryResponse> => {
   try {
-    const response = await axiosInstance.get<IBidHistoryResponse>('/api/bids');
+    const response = await axiosInstance.get<IBidHistoryResponse>('/api/bids', {
+      params: {
+        page,
+        size,
+      },
+    });
+    console.log('데이타:', response.data);
+
     return response.data;
   } catch (error) {
     console.error('Error fetching auction details:', error);
