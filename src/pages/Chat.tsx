@@ -13,7 +13,8 @@ export default function Chat() {
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   const searchParams = new URLSearchParams(location.search);
-  const roomId = searchParams.get('id');
+  const roomId = searchParams.get('roomId');
+  const memberId = localStorage.getItem('memberId');
 
   const scrollBottom = () => {
     if (messagesEndRef.current) {
@@ -26,13 +27,15 @@ export default function Chat() {
   }, [messages]);
 
   useEffect(() => {
+    const accessToken = localStorage.getItem('accessToken');
+
     const client = new Client({
-      brokerURL: 'wss://your-server-url/chat-ws',
+      brokerURL: 'wss://dddang.store/chat-ws',
       reconnectDelay: 5000,
       heartbeatIncoming: 4000,
       heartbeatOutgoing: 4000,
       connectHeaders: {
-        Authorization: 'Bearer your-jwt-token',
+        Authorization: `Bearer ${accessToken}`,
       },
       onConnect: () => {
         client.subscribe(`/sub/chat/room/${roomId}`, (message: IMessage) => {
@@ -59,10 +62,15 @@ export default function Chat() {
         destination: '/pub/chat/message',
         body: JSON.stringify({
           room_id: roomId,
-          memberId: 'yourMemberId',
+          memberId: memberId,
           message,
         }),
       });
+      // 새 메시지를 상태에 추가
+      setMessages(prevMessages => [
+        ...prevMessages,
+        { roomId, senderId: memberId, message, createdAt: new Date().toLocaleString() },
+      ]);
     }
   };
 
@@ -81,18 +89,18 @@ export default function Chat() {
           overflow={'hidden'}
           boxShadow={'1px 1px 10px rgba(0,0,0,0.1)'}
         >
-          {/* 왼쪽 채팅 리스트 부분 */}
           <ChatLeftSection
             selectedChatId={selectedChatId}
             setSelectedChatId={setSelectedChatId}
             scrollBottom={scrollBottom}
           />
-          {/* 오른쪽 채팅 메시지 부분 */}
           <ChatRightSection
             ConfirmPurchaseDisclosure={ConfirmPurchaseDisclosure}
             messagesEndRef={messagesEndRef}
             messages={messages}
+            setMessages={setMessages} // messages를 업데이트하기 위한 setter 함수 전달
             sendMessage={sendMessage}
+            roomId={roomId}
           />
         </Flex>
       </Flex>

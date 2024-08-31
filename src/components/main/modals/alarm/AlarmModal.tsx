@@ -11,6 +11,7 @@ import {
 } from '@chakra-ui/react';
 import { useRef, useState } from 'react';
 import AlarmList from './AlarmList';
+import NotificationSubscriber from './NotificationSubscriber';
 
 export default function AlarmModal() {
   const initialRef = useRef(null);
@@ -27,6 +28,7 @@ export default function AlarmModal() {
 
   return (
     <Box ref={initialRef} position={'relative'} zIndex={'50'}>
+      {/* <NotificationSubscriber /> */}
       <Popover
         placement={isLargerThan480 ? 'bottom-end' : 'bottom'}
         closeOnBlur={true}
@@ -37,7 +39,7 @@ export default function AlarmModal() {
         <PopoverTrigger>
           <span>알림</span>
         </PopoverTrigger>
-        <PopoverContent width={isLargerThan480 ? '650px' : '90vw'}>
+        <PopoverContent width={isLargerThan480 ? '640px' : '90vw'}>
           <PopoverArrow />
           <PopoverHeader
             display={'flex'}

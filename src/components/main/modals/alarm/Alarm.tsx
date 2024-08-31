@@ -37,7 +37,14 @@ export default function Alarm({ type, content, createdAt, auctionId }) {
       >
         <Flex alignItems={'center'}>
           <img src={logo} alt="alarm logo" className="w-7 h-6.5 mr-3.5" />
-          <Text fontSize={['14px', '16px']}>{content}</Text>
+          <Text
+            fontSize={['14px', '16px']}
+            overflow="hidden"
+            whiteSpace="nowrap"
+            textOverflow="ellipsis"
+          >
+            {content}
+          </Text>
         </Flex>
         <Text fontSize={['12px', '14px']} fontWeight={'normal'} color={'rgba(150,150,150,1)'}>
           {timeElapsed}

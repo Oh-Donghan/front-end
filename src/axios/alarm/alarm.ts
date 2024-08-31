@@ -1,12 +1,8 @@
 import axiosInstance from '../instance';
 
-export const getAlarms = async ({ page }: { page: number }) => {
+export const getAlarms = async () => {
   try {
-    const response = await axiosInstance.get(`/api/members/notification`, {
-      params: {
-        page,
-      },
-    });
+    const response = await axiosInstance.get(`/api/members/notification`);
     return response.data;
   } catch (error) {
     console.error('Error fetching alarms:', error);

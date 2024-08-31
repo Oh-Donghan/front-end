@@ -1,5 +1,6 @@
 import { Flex, Text } from '@chakra-ui/react';
 import default_profile from '../../../assets/image/modal/chat/profile.png';
+import { timeAgo } from '../../../utils/dateFormat';
 
 export default function ChatItem({ chat, isSelected, onSelect }) {
   return (
@@ -24,10 +25,10 @@ export default function ChatItem({ chat, isSelected, onSelect }) {
             fontWeight={'bold'}
             marginBottom={'3px'}
           >
-            {chat.name}
+            {chat.auction.title}
           </Text>
           <Text fontSize={12} textColor={'rgba(160,160,160,1)'}>
-            {chat.message}
+            {/* 채팅 마지막 메세지 */}
           </Text>
         </div>
       </Flex>
@@ -38,7 +39,7 @@ export default function ChatItem({ chat, isSelected, onSelect }) {
           textColor={'rgba(160,160,160,1)'}
           marginBottom={'6px'}
         >
-          {chat.time}
+          {timeAgo(chat.createdAt)}
         </Text>
         <Flex
           className="bg-violet-400 text-white font-thin w-4 h-4"
@@ -47,7 +48,7 @@ export default function ChatItem({ chat, isSelected, onSelect }) {
           fontSize={11}
           borderRadius={'50%'}
         >
-          {chat.unread}
+          {/* 채팅 읽었는지 아닌지 표시*/}
         </Flex>
       </Flex>
     </Flex>
