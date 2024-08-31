@@ -18,7 +18,7 @@ import { Link } from 'react-router-dom';
 import { MdLogout } from 'react-icons/md';
 
 export default function MyInfoCategory({
-  menuItem,
+  menuItem = [],
   handleItemClick,
   changePassword,
   deleteAccount,
