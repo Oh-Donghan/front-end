@@ -10,8 +10,7 @@ import PurchaseHistory from '../components/mypage/order/PurchaseHistory';
 import SellHistory from '../components/mypage/order/SellHistory';
 import RechargeHistory from '../components/mypage/order/RechargeHistory';
 import Payment from '../pages/Payment';
-import QnAAnswerList from '../components/mypage/order/QnAAnswerList';
-import QnAAskList from '../components/mypage/order/QnAAskList';
+import QnA from '../components/mypage/order/QnA';
 
 export const router = createBrowserRouter([
   {
@@ -55,13 +54,10 @@ export const router = createBrowserRouter([
             path: 'charge',
             element: <RechargeHistory />,
           },
+
           {
-            path: 'answer',
-            element: <QnAAnswerList />,
-          },
-          {
-            path: 'ask',
-            element: <QnAAskList />,
+            path: 'QnA',
+            element: <QnA />,
           },
         ],
       },
