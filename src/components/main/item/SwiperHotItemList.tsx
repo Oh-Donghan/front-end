@@ -24,7 +24,7 @@ export default function SwiperHotItemList({ isCategoryLoading }: SwiperHotItemLi
   const auctionArray = useRecoilValue(auctionState);
 
   const { data, isLoading } = useQuery({
-    queryKey: ['items', category, 'top5'],
+    queryKey: ['items', category, subCategory, 'top5'],
     queryFn: () => getAuctionHotItems({ category, subCategory }),
   });
 
@@ -53,7 +53,7 @@ export default function SwiperHotItemList({ isCategoryLoading }: SwiperHotItemLi
 
   return isSlider ? (
     <>
-      {data?.length === 0 ? null : (
+      {data.length === 0 ? null : (
         <Box minW="375px" mt={{ base: 12, sm: '75px' }}>
           <Flex alignItems="center" mb={{ base: '4', sm: '5' }}>
             <Text fontSize={{ base: 'xl', sm: '1.5rem' }} fontWeight="bold">
@@ -70,7 +70,7 @@ export default function SwiperHotItemList({ isCategoryLoading }: SwiperHotItemLi
           >
             {data?.map((item, i) => (
               <SwiperSlide key={item.id}>
-                <ItemCard type={'hot'} item={item} rank={i + 1} />
+                <ItemCard type={'hot'} item={item} rank={i + 1} auctionArray={auctionArray} />
               </SwiperSlide>
             ))}
           </Swiper>
@@ -79,7 +79,7 @@ export default function SwiperHotItemList({ isCategoryLoading }: SwiperHotItemLi
     </>
   ) : (
     <>
-      {data?.length === 0 ? null : (
+      {data.length === 0 ? null : (
         <Box minW="375px" mt={{ base: 12, sm: '75px' }}>
           <Flex alignItems="center" mb={{ base: '4', sm: '5' }}>
             <Text fontSize={{ base: 'xl', sm: '1.5rem' }} fontWeight="bold">
@@ -97,7 +97,7 @@ export default function SwiperHotItemList({ isCategoryLoading }: SwiperHotItemLi
           >
             {data?.map((item, i) => (
               <GridItem key={item.id}>
-                <ItemCard type={'hot'} item={item} rank={i + 1} />
+                <ItemCard type={'hot'} item={item} rank={i + 1} auctionArray={auctionArray} />
               </GridItem>
             ))}
           </Grid>

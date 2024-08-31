@@ -11,7 +11,6 @@ import {
   Flex,
   Badge,
   Box,
-  useColorModeValue,
 } from '@chakra-ui/react';
 import Timer from '../timer/Timer';
 import { HiUser } from 'react-icons/hi';
@@ -25,7 +24,6 @@ export default function ItemCard({ rank, item, type, auctionArray }: ItemCardPro
   const navigate = useNavigate();
   const [isFinished, setIsFinished] = useState(false);
   const [currentPrice, setCurrentPrice] = useState(item.currentPrice);
-  const [priceChanged, setPriceChanged] = useState(false);
 
   const moveDetail = () => {
     if (isFinished) return;
@@ -43,7 +41,6 @@ export default function ItemCard({ rank, item, type, auctionArray }: ItemCardPro
       // 현재 가격 업데이트
       if (currentPrice !== matchingAuction.bidAmount) {
         setCurrentPrice(matchingAuction.bidAmount);
-        setPriceChanged(true); // 가격 변경 표시
       }
     }
   }, [auctionArray, item.id, currentPrice]);

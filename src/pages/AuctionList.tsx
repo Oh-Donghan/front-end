@@ -15,11 +15,14 @@ import { useQuery } from '@tanstack/react-query';
 import { getCategories } from '../axios/category/categories';
 import { useEffect } from 'react';
 import { Client } from '@stomp/stompjs';
+import { auctionState } from '../recoil/atom/auctionPriceAtom';
+import { useRecoilState } from 'recoil';
 
 export default function AuctionList() {
   const location = useLocation();
 
   const showSearchInputBelow = useBreakpointValue({ base: true, lg: false }, { fallback: 'lg' });
+  const [auctionArray, setAuctionArray] = useRecoilState(auctionState);
 
   const searchParams = new URLSearchParams(location.search);
   const category = searchParams.get('mainCategory') || '전체';
@@ -52,6 +55,13 @@ export default function AuctionList() {
       stompClient.subscribe('/sub/auction-all', message => {
         const bidData = JSON.parse(message.body);
         console.log('Received bid data:', bidData);
+        setAuctionArray(prev => {
+          // 기존 배열에서 동일한 auctionId를 가진 객체 제거
+          const updatedArray = prev.filter(item => item.auctionId !== bidData.auctionId);
+
+          // 새로운 bidData를 추가한 배열 반환
+          return [...updatedArray, bidData];
+        });
       });
     };
 
@@ -71,6 +81,10 @@ export default function AuctionList() {
       console.log('WebSocket disconnected');
     };
   }, []);
+
+  useEffect(() => {
+    console.log('log:', JSON.stringify(auctionArray, null, 2));
+  }, [auctionArray]);
 
   const renderItemList = () => (
     <>

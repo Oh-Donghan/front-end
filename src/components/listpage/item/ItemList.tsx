@@ -7,6 +7,8 @@ import { getAuctionItems } from '../../../axios/auction/auctionItems';
 import ItemCardSkeleton from '../../../components/common/item/ItemCardSkeleton';
 import { useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import { auctionState } from '../../../recoil/atom/auctionPriceAtom';
+import { useRecoilValue } from 'recoil';
 
 interface SwiperHotItemListProps {
   isCategoryLoading?: boolean;
@@ -21,6 +23,7 @@ export default function ItemList({ isCategoryLoading }: SwiperHotItemListProps) 
   const search = searchParams.get('word') || undefined;
   const { ref, inView } = useInView();
   const skeletonArray = new Array(10).fill(null);
+  const auctionArray = useRecoilValue(auctionState);
 
   const gridTemplateColumns = useBreakpointValue({
     base: 'repeat(1, 1fr)', // 모바일에서 한 줄에 2개의 아이템
@@ -105,7 +108,7 @@ export default function ItemList({ isCategoryLoading }: SwiperHotItemListProps) 
                 page.content.map(item => {
                   return (
                     <GridItem key={item.id}>
-                      <ItemCard item={item} />
+                      <ItemCard item={item} auctionArray={auctionArray} />
                     </GridItem>
                   );
                 }),

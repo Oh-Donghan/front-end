@@ -23,21 +23,6 @@ export default function SwiperItemList({ isCategoryLoading }: SwiperHotItemListP
   const skeletonArray = new Array(5).fill(null);
   const auctionArray = useRecoilValue(auctionState);
 
-  // [
-  //   {
-  //     "bidStatus": "SUCCESS",
-  //     "auctionId": 43,
-  //     "memberId": "sdsd23",
-  //     "bidAmount": 5000
-  //   },
-  //   {
-  //     "bidStatus": "SUCCESS",
-  //     "auctionId": 42,
-  //     "memberId": "sdsd23",
-  //     "bidAmount": 4500
-  //   }
-  // ]
-
   const { data, isLoading } = useQuery({
     queryKey: ['items', category],
     queryFn: () =>
