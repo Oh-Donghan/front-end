@@ -40,6 +40,17 @@ export interface IAskList {
   writerId: string;
 }
 
+// Bid 항목의 인터페이스 정의
+interface IBidItem {
+  id: number; // 입찰 항목의 고유 ID
+  auctionId: number; // 경매의 고유 ID
+  auctionTitle: string; // 경매의 제목
+  bidPrice: number; // 입찰 가격
+  createdAt: string; // 입찰 생성 일시
+  memberId: string; // 입찰자의 고유 ID
+  thumbnailImageUrl: string; // 경매의 썸네일 이미지 URL
+}
+
 interface IAuctionItem {
   id: number;
   title: string;
@@ -60,7 +71,7 @@ interface IAuctionItem {
   seller: IDetailSeller;
   parentCategory: IDetailCategory;
   childCategory: IDetailCategory;
-  bidList: Array<unknown>; // Define a specific type if you know the structure of bids
+  bidList: IBidItem[]; // Define a specific type if you know the structure of bids
   askList: IAskList[]; // Define a specific type if you know the structure of asks
   imageList: IDetailImage[];
   createdAt: string;
