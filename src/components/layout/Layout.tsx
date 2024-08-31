@@ -13,7 +13,9 @@ export default function Layout() {
     location.pathname === '/mypage/myinfo' ||
     location.pathname === '/mypage/buy' ||
     location.pathname === '/mypage/sell' ||
-    location.pathname === '/mypage/charge';
+    location.pathname === '/mypage/charge' ||
+    location.pathname === '/mypage/answer' ||
+    location.pathname === '/mypage/ask';
 
   const hideFooter =
     location.pathname === '/mypage/myinfo' ||
@@ -23,7 +25,9 @@ export default function Layout() {
     location.pathname === '/rooms' ||
     location.pathname === '/payment' ||
     location.pathname === '/members/payment/approve' ||
-    location.pathname === '/members/payment/cancel';
+    location.pathname === '/members/payment/cancel' ||
+    location.pathname === '/mypage/answer' ||
+    location.pathname === '/mypage/ask';
 
   return (
     <>

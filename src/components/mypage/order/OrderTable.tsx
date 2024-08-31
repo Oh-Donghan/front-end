@@ -5,6 +5,7 @@ import {
   AccordionItem,
   AccordionPanel,
   Box,
+  Image,
   Table,
   Tbody,
   Td,
@@ -16,12 +17,21 @@ import {
 
 import { useLocation } from 'react-router-dom';
 import { formatPrice } from '../../../utils/formatPrice';
+import { formatDate } from '../../../utils/dateFormat';
 
 export default function OrderTable({ posts }) {
   const location = useLocation();
   const isBuyPage = location.pathname === '/mypage/buy';
 
+  console.log('dataaa:', posts);
+
   const fontSize = useBreakpointValue({ base: 'xs', md: 'sm', lg: 'md' });
+
+  const receiveTypeMapping = {
+    CONTACT: '대면 거래',
+    DELIVERY: '택배',
+    ALL: '모두 가능',
+  };
 
   if (!posts || posts.length === 0) {
     return <div>{isBuyPage ? '구매' : '판매'} 목록이 없습니다.</div>;
@@ -114,7 +124,7 @@ export default function OrderTable({ posts }) {
                         paddingY={{ base: '6px', md: '20px' }}
                         fontSize={fontSize}
                       >
-                        {item.saleDate}
+                        {item.saleDate.slice(0, 10)}
                       </Box>
                       <div className="absolute right-3">
                         <AccordionIcon />
@@ -130,7 +140,7 @@ export default function OrderTable({ posts }) {
                       >
                         <Box className="flex flex-col gap-6">
                           <p className="flex flex-col gap-1">
-                            <strong>수령 방법</strong> {item.receiveType}
+                            <strong>수령 방법</strong> {receiveTypeMapping[item.receiveType]}
                           </p>
                           <p className="flex flex-col gap-1">
                             <strong>상품명</strong> {item.productName}
@@ -141,13 +151,13 @@ export default function OrderTable({ posts }) {
                         </Box>
                         <Box className="flex flex-col gap-6">
                           <p className="flex flex-col gap-1">
-                            <strong>상태</strong> {item.productStatus}
+                            <strong>상태</strong> {item.productStatus}/5
                           </p>
                           <p className="flex flex-col gap-1">
-                            <strong>결제 금액</strong> {formatPrice(item.salePrice)}
+                            <strong>결제 금액</strong> {formatPrice(item.salePrice)}원
                           </p>
                           <p className="flex flex-col gap-1">
-                            <strong>입찰 시작가</strong> {item.startPrice}
+                            <strong>입찰 시작가</strong> {formatPrice(item.startPrice)}원
                           </p>
                         </Box>
                         <Box className="flex flex-col gap-6">
@@ -156,13 +166,21 @@ export default function OrderTable({ posts }) {
                             {item.sellerEmail}
                           </p>
                           <p className="flex flex-col gap-1">
-                            <strong>{isBuyPage ? '구매' : '판매'} 날짜</strong> {item.saleDate}
+                            <strong>{isBuyPage ? '구매' : '판매'} 날짜</strong>{' '}
+                            {formatDate(item.saleDate)}
                           </p>
                           <p className="flex flex-col gap-1">
-                            <strong>즉시 구매가</strong> {item.instantPrice}
+                            <strong>즉시 구매가</strong> {formatPrice(item.instantPrice)}원
                           </p>
                         </Box>
-                        <Box className="bg-stone-400"></Box>
+                        <Box className="bg-stone-400" width="100%" height="100%">
+                          <Image
+                            objectFit="cover"
+                            src={item.thumbnailUrl}
+                            width="100%"
+                            height="100%"
+                          />
+                        </Box>
                       </Box>
                     </AccordionPanel>
                   </AccordionItem>
