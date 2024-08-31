@@ -7,16 +7,25 @@ import {
   PopoverArrow,
   Box,
   Text,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { useRef } from 'react';
 import ViewedAuctionList from './ViewedAuctionList';
 
 export default function ViewedAuctionModal() {
+  const { onOpen, onClose, isOpen } = useDisclosure();
   const initialRef = useRef(null);
 
   return (
     <Box ref={initialRef} position={'relative'} zIndex={'50'}>
-      <Popover placement="bottom-end" closeOnBlur={true} trigger={'hover'}>
+      <Popover
+        placement="bottom-end"
+        closeOnBlur={true}
+        trigger={'hover'}
+        isOpen={isOpen}
+        onOpen={onOpen}
+        onClose={onClose}
+      >
         <PopoverTrigger>
           <span>최근 본 경매</span>
         </PopoverTrigger>
@@ -34,7 +43,7 @@ export default function ViewedAuctionModal() {
             </Text>
           </PopoverHeader>
           <PopoverBody padding={'0px'}>
-            <ViewedAuctionList />
+            {isOpen && <ViewedAuctionList />} {/* 모달이 열릴 때만 ViewedAuctionList를 렌더링 */}
           </PopoverBody>
         </PopoverContent>
       </Popover>

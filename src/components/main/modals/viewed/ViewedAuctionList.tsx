@@ -1,34 +1,18 @@
-import { Flex } from '@chakra-ui/react';
+import { Flex, Text } from '@chakra-ui/react';
 import ViewedAuction from './ViewedAuction';
+import { useEffect, useState } from 'react';
 
 export default function ViewedAuctionList() {
-  const datas = [
-    {
-      id: 1,
-      title: '메시 국대 유니폼',
-      ongoing: true,
-    },
-    {
-      id: 2,
-      title: '마이클 조던 농구화',
-      ongoing: true,
-    },
-    {
-      id: 3,
-      title: '삼천리 자전거',
-      ongoing: true,
-    },
-    {
-      id: 4,
-      title: '중고 유모차',
-      ongoing: false,
-    },
-    {
-      id: 5,
-      title: '다이슨 청소기',
-      ongoing: false,
-    },
-  ];
+  const [datas, setDatas] = useState([]);
+
+  useEffect(() => {
+    // localStorage에서 데이터 가져오기
+    const storedData = localStorage.getItem('null');
+    if (storedData) {
+      console.log(storedData);
+      setDatas(JSON.parse(storedData));
+    }
+  }, []);
 
   return (
     <Flex
@@ -42,9 +26,19 @@ export default function ViewedAuctionList() {
         'scrollbar-width': 'none', // Firefox
       }}
     >
-      {datas.map(data => {
-        return <ViewedAuction key={data.id} title={data.title} ongoing={data.ongoing} />;
-      })}
+      {datas.length !== 0 ? (
+        <>
+          {datas.map(data => {
+            return <ViewedAuction key={data.id} data={data} />;
+          })}
+        </>
+      ) : (
+        <Flex align={'center'} justify={'center'} w={'full'} height={'240px'}>
+          <Text fontWeight={'normal'} color={'rgba(70,70,70,1)'}>
+            존재하는 경매가 없습니다.
+          </Text>
+        </Flex>
+      )}
     </Flex>
   );
 }
