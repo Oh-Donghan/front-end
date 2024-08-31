@@ -1,35 +1,56 @@
-import { Box, Table, Tbody, Td, Tr, useBreakpointValue } from '@chakra-ui/react';
+import { Box, Table, Tbody, Td, Th, Thead, Tr, useBreakpointValue, Text } from '@chakra-ui/react';
 import { formatDate } from '../../../utils/dateFormat';
+import { formatPrice } from '../../../utils/formatPrice';
 
 export default function RechargeTable({ posts }) {
   const fontSize = useBreakpointValue({ base: 'xs', md: 'sm', lg: 'md' });
-  const tdPadding = useBreakpointValue({ base: '8px', md: '12px', lg: '16px' }); // 반응형 패딩 설정
+  const tdPadding = useBreakpointValue({ base: '4px', md: '8px', lg: '12px' }); // 패딩을 더 줄여서 간격을 조정
+  const thPadding = useBreakpointValue({ base: '8px', md: '12px', lg: '16px' }); // Thead의 패딩도 조정
 
   if (!posts || posts.length === 0) {
     return <div>거래 내역이 없습니다.</div>;
   }
 
-  console.log(posts);
-
   return (
-    <div className="overflow-y-scroll no-scrollbar h-full max-sm:h-72">
+    <Box overflowY="scroll" maxH="full" className="no-scrollbar h-full max-sm:h-72">
       <Table variant="simple" width="full" sx={{ tableLayout: 'fixed' }}>
+        <Thead>
+          <Tr>
+            <Th padding={thPadding} w="100px">
+              <Text fontSize={fontSize}>유형</Text>
+            </Th>
+            <Th padding={thPadding}>
+              <Text fontSize={fontSize} textAlign="center">
+                사용 시간
+              </Text>
+            </Th>
+            <Th padding={thPadding}>
+              <Text fontSize={fontSize} textAlign="center">
+                잔여 포인트
+              </Text>
+            </Th>
+            <Th padding={thPadding} isNumeric>
+              <Text fontSize={fontSize}>변경 포인트</Text>
+            </Th>
+          </Tr>
+        </Thead>
         <Tbody>
           {posts.map(item => (
             <Tr key={item.id}>
               <Td
-                w={{ base: '40px', md: '80px' }}
-                fontWeight={'bold'}
-                textAlign={'center'}
-                className={`${
+                w="80px" // Td의 너비를 Th와 맞추기
+                fontWeight="bold"
+                textAlign="center"
+                bgColor={
                   item.pointType === 'USE'
-                    ? 'bg-red-500 text-white'
+                    ? 'red.500'
                     : item.pointType === 'CHARGE'
-                      ? 'bg-green-500 text-white'
-                      : 'bg-blue-500 text-white'
-                }`} // pointType에 따른 배경색 및 텍스트 색상 변경
-                fontSize={fontSize} // 반응형 폰트 사이즈 적용
-                padding={tdPadding} // 반응형 패딩 적용
+                      ? 'green.500'
+                      : 'blue.500'
+                }
+                color="white"
+                fontSize={fontSize}
+                padding={tdPadding}
               >
                 {item.pointType === 'USE'
                   ? '사용'
@@ -37,27 +58,24 @@ export default function RechargeTable({ posts }) {
                     ? '충전'
                     : '판매 수익'}
               </Td>
-              <Td padding={tdPadding}>
-                <Box display="flex" justifyContent="space-between" fontSize={fontSize}>
-                  <Box>
-                    <span>{formatDate(item.createdAt)}</span>
-                  </Box>
-                  <Box textAlign="right" className="flex gap-8">
-                    <span className="block">{item.curPointAmount}P</span>
-                    <span
-                      className={`block w-24 ${
-                        item.pointAmount > 0 ? 'text-blue-600' : 'text-red-600'
-                      }`}
-                    >
-                      {item.pointAmount > 0 ? `+${item.pointAmount}` : item.pointAmount}P
-                    </span>
-                  </Box>
-                </Box>
+              <Td padding={tdPadding} fontSize={fontSize} textAlign="center">
+                {formatDate(item.createdAt)}
+              </Td>
+              <Td padding={tdPadding} fontSize={fontSize} textAlign="center">
+                {formatPrice(item.curPointAmount)}P
+              </Td>
+              <Td isNumeric padding={tdPadding} fontSize={fontSize}>
+                <Text color={item.pointType === 'USE' ? 'red.600' : 'blue.600'} fontWeight="bold">
+                  {item.pointType === 'USE'
+                    ? `-${formatPrice(item.pointAmount)}`
+                    : `+${formatPrice(item.pointAmount)}`}
+                  P
+                </Text>
               </Td>
             </Tr>
           ))}
         </Tbody>
       </Table>
-    </div>
+    </Box>
   );
 }
