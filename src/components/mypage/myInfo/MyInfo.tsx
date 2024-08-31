@@ -9,11 +9,8 @@ import {
   ListItem,
   UnorderedList,
   Text,
-  Table,
-  Tbody,
-  Tr,
-  Td,
 } from '@chakra-ui/react';
+import MyInfoTable from './MyInfoTable';
 // import Calendar from '../calendar/Calendar';
 
 export default function MyInfo() {
@@ -39,15 +36,17 @@ export default function MyInfo() {
           flex="1" // 남은 공간을 차지하도록 설정
         >
           <Flex direction={{ base: 'column', md: 'row' }} gap={8} flex="1">
-            <Flex direction="column" gap={2} w="100%">
+            <Flex direction="column" gap={2} w={{ base: '100%', md: '350px' }}>
               <Flex justifyContent="space-between">
                 <div>이메일</div>
                 <div>수정</div>
               </Flex>
-              <InputGroup>
-                <Input w="100%" />
-                <InputRightElement width="5rem">
-                  <Button fontSize="small">인증번호 받기</Button>
+              <InputGroup size="md">
+                <Input pr="5.5rem" type="text" placeholder="이메일을 입력해주세요" />
+                <InputRightElement width="4.5rem" mr="0.4rem">
+                  <Button h="1.75rem" size="sm" fontSize="xs">
+                    인증번호 받기
+                  </Button>
                 </InputRightElement>
               </InputGroup>
             </Flex>
@@ -60,125 +59,13 @@ export default function MyInfo() {
         </Flex>
       </Flex>
       <Flex direction="column" gap="2">
-        <Text>입찰 내역</Text>
+        <Text fontSize="lg" fontWeight="bold">
+          입찰 내역
+        </Text>
         {/* <Calendar /> */}
       </Flex>
-
       {/* 테이블 */}
-      <div className="overflow-y-scroll no-scrollbar h-full">
-        <Table variant="simple" width="full" sx={{ tableLayout: 'fixed' }}>
-          <Tbody>
-            <Tr>
-              <Td>아이템이름</Td>
-              <Td>
-                <Box display="flex" justifyContent="end" gap="6">
-                  <Box className="block">2024-08-14</Box>
-                  <Box>20000P</Box>
-                </Box>
-              </Td>
-            </Tr>
-            <Tr>
-              <Td>아이템이름</Td>
-              <Td>
-                <Box display="flex" justifyContent="end" gap="6">
-                  <Box className="block">2024-08-14</Box>
-                  <Box>20000P</Box>
-                </Box>
-              </Td>
-            </Tr>
-            <Tr>
-              <Td>아이템이름</Td>
-              <Td>
-                <Box display="flex" justifyContent="end" gap="6">
-                  <Box className="block">2024-08-14</Box>
-                  <Box>20000P</Box>
-                </Box>
-              </Td>
-            </Tr>
-            <Tr>
-              <Td>아이템이름</Td>
-              <Td>
-                <Box display="flex" justifyContent="end" gap="6">
-                  <Box className="block">2024-08-14</Box>
-                  <Box>20000P</Box>
-                </Box>
-              </Td>
-            </Tr>
-            <Tr>
-              <Td>아이템이름</Td>
-              <Td>
-                <Box display="flex" justifyContent="end" gap="6">
-                  <Box className="block">2024-08-14</Box>
-                  <Box>20000P</Box>
-                </Box>
-              </Td>
-            </Tr>
-            <Tr>
-              <Td>아이템이름</Td>
-              <Td>
-                <Box display="flex" justifyContent="end" gap="6">
-                  <Box className="block">2024-08-14</Box>
-                  <Box>20000P</Box>
-                </Box>
-              </Td>
-            </Tr>
-            <Tr>
-              <Td>아이템이름</Td>
-              <Td>
-                <Box display="flex" justifyContent="end" gap="6">
-                  <Box className="block">2024-08-14</Box>
-                  <Box>20000P</Box>
-                </Box>
-              </Td>
-            </Tr>
-            <Tr>
-              <Td>아이템이름</Td>
-              <Td>
-                <Box display="flex" justifyContent="end" gap="6">
-                  <Box className="block">2024-08-14</Box>
-                  <Box>20000P</Box>
-                </Box>
-              </Td>
-            </Tr>
-            <Tr>
-              <Td>아이템이름</Td>
-              <Td>
-                <Box display="flex" justifyContent="end" gap="6">
-                  <Box className="block">2024-08-14</Box>
-                  <Box>20000P</Box>
-                </Box>
-              </Td>
-            </Tr>
-            <Tr>
-              <Td>아이템이름</Td>
-              <Td>
-                <Box display="flex" justifyContent="end" gap="6">
-                  <Box className="block">2024-08-14</Box>
-                  <Box>20000P</Box>
-                </Box>
-              </Td>
-            </Tr>
-            <Tr>
-              <Td>아이템이름</Td>
-              <Td>
-                <Box display="flex" justifyContent="end" gap="6">
-                  <Box className="block">2024-08-14</Box>
-                  <Box>2012000P</Box>
-                </Box>
-              </Td>
-            </Tr>
-            <Tr>
-              <Td>아이템이름</Td>
-              <Td>
-                <Box display="flex" justifyContent="end" gap="6">
-                  <Box className="block">2024-08-14</Box>
-                  <Box>20000P</Box>
-                </Box>
-              </Td>
-            </Tr>
-          </Tbody>
-        </Table>
-      </div>
+      <MyInfoTable />
     </Box>
   );
 }
