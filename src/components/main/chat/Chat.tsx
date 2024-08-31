@@ -1,9 +1,10 @@
 import { Flex, Text } from '@chakra-ui/react';
 import defaul_profile from '../../../assets/image/modal/chat/profile.png';
 import { Link } from 'react-router-dom';
+import { timeAgo } from '../../../utils/dateFormat';
 
-export default function Chat({ data }) {
-  const auction = data.aution;
+export default function Chat({ chat }) {
+  const auction = chat.aution;
 
   return (
     <Link to={`/rooms?id=${auction.id}`}>
@@ -17,8 +18,8 @@ export default function Chat({ data }) {
       >
         <Flex align={'center'}>
           <img
-            src={auction.imageList[0].imageUrl ? auction.imageList[0].imageUrl : defaul_profile}
-            alt={auction.imageList[0].imageName}
+            src={auction.thumbnail ? auction.thumbnail : defaul_profile}
+            alt={auction.title}
             className="w-[50px] h-[50px]"
           />
           <div className="ml-2.5">
@@ -31,7 +32,7 @@ export default function Chat({ data }) {
               {auction.title}
             </Text>
             <Text fontSize={12} textColor={'rgba(160,160,160,1)'}>
-              안녕하세요!
+              {/* 마지막 채팅 */}
             </Text>
           </div>
         </Flex>
@@ -42,7 +43,7 @@ export default function Chat({ data }) {
             textColor={'rgba(160,160,160,1)'}
             marginBottom={'6px'}
           >
-            19:49
+            {timeAgo(chat.createdAt)}
           </Text>
           <Flex
             className="bg-violet-400 text-white font-thin w-4 h-4"
@@ -51,7 +52,7 @@ export default function Chat({ data }) {
             fontSize={11}
             borderRadius={'50%'}
           >
-            1
+            {/* 읽은 메세지면 1 or 읽지 않았으면 0 */}
           </Flex>
         </Flex>
       </Flex>

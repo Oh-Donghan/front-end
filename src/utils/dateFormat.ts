@@ -1,3 +1,10 @@
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import 'dayjs/locale/ko';
+
+dayjs.extend(relativeTime);
+dayjs.locale('ko');
+
 export const formatDate = dateString => {
   const date = new Date(dateString);
 
@@ -42,4 +49,9 @@ export const formatDateToKorean = (dateString: string): string => {
 
   // 로케일을 'ko-KR'로 설정하여 한글로 출력
   return date.toLocaleDateString('ko-KR', options);
+};
+
+// 날짜 정보를 받아서 시간이 얼마나 지났는지 반환
+export const timeAgo = dateString => {
+  return dayjs(dateString).fromNow();
 };

@@ -7,7 +7,7 @@ import Chat from './Chat';
 //   data?: ChatResponseType
 // }
 
-export default function ChatList({ datas, isLoading }) {
+export default function ChatList({ chats, isLoading }) {
   if (isLoading) {
     return (
       <Flex height={'410px'} align={'center'} justify={'center'}>
@@ -16,7 +16,7 @@ export default function ChatList({ datas, isLoading }) {
     );
   }
 
-  if (!datas || datas.length === 0) {
+  if (!chats || chats.length === 0) {
     return (
       <Flex height={'410px'} align={'center'} justify={'center'}>
         <Text fontSize={'1.05rem'} color={'rgba(90,90,90,1)'} letterSpacing={'0.07rem'}>
@@ -39,8 +39,8 @@ export default function ChatList({ datas, isLoading }) {
         'scrollbar-width': 'none', // Firefox
       }}
     >
-      {datas?.map(data => {
-        return <Chat key={data.id} data={data} />;
+      {chats?.map(chat => {
+        return <Chat key={chat.id} chat={chat} />;
       })}
     </Flex>
   );

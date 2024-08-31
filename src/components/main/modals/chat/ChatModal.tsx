@@ -29,7 +29,7 @@ export default function ChatModal() {
     }
   }, [isChatModalOpen]);
 
-  const { data, isLoading } = useQuery({
+  const { data: chats, isLoading } = useQuery({
     queryKey: ['chat'],
     queryFn: () => getAllChats(),
     staleTime: 0,
@@ -66,7 +66,7 @@ export default function ChatModal() {
             </PopoverHeader>
             <PopoverArrow />
             <PopoverBody padding={'0px'}>
-              <ChatList datas={data} isLoading={isLoading} />
+              <ChatList chats={chats} isLoading={isLoading} />
             </PopoverBody>
           </PopoverContent>
         )}
