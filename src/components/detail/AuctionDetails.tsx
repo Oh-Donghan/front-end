@@ -109,7 +109,6 @@ const AuctionDetails = ({ auctionId }) => {
     }
 
     const bidPrice = bidPriceRef.current?.value;
-    console.log('입력된 입찰 금액:', bidPrice);
 
     if (bidPrice.length === 0) {
       toast({
