@@ -39,16 +39,7 @@ export default function QnaSection({ qna }: { qna: IAskList[] }) {
           <Text fontSize="4xl" fontWeight="bold">
             Q&A
           </Text>
-          {/* <Text onClick={qnaDisclosure.onOpen} cursor="pointer" color="#3182ce">
-            질문 작성하기
-          </Text> */}
-          <Button
-            onClick={qnaDisclosure.onOpen}
-            cursor="pointer"
-            colorScheme="blue"
-            size="sm"
-            isDisabled={!auth}
-          >
+          <Button onClick={qnaDisclosure.onOpen} colorScheme="blue" size="sm" isDisabled={!auth}>
             질문 작성하기
           </Button>
         </Flex>
