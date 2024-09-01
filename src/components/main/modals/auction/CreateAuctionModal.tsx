@@ -269,6 +269,7 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
                           borderColor={'rgba(200,200,200,1)'}
                           type="text"
                           fontSize={'0.95rem'}
+                          {...register('color')}
                         />
                       </Flex>
                     </InputGroup>
