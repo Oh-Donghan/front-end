@@ -12,7 +12,7 @@ interface IAnswerImage {
 }
 
 // Answer 항목의 인터페이스 정의
-interface IAnswer {
+export interface IAnswer {
   id: number;
   auctionId: number;
   auctionTitle: string;
@@ -24,7 +24,7 @@ interface IAnswer {
 }
 
 // QnA 항목의 인터페이스 정의
-export interface IQnA {
+interface IQnA {
   id: number;
   auctionId: number;
   auctionTitle: string;
@@ -53,7 +53,7 @@ interface IPageable {
 }
 
 // 전체 응답 구조의 인터페이스 정의
-interface IMyQnA {
+interface IReceiveQnA {
   totalPages: number;
   totalElements: number;
   first: boolean;
@@ -67,9 +67,9 @@ interface IMyQnA {
   empty: boolean;
 }
 
-export const fetchMyQnAData = async ({ page, size }): Promise<IMyQnA> => {
+export const fetchReceiveQnAData = async ({ page, size }): Promise<IReceiveQnA> => {
   try {
-    const response = await axiosInstance.get<IMyQnA>('api/asks', {
+    const response = await axiosInstance.get<IReceiveQnA>('api/asks/receive', {
       params: {
         page,
         size,

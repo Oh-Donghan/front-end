@@ -25,7 +25,7 @@ const AuctionImages: React.FC<AuctionImagesProps> = ({ imageList = [] }) => {
     <Flex direction="column" w={{ base: '100%', md: '40%' }} flex={1}>
       <VStack spacing={2} w="100%">
         {/* Main Image */}
-        <Box w="100%" h="full" minH="480px">
+        <Box w="100%" h="full" minH="280px">
           <Image src={mainImage} alt="Main Image" objectFit="cover" w="100%" h="100%" />
         </Box>
 

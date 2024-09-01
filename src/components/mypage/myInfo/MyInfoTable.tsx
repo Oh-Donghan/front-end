@@ -22,15 +22,14 @@ export default function MyInfoTable() {
   const { ref, inView } = useInView();
   const pageSize = 10;
 
-  const { data, fetchNextPage, hasNextPage, isFetching, isLoading, isError, error } =
-    useInfiniteQuery({
-      queryKey: ['bidList'],
-      queryFn: ({ pageParam = 0 }) => fetchBidData({ page: pageParam, size: pageSize }),
-      getNextPageParam: lastPage => {
-        return lastPage.last ? undefined : lastPage.number + 1;
-      },
-      initialPageParam: 0,
-    });
+  const { data, fetchNextPage, hasNextPage, isLoading, isError, error } = useInfiniteQuery({
+    queryKey: ['bidList'],
+    queryFn: ({ pageParam = 0 }) => fetchBidData({ page: pageParam, size: pageSize }),
+    getNextPageParam: lastPage => {
+      return lastPage.last ? undefined : lastPage.number + 1;
+    },
+    initialPageParam: 0,
+  });
 
   useEffect(() => {
     if (inView && hasNextPage) {
@@ -53,8 +52,7 @@ export default function MyInfoTable() {
   }
 
   return (
-    <>
-      {isFetching && <div className="loading">fetch loading...</div>}
+    data && (
       <Box
         overflowY="scroll"
         h="full"
@@ -83,8 +81,8 @@ export default function MyInfoTable() {
                 bidItem.content.map(item => (
                   <Tr key={item.id}>
                     <Td>{item.auctionTitle}</Td>
-                    <Td>{formatDate(item.createdAt)}</Td>
-                    <Td isNumeric>{formatPrice(item.bidPrice)}P</Td>
+                    <Td>{formatDate(item?.createdAt)}</Td>
+                    <Td isNumeric>{formatPrice(item?.bidPrice)}P</Td>
                   </Tr>
                 )),
               )}
@@ -93,6 +91,6 @@ export default function MyInfoTable() {
           </Table>
         </TableContainer>
       </Box>
-    </>
+    )
   );
 }

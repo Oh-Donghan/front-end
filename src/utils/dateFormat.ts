@@ -5,7 +5,7 @@ import 'dayjs/locale/ko';
 dayjs.extend(relativeTime);
 dayjs.locale('ko');
 
-export const formatDate = dateString => {
+export const formatDate = (dateString: string) => {
   const date = new Date(dateString);
 
   // 요일 배열
