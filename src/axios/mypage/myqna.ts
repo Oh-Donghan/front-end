@@ -1,5 +1,16 @@
 import axiosInstance from '../instance';
 
+// Image 항목의 인터페이스 정의
+interface IAnswerImage {
+  answerId: number;
+  auctionId: number | null;
+  createdAt: string;
+  id: number;
+  imageName: string;
+  imageType: string;
+  imageUrl: string;
+}
+
 // Answer 항목의 인터페이스 정의
 interface IAnswer {
   id: number;
@@ -8,12 +19,12 @@ interface IAnswer {
   title: string;
   content: string;
   writerId: string;
-  imageList: string[];
+  imageList: IAnswerImage[];
   createdAt: string;
 }
 
 // QnA 항목의 인터페이스 정의
-interface IQnA {
+export interface IQnA {
   id: number;
   auctionId: number;
   auctionTitle: string;
@@ -42,7 +53,7 @@ interface IPageable {
 }
 
 // 전체 응답 구조의 인터페이스 정의
-interface IQnAResponse {
+interface IMyQnA {
   totalPages: number;
   totalElements: number;
   first: boolean;
@@ -56,15 +67,16 @@ interface IQnAResponse {
   empty: boolean;
 }
 
-export const fetchMyQnAData = async ({ page, size }): Promise<IQnAResponse> => {
+export const fetchMyQnAData = async ({ page, size }): Promise<IMyQnA> => {
   try {
-    const response = await axiosInstance.get<IQnAResponse>('api/asks', {
+    const response = await axiosInstance.get<IMyQnA>('api/asks', {
       params: {
         page,
         size,
       },
     });
     console.log('data::', response.data);
+
     return response.data;
   } catch (error) {
     console.error('Error fetching auction details:', error);
