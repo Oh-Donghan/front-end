@@ -6,6 +6,8 @@ import {
   Text,
   Input,
   useToast,
+  Box,
+  Image,
 } from '@chakra-ui/react';
 import ChatMessage from '../../../components/chat/item/ChatMessage';
 import { IoMdSend } from 'react-icons/io';
@@ -21,17 +23,19 @@ export default function ChatRightSection({
   setMessages, // messages를 업데이트하기 위한 setter 함수 추가
   sendMessage,
   roomId,
+  chatList,
 }) {
   const { register, handleSubmit, reset } = useForm();
   const [inputText, setInputText] = useState('');
+  const [currentAuction, setCurrentAuction] = useState(null);
   const memberId = localStorage.getItem('memberId');
   const toast = useToast();
 
   const { data, isLoading } = useQuery({
     queryKey: ['chat', 'room', roomId],
     queryFn: () => getChatsById({ roomId }),
-    staleTime: 5 * 60 * 1000,
-    gcTime: 60 * 60 * 1000,
+    staleTime: 0,
+    gcTime: 30 * 60 * 1000,
     enabled: !!roomId,
   });
 
@@ -44,7 +48,11 @@ export default function ChatRightSection({
 
   useEffect(() => {
     reset();
-  }, [roomId]);
+    const currentAuction = chatList.find(chat => {
+      return chat.id == roomId;
+    });
+    setCurrentAuction(currentAuction);
+  }, [roomId, chatList]);
 
   const onSubmit = data => {
     if (!data.message.trim()) {
@@ -79,8 +87,21 @@ export default function ChatRightSection({
         paddingY={'20px'}
       >
         <Flex alignItems={'center'}>
-          <Text marginLeft={'10px'} fontSize={'16px'} fontWeight={'bold'}>
-            {/* */}
+          <Box w={'45px'} h={'45px'} borderRadius={'50%'} overflow={'hidden'}>
+            <Image src={currentAuction.auction.thumbnail} />
+          </Box>
+          <Text marginLeft={'12px'} fontSize={'18px'} fontWeight={'bold'}>
+            {currentAuction.auction.title}
+          </Text>
+          <Box
+            w={'6px'}
+            h={'6px'}
+            bgColor={'rgb(49, 130, 206)'}
+            borderRadius={'50%'}
+            marginX={'10px'}
+          />
+          <Text fontSize={'16px'} color={'rgba(80,80,80,1)'}>
+            {currentAuction.buyer.memberId === memberId ? '판매중' : '구매중'}
           </Text>
         </Flex>
         <Flex gap={2}>

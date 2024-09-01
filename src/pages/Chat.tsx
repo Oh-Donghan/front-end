@@ -91,6 +91,10 @@ export default function Chat() {
     }
   };
 
+  if (isChatListLoading) {
+    return null;
+  }
+
   return (
     <>
       <ConfirmPurchaseModal
@@ -119,6 +123,7 @@ export default function Chat() {
             setMessages={setMessages} // messages를 업데이트하기 위한 setter 함수 전달
             sendMessage={sendMessage}
             roomId={roomId}
+            chatList={chatList}
           />
         </Flex>
       </Flex>
