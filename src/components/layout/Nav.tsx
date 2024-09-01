@@ -12,7 +12,7 @@ import {
 import { RxTextAlignJustify } from 'react-icons/rx';
 import SigninModal from '../main/modals/auth/SigninModal';
 import SignupModal from '../main/modals/auth/SignupModal';
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import PointChargeModal from '../main/modals/point/PointChargeModal';
 import AlarmModal from '../main/modals/alarm/AlarmModal';
@@ -21,7 +21,6 @@ import CreateAuctionModal from '../main/modals/auction/CreateAuctionModal';
 import { useRecoilState } from 'recoil';
 import { authState } from '../../recoil/atom/authAtom';
 import { signOut } from '../../axios/auth/user';
-import { useSSE } from '../../hooks/useSSE';
 
 export default function Nav() {
   const signinDisclosure = useDisclosure();
@@ -44,11 +43,6 @@ export default function Nav() {
   const moveToMypage = () => {
     navigate('/mypage');
   };
-
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    useSSE();
-  }, []);
 
   return (
     <>

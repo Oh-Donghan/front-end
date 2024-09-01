@@ -10,7 +10,7 @@ interface ChatListPropsType {
 export default function ChatList({ chats, isLoading }: ChatListPropsType) {
   if (isLoading) {
     return (
-      <Flex height={'410px'} align={'center'} justify={'center'}>
+      <Flex height={'100px'} align={'center'} justify={'center'}>
         <Spinner />
       </Flex>
     );
@@ -35,8 +35,8 @@ export default function ChatList({ chats, isLoading }: ChatListPropsType) {
         '::-webkit-scrollbar': {
           display: 'none',
         },
-        '-ms-overflow-style': 'none', // IE and Edge
-        'scrollbar-width': 'none', // Firefox
+        msOverflowStyle: 'none', // 수정된 부분 (IE and Edge)
+        scrollbarWidth: 'none', // Firefox
       }}
     >
       {chats?.map(chat => {

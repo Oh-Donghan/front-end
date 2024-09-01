@@ -1,30 +1,26 @@
 import { Flex, Text } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import { MdLogout } from 'react-icons/md';
+import { ChatDataType } from '../../../interface/chat/chatInterface';
 import ChatList from '../../../components/chat/item/ChatList';
-import { useQuery } from '@tanstack/react-query';
-import { getAllChats } from '../../../axios/chat/chat';
 import { Dispatch, SetStateAction } from 'react';
 
 interface ChatLeftSectionType {
   selectedChatId: number;
   setSelectedChatId: Dispatch<SetStateAction<number | undefined>>;
   scrollBottom: () => void;
+  chatList: ChatDataType[];
+  isChatListLoading: boolean;
 }
 
 export default function ChatLeftSection({
   selectedChatId,
   setSelectedChatId,
   scrollBottom,
+  chatList,
+  isChatListLoading,
 }: ChatLeftSectionType) {
-  const { data: chats, isLoading } = useQuery({
-    queryKey: ['chat'],
-    queryFn: () => getAllChats(),
-    staleTime: 5 * 60 * 1000,
-    gcTime: 30 * 60 * 1000,
-  });
-
-  if (isLoading) {
+  if (isChatListLoading) {
     return null;
   }
 
@@ -34,8 +30,8 @@ export default function ChatLeftSection({
         selectedChatId={selectedChatId}
         setSelectedChatId={setSelectedChatId}
         scrollBottom={scrollBottom}
-        isLoading={isLoading}
-        chats={chats}
+        isLoading={isChatListLoading}
+        chats={chatList}
       />
       <Flex
         alignItems={'center'}

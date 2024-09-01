@@ -2,12 +2,13 @@ import { Flex, Spinner, Text } from '@chakra-ui/react';
 import Alarm from './Alarm';
 import { useQuery } from '@tanstack/react-query';
 import { getAlarms } from '../../../../axios/alarm/alarm';
-import { useEffect } from 'react';
-import { useSetRecoilState } from 'recoil';
-import { lastEventIdState } from '../../../../recoil/atom/lastEventIdAtom';
+import { Dispatch, SetStateAction, useEffect } from 'react';
 
-export default function AlarmList() {
-  const setLastEventId = useSetRecoilState(lastEventIdState);
+interface AlarmListProps {
+  setLastEventId: Dispatch<SetStateAction<string | undefined>>;
+}
+
+export default function AlarmList({ setLastEventId }: AlarmListProps) {
   const { data, isLoading } = useQuery({
     queryKey: ['alarm'],
     queryFn: () => getAlarms(),

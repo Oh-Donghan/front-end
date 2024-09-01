@@ -4,6 +4,9 @@ import ChatLeftSection from '../components/main/chat/ChatLeftSection';
 import ChatRightSection from '../components/main/chat/ChatRightSection';
 import ConfirmPurchaseModal from '../components/chat/modals/ConfirmPurchaseModal';
 import { Client, IMessage } from '@stomp/stompjs';
+import { getAllChats } from '../axios/chat/chat';
+import { useQuery } from '@tanstack/react-query';
+import { formatDateToCustomString } from '../utils/dateFormat';
 
 export default function Chat() {
   const [messages, setMessages] = useState([]);
@@ -15,6 +18,13 @@ export default function Chat() {
   const searchParams = new URLSearchParams(location.search);
   const roomId = searchParams.get('id');
   const memberId = localStorage.getItem('memberId');
+
+  const { data: chatList, isLoading: isChatListLoading } = useQuery({
+    queryKey: ['chat'],
+    queryFn: () => getAllChats(),
+    staleTime: 5 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
+  });
 
   const scrollBottom = () => {
     if (messagesEndRef.current) {
@@ -63,15 +73,20 @@ export default function Chat() {
       stompClient.publish({
         destination: '/pub/chat/message',
         body: JSON.stringify({
-          room_id: roomId,
-          memberId: memberId,
+          roomId: roomId,
+          senderId: memberId,
           message,
         }),
       });
       // 새 메시지를 상태에 추가
       setMessages(prevMessages => [
         ...prevMessages,
-        { roomId, senderId: memberId, message, createdAt: new Date().toLocaleString() },
+        {
+          roomId,
+          senderId: memberId,
+          message,
+          createdAt: formatDateToCustomString(new Date()),
+        },
       ]);
     }
   };
@@ -94,6 +109,8 @@ export default function Chat() {
             selectedChatId={selectedChatId}
             setSelectedChatId={setSelectedChatId}
             scrollBottom={scrollBottom}
+            chatList={chatList}
+            isChatListLoading={isChatListLoading}
           />
           <ChatRightSection
             ConfirmPurchaseDisclosure={ConfirmPurchaseDisclosure}

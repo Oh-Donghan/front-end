@@ -12,7 +12,7 @@ import { IoMdSend } from 'react-icons/io';
 import { useForm } from 'react-hook-form';
 import { useQuery } from '@tanstack/react-query';
 import { getChatsById } from '../../../axios/chat/chat';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function ChatRightSection({
   ConfirmPurchaseDisclosure,
@@ -23,6 +23,8 @@ export default function ChatRightSection({
   roomId,
 }) {
   const { register, handleSubmit, reset } = useForm();
+  const [inputText, setInputText] = useState('');
+  const memberId = localStorage.getItem('memberId');
   const toast = useToast();
 
   const { data, isLoading } = useQuery({
@@ -36,9 +38,13 @@ export default function ChatRightSection({
   useEffect(() => {
     if (data) {
       // 가져온 데이터를 기존 메시지에 추가
-      setMessages(prevMessages => [...data, ...prevMessages]);
+      setMessages([...data]);
     }
   }, [data, setMessages]);
+
+  useEffect(() => {
+    reset();
+  }, [roomId]);
 
   const onSubmit = data => {
     if (!data.message.trim()) {
@@ -74,7 +80,7 @@ export default function ChatRightSection({
       >
         <Flex alignItems={'center'}>
           <Text marginLeft={'10px'} fontSize={'16px'} fontWeight={'bold'}>
-            {/* 상대방 이름 */}
+            {/* */}
           </Text>
         </Flex>
         <Flex gap={2}>
@@ -128,7 +134,7 @@ export default function ChatRightSection({
               key={index}
               text={message.message}
               createdAt={message.createdAt}
-              type={undefined} // isSentByCurrentUser={message.senderId === memberId}
+              isMyMessage={!!(message.senderId !== memberId)}
             />
           ))}
           <div ref={messagesEndRef} />
@@ -147,6 +153,10 @@ export default function ChatRightSection({
                 bgColor={'white'}
                 border={'none'}
                 boxShadow={'1px 1px 8px rgba(150,150,150,0.1)'}
+                defaultValue={inputText}
+                onChange={e => {
+                  setInputText(e.target.value);
+                }}
                 {...register('message')}
               />
               <InputRightElement>

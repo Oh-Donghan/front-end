@@ -1,15 +1,14 @@
 import { useRecoilState } from 'recoil';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { EventSourcePolyfill } from 'event-source-polyfill';
 import { useToast } from '@chakra-ui/react';
-import { eventSourceState } from '../recoil/atom/eventSourceAtom';
-import { lastEventIdState } from '../recoil/atom/lastEventIdAtom';
+import { eventSourceState } from '../../../../recoil/atom/eventSourceAtom';
+import { lastEventIdState } from '../../../../recoil/atom/lastEventIdAtom';
 
-export function useSSE() {
+export default function NotificationSubscriber() {
   const [eventSource, setEventSource] = useRecoilState(eventSourceState);
   const [lastEventId, setLastEventId] = useRecoilState(lastEventIdState);
   const toast = useToast();
-  const eventSourceRef = useRef(null);
 
   useEffect(() => {
     if (eventSource) {
@@ -31,8 +30,6 @@ export function useSSE() {
       headers,
       withCredentials: true,
     });
-
-    eventSourceRef.current = es;
 
     es.onmessage = event => {
       const data = JSON.parse(event.data);
@@ -58,21 +55,21 @@ export function useSSE() {
         duration: 2000,
       });
 
-      // EventSource 객체를 안전하게 정리
-      if (eventSourceRef.current) {
-        eventSourceRef.current.close();
-        eventSourceRef.current = null;
-        setEventSource(null);
+      // 상태를 업데이트하여 현재 연결이 종료되었음을 표시
+      if (es.readyState !== 2) {
+        // 상태가 CLOSED가 아닌 경우에만 close 호출
+        es.close();
+        setEventSource(null); // 상태 초기화
       }
 
-      // 일정 시간 후 재연결 시도 (예: 5초 후)
+      // 일정 시간 후 재연결 시도
       setTimeout(() => {
-        if (!eventSourceRef.current) {
+        // 새로운 연결을 위해 다시 상태를 확인
+        if (!eventSource) {
           const newEs = new EventSourcePolyfill(url, {
             headers,
             withCredentials: true,
           });
-          eventSourceRef.current = newEs;
           setEventSource(newEs);
         }
       }, 5000);
@@ -81,14 +78,12 @@ export function useSSE() {
     setEventSource(es);
 
     return () => {
-      // 컴포넌트가 언마운트될 때 EventSource 정리
-      if (eventSourceRef.current) {
-        eventSourceRef.current.close();
-        eventSourceRef.current = null;
-        setEventSource(null);
+      // 컴포넌트가 언마운트될 때, 연결을 안전하게 종료
+      if (eventSource && eventSource.readyState !== 2) {
+        eventSource.close();
       }
     };
   }, [eventSource, lastEventId, setEventSource, setLastEventId, toast]);
 
-  return eventSource;
+  return null; // 컴포넌트 자체는 UI를 렌더링하지 않음
 }

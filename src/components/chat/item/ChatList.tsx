@@ -48,16 +48,16 @@ export default function ChatList({
 
   return (
     <Flex
-      direction={'column'}
+      direction="column"
       overflowY="scroll"
       sx={{
-        '&::-webkit-scrollbar': {
+        '&::-webkitScrollbar': {
           display: 'none',
         },
-        '-ms-overflow-style': 'none' /* Internet Explorer 10+ */,
-        'scrollbar-width': 'none' /* Firefox */,
+        msOverflowStyle: 'none', // Internet Explorer 10+
+        scrollbarWidth: 'none', // Firefox
       }}
-      minH={'596px'}
+      minH="596px"
     >
       {chats.map(chat => (
         <ChatItem

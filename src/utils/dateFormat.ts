@@ -53,5 +53,24 @@ export const formatDateToKorean = (dateString: string): string => {
 
 // 날짜 정보를 받아서 시간이 얼마나 지났는지 반환
 export const timeAgo = dateString => {
-  return dayjs(dateString).fromNow();
+  const now = dayjs();
+  const date = dayjs(dateString);
+  const diffInSeconds = now.diff(date, 'second');
+
+  if (diffInSeconds < 60) {
+    return '방금 전'; // 60초 이내면 "방금 전"으로 표시
+  }
+
+  return date.fromNow(); // 60초 이상이면 기본 상대 시간 표시
+};
+
+// ex) date값을 받아서 year-month-day hours:minutes 형태도 formatting
+export const formatDateToCustomString = (date: Date): string => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+
+  return `${year}-${month}-${day} ${hours}:${minutes}`;
 };

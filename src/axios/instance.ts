@@ -2,7 +2,8 @@ import axios from 'axios';
 
 // Axios 인스턴스 생성 - VITE_BASE_URL을 기반으로 모든 요청이 이 URL을 사용
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_BASE_URL,
+  // baseURL: import.meta.env.VITE_BASE_URL,
+  baseURL: 'https://dddang.store',
 });
 
 // 요청 인터셉터 - 요청이 서버로 보내지기 전에 실행
