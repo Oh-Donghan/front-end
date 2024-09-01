@@ -17,7 +17,7 @@ export default function AlarmList({ setLastEventId }: AlarmListProps) {
   });
 
   useEffect(() => {
-    if (data) {
+    if (data.length !== 0) {
       setLastEventId(String(data[data.length - 1].id));
     }
   }, [data]);
