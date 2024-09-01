@@ -22,6 +22,7 @@ import { Link } from 'react-router-dom';
 import { logIn } from '../../../../axios/auth/user';
 import { useSetRecoilState } from 'recoil';
 import { authState } from '../../../../recoil/atom/authAtom';
+import { subscribeToAlarmSSE } from '../../../../sse/alarm/subscribeToAlarmSSE';
 
 export default function SigninModal({ onClose, isOpen, initialRef, onSignupClick }) {
   const { register, handleSubmit, reset } = useForm();
@@ -36,6 +37,9 @@ export default function SigninModal({ onClose, isOpen, initialRef, onSignupClick
     try {
       const response = await logIn({ id: data.id, password: data.password });
       if (response.accessToken) {
+        // SSE 구독을 시작
+        // subscribeToAlarmSSE(response.accessToken, toast);
+
         setAuth(true);
         reset();
         onClose();

@@ -40,10 +40,6 @@ export default function Nav() {
     signupDisclosure.onOpen();
   };
 
-  const moveToMypage = () => {
-    navigate('/mypage');
-  };
-
   return (
     <>
       <CreateAuctionModal
@@ -87,7 +83,12 @@ export default function Nav() {
                 <li className="mr-4 cursor-pointer">
                   <ViewedAuctionModal />
                 </li>
-                <li className="mr-4 cursor-pointer" onClick={moveToMypage}>
+                <li
+                  className="mr-4 cursor-pointer"
+                  onClick={() => {
+                    navigate('/mypage');
+                  }}
+                >
                   마이페이지
                 </li>
                 <li
@@ -184,7 +185,13 @@ export default function Nav() {
                   <li className="mb-4 cursor-pointer" onClick={drawerDisclosure.onClose}>
                     <ViewedAuctionModal />
                   </li>
-                  <li className="mb-4 cursor-pointer" onClick={drawerDisclosure.onClose}>
+                  <li
+                    className="mb-4 cursor-pointer"
+                    onClick={() => {
+                      navigate('/mypage');
+                      drawerDisclosure.onClose;
+                    }}
+                  >
                     마이페이지
                   </li>
                   <li

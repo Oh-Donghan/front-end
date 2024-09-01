@@ -73,8 +73,7 @@ export default function SignupModal({ onClose, isOpen, initialRef }) {
   };
 
   const validatePassword = value => {
-    const passwordPattern =
-      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{4,16}$|^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{4,16}$|^(?=.*[A-Za-z])(?=.*[@$!%*#?&])[A-Za-z@$!%*#?&]{4,16}$|^(?=.*\d)(?=.*[@$!%*#?&])[\d@$!%*#?&]{4,16}$/;
+    const passwordPattern = /^(?=.*[A-Za-z])(?=.*[0-9!@#$%^&*()\-_=+{};:,<.>]).{4,16}$/;
 
     if (value.length === 0) {
       setIsPasswordValid(true);

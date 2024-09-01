@@ -257,7 +257,7 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
                     subCategories={subCategories}
                     setSubCategories={setSubCategories}
                   />
-                  <Flex gap={6} marginTop={'30px'}>
+                  <Flex gap={6} marginTop={'30px'} position={'relative'} zIndex={999}>
                     <InputGroup>
                       <Flex direction={'column'} width={'full'}>
                         <Flex alignItems={'center'} marginBottom={'4px'}>
@@ -275,29 +275,15 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
                     </InputGroup>
                     <InputGroup>
                       <Flex direction={'column'} width={'full'}>
-                        <Flex alignItems={'center'} marginBottom={'4px'}>
-                          <Text fontSize={16} fontWeight={'semibold'} color={'rgba(70,70,70,1)'}>
-                            택배비
-                          </Text>
-                          <Text fontSize={12} color={'red'} marginLeft={1}>
-                            *택배 거래 시 필수
-                          </Text>
-                        </Flex>
-                        <Input
-                          type={'number'}
-                          borderColor={'rgba(200,200,200,1)'}
-                          fontSize={'0.95rem'}
-                          value={shippingCost}
-                          onChange={e => setShippingCost(e.target.value)}
-                          isDisabled={tradeMethod === '' || tradeMethod === 'contact'}
-                        />
+                        <Flex alignItems={'center'} marginBottom={'4px'}></Flex>
+                        <SelectDateSection endDate={endDate} setEndDate={setEndDate} />
                       </Flex>
                     </InputGroup>
                   </Flex>
                   <Flex marginTop={'30px'}>
                     <RatingSection rating={rating} onRatingChange={setRating} />
                   </Flex>
-                  <Flex gap={6} marginTop={'30px'}>
+                  <Flex gap={6} marginTop={'30px'} position={'relative'} zIndex={1}>
                     <InputGroup>
                       <Flex direction={'column'} width={'full'}>
                         <Flex alignItems={'center'} marginBottom={'4px'}>
@@ -363,41 +349,17 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
                             width: '6px',
                             height: '6px',
                           },
-                          '::-webkit-scrollbar-thumb': {
+                          '::-webkit-scrollbarThumb': {
                             backgroundColor: 'rgba(150, 150, 150, 1)',
                             borderRadius: '10px',
                           },
-                          '::-webkit-scrollbar-track': {
+                          '::-webkit-scrollbarTrack': {
                             backgroundColor: 'rgba(240, 240, 240, 1)',
                           },
                         }}
                       />
                     </Flex>
                   </InputGroup>
-
-                  <Flex gap={6} marginTop={'30px'}>
-                    <SelectDateSection endDate={endDate} setEndDate={setEndDate} />
-                    <InputGroup flex={1}>
-                      <Flex direction={'column'} width={'full'}>
-                        <Flex alignItems={'center'} marginBottom={'4px'}>
-                          <Text fontSize={16} fontWeight={'semibold'}>
-                            직거래 주소
-                          </Text>
-                          <Text fontSize={12} color={'red'} marginLeft={1}>
-                            *직거래 시 필수
-                          </Text>
-                        </Flex>
-                        <Input
-                          borderColor={'rgba(200,200,200,1)'}
-                          type="text"
-                          fontSize={'0.95rem'}
-                          value={contactPlace}
-                          onChange={e => setContactPlace(e.target.value)}
-                          isDisabled={tradeMethod === '' || tradeMethod === 'delivery'}
-                        />
-                      </Flex>
-                    </InputGroup>
-                  </Flex>
                   <Flex gap={6} marginTop={'30px'}>
                     <Flex flex={1} direction={'column'}>
                       <Flex alignItems={'center'} marginBottom={'4px'}>
@@ -420,32 +382,76 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
                         <option value="all">모두 가능</option>
                       </Select>
                     </Flex>
+
                     <Flex flex={1} direction={'column'}>
                       <Flex alignItems={'center'} marginBottom={'4px'}>
                         <Text fontSize={16} fontWeight={'semibold'}>
-                          택배비 지불 방법
+                          직거래 주소
                         </Text>
                         <Text fontSize={12} color={'red'} marginLeft={1}>
-                          *필수
+                          *직거래 시 필수
                         </Text>
                       </Flex>
-                      <Select
+                      <Input
                         borderColor={'rgba(200,200,200,1)'}
+                        type="text"
                         fontSize={'0.95rem'}
-                        onChange={handleShippingMethodChange}
-                        value={shippingMethod}
-                        isDisabled={tradeMethod === 'contact'}
-                        placeholder={
-                          tradeMethod === 'contact' ? '택배 불가능' : '비용 지불 방법 선택'
-                        }
-                      >
-                        <option value="prepay">선불</option>
-                        <option value="noprepay">착불</option>
-                        {tradeMethod !== 'delivery' && (
-                          <option value="nodelivery">택배 불가능</option>
-                        )}
-                      </Select>
+                        value={contactPlace}
+                        onChange={e => setContactPlace(e.target.value)}
+                        isDisabled={tradeMethod === '' || tradeMethod === 'delivery'}
+                      />
                     </Flex>
+                  </Flex>
+                  <Flex gap={6} marginTop={'30px'}>
+                    <InputGroup>
+                      <Flex flex={1} direction={'column'}>
+                        <Flex alignItems={'center'} marginBottom={'4px'}>
+                          <Text fontSize={16} fontWeight={'semibold'}>
+                            택배비
+                          </Text>
+                          <Text fontSize={12} color={'red'} marginLeft={1}>
+                            *택배 거래 시 필수
+                          </Text>
+                        </Flex>
+                        <Input
+                          type={'number'}
+                          borderColor={'rgba(200,200,200,1)'}
+                          fontSize={'0.95rem'}
+                          value={shippingCost}
+                          onChange={e => setShippingCost(e.target.value)}
+                          isDisabled={tradeMethod === '' || tradeMethod === 'contact'}
+                        />
+                      </Flex>
+                    </InputGroup>
+
+                    <InputGroup>
+                      <Flex flex={1} direction={'column'}>
+                        <Flex alignItems={'center'} marginBottom={'4px'}>
+                          <Text fontSize={16} fontWeight={'semibold'}>
+                            택배비 지불 방법
+                          </Text>
+                          <Text fontSize={12} color={'red'} marginLeft={1}>
+                            *필수
+                          </Text>
+                        </Flex>
+                        <Select
+                          borderColor={'rgba(200,200,200,1)'}
+                          fontSize={'0.95rem'}
+                          onChange={handleShippingMethodChange}
+                          value={shippingMethod}
+                          isDisabled={tradeMethod === 'contact'}
+                          placeholder={
+                            tradeMethod === 'contact' ? '택배 불가능' : '비용 지불 방법 선택'
+                          }
+                        >
+                          <option value="prepay">선불</option>
+                          <option value="noprepay">착불</option>
+                          {tradeMethod !== 'delivery' && (
+                            <option value="nodelivery">택배 불가능</option>
+                          )}
+                        </Select>
+                      </Flex>
+                    </InputGroup>
                   </Flex>
                   <Flex marginTop={'30px'}>
                     <ImageSection files={files} setFiles={setFiles} />

@@ -4,23 +4,13 @@ import { useQuery } from '@tanstack/react-query';
 import { getAlarms } from '../../../../axios/alarm/alarm';
 import { Dispatch, SetStateAction, useEffect } from 'react';
 
-interface AlarmListProps {
-  setLastEventId: Dispatch<SetStateAction<string | undefined>>;
-}
-
-export default function AlarmList({ setLastEventId }: AlarmListProps) {
+export default function AlarmList() {
   const { data, isLoading } = useQuery({
     queryKey: ['alarm'],
     queryFn: () => getAlarms(),
     staleTime: 0,
     gcTime: 0,
   });
-
-  useEffect(() => {
-    if (data.length !== 0) {
-      setLastEventId(String(data[data.length - 1].id));
-    }
-  }, [data]);
 
   if (isLoading) {
     return (
@@ -30,7 +20,7 @@ export default function AlarmList({ setLastEventId }: AlarmListProps) {
     );
   }
 
-  if (data?.length === 0) {
+  if (data.length === 0) {
     return (
       <Flex w={'100%'} h={['200px', '272px']} align={'center'} justify={'center'}>
         <Text
@@ -55,8 +45,8 @@ export default function AlarmList({ setLastEventId }: AlarmListProps) {
         '::-webkit-scrollbar': {
           display: 'none',
         },
-        '-ms-overflow-style': 'none',
-        'scrollbar-width': 'none',
+        msOverflowStyle: 'none', // '-ms-overflow-style' -> 'msOverflowStyle'
+        scrollbarWidth: 'none',
       }}
     >
       {data?.map(alarm => (
