@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Flex, useDisclosure } from '@chakra-ui/react';
 import ChatLeftSection from '../components/main/chat/ChatLeftSection';
 import ChatRightSection from '../components/main/chat/ChatRightSection';
@@ -7,13 +7,13 @@ import { Client, IMessage } from '@stomp/stompjs';
 
 export default function Chat() {
   const [messages, setMessages] = useState([]);
-  const [selectedChatId, setSelectedChatId] = useState(1);
+  const [selectedChatId, setSelectedChatId] = useState(0);
   const [stompClient, setStompClient] = useState<Client | null>(null);
   const ConfirmPurchaseDisclosure = useDisclosure();
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   const searchParams = new URLSearchParams(location.search);
-  const roomId = searchParams.get('roomId');
+  const roomId = searchParams.get('id');
   const memberId = localStorage.getItem('memberId');
 
   const scrollBottom = () => {
@@ -27,6 +27,7 @@ export default function Chat() {
   }, [messages]);
 
   useEffect(() => {
+    setSelectedChatId(parseInt(roomId));
     const accessToken = localStorage.getItem('accessToken');
 
     const client = new Client({
@@ -38,6 +39,7 @@ export default function Chat() {
         Authorization: `Bearer ${accessToken}`,
       },
       onConnect: () => {
+        console.log('STOMP client connected');
         client.subscribe(`/sub/chat/room/${roomId}`, (message: IMessage) => {
           const body = JSON.parse(message.body);
           setMessages(prevMessages => [...prevMessages, body]);
@@ -83,7 +85,6 @@ export default function Chat() {
       <Flex align={'center'} justify={'center'} className="w-full h-[100vh] bg-slate-200">
         <Flex
           width={'1200px'}
-          height={'672px'}
           backgroundColor={'white'}
           borderRadius={'10px'}
           overflow={'hidden'}

@@ -1,13 +1,11 @@
-import { Flex, Text } from '@chakra-ui/react';
+import { Box, Flex, Image, Text } from '@chakra-ui/react';
 import defaul_profile from '../../../assets/image/modal/chat/profile.png';
 import { Link } from 'react-router-dom';
 import { timeAgo } from '../../../utils/dateFormat';
 
 export default function Chat({ chat }) {
-  const auction = chat.aution;
-
   return (
-    <Link to={`/rooms?id=${auction.id}`}>
+    <Link to={`/rooms?id=${chat.id}`}>
       <Flex
         _hover={{ bgColor: 'rgba(240,240,240,1)' }}
         align="center"
@@ -17,19 +15,20 @@ export default function Chat({ chat }) {
         paddingY={'16px'}
       >
         <Flex align={'center'}>
-          <img
-            src={auction.thumbnail ? auction.thumbnail : defaul_profile}
-            alt={auction.title}
-            className="w-[50px] h-[50px]"
-          />
-          <div className="ml-2.5">
+          <Box w={'50px'} h={'50px'} borderRadius={'50%'} overflow={'hidden'}>
+            <Image
+              src={chat.auction.thumbnail ? chat.auction.thumbnail : defaul_profile}
+              alt={chat.auction.title}
+            />
+          </Box>
+          <div className="ml-3">
             <Text
-              fontSize={16}
+              fontSize={17}
               textColor={'rgba(70,70,70,1)'}
               fontWeight={'bold'}
               marginBottom={'3px'}
             >
-              {auction.title}
+              {chat.auction.title}
             </Text>
             <Text fontSize={12} textColor={'rgba(160,160,160,1)'}>
               {/* 마지막 채팅 */}
@@ -45,15 +44,16 @@ export default function Chat({ chat }) {
           >
             {timeAgo(chat.createdAt)}
           </Text>
-          <Flex
-            className="bg-violet-400 text-white font-thin w-4 h-4"
+          {/* <Flex
+            className=" text-white font-thin w-4 h-4"
             alignItems={'center'}
             justifyContent={'center'}
             fontSize={11}
             borderRadius={'50%'}
+            bgColor={'rgb(49, 130, 206)'}
           >
-            {/* 읽은 메세지면 1 or 읽지 않았으면 0 */}
-          </Flex>
+            쌓인 메세지 count
+          </Flex> */}
         </Flex>
       </Flex>
     </Link>

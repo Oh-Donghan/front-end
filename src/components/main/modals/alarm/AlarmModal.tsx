@@ -17,6 +17,7 @@ export default function AlarmModal() {
   const initialRef = useRef(null);
   const [isLargerThan480] = useMediaQuery('(min-width: 480px)');
   const [isOpen, setIsOpen] = useState(false);
+  const [lastEventId, setLastEventId] = useState('');
 
   const handleOpen = () => {
     setIsOpen(true);
@@ -28,7 +29,7 @@ export default function AlarmModal() {
 
   return (
     <Box ref={initialRef} position={'relative'} zIndex={'50'}>
-      {/* <NotificationSubscriber /> */}
+      <NotificationSubscriber lastEventId={lastEventId} />
       <Popover
         placement={isLargerThan480 ? 'bottom-end' : 'bottom'}
         closeOnBlur={true}
@@ -56,7 +57,9 @@ export default function AlarmModal() {
               *최근 30일 동안의 알림만 보관되며, 이후 자동 삭제됩니다.
             </Text>
           </PopoverHeader>
-          <PopoverBody padding={'0px'}>{isOpen && <AlarmList />}</PopoverBody>
+          <PopoverBody padding={'0px'}>
+            {isOpen && <AlarmList setLastEventId={setLastEventId} />}
+          </PopoverBody>
         </PopoverContent>
       </Popover>
     </Box>

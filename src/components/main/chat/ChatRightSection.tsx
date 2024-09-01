@@ -6,13 +6,13 @@ import {
   Text,
   Input,
   useToast,
-  Spinner,
 } from '@chakra-ui/react';
 import ChatMessage from '../../../components/chat/item/ChatMessage';
 import { IoMdSend } from 'react-icons/io';
 import { useForm } from 'react-hook-form';
 import { useQuery } from '@tanstack/react-query';
 import { getChatsById } from '../../../axios/chat/chat';
+import { useEffect } from 'react';
 
 export default function ChatRightSection({
   ConfirmPurchaseDisclosure,
@@ -24,7 +24,6 @@ export default function ChatRightSection({
 }) {
   const { register, handleSubmit, reset } = useForm();
   const toast = useToast();
-  const memberId = localStorage.getItem('memberId'); // 현재 사용자의 memberId 가져오기
 
   const { data, isLoading } = useQuery({
     queryKey: ['chat', 'room', roomId],
@@ -32,11 +31,14 @@ export default function ChatRightSection({
     staleTime: 5 * 60 * 1000,
     gcTime: 60 * 60 * 1000,
     enabled: !!roomId,
-    onSuccess: data => {
+  });
+
+  useEffect(() => {
+    if (data) {
       // 가져온 데이터를 기존 메시지에 추가
       setMessages(prevMessages => [...data, ...prevMessages]);
-    },
-  });
+    }
+  }, [data, setMessages]);
 
   const onSubmit = data => {
     if (!data.message.trim()) {
@@ -56,11 +58,7 @@ export default function ChatRightSection({
   };
 
   if (isLoading) {
-    return (
-      <Flex align={'center'} justify={'center'} h={'100%'} w={'100%'}>
-        <Spinner size={'lg'} />
-      </Flex>
-    );
+    return null;
   }
 
   return (
@@ -130,7 +128,7 @@ export default function ChatRightSection({
               key={index}
               text={message.message}
               createdAt={message.createdAt}
-              isSentByCurrentUser={message.senderId === memberId}
+              type={undefined} // isSentByCurrentUser={message.senderId === memberId}
             />
           ))}
           <div ref={messagesEndRef} />

@@ -1,13 +1,13 @@
 import { Flex, Spinner, Text } from '@chakra-ui/react';
 import Chat from './Chat';
-// import { ChatResponseType } from '../../../interface/chat/chatInterface';
+import { ChatDataType } from '../../../interface/chat/chatInterface';
 
-// interface ChatListPropsType {
-//   isLoading?: boolean;
-//   data?: ChatResponseType
-// }
+interface ChatListPropsType {
+  isLoading?: boolean;
+  chats: ChatDataType[];
+}
 
-export default function ChatList({ chats, isLoading }) {
+export default function ChatList({ chats, isLoading }: ChatListPropsType) {
   if (isLoading) {
     return (
       <Flex height={'410px'} align={'center'} justify={'center'}>

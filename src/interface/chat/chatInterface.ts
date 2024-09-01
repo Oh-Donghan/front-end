@@ -1,51 +1,22 @@
 interface Seller {
-  id: number;
-  member_id: string;
-  email: string;
-  social: string;
-  social_provider_id: string;
+  memberId: string;
+  social: string | null;
 }
 
 interface Buyer {
-  id: number;
-  member_id: string;
-  email: string;
-  social: string;
-  social_provider_id: string;
-}
-
-interface Category {
-  category_name: string;
+  memberId: string;
+  social: string | null;
 }
 
 interface Auction {
-  id: number;
   title: string;
-  auction_status: string;
-  product_name: string;
-  product_color: string;
-  product_status: string;
-  product_description: string;
-  contact: boolean;
-  delivery: boolean;
-  delivery_type: string;
-  delivery_price: number;
-  start_price: number;
-  instance_price: number;
-  ended_at: string;
-  created_at: string;
+  thumbnail: string;
 }
 
-interface AuctionData {
+export interface ChatDataType {
   id: number;
-  seller: Seller[];
-  buyer: Buyer[];
-  category: Category[];
-  auction: Auction[];
-}
-
-export interface ChatResponseType {
-  status: number;
-  message: string;
-  data: AuctionData[];
+  seller: Seller;
+  buyer: Buyer;
+  auction: Auction;
+  createdAt: string;
 }

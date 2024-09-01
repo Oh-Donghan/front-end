@@ -20,8 +20,9 @@ export default function Home() {
   const setAuth = useSetRecoilState(authState);
   const navigate = useNavigate();
   const location = useLocation();
-  const [auctionArray, setAuctionArray] = useRecoilState(auctionState);
+  const [, setAuctionArray] = useRecoilState(auctionState);
 
+  // 소셜 로그인 후 redirect 주소에 있는 accessToken recoil에 저장
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const accessToken = queryParams.get('accessToken');
@@ -86,10 +87,6 @@ export default function Home() {
       console.log('WebSocket disconnected');
     };
   }, []);
-
-  useEffect(() => {
-    console.log('log:', JSON.stringify(auctionArray, null, 2));
-  }, [auctionArray]);
 
   // getCategories의 isLoading을 ItemList에도 전달하기 위해 home에서 카테고리 패칭
   const { data: categories, isLoading } = useQuery({

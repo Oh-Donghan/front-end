@@ -1,29 +1,39 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { EventSourcePolyfill } from 'event-source-polyfill';
 import { useToast } from '@chakra-ui/react';
 
-export default function NotificationSubscriber({ lastEventId }) {
-  const [, setEventSource] = useState(null);
+function NotificationComponent({ lastEventId }) {
   const toast = useToast();
 
   useEffect(() => {
-    const token = localStorage.getItem('accessToken'); // 실제 토큰으로 대체
+    const token = localStorage.getItem('accessToken');
 
-    // URL에 쿼리 파라미터로 토큰과 마지막 이벤트 ID를 추가
-    const url = `/api/members/notifications/subscribe?Authorization=${encodeURIComponent(`Bearer ${token}`)}&Last-Event-ID=${encodeURIComponent(lastEventId)}`;
+    const url = `https://dddang.store/api/members/notification/subscribe`;
 
-    // EventSource 초기화
-    const es = new EventSource(url);
+    // 헤더 객체 생성
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+
+    // lastEventId가 존재할 때만 Last-Event-ID 헤더 추가
+    if (lastEventId) {
+      headers['Last-Event-ID'] = lastEventId;
+    }
+
+    // EventSourcePolyfill 초기화
+    const es = new EventSourcePolyfill(url, {
+      headers,
+    });
 
     es.onmessage = event => {
       const data = JSON.parse(event.data);
       console.log('New notification:', data);
 
       toast({
-        title: '새 알림',
+        title: '새로운 알림이 도착했습니다.',
         description: data.message,
         status: 'info',
-        duration: 5000,
-        isClosable: true,
+        duration: 2000,
       });
     };
 
@@ -33,19 +43,18 @@ export default function NotificationSubscriber({ lastEventId }) {
         title: '연결 오류',
         description: '알림 서버와의 연결에 문제가 발생했습니다.',
         status: 'error',
-        duration: 5000,
-        isClosable: true,
+        duration: 2000,
       });
 
       es.close();
     };
 
-    setEventSource(es);
-
     return () => {
       es.close();
     };
-  }, []);
+  }, [lastEventId]);
 
   return <></>;
 }
+
+export default NotificationComponent;

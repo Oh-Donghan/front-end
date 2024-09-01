@@ -1,5 +1,15 @@
 import ChatItem from './ChatItem';
 import { Flex, Spinner, Text } from '@chakra-ui/react';
+import { ChatDataType } from '../../../interface/chat/chatInterface';
+import { Dispatch, SetStateAction } from 'react';
+
+interface ChatListType {
+  selectedChatId: number;
+  setSelectedChatId: Dispatch<SetStateAction<number | undefined>>;
+  scrollBottom: () => void;
+  isLoading: boolean;
+  chats: ChatDataType[];
+}
 
 export default function ChatList({
   selectedChatId,
@@ -7,21 +17,30 @@ export default function ChatList({
   scrollBottom,
   isLoading,
   chats,
-}) {
+}: ChatListType) {
   const handleSelect = id => {
     setSelectedChatId(id);
     scrollBottom();
   };
 
   if (isLoading) {
-    <Flex>
-      <Spinner size={'md'} />
-    </Flex>;
+    return (
+      <Flex w={'390px'} h={'668px'} align={'center'} justify={'center'}>
+        <Spinner size={'xl'} />
+      </Flex>
+    );
   }
 
   if (chats === undefined || chats.length === 0) {
     return (
-      <Flex height={'100%'} justify={'center'} align={'center'} color={'rgba(70,70,70,1)'}>
+      <Flex
+        w={'390px'}
+        h={'668px'}
+        align={'center'}
+        justify={'center'}
+        color={'rgba(70,70,70,1)'}
+        border={'1px solid red'}
+      >
         <Text>현재 존재하는 채팅이 없습니다.</Text>
       </Flex>
     );
@@ -38,6 +57,7 @@ export default function ChatList({
         '-ms-overflow-style': 'none' /* Internet Explorer 10+ */,
         'scrollbar-width': 'none' /* Firefox */,
       }}
+      minH={'596px'}
     >
       {chats.map(chat => (
         <ChatItem
