@@ -11,7 +11,6 @@ import {
 import MyInfoTable from './MyInfoTable';
 import { useQuery } from '@tanstack/react-query';
 import { fetchMemberInquiry } from '../../../axios/mypage/memberinquiry';
-import { formatDate } from '../../../utils/dateFormat';
 import { formatPrice } from '../../../utils/formatPrice';
 import { useRef } from 'react';
 import ChangeEmail from './modal/ChangeEmail';
@@ -84,7 +83,7 @@ export default function MyInfo() {
               </Flex>
               <Flex gap={1}>
                 <Text fontWeight="bold">가입날짜:</Text>
-                <Text>{formatDate(data.createdAt)}</Text>
+                <Text>{data.createdAt.split(' ')[0]}</Text>
               </Flex>
             </Flex>
             <Flex alignItems="center" justifyContent="flex-end" gap={2}>
