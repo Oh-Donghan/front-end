@@ -25,8 +25,6 @@ export default function MyInfo() {
     queryFn: fetchMemberInquiry,
   });
 
-  console.log('회원 조회:', data);
-
   if (isLoading) {
     return (
       <Flex justifyContent="center" alignItems="center" height="100%" width="100%">
