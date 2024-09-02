@@ -4,7 +4,6 @@ import { FaUserCheck } from 'react-icons/fa';
 import { useEffect, useRef } from 'react';
 import { Client } from '@stomp/stompjs';
 import { fetchAuctionDetailData } from '../../axios/auctionDetail/auctionDetail';
-import maskUserId from '../../utils/maskUserId';
 import { formatPrice } from '../../utils/formatPrice';
 import { formatTimeAgo } from '../../utils/formatTimeAgo';
 
@@ -56,7 +55,7 @@ const BidList = ({ auctionId }) => {
               <Flex alignItems="center">
                 <Icon as={FaUserCheck} color="green.500" />
                 <Text fontSize="md" ml={2}>
-                  {maskUserId(bid.memberId)} - {formatPrice(bid.bidPrice)}원 입찰 하셨습니다.
+                  {bid.memberId} - {formatPrice(bid.bidPrice)}원 입찰 하셨습니다.
                 </Text>
               </Flex>
               <Text fontSize="sm" color="gray.500">
