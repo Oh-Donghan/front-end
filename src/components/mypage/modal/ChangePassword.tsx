@@ -121,7 +121,9 @@ export default function ChangePassword({ onClose, isOpen, initialRef }) {
 
         handleReset();
         handleSignOut();
-        navigate('/');
+        // 홈으로 이동하고 새로고침
+        navigate('/', { replace: true });
+        window.location.reload();
       } else {
         toast({
           title: '비밀번호 변경 실패.',

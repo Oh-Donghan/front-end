@@ -58,7 +58,9 @@ export default function DeleteAccount({ onClose, isOpen, initialRef }) {
         localStorage.removeItem('memberId');
 
         handleSignOut();
-        navigate('/'); // 성공 시 홈으로 이동
+        // 홈으로 이동하고 새로고침
+        navigate('/', { replace: true });
+        window.location.reload();
       } else {
         toast({
           title: '탈퇴에 실패했습니다. 다시 시도해주세요.',
