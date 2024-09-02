@@ -22,6 +22,8 @@ import CreateAuctionModal from '../main/modals/auction/CreateAuctionModal';
 import { useRecoilState } from 'recoil';
 import { authState } from '../../recoil/atom/authAtom';
 import { signOut } from '../../axios/auth/user';
+import { eventSourceState } from '../../recoil/atom/eventSourceAtom';
+import { EventSourcePolyfill } from 'event-source-polyfill';
 
 export default function Nav() {
   const signinDisclosure = useDisclosure();
@@ -30,11 +32,20 @@ export default function Nav() {
   const createAuctionDisclosure = useDisclosure();
   const drawerDisclosure = useDisclosure();
   const [auth, setAuth] = useRecoilState(authState);
+  const [eventSource, setEventSource] = useRecoilState(eventSourceState);
 
   const navigate = useNavigate();
 
   const initialRef = useRef(null);
   const toast = useToast();
+
+  const unSubscribeAlarmSSE = () => {
+    if (eventSource) {
+      eventSource.close(); // SSE 연결 닫기
+      setEventSource(null);
+      console.log('Unsubscribed from notifications');
+    }
+  };
 
   const handleSignupOpen = () => {
     signinDisclosure.onClose();
@@ -111,6 +122,8 @@ export default function Nav() {
                 <li
                   className="mr-4 cursor-pointer"
                   onClick={async () => {
+                    unSubscribeAlarmSSE();
+
                     await setAuth(false);
                     await signOut();
                     localStorage.removeItem('accessToken');
@@ -230,6 +243,8 @@ export default function Nav() {
                       className="cursor-pointer -mx-6 px-6 py-3 hover:bg-[rgba(226,232,240,1)]"
                       onClick={async () => {
                         drawerDisclosure.onClose();
+                        unSubscribeAlarmSSE();
+
                         await setAuth(false);
                         await signOut();
                         localStorage.removeItem('accessToken');
