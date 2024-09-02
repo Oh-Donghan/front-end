@@ -5,6 +5,8 @@ import {
   Box,
   InputLeftAddon,
   useToast,
+  InputRightElement,
+  Button,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { IoSearch } from 'react-icons/io5';
@@ -60,6 +62,19 @@ export default function Input() {
               borderColor="rgba(210,210,210,1)"
               {...register('search')}
             />
+            <InputRightElement width="4.5rem">
+              <Button
+                h="1.35rem"
+                w={'50px'}
+                ml={2}
+                size="sm"
+                color={'rgba(130,130,130,1)'}
+                type="submit"
+                fontSize={'0.8rem'}
+              >
+                {'enter'}
+              </Button>
+            </InputRightElement>
           </InputGroup>
         </Stack>
       </Box>

@@ -184,8 +184,8 @@ export default function AuctionList() {
                   height={'28px'}
                   className="ml-1 mr-3 mb-0.5 mt-1.5"
                 />
-                <Text fontSize="26px" fontWeight="bold" ml="3px" mt={'4px'}>
-                  {`${search} 에 대한 검색 결과`}
+                <Text fontSize={{ base: '20px', md: '26px' }} fontWeight="bold" ml="3px" mt={'4px'}>
+                  {`'${search}' 에 대한 검색 결과`}
                 </Text>
               </Flex>
             )}
