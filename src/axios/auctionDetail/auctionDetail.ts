@@ -29,8 +29,31 @@ export interface IDetailImage {
   createdAt: string;
 }
 
+// Image 항목의 인터페이스 정의
+interface IAnswerImage {
+  answerId: number;
+  auctionId: number | null;
+  createdAt: string;
+  id: number;
+  imageName: string;
+  imageType: string;
+  imageUrl: string;
+}
+
+// Answer 항목의 인터페이스 정의
+interface IAnswer {
+  id: number;
+  auctionId: number;
+  auctionTitle: string;
+  title: string;
+  content: string;
+  writerId: string;
+  imageList: IAnswerImage[];
+  createdAt: string;
+}
+
 export interface IAskList {
-  answerList: [];
+  answerList: IAnswer[];
   auctionId: number;
   auctionTitle: string;
   content: string;
