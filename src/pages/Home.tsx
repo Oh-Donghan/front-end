@@ -14,19 +14,25 @@ import { getCategories } from '../axios/category/categories';
 import { useQuery } from '@tanstack/react-query';
 import { Client } from '@stomp/stompjs';
 import { auctionState } from '../recoil/atom/auctionPriceAtom';
+import { eventSourceState } from 'src/recoil/atom/eventSourceAtom';
+import { alarmState, isNewNotificationState } from '../recoil/atom/alarmAtom';
 
 export default function Home() {
   const [isProcessingAuth, setIsProcessingAuth] = useState(false);
   const setAuth = useSetRecoilState(authState);
   const navigate = useNavigate();
   const location = useLocation();
+  const [eventSource, setEventSource] = useRecoilState(eventSourceState);
+  const setAlarmState = useSetRecoilState(alarmState);
   const [, setAuctionArray] = useRecoilState(auctionState);
+  const [, setIsNewNotification] = useRecoilState(isNewNotificationState);
 
   // 소셜 로그인 후 redirect 주소에 있는 accessToken recoil에 저장
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const accessToken = queryParams.get('accessToken');
     const memberId = queryParams.get('memberId');
+    const lastEventId = localStorage.getItem('lastEventId');
 
     if (accessToken && memberId) {
       setIsProcessingAuth(true);
@@ -44,6 +50,77 @@ export default function Home() {
       // URL에서 쿼리 파라미터 제거
       navigate('/', { replace: true });
       setIsProcessingAuth(false);
+
+      if (eventSource) {
+        console.log('Unsubscribed from notifications');
+        eventSource.close();
+        setEventSource(null);
+      }
+
+      const headers = {
+        Authorization: `Bearer ${accessToken}`,
+        ...(lastEventId ? { 'Last-Event-ID': lastEventId } : {}),
+      };
+
+      // SSE 연결을 fetch로 구현
+      const sseConnect = async (url, headers) => {
+        try {
+          const response = await fetch(url, {
+            headers,
+            method: 'GET',
+          });
+
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+
+          const reader = response.body.getReader();
+          const decoder = new TextDecoder();
+
+          let buffer = '';
+
+          // 새로운 EventSource 객체 생성
+          const newEventSource = {
+            close: () => {
+              reader.cancel(); // SSE 연결을 수동으로 해제
+            },
+          };
+
+          setEventSource(newEventSource);
+
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+
+            buffer += decoder.decode(value, { stream: true });
+
+            let lines = buffer.split('\n');
+            buffer = lines.pop() || '';
+
+            for (const line of lines) {
+              if (line.startsWith('data:')) {
+                const eventDataString = line.replace(/^data:\s*/, '');
+                try {
+                  const eventData = JSON.parse(eventDataString); // JSON 문자열을 객체로 변환
+                  console.log('New message:', eventData);
+                  setAlarmState(prev => [eventData, ...prev]);
+                  localStorage.setItem('last-event-id', eventData.id.toString()); // id 값을 로컬 스토리지에 저장
+                  setIsNewNotification(true); // 새로운 알림 도착 시 상태 업데이트
+                } catch (error) {
+                  console.error('Failed to parse event data:', error);
+                }
+              }
+            }
+          }
+        } catch (err) {
+          console.error('SSE connection failed:', err);
+        }
+      };
+
+      // Fetch-based SSE connection
+      sseConnect('https://dddang.store/api/members/notification/subscribe', headers);
+
+      console.log('Subscribed to notifications');
     }
   }, [location, navigate]);
 

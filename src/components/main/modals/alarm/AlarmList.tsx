@@ -2,14 +2,25 @@ import { Flex, Spinner, Text } from '@chakra-ui/react';
 import Alarm from './Alarm';
 import { useQuery } from '@tanstack/react-query';
 import { getAlarms } from '../../../../axios/alarm/alarm';
+import { useRecoilState } from 'recoil';
+import { alarmState } from '../../../../recoil/atom/alarmAtom';
+import { useEffect } from 'react';
 
 export default function AlarmList() {
+  const [alarms, setAlarms] = useRecoilState(alarmState);
+
   const { data, isLoading } = useQuery({
     queryKey: ['alarm'],
     queryFn: () => getAlarms(),
     staleTime: 0,
     gcTime: 0,
   });
+
+  useEffect(() => {
+    if (data) {
+      setAlarms(prev => [...prev, ...data]);
+    }
+  }, [data, setAlarms]);
 
   if (isLoading) {
     return (
@@ -19,7 +30,7 @@ export default function AlarmList() {
     );
   }
 
-  if (data.length === 0) {
+  if (alarms.length === 0) {
     return (
       <Flex w={'100%'} h={'272px'} align={'center'} justify={'center'}>
         <Text
@@ -48,7 +59,7 @@ export default function AlarmList() {
         scrollbarWidth: 'none',
       }}
     >
-      {data?.map(alarm => (
+      {alarms?.map(alarm => (
         <Alarm
           key={alarm.id}
           type={alarm.notificationType}

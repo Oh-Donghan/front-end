@@ -23,11 +23,14 @@ import { logIn } from '../../../../axios/auth/user';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { authState } from '../../../../recoil/atom/authAtom';
 import { eventSourceState } from '../../../../recoil/atom/eventSourceAtom';
+import { alarmState, isNewNotificationState } from '../../../../recoil/atom/alarmAtom';
 
 export default function SigninModal({ onClose, isOpen, initialRef, onSignupClick }) {
   const { register, handleSubmit, reset } = useForm();
   const setAuth = useSetRecoilState(authState);
+  const setAlarmState = useSetRecoilState(alarmState);
   const [eventSource, setEventSource] = useRecoilState(eventSourceState);
+  const [, setIsNewNotification] = useRecoilState(isNewNotificationState); // 추가
   const toast = useToast();
   const lastEventId = localStorage.getItem('lastEventId');
 
@@ -37,8 +40,11 @@ export default function SigninModal({ onClose, isOpen, initialRef, onSignupClick
     }
 
     try {
-      const response = await logIn({ id: data.id, password: data.password });
-      if (response.accessToken) {
+      await logIn({ id: data.id, password: data.password });
+
+      const accessToken = localStorage.getItem('accessToken');
+
+      if (accessToken) {
         setAuth(true);
         reset();
         onClose();
@@ -50,7 +56,7 @@ export default function SigninModal({ onClose, isOpen, initialRef, onSignupClick
         }
 
         const headers = {
-          Authorization: `Bearer ${response.accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
           ...(lastEventId ? { 'Last-Event-ID': lastEventId } : {}),
         };
 
@@ -91,9 +97,16 @@ export default function SigninModal({ onClose, isOpen, initialRef, onSignupClick
 
               for (const line of lines) {
                 if (line.startsWith('data:')) {
-                  const eventData = line.replace(/^data:\s*/, '');
-                  console.log('New message:', eventData);
-                  // 여기에서 SSE로 받은 데이터를 처리합니다.
+                  const eventDataString = line.replace(/^data:\s*/, '');
+                  try {
+                    const eventData = JSON.parse(eventDataString); // JSON 문자열을 객체로 변환
+                    console.log('New message:', eventData);
+                    setAlarmState(prev => [eventData, ...prev]);
+                    localStorage.setItem('last-event-id', eventData.id.toString()); // id 값을 로컬 스토리지에 저장
+                    setIsNewNotification(true); // 새로운 알림 도착 시 상태 업데이트
+                  } catch (error) {
+                    console.error('Failed to parse event data:', error);
+                  }
                 }
               }
             }

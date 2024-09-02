@@ -14,12 +14,19 @@ import AlarmList from './AlarmList';
 interface AlarmModalType {
   containerRef?: RefObject<HTMLDivElement>;
   type?: string;
+  onOpen?: () => void; // 추가
 }
 
-export default function AlarmModal({ type }: AlarmModalType) {
+export default function AlarmModal({ type, onOpen }: AlarmModalType) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleOpen = () => setIsOpen(true);
+  const handleOpen = () => {
+    setIsOpen(true);
+    if (onOpen) {
+      onOpen(); // 알림 확인 시 호출
+    }
+  };
+
   const handleClose = () => setIsOpen(false);
 
   return (

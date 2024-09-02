@@ -9,6 +9,8 @@ import {
   DrawerContent,
   DrawerCloseButton,
   Box,
+  Flex,
+  Badge,
 } from '@chakra-ui/react';
 import { RxTextAlignJustify } from 'react-icons/rx';
 import SigninModal from '../main/modals/auth/SigninModal';
@@ -23,7 +25,7 @@ import { useRecoilState } from 'recoil';
 import { authState } from '../../recoil/atom/authAtom';
 import { signOut } from '../../axios/auth/user';
 import { eventSourceState } from '../../recoil/atom/eventSourceAtom';
-import { EventSourcePolyfill } from 'event-source-polyfill';
+import { isNewNotificationState } from '../../recoil/atom/alarmAtom';
 
 export default function Nav() {
   const signinDisclosure = useDisclosure();
@@ -33,9 +35,9 @@ export default function Nav() {
   const drawerDisclosure = useDisclosure();
   const [auth, setAuth] = useRecoilState(authState);
   const [eventSource, setEventSource] = useRecoilState(eventSourceState);
+  const [isNewNotification, setIsNewNotification] = useRecoilState(isNewNotificationState); // 추가
 
   const navigate = useNavigate();
-
   const initialRef = useRef(null);
   const toast = useToast();
 
@@ -52,18 +54,19 @@ export default function Nav() {
     signupDisclosure.onOpen();
   };
 
+  const handleAlarmModalOpen = () => {
+    setIsNewNotification(false); // 알림 확인 시 빨간 점 사라지게 설정
+  };
+
   useEffect(() => {
     const handleResize = () => {
-      // 화면의 너비가 lg 이상일 때 Drawer를 닫음
       if (window.innerWidth >= 1024 && drawerDisclosure.isOpen) {
         drawerDisclosure.onClose();
       }
     };
 
-    // 리사이즈 이벤트 리스너 등록
     window.addEventListener('resize', handleResize);
 
-    // 컴포넌트 언마운트 시 리사이즈 이벤트 리스너 해제
     return () => {
       window.removeEventListener('resize', handleResize);
     };
@@ -105,8 +108,20 @@ export default function Nav() {
           <ul className="flex justify-between items-center font-semibold w-full gap-3">
             {auth ? (
               <>
-                <li className="mr-4 cursor-pointer">
-                  <AlarmModal />
+                <li className="relative mr-4 cursor-pointer">
+                  <AlarmModal type="button" onOpen={handleAlarmModalOpen} />
+                  {isNewNotification && (
+                    <Badge
+                      colorScheme="red"
+                      position="absolute"
+                      top="0"
+                      right="0"
+                      borderRadius="full"
+                      width="8px"
+                      height="8px"
+                      display="inline-block"
+                    />
+                  )}
                 </li>
                 <li className="mr-4 cursor-pointer">
                   <ViewedAuctionModal />
@@ -216,7 +231,7 @@ export default function Nav() {
               <ul className="flex flex-col font-semibold text-lg">
                 {auth ? (
                   <>
-                    <AlarmModal type={'drawer'} />
+                    <AlarmModal type={'drawer'} onOpen={handleAlarmModalOpen} />
                     <ViewedAuctionModal type={'drawer'} />
                     <li
                       className="cursor-pointer -mx-6 px-6 py-3 hover:bg-[rgba(226,232,240,1)]"
