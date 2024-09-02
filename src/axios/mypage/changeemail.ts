@@ -1,6 +1,7 @@
 import axiosInstance from '../instance';
 
 export const fetchChangeEmail = async (email: string, authNum: string) => {
+  console.log('이메일:', email, '인증번호:', authNum);
   try {
     const response = await axiosInstance.patch('api/auth/change/email', {
       email,
