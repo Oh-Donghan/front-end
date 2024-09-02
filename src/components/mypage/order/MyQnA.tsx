@@ -18,7 +18,6 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { fetchMyQnAData, IQnA } from '../../../axios/mypage/myqna';
-import maskUserId from '../../../utils/maskUserId';
 import { formatDate } from '../../../utils/dateFormat';
 import MyQnAFix from './modal/MyQnAFix';
 import DeleteMyQnA from './modal/DeleteMyQnA';
@@ -116,7 +115,7 @@ export default function MyQnA() {
                   >
                     <Flex gap={4} flex="1" textAlign="left">
                       <Text fontWeight="bold">{qna.auctionTitle}</Text> -{' '}
-                      <Text>{maskUserId(qna.writerId)}</Text>
+                      <Text>{qna.writerId}</Text>
                       {qna.answerList && qna.answerList.length > 0 ? (
                         <Flex justifyContent="center" alignItems="center">
                           <Badge colorScheme="blue">답변완료</Badge>
@@ -170,7 +169,7 @@ export default function MyQnA() {
                             </Flex>
                             <Flex gap={2} fontSize="sm" color="blue.600">
                               <Text>작성자:</Text>
-                              <Text>{maskUserId(answer.writerId)}</Text>
+                              <Text>{answer.writerId}</Text>
                             </Flex>
                             <Flex gap={2} fontSize="sm" color="blue.600">
                               <Text>작성일:</Text>
