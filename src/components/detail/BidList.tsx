@@ -49,21 +49,25 @@ const BidList = ({ auctionId }) => {
   return (
     <Box mt={8} flex={1}>
       <List spacing={4}>
-        {data.bidList.slice(0, 5).map(bid => (
-          <ListItem key={bid.id}>
-            <Flex justifyContent="space-between" alignItems="center">
-              <Flex alignItems="center">
-                <Icon as={FaUserCheck} color="green.500" />
-                <Text fontSize="md" ml={2}>
-                  {bid.memberId} - {formatPrice(bid.bidPrice)}원 입찰 하셨습니다.
+        {data.bidList.length > 0 ? (
+          data.bidList.slice(0, 5).map(bid => (
+            <ListItem key={bid.id}>
+              <Flex justifyContent="space-between" alignItems="center">
+                <Flex alignItems="center">
+                  <Icon as={FaUserCheck} color="green.500" />
+                  <Text fontSize="md" ml={2}>
+                    {bid.memberId} - {formatPrice(bid.bidPrice)}원 입찰 하셨습니다.
+                  </Text>
+                </Flex>
+                <Text fontSize="sm" color="gray.500">
+                  {formatTimeAgo(bid.createdAt)}
                 </Text>
               </Flex>
-              <Text fontSize="sm" color="gray.500">
-                {formatTimeAgo(bid.createdAt)}
-              </Text>
-            </Flex>
-          </ListItem>
-        ))}
+            </ListItem>
+          ))
+        ) : (
+          <Box>입찰 내역이 없습니다.</Box>
+        )}
       </List>
     </Box>
   );
