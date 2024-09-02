@@ -18,7 +18,7 @@ const AuctionDetail = () => {
     queryFn: () => fetchAuctionDetailData(auctionId),
   });
 
-  console.log('데이터', data);
+  // console.log('데이터', data);
 
   // 로컬에 내가본 경매 정보 저장
   useEffect(() => {
@@ -44,7 +44,7 @@ const AuctionDetail = () => {
       const updatedRecentAuctions = [
         recentAuction,
         ...recentAuctions.filter((item: { id: number }) => item.id !== id),
-      ].slice(0, 10); // 최대 10개까지만 저장
+      ].slice(0, 5); // 최대 10개까지만 저장
 
       localStorage.setItem(memberId, JSON.stringify(updatedRecentAuctions));
     }
@@ -79,7 +79,7 @@ const AuctionDetail = () => {
           <BreadcrumbLink href="#">{data?.childCategory?.categoryName}</BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbItem isCurrentPage>
-          <BreadcrumbLink href="#">{data?.productName}</BreadcrumbLink>
+          <BreadcrumbLink href="#">{data?.title}</BreadcrumbLink>
         </BreadcrumbItem>
       </Breadcrumb>
 

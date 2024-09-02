@@ -1,8 +1,8 @@
 import axiosInstance from '../instance';
 
-export const fetchDeleteAnswerQnA = async (answerId: number) => {
+export const fetchDeleteMyQnA = async (askId: number) => {
   try {
-    const response = await axiosInstance.delete(`api/answers/${answerId}`);
+    const response = await axiosInstance.delete(`api/asks/${askId}`);
     return response.data;
   } catch (error) {
     console.error('Error deleting answer:', error);

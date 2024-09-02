@@ -1,4 +1,14 @@
-import { Box, Button, Flex, Menu, MenuButton, MenuItem, MenuList, Spinner } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Spinner,
+} from '@chakra-ui/react';
 import { IoChevronDownSharp } from 'react-icons/io5';
 import HistoryPagination from './HistoryPagination';
 import Calendar from '../calendar/Calendar';
@@ -80,6 +90,7 @@ export default function RechargeHistory() {
       overflow="hidden"
       textColor={'rgba(70,70,70,1)'}
     >
+      <Heading mb={6}>충전 내역</Heading>
       <Flex
         direction={{ base: 'row' }}
         wrap={'wrap'}

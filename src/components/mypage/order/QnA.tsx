@@ -1,11 +1,14 @@
-import { Box, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
+import { Box, Heading, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
 import MyQnA from './MyQnA';
 import ReceivedQnA from './ReceivedQnA';
 
 export default function QnA() {
   return (
-    <Box w="100%" h="100vh" overflow="hidden">
+    <Box w="100%" h="100vh" overflow="hidden" textColor={'rgba(70,70,70,1)'}>
       {/* 부모 요소에 100vh로 높이 설정 */}
+      <Heading textAlign="center" mb={6}>
+        QnA 내역
+      </Heading>
       <Tabs isFitted variant="enclosed" h="100%">
         {/* Tabs 컴포넌트에도 높이 설정 */}
         <TabList fontWeight="bold">
