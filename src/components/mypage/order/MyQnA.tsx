@@ -183,7 +183,12 @@ export default function MyQnA() {
                               answer.imageList.length > 0 &&
                               answer.imageList.map(image => (
                                 <Box key={image.id} mt={2}>
-                                  <Image src={image.imageUrl} alt="Answer Image" />
+                                  <Image
+                                    src={image.imageUrl}
+                                    alt="Answer Image"
+                                    w="200px"
+                                    h="full"
+                                  />
                                 </Box>
                               ))}
                           </Box>
