@@ -31,8 +31,12 @@ export default function RechargePoint() {
       marginRight={'24px'}
       marginBottom={'8px'}
     >
-      <Text fontSize={{ base: 'sm', md: 'xl' }}>보유 포인트</Text>
-      <Box fontSize={{ base: 'lg', md: '3xl' }}>{formatPrice(data?.pointAmount)}P</Box>
+      <Text fontSize="xl" fontWeight="bold">
+        보유 포인트:
+      </Text>
+      <Box fontSize="3xl" fontWeight="bold" color="#3182ce">
+        {formatPrice(data?.pointAmount)}P
+      </Box>
     </Flex>
   );
 }
