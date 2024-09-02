@@ -14,7 +14,7 @@ import { getCategories } from '../axios/category/categories';
 import { useQuery } from '@tanstack/react-query';
 import { Client } from '@stomp/stompjs';
 import { auctionState } from '../recoil/atom/auctionPriceAtom';
-import { eventSourceState } from 'src/recoil/atom/eventSourceAtom';
+import { eventSourceState } from '../recoil/atom/eventSourceAtom';
 import { alarmState, isNewNotificationState } from '../recoil/atom/alarmAtom';
 
 export default function Home() {
