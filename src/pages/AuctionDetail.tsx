@@ -18,7 +18,7 @@ const AuctionDetail = () => {
     queryFn: () => fetchAuctionDetailData(auctionId),
   });
 
-  // console.log('데이터', data);
+  console.log('데이터', data);
 
   // 로컬에 내가본 경매 정보 저장
   useEffect(() => {
@@ -95,7 +95,7 @@ const AuctionDetail = () => {
         <BidList auctionId={auctionId} />
 
         {/* Q&A Section */}
-        <QnASection qna={data?.askList} />
+        <QnASection qna={data?.askList} sellerId={data?.seller.memberId} />
       </Flex>
     </Flex>
   );
