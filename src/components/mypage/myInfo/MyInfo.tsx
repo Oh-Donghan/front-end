@@ -2,66 +2,110 @@ import {
   Box,
   Button,
   Flex,
-  Input,
-  InputGroup,
-  InputRightElement,
-  ListItem,
-  UnorderedList,
   Text,
+  Spinner,
+  Heading,
+  useDisclosure,
+  Tooltip,
 } from '@chakra-ui/react';
 import MyInfoTable from './MyInfoTable';
+import { useQuery } from '@tanstack/react-query';
+import { fetchMemberInquiry } from '../../../axios/mypage/memberinquiry';
+import { formatDate } from '../../../utils/dateFormat';
+import { formatPrice } from '../../../utils/formatPrice';
+import { useRef } from 'react';
+import ChangeEmail from './modal/ChangeEmail';
+import { cleanEmail } from '../../../utils/cleanEmail';
 
 export default function MyInfo() {
+  const changeEmailDisclosure = useDisclosure();
+  const initialRef = useRef(null);
+
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['memberInquiry'],
+    queryFn: fetchMemberInquiry,
+  });
+
+  console.log('회원 조회:', data);
+
+  if (isLoading) {
+    return (
+      <Flex justifyContent="center" alignItems="center" height="100%" width="100%">
+        <Spinner size="xl" />
+      </Flex>
+    );
+  }
+
+  if (isError) {
+    return <div>data fetching error...</div>;
+  }
+
   return (
-    <Box
-      className="flex justify-center flex-col"
-      w="100%"
-      h="100vh"
-      overflow="hidden"
-      textColor={'rgba(70,70,70,1)'}
-    >
-      <Flex
-        direction={{ base: 'column', md: 'row' }}
-        gap={10}
-        justifyContent="center"
-        alignItems={{ base: 'center', md: 'flex-start' }}
-      >
-        <Flex
-          direction="column"
-          gap={4}
-          w={{ base: '100%', md: 'auto' }}
-          flex="1" // 남은 공간을 차지하도록 설정
+    <>
+      <ChangeEmail
+        onClose={changeEmailDisclosure.onClose}
+        isOpen={changeEmailDisclosure.isOpen}
+        initialRef={initialRef}
+        memberEmail={data?.email}
+      />
+      {data && (
+        <Box
+          className="flex flex-col"
+          w="100%"
+          h="100vh"
+          overflow="hidden"
+          textColor={'rgba(70,70,70,1)'}
         >
-          <Flex direction={{ base: 'column', md: 'row' }} gap={8} flex="1">
-            <Flex direction="column" gap={2} w={{ base: '100%', md: '350px' }}>
-              <Flex justifyContent="space-between">
-                <div>이메일</div>
-                <div>수정</div>
+          <Box>
+            <Heading mb={6}>내 정보</Heading>
+            <Flex direction="column" mb="30px" fontSize="lg">
+              <Flex gap={1}>
+                <Text fontWeight="bold">아이디:</Text>
+                <Text>{data.memberId}</Text>
               </Flex>
-              <InputGroup size="md">
-                <Input pr="5.5rem" type="text" placeholder="이메일을 입력해주세요" />
-                <InputRightElement width="4.5rem" mr="0.4rem">
-                  <Button h="1.75rem" size="sm" fontSize="xs">
-                    인증번호 받기
+              <Flex gap={1} alignItems="center">
+                <Text fontWeight="bold">이메일:</Text>
+                <Text>{cleanEmail(data.email)}</Text>
+                <Tooltip
+                  label="소셜로그인은 비밀번호 변경이 불가합니다."
+                  aria-label="A tooltip"
+                  isDisabled={!data.social}
+                >
+                  <Button
+                    size="sm"
+                    colorScheme="blue"
+                    ml={1}
+                    onClick={changeEmailDisclosure.onOpen}
+                    isDisabled={!!data.social}
+                  >
+                    변경
                   </Button>
-                </InputRightElement>
-              </InputGroup>
+                </Tooltip>
+              </Flex>
+              <Flex gap={1}>
+                <Text fontWeight="bold">가입날짜:</Text>
+                <Text>{formatDate(data.createdAt)}</Text>
+              </Flex>
             </Flex>
+            <Flex alignItems="center" justifyContent="flex-end" gap={2}>
+              <Text fontSize="xl" fontWeight="bold">
+                보유 포인트:
+              </Text>
+              <Text fontSize={{ base: '2xl', md: '3xl' }} fontWeight="bold" color="#3182ce">
+                {formatPrice(data.point)}P
+              </Text>
+            </Flex>
+          </Box>
+
+          <Flex direction="column" gap="2">
+            <Text fontSize="lg" fontWeight="bold">
+              입찰 내역
+            </Text>
           </Flex>
-          <UnorderedList className="text-sm mb-6" w="100%" flex="1">
-            <ListItem>이메일은 최초 설정 또는 변경 후 30일이 지나야 바꿀 수 있습니다.</ListItem>
-            <ListItem>소셜로그인 계정은 정보를 수정할 수 없습니다.</ListItem>
-            <ListItem>이메일과 동일한 아이디는 사용이 불가능합니다.</ListItem>
-          </UnorderedList>
-        </Flex>
-      </Flex>
-      <Flex direction="column" gap="2">
-        <Text fontSize="lg" fontWeight="bold">
-          입찰 내역
-        </Text>
-      </Flex>
-      {/* 테이블 */}
-      <MyInfoTable />
-    </Box>
+          {/* 테이블 */}
+          <MyInfoTable />
+        </Box>
+      )}
+    </>
   );
 }
