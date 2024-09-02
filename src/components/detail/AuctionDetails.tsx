@@ -27,7 +27,7 @@ const AuctionDetails = ({ auctionId }) => {
     queryFn: () => fetchAuctionDetailData(auctionId),
   });
 
-  // console.log('data!!:', data);
+  console.log('data!!:', data);
 
   useEffect(() => {
     const stompClient = new Client({
@@ -190,9 +190,17 @@ const AuctionDetails = ({ auctionId }) => {
         <Text fontSize={{ base: '2xl', md: '3xl' }} fontWeight="bold">
           {data?.title}
         </Text>
-        <Box fontSize={{ base: 'lg', md: 'xl' }} color="gray.600">
-          <Timer endedAt={data?.endedAt} setIsFinished={setIsFinished} />
-        </Box>
+        {data?.auctionState === 'END' ? (
+          <Box>
+            <Text fontSize="xl" fontWeight="bold">
+              종료된 경매 입니다.
+            </Text>
+          </Box>
+        ) : (
+          <Box fontSize={{ base: 'lg', md: 'xl' }} color="gray.600">
+            <Timer endedAt={data?.endedAt} setIsFinished={setIsFinished} />
+          </Box>
+        )}
       </Flex>
 
       <Flex gap={{ base: '4', md: '8' }} mt={4}>
@@ -290,14 +298,19 @@ const AuctionDetails = ({ auctionId }) => {
               py={2}
               px={3}
               flex="1"
-              isDisabled={!auth}
+              isDisabled={!auth || data.auctionState === 'END'}
             />
-            <Button type="submit" colorScheme="blue" variant="outline" isDisabled={!auth}>
+            <Button
+              type="submit"
+              colorScheme="blue"
+              variant="outline"
+              isDisabled={!auth || data.auctionState === 'END'}
+            >
               입찰하기
             </Button>
           </Flex>
         </form>
-        <InstantBuyForm auctionId={auctionId} />
+        <InstantBuyForm auctionState={data?.auctionState} auctionId={auctionId} />
       </Box>
     </Box>
   );
