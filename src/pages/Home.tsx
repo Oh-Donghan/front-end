@@ -119,7 +119,7 @@ export default function Home() {
       setAuth(true);
 
       // URL에서 쿼리 파라미터 제거
-      // navigate('/', { replace: true });
+      navigate('/', { replace: true });
       setIsProcessingAuth(false);
     }
   }, [location, navigate]);
