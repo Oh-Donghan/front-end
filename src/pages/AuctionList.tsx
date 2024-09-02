@@ -41,6 +41,11 @@ export default function AuctionList() {
     return cat.categoryName === category;
   });
 
+  // 페이지 첫 로드시 스크롤 최상단으로 이동
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   // 웹소켓 연결 및 구독 설정
   useEffect(() => {
     const stompClient = new Client({
