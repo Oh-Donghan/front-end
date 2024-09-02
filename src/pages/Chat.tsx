@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import { Flex, useDisclosure } from '@chakra-ui/react';
+import { Flex } from '@chakra-ui/react';
 import ChatLeftSection from '../components/main/chat/ChatLeftSection';
 import ChatRightSection from '../components/main/chat/ChatRightSection';
-import ConfirmPurchaseModal from '../components/chat/modals/ConfirmPurchaseModal';
 import { Client, IMessage } from '@stomp/stompjs';
 import { getAllChats } from '../axios/chat/chat';
 import { useQuery } from '@tanstack/react-query';
@@ -12,7 +11,7 @@ export default function Chat() {
   const [messages, setMessages] = useState([]);
   const [selectedChatId, setSelectedChatId] = useState(0);
   const [stompClient, setStompClient] = useState<Client | null>(null);
-  const ConfirmPurchaseDisclosure = useDisclosure();
+
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   const searchParams = new URLSearchParams(location.search);
@@ -97,10 +96,6 @@ export default function Chat() {
 
   return (
     <>
-      <ConfirmPurchaseModal
-        isOpen={ConfirmPurchaseDisclosure.isOpen}
-        onClose={ConfirmPurchaseDisclosure.onClose}
-      />
       <Flex align={'center'} justify={'center'} className="w-full h-[100vh] bg-slate-200">
         <Flex
           width={'1200px'}
@@ -117,7 +112,6 @@ export default function Chat() {
             isChatListLoading={isChatListLoading}
           />
           <ChatRightSection
-            ConfirmPurchaseDisclosure={ConfirmPurchaseDisclosure}
             messagesEndRef={messagesEndRef}
             messages={messages}
             setMessages={setMessages} // messages를 업데이트하기 위한 setter 함수 전달

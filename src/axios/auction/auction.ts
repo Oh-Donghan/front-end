@@ -2,6 +2,7 @@ import axios from 'axios';
 import axiosInstance from '../instance';
 import { CreateAuctionType } from '../../interface/auction/actionInterface';
 
+/* 경매 만들기 **/
 export const createAuction = async (
   createDto: CreateAuctionType,
   thumbnail: File,
@@ -53,4 +54,24 @@ export const createAuction = async (
       throw new Error('An unexpected error occurred');
     }
   }
+};
+
+/* 경매 구매 확정 **/
+export const confirmAuctionPayment = async ({
+  auctionId,
+  price,
+  sellerId,
+}: {
+  auctionId: number;
+  price: number;
+  sellerId: string;
+}) => {
+  const requestBody = {
+    price,
+    sellerId,
+  };
+
+  const res = await axiosInstance.post(`/api/auctions/${auctionId}/confirm`, requestBody);
+
+  return res.data;
 };

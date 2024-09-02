@@ -154,6 +154,7 @@ export default function AuctionList() {
           </>
         ) : (
           <>
+            {/*카테고리를 선택하고 검색은 하지 않았을 떄*/}
             {category !== '전체' && !search && (
               <Flex alignItems={'center'} marginTop={'20px'}>
                 <img
@@ -165,6 +166,21 @@ export default function AuctionList() {
                 />
                 <Text fontSize="26px" fontWeight="bold" pl="6px" ml="3px">
                   {currentCategoryData?.categoryName}
+                </Text>
+              </Flex>
+            )}
+            {/*카테고리를 선택하고 검색을 했을 떄*/}
+            {category !== '전체' && search && (
+              <Flex align={'center'} mt={4}>
+                <img
+                  src={searchico}
+                  alt="검색 아이콘"
+                  width={'28px'}
+                  height={'28px'}
+                  className="ml-1 mr-3 mb-0.5 mt-1.5"
+                />
+                <Text fontSize="26px" fontWeight="bold" ml="3px" mt={'4px'}>
+                  {`${search} 에 대한 검색 결과`}
                 </Text>
               </Flex>
             )}
@@ -208,70 +224,55 @@ export default function AuctionList() {
           }}
         >
           <Flex alignItems="center" justifyContent={'space-between'} width={'full'}>
-            {search ? (
-              <Flex align={'center'}>
-                <img
-                  src={searchico}
-                  alt="검색 아이콘"
-                  width={'28px'}
-                  height={'28px'}
-                  className="ml-1 mr-3 mb-0.5 mt-1.5"
-                />
-                <Text fontSize="26px" fontWeight="bold" ml="3px" mt={'4px'}>
-                  {`${search}'에 대한 검색 결과`}
-                </Text>
-              </Flex>
-            ) : (
-              <Flex>
-                <CategorySortButton /> {/* 대분류 변경 핸들러 */}
-                {category !== '전체' && (
-                  <Link
-                    to={{
-                      pathname: '/auctions',
-                      search: new URLSearchParams({
-                        mainCategory: category,
-                        ...(sort !== 'recent' && { sort }), // sort가 있으면 포함
-                      }).toString(),
-                    }}
-                    className="mr-2"
+            <Flex>
+              <CategorySortButton /> {/* 대분류 변경 핸들러 */}
+              {category !== '전체' && (
+                <Link
+                  to={{
+                    pathname: '/auctions',
+                    search: new URLSearchParams({
+                      mainCategory: category,
+                      ...(sort !== 'recent' && { sort }), // sort가 있으면 포함
+                    }).toString(),
+                  }}
+                  className="mr-2"
+                >
+                  <Button
+                    size={{ base: 'xs', sm: 'sm' }}
+                    variant={!subCategory ? 'solid' : 'outline'}
+                    colorScheme={!subCategory ? 'blue' : 'gray'}
+                    leftIcon={!subCategory ? <FaCheck /> : null}
+                    borderColor={'rgba(210,210,210,1)'}
                   >
-                    <Button
-                      size={{ base: 'xs', sm: 'sm' }}
-                      variant={!subCategory ? 'solid' : 'outline'}
-                      colorScheme={!subCategory ? 'blue' : 'gray'}
-                      leftIcon={!subCategory ? <FaCheck /> : null}
-                      borderColor={'rgba(210,210,210,1)'}
-                    >
-                      {'전체'}
-                    </Button>
-                  </Link>
-                )}
-                {currentCategoryData?.categories?.map((sub, i) => (
-                  <Link
-                    to={{
-                      pathname: '/auctions',
-                      search: new URLSearchParams({
-                        mainCategory: category,
-                        subCategory: sub.categoryName,
-                        ...(sort !== 'recent' && { sort }), // sort가 있으면 포함
-                      }).toString(),
-                    }}
-                    key={i}
-                    className="mr-2"
+                    {'전체'}
+                  </Button>
+                </Link>
+              )}
+              {currentCategoryData?.categories?.map((sub, i) => (
+                <Link
+                  to={{
+                    pathname: '/auctions',
+                    search: new URLSearchParams({
+                      mainCategory: category,
+                      subCategory: sub.categoryName,
+                      ...(sort !== 'recent' && { sort }), // sort가 있으면 포함
+                    }).toString(),
+                  }}
+                  key={i}
+                  className="mr-2"
+                >
+                  <Button
+                    size={{ base: 'xs', sm: 'sm' }}
+                    variant={sub.categoryName === subCategory ? 'solid' : 'outline'}
+                    colorScheme={sub.categoryName === subCategory ? 'blue' : 'gray'}
+                    leftIcon={sub.categoryName === subCategory ? <FaCheck /> : null}
+                    borderColor={'rgba(210,210,210,1)'}
                   >
-                    <Button
-                      size={{ base: 'xs', sm: 'sm' }}
-                      variant={sub.categoryName === subCategory ? 'solid' : 'outline'}
-                      colorScheme={sub.categoryName === subCategory ? 'blue' : 'gray'}
-                      leftIcon={sub.categoryName === subCategory ? <FaCheck /> : null}
-                      borderColor={'rgba(210,210,210,1)'}
-                    >
-                      {sub.categoryName}
-                    </Button>
-                  </Link>
-                ))}
-              </Flex>
-            )}
+                    {sub.categoryName}
+                  </Button>
+                </Link>
+              ))}
+            </Flex>
 
             <Flex>
               {!showSearchInputBelow && (

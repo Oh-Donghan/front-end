@@ -38,3 +38,14 @@ export const getAuctionHotItems = async ({ category, subCategory }: fetchItemsPr
 
   return res.data;
 };
+
+/* 경매 거래 단건 조회 */
+export const getTransactions = async (auctionId: number) => {
+  const res = await axiosInstance.get(`/api/transactions`, {
+    params: {
+      auctionId,
+    },
+  });
+
+  return res.data;
+};

@@ -26,7 +26,12 @@ export default function Input() {
       return;
     }
 
-    navigate(`/auctions?word=${data.search}`);
+    // 현재 URL에 word 파라미터를 추가하여 navigate
+    const searchParams = new URLSearchParams(location.search);
+    searchParams.set('word', data.search);
+    const newUrl = `${location.pathname}?${searchParams.toString()}`;
+
+    navigate(newUrl);
   };
 
   return (

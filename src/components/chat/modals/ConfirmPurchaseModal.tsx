@@ -8,10 +8,67 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Spinner,
   Text,
+  useToast,
 } from '@chakra-ui/react';
+import { useState } from 'react';
+import { confirmAuctionPayment } from '../../../axios/auction/auction';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { getTransactions } from '../../../axios/auction/auctionItems';
+
+interface ConfirmAuctionPaymentInput {
+  price: number;
+  sellerId: string;
+}
 
 export default function ConfirmPurchaseModal({ isOpen, onClose }) {
+  const [isChecked, setIsCheked] = useState(false);
+  const toast = useToast();
+  const queryClient = useQueryClient();
+  const searchParams = new URLSearchParams(location.search);
+  const roomId = searchParams.get('id');
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: ({ price, sellerId }: ConfirmAuctionPaymentInput) =>
+      confirmAuctionPayment({ auctionId: parseInt(roomId), price, sellerId }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['chat'] });
+      toast({
+        title: '구매 확정 완료되었습니다',
+        status: 'success',
+        duration: 1300,
+      });
+    },
+    onError: error => {
+      toast({
+        title: '구매 확정을 실패하였습니다',
+        status: 'error',
+        duration: 1300,
+      });
+      console.error(`Confirm Auction Payment Error:${error}`);
+    },
+  });
+
+  const onclick = async () => {
+    if (!isChecked) {
+      toast({
+        title: '주의사항 확인란을 체크해 주세요',
+        status: 'error',
+        duration: 1300,
+      });
+      return;
+    }
+
+    // try {
+    //   const res = await getTransactions( 경매 아이디 );
+    //   console.log(res);
+    //   mutate({ price: res.price, sellerId: res.sellerId });
+    // } catch (error) {
+    //   console.log(`Get Transactions Error : ${error}`);
+    // }
+  };
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered preserveScrollBarGap={true}>
       <ModalOverlay />
@@ -23,7 +80,14 @@ export default function ConfirmPurchaseModal({ isOpen, onClose }) {
             <Text>• 구매를 확정하면 판매자와의 채팅은 자동으로 종료됩니다.</Text>
             <Text>• 구매확정 후 거래에 대한 정보는 개인정보처리방침에 따라 관리됩니다.</Text>
           </Flex>
-          <Checkbox fontSize="18px" marginTop={'24px'}>
+          <Checkbox
+            fontSize="18px"
+            marginTop={'24px'}
+            checked={isChecked}
+            onChange={() => {
+              setIsCheked(prev => !prev);
+            }}
+          >
             <Text fontSize={12} fontWeight={'thin'} color={'rgba(120,120,120,1)'}>
               주의사항을 모두 확인하였습니다.
             </Text>
@@ -42,8 +106,15 @@ export default function ConfirmPurchaseModal({ isOpen, onClose }) {
             >
               취소
             </Button>
-            <Button colorScheme="blue" variant="solid" size="sm" paddingTop={'4px'}>
-              확정
+            <Button
+              disabled={isPending}
+              colorScheme="blue"
+              variant="solid"
+              size="sm"
+              paddingTop={'4px'}
+              onClick={onclick}
+            >
+              {isPending ? <Spinner size={'md'} /> : '확정'}
             </Button>
           </Flex>
         </ModalFooter>
