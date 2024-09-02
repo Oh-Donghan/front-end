@@ -16,6 +16,7 @@ import { useState } from 'react';
 import { confirmAuctionPayment } from '../../../axios/auction/auction';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { getTransactions } from '../../../axios/auction/auctionItems';
+import { useNavigate } from 'react-router-dom';
 
 interface ConfirmAuctionPaymentInput {
   auctionId: string;
@@ -27,6 +28,7 @@ export default function ConfirmPurchaseModal({ isOpen, onClose, currentAuction }
   const [isChecked, setIsCheked] = useState(false);
   const toast = useToast();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const { mutate, isPending } = useMutation({
     mutationFn: ({ auctionId, price, sellerId }: ConfirmAuctionPaymentInput) =>
@@ -66,6 +68,7 @@ export default function ConfirmPurchaseModal({ isOpen, onClose, currentAuction }
         price: res.price,
         sellerId: res.sellerId,
       });
+      navigate('/rooms?id=0');
     } catch (error) {
       console.log(`Get Transactions Error : ${error}`);
     }

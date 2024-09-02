@@ -74,11 +74,30 @@ export default function ChatRightSection({
     reset();
   };
 
-  if (isLoading) {
-    return null;
-  }
+  // if (isLoading) {
+  //   return (
+  //     <>
+  //       <ConfirmPurchaseModal
+  //         isOpen={ConfirmPurchaseDisclosure.isOpen}
+  //         onClose={ConfirmPurchaseDisclosure.onClose}
+  //         currentAuction={currentAuction}
+  //       />
+  //       <Flex
+  //         flex={3}
+  //         direction={'column'}
+  //         minWidth={'800px'}
+  //         height={'666px'}
+  //         background={'rgba(180,180,180,0.1)'}
+  //         align={'center'}
+  //         justify={'center'}
+  //       >
+  //         <Spinner size={'xl'} />
+  //       </Flex>
+  //     </>
+  //   );
+  // }
 
-  if (!currentAuction || currentAuction.length === 0) {
+  if (isLoading || !currentAuction || currentAuction.length === 0) {
     return (
       <>
         <ConfirmPurchaseModal
