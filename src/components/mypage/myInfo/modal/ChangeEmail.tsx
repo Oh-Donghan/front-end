@@ -27,7 +27,7 @@ import { fetchPinNumber } from '../../../../axios/mypage/sendPinNumber';
 import { fetchChangeEmail } from '../../../../axios/mypage/changeemail';
 
 export default function ChangeEmail({ onClose, isOpen, initialRef, memberEmail }) {
-  // 이메일 인증 상태
+  // 변경할 이메일 인증 상태
   const [email, setEmail] = useState('');
   const [isEmailSending, setIsEmailSending] = useState(false);
   const [isAuthOk, setIsAuthOk] = useState(false);
@@ -35,13 +35,11 @@ export default function ChangeEmail({ onClose, isOpen, initialRef, memberEmail }
   const [pinNumber, setPinNumber] = useState('');
   const [isPinSending, setIsPinSending] = useState(false);
   const [isPinOk, setIsPinOk] = useState(false);
-  // 변경할 비밀번호 상태
-  const [changedEmail, setChangedEmail] = useState('');
 
   const toast = useToast();
   const queryClient = useQueryClient();
 
-  // 이메일 인증 요청
+  // 변경할 이메일 인증 요청
   const handleSendEmailAuth = async () => {
     if (!email) {
       toast({ title: '이메일을 입력하세요.', status: 'warning', duration: 3000, isClosable: true });
@@ -60,7 +58,6 @@ export default function ChangeEmail({ onClose, isOpen, initialRef, memberEmail }
         isClosable: true,
       });
       setIsAuthOk(true);
-      setEmail('');
     } else {
       toast({
         title: '인증 이메일 발송 실패.',
@@ -85,7 +82,7 @@ export default function ChangeEmail({ onClose, isOpen, initialRef, memberEmail }
     }
 
     setIsPinSending(true);
-    const response = await fetchPinNumber(memberEmail, pinNumber);
+    const response = await fetchPinNumber(email, pinNumber);
     console.log('응답', response);
     setIsPinSending(false);
 
@@ -110,7 +107,7 @@ export default function ChangeEmail({ onClose, isOpen, initialRef, memberEmail }
 
   // 이메일 변경 요청
   const { mutate } = useMutation({
-    mutationFn: () => fetchChangeEmail(changedEmail, pinNumber),
+    mutationFn: () => fetchChangeEmail(email, pinNumber),
     onSuccess: () => {
       toast({
         title: '이메일 변경이 완료되었습니다.',
@@ -119,7 +116,7 @@ export default function ChangeEmail({ onClose, isOpen, initialRef, memberEmail }
         isClosable: true,
       });
 
-      onClose();
+      handleReset();
       queryClient.invalidateQueries({ queryKey: ['memberInquiry'] });
     },
     onError: error => {
@@ -134,9 +131,9 @@ export default function ChangeEmail({ onClose, isOpen, initialRef, memberEmail }
   });
 
   const handleChangeEmail = () => {
-    if (!changedEmail && !pinNumber) {
+    if (!email && !pinNumber) {
       toast({
-        title: '이메일과 핀 번호를 입력하세요.',
+        title: '인증을 완료 해주세요.',
         status: 'warning',
         duration: 3000,
         isClosable: true,
@@ -151,7 +148,9 @@ export default function ChangeEmail({ onClose, isOpen, initialRef, memberEmail }
   const handleReset = () => {
     setEmail('');
     setPinNumber('');
-    setChangedEmail('');
+    setIsAuthOk(false);
+    setIsEmailSending(false);
+    setIsPinOk(false);
     onClose();
   };
 
@@ -171,8 +170,14 @@ export default function ChangeEmail({ onClose, isOpen, initialRef, memberEmail }
         <ModalBody pb={6}>
           <FormControl>
             <Stack>
-              <FormLabel htmlFor="title" hidden>
-                이메일 인증
+              <FormLabel htmlFor="currentEmail" m={0}>
+                기존 이메일
+              </FormLabel>
+              <InputGroup>
+                <Input id="currentEmail" value={memberEmail} isDisabled />
+              </InputGroup>
+              <FormLabel htmlFor="title" m={0}>
+                변경할 이메일
               </FormLabel>
               <InputGroup>
                 <Input
@@ -180,18 +185,20 @@ export default function ChangeEmail({ onClose, isOpen, initialRef, memberEmail }
                   value={email}
                   onChange={e => setEmail(e.target.value)}
                   colorScheme="blue"
-                  placeholder="인증할 이메일을 입력하세요."
+                  placeholder="변경할 이메일을 입력하세요."
                 />
                 <InputRightElement width="4.5rem">
                   <Button
+                    w="4rem"
                     h="1.75rem"
                     size="sm"
                     mr={1.5}
                     colorScheme="blue"
                     variant="outline"
                     onClick={handleSendEmailAuth}
+                    isDisabled={isAuthOk}
                   >
-                    {isEmailSending ? <Spinner size="sm" /> : '인증하기'}
+                    {isEmailSending ? <Spinner size="sm" /> : isAuthOk ? '인증 완료' : '인증하기'}
                   </Button>
                 </InputRightElement>
               </InputGroup>
@@ -204,7 +211,7 @@ export default function ChangeEmail({ onClose, isOpen, initialRef, memberEmail }
                 인증 번호를 입력 해주세요.
               </Text>
               <HStack>
-                <PinInput value={pinNumber} onChange={value => setPinNumber(value)}>
+                <PinInput value={pinNumber} onChange={value => setPinNumber(value)} autoFocus>
                   <PinInputField />
                   <PinInputField />
                   <PinInputField />
@@ -217,29 +224,10 @@ export default function ChangeEmail({ onClose, isOpen, initialRef, memberEmail }
             </Flex>
           )}
           {/* 기존 이메일 및 변경할 이메일 */}
-          {isPinOk && (
-            <FormControl mt={4}>
-              <FormLabel htmlFor="currentEmail">기존 이메일</FormLabel>
-              <InputGroup>
-                <Input id="currentEmail" value={memberEmail} isDisabled />
-              </InputGroup>
-              <FormLabel htmlFor="newEmail" mt={1}>
-                변경할 이메일
-              </FormLabel>
-              <InputGroup>
-                <Input
-                  id="newEmail"
-                  value={changedEmail}
-                  onChange={e => setChangedEmail(e.target.value)}
-                  placeholder="변경할 이메일을 입력하세요"
-                />
-              </InputGroup>
-            </FormControl>
-          )}
         </ModalBody>
 
         <ModalFooter>
-          <Button mr={3} colorScheme="blue" onClick={handleChangeEmail}>
+          <Button mr={3} colorScheme="blue" isDisabled={!isPinOk} onClick={handleChangeEmail}>
             변경하기
           </Button>
           <Button onClick={handleReset}>취소</Button>
