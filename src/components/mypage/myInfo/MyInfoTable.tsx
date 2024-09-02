@@ -37,7 +37,7 @@ export default function MyInfoTable() {
     }
   }, [inView, fetchNextPage, hasNextPage]);
 
-  console.log('bidList:', data);
+  // console.log('bidList:', data);
 
   if (isLoading) {
     return (
@@ -87,8 +87,8 @@ export default function MyInfoTable() {
                 )),
               )}
             </Tbody>
-            <Box ref={ref} textAlign="center" py={0}></Box>
           </Table>
+          <Text ref={ref} textAlign="center" py={0}></Text>
         </TableContainer>
       </Box>
     )
