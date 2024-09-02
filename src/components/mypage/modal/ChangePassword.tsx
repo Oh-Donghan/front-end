@@ -1,5 +1,12 @@
 import {
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
   Button,
+  Flex,
   FormControl,
   FormLabel,
   Input,
@@ -9,19 +16,36 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Spinner,
   Stack,
   useToast,
 } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { fetchChangePassword } from '../../../axios/mypage/changepassword';
+import { useQuery } from '@tanstack/react-query';
+import { fetchMemberInquiry } from '../../../axios/mypage/memberinquiry';
 
 export default function ChangePassword({ onClose, isOpen, initialRef }) {
   const toast = useToast();
+  const cancelRef = useRef();
   const [passwords, setPasswords] = useState({
     currentPassword: '',
     newPassword: '',
     confirmPassword: '',
   });
+
+  const { data, isLoading } = useQuery({
+    queryKey: ['memberInquiry'],
+    queryFn: fetchMemberInquiry,
+  });
+
+  if (isLoading) {
+    return (
+      <Flex alignItems="center" justifyContent="center">
+        <Spinner size="lg" />
+      </Flex>
+    );
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -112,47 +136,71 @@ export default function ChangePassword({ onClose, isOpen, initialRef }) {
     >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader fontSize={'2xl'} textAlign={'center'}>
-          비밀번호 변경
-        </ModalHeader>
-        <ModalBody>
-          <FormControl>
-            <Stack spacing={2}>
-              <FormLabel htmlFor="currentPassword" margin={0}>
-                현재 비밀번호
-              </FormLabel>
-              <Input
-                id="currentPassword"
-                ref={initialRef}
-                value={passwords.currentPassword}
-                onChange={handleChange}
-              />
-              <FormLabel htmlFor="newPassword" margin={0}>
-                변경할 비밀번호
-              </FormLabel>
-              <Input id="newPassword" value={passwords.newPassword} onChange={handleChange} />
-              <FormLabel htmlFor="confirmPassword" margin={0}>
-                한번 더 입력
-              </FormLabel>
-              <Input
-                id="confirmPassword"
-                value={passwords.confirmPassword}
-                onChange={handleChange}
-              />
-              <span className="text-xs">
-                4자 ~ 16자 이내의 숫자, 특수문자, 영문자 중 2가지 이상을 조합
-              </span>
-            </Stack>
-          </FormControl>
-        </ModalBody>
-        <ModalFooter className="flex gap-4">
-          <Button className="w-full" colorScheme="blue" onClick={handleSubmit}>
-            변경
-          </Button>
-          <Button className="w-full" bgColor={'white'} onClick={handleReset}>
-            취소
-          </Button>
-        </ModalFooter>
+        {data?.social === null ? (
+          <>
+            <ModalHeader fontSize={'2xl'} textAlign={'center'}>
+              비밀번호 변경
+            </ModalHeader>
+            <ModalBody>
+              <FormControl>
+                <Stack spacing={2}>
+                  <FormLabel htmlFor="currentPassword" margin={0}>
+                    현재 비밀번호
+                  </FormLabel>
+                  <Input
+                    id="currentPassword"
+                    ref={initialRef}
+                    value={passwords.currentPassword}
+                    onChange={handleChange}
+                  />
+                  <FormLabel htmlFor="newPassword" margin={0}>
+                    변경할 비밀번호
+                  </FormLabel>
+                  <Input id="newPassword" value={passwords.newPassword} onChange={handleChange} />
+                  <FormLabel htmlFor="confirmPassword" margin={0}>
+                    한번 더 입력
+                  </FormLabel>
+                  <Input
+                    id="confirmPassword"
+                    value={passwords.confirmPassword}
+                    onChange={handleChange}
+                  />
+                  <span className="text-xs">
+                    4자 ~ 16자 이내의 숫자, 특수문자, 영문자 중 2가지 이상을 조합
+                  </span>
+                </Stack>
+              </FormControl>
+            </ModalBody>
+            <ModalFooter className="flex gap-4">
+              <Button className="w-full" colorScheme="blue" onClick={handleSubmit}>
+                변경
+              </Button>
+              <Button className="w-full" bgColor={'white'} onClick={handleReset}>
+                취소
+              </Button>
+            </ModalFooter>
+          </>
+        ) : (
+          <AlertDialog isOpen={isOpen} leastDestructiveRef={cancelRef} onClose={onClose}>
+            <AlertDialogOverlay>
+              <AlertDialogContent>
+                <AlertDialogHeader fontSize="xl" fontWeight="bold">
+                  비밀번호 변경 불가 안내
+                </AlertDialogHeader>
+
+                <AlertDialogBody fontSize="lg">
+                  소셜 로그인 계정은 비밀번호 변경이 불가능합니다.
+                </AlertDialogBody>
+
+                <AlertDialogFooter>
+                  <Button ref={cancelRef} onClick={onClose} colorScheme="blue">
+                    확인
+                  </Button>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialogOverlay>
+          </AlertDialog>
+        )}
       </ModalContent>
     </Modal>
   );
