@@ -13,7 +13,6 @@ import {
   Spinner,
   Text,
   useDisclosure,
-  useToast,
 } from '@chakra-ui/react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
@@ -22,12 +21,12 @@ import { fetchReceiveQnAData, IAnswer } from '../../../axios/mypage/receiveqna';
 import maskUserId from '../../../utils/maskUserId';
 import { formatDate } from '../../../utils/dateFormat';
 import QnAAnswer from './modal/QnAAnswer';
-import { fetchDeleteAnswerQnA } from '../../../axios/mypage/deleteanswerqna';
+import DeleteReceiveQnA from './modal/DeleteReceiveQnA';
 
 export default function ReceivedQnA() {
   const qnaAnswerDisclosure = useDisclosure();
+  const deleteQnAAnswer = useDisclosure();
   const initialRef = useRef(null);
-  const toast = useToast();
   const { ref, inView } = useInView();
 
   // 선택된 질문 제목, 내용을 모달에 전달하기 위한 state
@@ -38,6 +37,9 @@ export default function ReceivedQnA() {
     id: 0,
     existingAnswer: null, // 기존 답변 정보
   });
+
+  // 답변 삭제 모달에 답변 id를 넘기기위한 state
+  const [selectedAnswerId, setSelectedAnswerId] = useState(null);
 
   const pageSize = 10;
 
@@ -89,27 +91,7 @@ export default function ReceivedQnA() {
     qnaAnswerDisclosure.onOpen();
   };
 
-  const deleteAnswer = () => {
-    try {
-      fetchDeleteAnswerQnA;
-      toast({
-        title: '답변이 성공적으로 삭제되었습니다.',
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-      });
-
-      // 답변 삭제 후 목록 갱신 또는 화면 업데이트
-      // 예를 들어: setData((prevData) => prevData.filter((item) => item.id !== answerId));
-    } catch (error) {
-      toast({
-        title: '답변 삭제에 실패했습니다.',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      });
-    }
-  };
+  console.log('선택된 답변 아이디', selectedAnswerId);
 
   return (
     <>
@@ -123,6 +105,14 @@ export default function ReceivedQnA() {
         askId={selectedQuestion.id}
         existingAnswer={selectedQuestion.existingAnswer} // 기존 답변 정보 전달
       />
+      {selectedAnswerId && (
+        <DeleteReceiveQnA
+          onClose={deleteQnAAnswer.onClose}
+          isOpen={deleteQnAAnswer.isOpen}
+          initialRef={initialRef}
+          answerId={selectedAnswerId}
+        />
+      )}
       <Box h="100%" overflowY="auto">
         <Accordion allowToggle paddingY="20px">
           {data.pages.map(qnaPage =>
@@ -177,13 +167,6 @@ export default function ReceivedQnA() {
                       >
                         {qna.answerList && qna.answerList.length > 0 ? '답변 수정' : '답변 달기'}
                       </Button>
-                      {qna.answerList && qna.answerList.length > 0 ? (
-                        <Button size="sm" ml="10px" onClick={deleteAnswer}>
-                          답변 삭제
-                        </Button>
-                      ) : (
-                        ''
-                      )}
                     </Flex>
                     {/* 답변 영역 */}
                     {qna.answerList && qna.answerList.length > 0 ? (
@@ -218,10 +201,23 @@ export default function ReceivedQnA() {
                             {answer.imageList &&
                               answer.imageList.length > 0 &&
                               answer.imageList.map(image => (
-                                <Box key={image.id} mt={2}>
+                                <Box key={image.id} mt={2} w="200px" h="100%">
                                   <Image src={image.imageUrl} alt="Answer Image" />
                                 </Box>
                               ))}
+
+                            <Flex justifyContent="flex-end">
+                              <Button
+                                size="sm"
+                                ml="10px"
+                                onClick={() => {
+                                  setSelectedAnswerId(answer.id);
+                                  deleteQnAAnswer.onOpen();
+                                }}
+                              >
+                                답변 삭제
+                              </Button>
+                            </Flex>
                           </Box>
                         ))}
                       </Flex>
