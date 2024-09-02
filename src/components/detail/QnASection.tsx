@@ -20,7 +20,15 @@ import { useRecoilState } from 'recoil';
 import { authState } from '../../recoil/atom/authAtom';
 import { formatDate } from '../../utils/dateFormat';
 
-export default function QnaSection({ qna, sellerId }: { qna: IAskList[]; sellerId: string }) {
+export default function QnaSection({
+  qna,
+  sellerId,
+  auctionState,
+}: {
+  qna: IAskList[];
+  sellerId: string;
+  auctionState: string;
+}) {
   const [auth] = useRecoilState(authState);
   const memberId = localStorage.getItem('memberId');
   const qnaDisclosure = useDisclosure();
@@ -29,8 +37,6 @@ export default function QnaSection({ qna, sellerId }: { qna: IAskList[]; sellerI
   if (!qna) {
     return <div>data not fetched...</div>;
   }
-
-  console.log(sellerId, memberId);
 
   return (
     <>
@@ -49,7 +55,7 @@ export default function QnaSection({ qna, sellerId }: { qna: IAskList[]; sellerI
             onClick={qnaDisclosure.onOpen}
             colorScheme="blue"
             size="sm"
-            isDisabled={!auth || sellerId === memberId}
+            isDisabled={!auth || sellerId === memberId || auctionState === 'END'}
           >
             질문 작성하기
           </Button>
