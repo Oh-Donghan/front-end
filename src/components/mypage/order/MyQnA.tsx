@@ -21,13 +21,16 @@ import { fetchMyQnAData, IQnA } from '../../../axios/mypage/myqna';
 import maskUserId from '../../../utils/maskUserId';
 import { formatDate } from '../../../utils/dateFormat';
 import MyQnAFix from './modal/MyQnAFix';
+import DeleteMyQnA from './modal/DeleteMyQnA';
 
 export default function MyQnA() {
   const myQnAFixDisclosure = useDisclosure();
+  const myQnADeleteDisclosure = useDisclosure();
   const initialRef = useRef(null);
   const { ref, inView } = useInView();
   const pageSize = 10;
   const [selectedQuestion, setSelectedQuestion] = useState(null);
+  const [selectedQnAId, setSelectedQnAId] = useState(null);
 
   const { data, fetchNextPage, hasNextPage, isLoading, isError, error } = useInfiniteQuery({
     queryKey: ['myQnA'],
@@ -58,6 +61,11 @@ export default function MyQnA() {
     myQnAFixDisclosure.onOpen();
   };
 
+  const handleDeleteClick = (qna: number) => {
+    setSelectedQnAId(qna);
+    myQnADeleteDisclosure.onOpen();
+  };
+
   console.log('qna:', data);
 
   if (isLoading && !data) {
@@ -83,9 +91,17 @@ export default function MyQnA() {
           onClose={myQnAFixDisclosure.onClose}
           isOpen={myQnAFixDisclosure.isOpen}
           initialRef={initialRef}
-          questionTitle={selectedQuestion.title}
-          questionContent={selectedQuestion.content}
-          askId={selectedQuestion.id}
+          questionTitle={selectedQuestion?.title}
+          questionContent={selectedQuestion?.content}
+          askId={selectedQuestion?.id}
+        />
+      )}
+      {selectedQnAId && (
+        <DeleteMyQnA
+          onClose={myQnADeleteDisclosure.onClose}
+          isOpen={myQnADeleteDisclosure.isOpen}
+          initialRef={initialRef}
+          askId={selectedQnAId}
         />
       )}
       <Box h="100%" overflowY="auto">
@@ -130,7 +146,7 @@ export default function MyQnA() {
                       <Button colorScheme="blue" size="sm" onClick={() => handleEditClick(qna)}>
                         질문 수정
                       </Button>
-                      <Button size="sm" ml="10px">
+                      <Button size="sm" ml="10px" onClick={() => handleDeleteClick(qna.id)}>
                         질문 삭제
                       </Button>
                     </Flex>
