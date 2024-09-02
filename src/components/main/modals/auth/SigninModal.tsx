@@ -115,7 +115,6 @@ export default function SigninModal({ onClose, isOpen, initialRef, onSignupClick
           }
         };
 
-        // Fetch-based SSE connection
         sseConnect('https://dddang.store/api/members/notification/subscribe', headers);
 
         console.log('Subscribed to notifications');

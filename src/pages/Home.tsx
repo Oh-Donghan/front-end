@@ -44,13 +44,7 @@ export default function Home() {
       localStorage.setItem('memberId', memberId);
       console.log('Member ID saved:', memberId);
 
-      // Recoil 상태 업데이트
-      setAuth(true);
-
-      // URL에서 쿼리 파라미터 제거
-      navigate('/', { replace: true });
-      setIsProcessingAuth(false);
-
+      // 알림 SSE 연결 요청
       if (eventSource) {
         console.log('Unsubscribed from notifications');
         eventSource.close();
@@ -117,10 +111,16 @@ export default function Home() {
         }
       };
 
-      // Fetch-based SSE connection
       sseConnect('https://dddang.store/api/members/notification/subscribe', headers);
 
       console.log('Subscribed to notifications');
+
+      // Recoil 상태 업데이트
+      setAuth(true);
+
+      // URL에서 쿼리 파라미터 제거
+      navigate('/', { replace: true });
+      setIsProcessingAuth(false);
     }
   }, [location, navigate]);
 
