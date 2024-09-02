@@ -1,4 +1,14 @@
-import { Box, Button, Flex, Menu, MenuButton, MenuItem, MenuList, Spinner } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Spinner,
+} from '@chakra-ui/react';
 import { IoChevronDownSharp } from 'react-icons/io5';
 import Calendar from '../calendar/Calendar';
 import OrderTable from './OrderTable';
@@ -99,6 +109,7 @@ export default function PurchaseHistory() {
       overflow="hidden"
       textColor={'rgba(70,70,70,1)'}
     >
+      <Heading mb={6}>구매 내역</Heading>
       <Flex
         direction={{ base: 'column', lg: 'row' }}
         wrap={'wrap'}
