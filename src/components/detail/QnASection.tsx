@@ -71,8 +71,7 @@ export default function QnaSection({
                         paddingY={{ base: '6px', md: '20px' }}
                       >
                         <Flex gap={4} flex="1" textAlign="left">
-                          <Text fontWeight="bold">{ask.auctionTitle}</Text> -{' '}
-                          <Text>{ask.writerId}</Text>
+                          <Text fontWeight="bold">{ask.title}</Text> - <Text>{ask.writerId}</Text>
                           {ask.answerList && ask.answerList.length > 0 ? (
                             <Flex justifyContent="center" alignItems="center">
                               <Badge colorScheme="blue">답변완료</Badge>
@@ -88,10 +87,6 @@ export default function QnaSection({
                     </h2>
                     <AccordionPanel pb={4} bgColor={'gray.50'}>
                       <Flex direction="column" gap={1}>
-                        <Flex gap={2} fontWeight="bold">
-                          <Text>제목:</Text>
-                          <Text>{ask.title}</Text>
-                        </Flex>
                         <Flex gap={2} fontSize="sm">
                           <Text>생성날짜:</Text>
                           <Text>{formatDate(ask.createdAt)}</Text>
