@@ -5,7 +5,7 @@ import { AxiosError } from 'axios';
 import { authState } from '../../recoil/atom/authAtom';
 import { useRecoilState } from 'recoil';
 
-const InstantBuyForm = ({ auctionId }) => {
+const InstantBuyForm = ({ auctionState, auctionId }) => {
   const [auth] = useRecoilState(authState);
   const toast = useToast();
 
@@ -40,7 +40,13 @@ const InstantBuyForm = ({ auctionId }) => {
   });
 
   return (
-    <Button colorScheme="blue" w="full" mt={2} onClick={() => mutate()} isDisabled={!auth}>
+    <Button
+      colorScheme="blue"
+      w="full"
+      mt={2}
+      onClick={() => mutate()}
+      isDisabled={!auth || auctionState === 'END'}
+    >
       즉시 구매
     </Button>
   );
