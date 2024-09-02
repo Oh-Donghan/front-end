@@ -53,7 +53,10 @@ export default function Chat() {
           const body = JSON.parse(message.body);
           console.log('Received message from server:', body);
 
-          setMessages(prevMessages => [...prevMessages, body]);
+          // 서버로부터 받은 메시지의 senderId와 로컬의 memberId를 비교하여 다를 때만 messages에 추가
+          if (body.senderId !== memberId) {
+            setMessages(prevMessages => [...prevMessages, body]);
+          }
         });
       },
       onStompError: frame => {
@@ -79,6 +82,8 @@ export default function Chat() {
           message,
         }),
       });
+
+      console.log(`send message : ${message}`);
 
       // 새 메시지를 상태에 추가
       setMessages(prevMessages => [
