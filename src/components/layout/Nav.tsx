@@ -8,13 +8,12 @@ import {
   DrawerOverlay,
   DrawerContent,
   DrawerCloseButton,
-  Portal,
   Box,
 } from '@chakra-ui/react';
 import { RxTextAlignJustify } from 'react-icons/rx';
 import SigninModal from '../main/modals/auth/SigninModal';
 import SignupModal from '../main/modals/auth/SignupModal';
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import PointChargeModal from '../main/modals/point/PointChargeModal';
 import AlarmModal from '../main/modals/alarm/AlarmModal';
@@ -31,7 +30,6 @@ export default function Nav() {
   const createAuctionDisclosure = useDisclosure();
   const drawerDisclosure = useDisclosure();
   const [auth, setAuth] = useRecoilState(authState);
-  const containerRef = useRef();
 
   const navigate = useNavigate();
 
@@ -42,6 +40,23 @@ export default function Nav() {
     signinDisclosure.onClose();
     signupDisclosure.onOpen();
   };
+
+  useEffect(() => {
+    const handleResize = () => {
+      // 화면의 너비가 lg 이상일 때 Drawer를 닫음
+      if (window.innerWidth >= 1024 && drawerDisclosure.isOpen) {
+        drawerDisclosure.onClose();
+      }
+    };
+
+    // 리사이즈 이벤트 리스너 등록
+    window.addEventListener('resize', handleResize);
+
+    // 컴포넌트 언마운트 시 리사이즈 이벤트 리스너 해제
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [drawerDisclosure]);
 
   return (
     <>
@@ -66,7 +81,6 @@ export default function Nav() {
         initialRef={initialRef}
       />
 
-      {/* 네비게이션 바 */}
       <div className="flex justify-between items-center h-[84px] px-10 min-w-[375px] max-w-full">
         <Link to={'/'} className="text-3xl font-bold">
           Logo
@@ -172,14 +186,14 @@ export default function Nav() {
       </div>
 
       {/* 드로어 */}
-      <Box ref={containerRef} position="relative" zIndex={500}>
+      <Box>
         <Drawer
           isOpen={drawerDisclosure.isOpen}
           placement="left"
           onClose={drawerDisclosure.onClose}
         >
           <DrawerOverlay />
-          <DrawerContent zIndex={1000}>
+          <DrawerContent>
             <DrawerCloseButton marginTop={2} />
             <DrawerHeader fontSize={22} fontWeight={'bold'}>
               Logo
@@ -189,25 +203,33 @@ export default function Nav() {
               <ul className="flex flex-col font-semibold text-lg">
                 {auth ? (
                   <>
-                    <li onClick={drawerDisclosure.onClose}>
-                      <AlarmModal containerRef={containerRef} />
-                    </li>
-                    <li onClick={drawerDisclosure.onClose}>
-                      <ViewedAuctionModal />
-                    </li>
+                    <AlarmModal type={'drawer'} />
+                    <ViewedAuctionModal type={'drawer'} />
                     <li
                       className="cursor-pointer -mx-6 px-6 py-3 hover:bg-[rgba(226,232,240,1)]"
                       onClick={() => {
                         navigate('/mypage');
-                        drawerDisclosure.onClose;
+                        drawerDisclosure.onClose();
                       }}
                     >
                       마이페이지
                     </li>
                     <li
                       className="cursor-pointer -mx-6 px-6 py-3 hover:bg-[rgba(226,232,240,1)]"
+                      onClick={pointChargeDisclosure.onOpen}
+                    >
+                      포인트 충전
+                    </li>
+                    <li
+                      className="cursor-pointer -mx-6 px-6 py-3 hover:bg-[rgba(226,232,240,1)]"
+                      onClick={createAuctionDisclosure.onOpen}
+                    >
+                      경매 만들기
+                    </li>
+                    <li
+                      className="cursor-pointer -mx-6 px-6 py-3 hover:bg-[rgba(226,232,240,1)]"
                       onClick={async () => {
-                        drawerDisclosure.onClose;
+                        drawerDisclosure.onClose();
                         await setAuth(false);
                         await signOut();
                         localStorage.removeItem('accessToken');
@@ -237,6 +259,7 @@ export default function Nav() {
                     >
                       회원가입
                     </li>
+                    <ViewedAuctionModal type={'drawer'} />
                   </>
                 )}
               </ul>

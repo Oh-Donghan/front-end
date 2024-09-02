@@ -31,22 +31,17 @@ export default function Alarm({ type, content, createdAt, auctionId }) {
       <Flex
         justifyContent={'space-between'}
         alignItems={'center'}
-        py={['10px', '20px']}
-        px={['10px', '22px']}
+        py={'20px'}
+        px={'22px'}
         _hover={{ bgColor: 'rgba(240,240,240,1)' }}
       >
         <Flex alignItems={'center'}>
           <img src={logo} alt="alarm logo" className="w-7 h-6.5 mr-3.5" />
-          <Text
-            fontSize={['14px', '16px']}
-            overflow="hidden"
-            whiteSpace="nowrap"
-            textOverflow="ellipsis"
-          >
+          <Text fontSize={'16px'} overflow="hidden" whiteSpace="nowrap" textOverflow="ellipsis">
             {content}
           </Text>
         </Flex>
-        <Text fontSize={['12px', '14px']} fontWeight={'normal'} color={'rgba(150,150,150,1)'}>
+        <Text fontSize={'14px'} fontWeight={'normal'} color={'rgba(150,150,150,1)'}>
           {timeElapsed}
         </Text>
       </Flex>

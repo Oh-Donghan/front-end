@@ -9,17 +9,21 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
-import { useRef } from 'react';
+import { RefObject } from 'react';
 import ViewedAuctionList from './ViewedAuctionList';
 
-export default function ViewedAuctionModal() {
+interface AlarmModalType {
+  containerRef?: RefObject<HTMLDivElement>;
+  type?: string;
+}
+
+export default function ViewedAuctionModal({ type }: AlarmModalType) {
   const { onOpen, onClose, isOpen } = useDisclosure();
-  const initialRef = useRef(null);
 
   return (
-    <Box ref={initialRef} position={'relative'} zIndex={'50'}>
+    <Box>
       <Popover
-        placement="bottom-end"
+        placement={type === 'drawer' ? 'end-end' : 'bottom-end'}
         closeOnBlur={true}
         trigger={'hover'}
         isOpen={isOpen}
@@ -27,11 +31,20 @@ export default function ViewedAuctionModal() {
         onClose={onClose}
       >
         <PopoverTrigger>
-          <Box _hover={{ bgColor: 'rgba(226,232,240,1)' }} cursor={'pointer'} mx={-6} px={6} py={3}>
+          <Box
+            _hover={{
+              bgColor: type === 'drawer' ? 'rgba(226,232,240,1)' : 'rgba(255,255,255,1)',
+            }}
+            cursor={'pointer'}
+            mx={-6}
+            px={6}
+            py={3}
+          >
             최근 본 경매
           </Box>
         </PopoverTrigger>
-        <PopoverContent width={['280px', '380px']}>
+
+        <PopoverContent width={['330px', '380px']}>
           <PopoverArrow />
           <PopoverHeader
             display={'flex'}

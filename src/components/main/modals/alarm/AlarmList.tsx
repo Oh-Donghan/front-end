@@ -2,7 +2,6 @@ import { Flex, Spinner, Text } from '@chakra-ui/react';
 import Alarm from './Alarm';
 import { useQuery } from '@tanstack/react-query';
 import { getAlarms } from '../../../../axios/alarm/alarm';
-import { Dispatch, SetStateAction, useEffect } from 'react';
 
 export default function AlarmList() {
   const { data, isLoading } = useQuery({
@@ -14,7 +13,7 @@ export default function AlarmList() {
 
   if (isLoading) {
     return (
-      <Flex w={'100%'} h={['200px', '272px']} align={'center'} justify={'center'}>
+      <Flex w={'100%'} h={'272px'} align={'center'} justify={'center'}>
         <Spinner size="xl" />
       </Flex>
     );
@@ -22,7 +21,7 @@ export default function AlarmList() {
 
   if (data.length === 0) {
     return (
-      <Flex w={'100%'} h={['200px', '272px']} align={'center'} justify={'center'}>
+      <Flex w={'100%'} h={'272px'} align={'center'} justify={'center'}>
         <Text
           color={'rgba(90,90,90,1)'}
           fontSize={'1.05rem'}
@@ -39,7 +38,7 @@ export default function AlarmList() {
   return (
     <Flex
       direction={'column'}
-      maxHeight={['200px', '272px']}
+      maxHeight={'272px'}
       overflowY={'scroll'}
       sx={{
         '::-webkit-scrollbar': {
