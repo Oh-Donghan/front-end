@@ -12,7 +12,6 @@ import {
 } from '@chakra-ui/react';
 import { useRef } from 'react';
 import QnAModal from './modal/QnAModal';
-import maskUserId from '../../utils/maskUserId';
 import { IAskList } from '../../axios/auctionDetail/auctionDetail';
 import { useRecoilState } from 'recoil';
 import { authState } from '../../recoil/atom/authAtom';
@@ -25,6 +24,8 @@ export default function QnaSection({ qna }: { qna: IAskList[] }) {
   if (!qna) {
     return <div>data not fetched...</div>;
   }
+
+  console.log('질문:', qna);
 
   return (
     <>
@@ -54,7 +55,7 @@ export default function QnaSection({ qna }: { qna: IAskList[] }) {
                           <Text fontSize="lg">{ask.title}</Text>
                           <Text>-</Text>
                           <Text fontSize="sm" textColor="gray.600">
-                            {maskUserId(ask.writerId)}
+                            {ask.writerId}
                           </Text>
                         </Flex>
                         <AccordionIcon />
