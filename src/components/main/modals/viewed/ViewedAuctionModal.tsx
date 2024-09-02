@@ -27,7 +27,9 @@ export default function ViewedAuctionModal() {
         onClose={onClose}
       >
         <PopoverTrigger>
-          <span>최근 본 경매</span>
+          <Box _hover={{ bgColor: 'rgba(226,232,240,1)' }} cursor={'pointer'} mx={-6} px={6} py={3}>
+            최근 본 경매
+          </Box>
         </PopoverTrigger>
         <PopoverContent width={['280px', '380px']}>
           <PopoverArrow />

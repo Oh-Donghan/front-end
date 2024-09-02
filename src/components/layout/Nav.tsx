@@ -8,6 +8,8 @@ import {
   DrawerOverlay,
   DrawerContent,
   DrawerCloseButton,
+  Portal,
+  Box,
 } from '@chakra-ui/react';
 import { RxTextAlignJustify } from 'react-icons/rx';
 import SigninModal from '../main/modals/auth/SigninModal';
@@ -29,6 +31,7 @@ export default function Nav() {
   const createAuctionDisclosure = useDisclosure();
   const drawerDisclosure = useDisclosure();
   const [auth, setAuth] = useRecoilState(authState);
+  const containerRef = useRef();
 
   const navigate = useNavigate();
 
@@ -169,70 +172,78 @@ export default function Nav() {
       </div>
 
       {/* 드로어 */}
-      <Drawer isOpen={drawerDisclosure.isOpen} placement="left" onClose={drawerDisclosure.onClose}>
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton marginTop={2} />
-          <DrawerHeader fontSize={21}>메뉴</DrawerHeader>
+      <Box ref={containerRef} position="relative" zIndex={500}>
+        <Drawer
+          isOpen={drawerDisclosure.isOpen}
+          placement="left"
+          onClose={drawerDisclosure.onClose}
+        >
+          <DrawerOverlay />
+          <DrawerContent zIndex={1000}>
+            <DrawerCloseButton marginTop={2} />
+            <DrawerHeader fontSize={22} fontWeight={'bold'}>
+              Logo
+            </DrawerHeader>
 
-          <DrawerBody>
-            <ul className="flex flex-col font-semibold text-lg gap-2">
-              {auth ? (
-                <>
-                  <li className="mb-4 cursor-pointer mt-4" onClick={drawerDisclosure.onClose}>
-                    <AlarmModal />
-                  </li>
-                  <li className="mb-4 cursor-pointer" onClick={drawerDisclosure.onClose}>
-                    <ViewedAuctionModal />
-                  </li>
-                  <li
-                    className="mb-4 cursor-pointer"
-                    onClick={() => {
-                      navigate('/mypage');
-                      drawerDisclosure.onClose;
-                    }}
-                  >
-                    마이페이지
-                  </li>
-                  <li
-                    className="mb-4 cursor-pointer"
-                    onClick={async () => {
-                      drawerDisclosure.onClose;
-                      await setAuth(false);
-                      await signOut();
-                      localStorage.removeItem('accessToken');
-                      localStorage.removeItem('memberId');
-                    }}
-                  >
-                    로그아웃
-                  </li>
-                </>
-              ) : (
-                <>
-                  <li
-                    className="mb-4 cursor-pointer mt-4"
-                    onClick={() => {
-                      signinDisclosure.onOpen();
-                      drawerDisclosure.onClose();
-                    }}
-                  >
-                    로그인
-                  </li>
-                  <li
-                    className="mb-4 cursor-pointer"
-                    onClick={() => {
-                      signupDisclosure.onOpen();
-                      drawerDisclosure.onClose();
-                    }}
-                  >
-                    회원가입
-                  </li>
-                </>
-              )}
-            </ul>
-          </DrawerBody>
-        </DrawerContent>
-      </Drawer>
+            <DrawerBody>
+              <ul className="flex flex-col font-semibold text-lg">
+                {auth ? (
+                  <>
+                    <li onClick={drawerDisclosure.onClose}>
+                      <AlarmModal containerRef={containerRef} />
+                    </li>
+                    <li onClick={drawerDisclosure.onClose}>
+                      <ViewedAuctionModal />
+                    </li>
+                    <li
+                      className="cursor-pointer -mx-6 px-6 py-3 hover:bg-[rgba(226,232,240,1)]"
+                      onClick={() => {
+                        navigate('/mypage');
+                        drawerDisclosure.onClose;
+                      }}
+                    >
+                      마이페이지
+                    </li>
+                    <li
+                      className="cursor-pointer -mx-6 px-6 py-3 hover:bg-[rgba(226,232,240,1)]"
+                      onClick={async () => {
+                        drawerDisclosure.onClose;
+                        await setAuth(false);
+                        await signOut();
+                        localStorage.removeItem('accessToken');
+                        localStorage.removeItem('memberId');
+                      }}
+                    >
+                      로그아웃
+                    </li>
+                  </>
+                ) : (
+                  <>
+                    <li
+                      className="cursor-pointer -mx-6 px-6 py-3 hover:bg-[rgba(226,232,240,1)]"
+                      onClick={() => {
+                        signinDisclosure.onOpen();
+                        drawerDisclosure.onClose();
+                      }}
+                    >
+                      로그인
+                    </li>
+                    <li
+                      className="cursor-pointer -mx-6 px-6 py-3 hover:bg-[rgba(226,232,240,1)]"
+                      onClick={() => {
+                        signupDisclosure.onOpen();
+                        drawerDisclosure.onClose();
+                      }}
+                    >
+                      회원가입
+                    </li>
+                  </>
+                )}
+              </ul>
+            </DrawerBody>
+          </DrawerContent>
+        </Drawer>
+      </Box>
     </>
   );
 }

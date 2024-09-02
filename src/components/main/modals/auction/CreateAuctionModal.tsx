@@ -24,6 +24,7 @@ import SelectDateSection from './SelectDateSection';
 import { createAuction } from '../../../../axios/auction/auction';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { CreateAuctionType } from '../../../../interface/auction/actionInterface';
+import { formatDateToCustomString } from '../../../../utils/dateFormat';
 
 export default function CreateAuctionModal({ isOpen, onClose }) {
   const methods = useForm();
@@ -42,18 +43,6 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
   const [shippingCost, setShippingCost] = useState<string>(''); // 택배비 상태 추가
   const toast = useToast();
   const queryClient = useQueryClient();
-
-  function formatDateToDatetime(date) {
-    if (!date) return '';
-
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
-
-    return `${year}-${month}-${day} ${hours}:${minutes}`;
-  }
 
   const handleClose = () => {
     reset({
@@ -92,6 +81,12 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
 
     if (method === 'delivery') {
       // 택배 거래 선택 시, 직거래 주소 초기화
+      setContactPlace('');
+    }
+
+    if (method === 'all') {
+      // 모두 가능 거래 선택 시, 택배비 지불 방법 초기화
+      setShippingMethod('');
       setContactPlace('');
     }
   };
@@ -148,7 +143,7 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
       !shippingMethod ||
       rating === 0 ||
       files.length === 0 ||
-      (tradeMethod === 'contact' && contactPlace === '') || // 직거래 방법 선택 시 주소 필수
+      ((tradeMethod === 'contact' || tradeMethod === 'all') && contactPlace === '') || // 직거래 방법 선택 시 주소 필수
       ((tradeMethod === 'delivery' || tradeMethod === 'all') && !shippingCost) // 택배 방법 선택 시 택배비 필수
     ) {
       toast({
@@ -183,7 +178,7 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
       deliveryType: shippingMethod,
       startPrice: startPrice,
       instantPrice: instantPrice,
-      endedAt: formatDateToDatetime(endDate),
+      endedAt: formatDateToCustomString(endDate),
       parentCategoryId: selectedCategory,
       childCategoryId: selectedSubCategory,
       productName: data.productName,
@@ -393,12 +388,13 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
                         </Text>
                       </Flex>
                       <Input
-                        borderColor={'rgba(200,200,200,1)'}
+                        borderColor={'rgba(100,100,100,1)'}
                         type="text"
                         fontSize={'0.95rem'}
                         value={contactPlace}
                         onChange={e => setContactPlace(e.target.value)}
                         isDisabled={tradeMethod === '' || tradeMethod === 'delivery'}
+                        _disabled={{ borderColor: 'rgba(200,200,200,1)' }}
                       />
                     </Flex>
                   </Flex>
@@ -415,11 +411,12 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
                         </Flex>
                         <Input
                           type={'number'}
-                          borderColor={'rgba(200,200,200,1)'}
+                          borderColor={'rgba(100,100,100,1)'}
                           fontSize={'0.95rem'}
                           value={shippingCost}
                           onChange={e => setShippingCost(e.target.value)}
                           isDisabled={tradeMethod === '' || tradeMethod === 'contact'}
+                          _disabled={{ borderColor: 'rgba(200,200,200,1)' }}
                         />
                       </Flex>
                     </InputGroup>
@@ -435,14 +432,17 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
                           </Text>
                         </Flex>
                         <Select
-                          borderColor={'rgba(200,200,200,1)'}
+                          borderColor={'rgba(100,100,100,1)'}
                           fontSize={'0.95rem'}
                           onChange={handleShippingMethodChange}
                           value={shippingMethod}
-                          isDisabled={tradeMethod === 'contact'}
+                          isDisabled={
+                            tradeMethod === '' || tradeMethod === 'contact' ? true : false
+                          }
                           placeholder={
                             tradeMethod === 'contact' ? '택배 불가능' : '비용 지불 방법 선택'
                           }
+                          _disabled={{ borderColor: 'rgba(200,200,200,1)' }}
                         >
                           <option value="prepay">선불</option>
                           <option value="noprepay">착불</option>
