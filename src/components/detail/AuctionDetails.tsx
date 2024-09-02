@@ -292,7 +292,12 @@ const AuctionDetails = ({ auctionId }) => {
               flex="1"
               isDisabled={!auth}
             />
-            <Button type="submit" colorScheme="blue" variant="outline" isDisabled={!auth}>
+            <Button
+              type="submit"
+              colorScheme="blue"
+              variant="outline"
+              isDisabled={!auth || memberId === data?.askList[0].writerId}
+            >
               입찰하기
             </Button>
           </Flex>
