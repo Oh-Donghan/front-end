@@ -46,6 +46,17 @@ export default function ChangeEmail({ onClose, isOpen, initialRef, memberEmail }
       return;
     }
 
+    if (memberEmail === email) {
+      toast({
+        title: '현재 사용 중인 이메일로는 변경할 수 없습니다.',
+        status: 'warning',
+        duration: 3000,
+        isClosable: true,
+      });
+      setEmail('');
+      return;
+    }
+
     setIsEmailSending(true); // 전송 시작
     const response = await fetchSendEmailAuth(email);
     setIsEmailSending(false); // 전송 완료
