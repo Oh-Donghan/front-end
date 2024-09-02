@@ -32,7 +32,6 @@ export default function SigninModal({ onClose, isOpen, initialRef, onSignupClick
   const [eventSource, setEventSource] = useRecoilState(eventSourceState);
   const [, setIsNewNotification] = useRecoilState(isNewNotificationState); // 추가
   const toast = useToast();
-  const lastEventId = localStorage.getItem('lastEventId');
 
   const onSubmit = async data => {
     if (data.id.trim() === '' || data.password.trim() === '') {
@@ -40,9 +39,12 @@ export default function SigninModal({ onClose, isOpen, initialRef, onSignupClick
     }
 
     try {
-      await logIn({ id: data.id, password: data.password });
+      const response = await logIn({ id: data.id, password: data.password });
+      const responseData = await response.json(); // JSON 데이터로 변환
 
       const accessToken = localStorage.getItem('accessToken');
+      const memberId = localStorage.getItem('memberId');
+      const lastEventId = localStorage.getItem(`last-event-id-${memberId}`);
 
       if (accessToken) {
         setAuth(true);
@@ -102,7 +104,10 @@ export default function SigninModal({ onClose, isOpen, initialRef, onSignupClick
                     const eventData = JSON.parse(eventDataString); // JSON 문자열을 객체로 변환
                     console.log('New message:', eventData);
                     setAlarmState(prev => [eventData, ...prev]);
-                    localStorage.setItem('last-event-id', eventData.id.toString()); // id 값을 로컬 스토리지에 저장
+                    localStorage.setItem(
+                      `last-event-id-${responseData.memberId}`,
+                      eventData.id.toString(),
+                    ); // id 값을 로컬 스토리지에 저장
                     setIsNewNotification(true); // 새로운 알림 도착 시 상태 업데이트
                   } catch (error) {
                     console.error('Failed to parse event data:', error);

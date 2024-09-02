@@ -32,7 +32,7 @@ export default function Home() {
     const queryParams = new URLSearchParams(location.search);
     const accessToken = queryParams.get('accessToken');
     const memberId = queryParams.get('memberId');
-    const lastEventId = localStorage.getItem('lastEventId');
+    const lastEventId = localStorage.getItem(`last-event-id-${memberId}`);
 
     if (accessToken && memberId) {
       setIsProcessingAuth(true);
@@ -98,7 +98,7 @@ export default function Home() {
                   const eventData = JSON.parse(eventDataString); // JSON 문자열을 객체로 변환
                   console.log('New message:', eventData);
                   setAlarmState(prev => [eventData, ...prev]);
-                  localStorage.setItem('last-event-id', eventData.id.toString()); // id 값을 로컬 스토리지에 저장
+                  localStorage.setItem(`last-event-id-${memberId}`, eventData.id.toString()); // id 값을 로컬 스토리지에 저장
                   setIsNewNotification(true); // 새로운 알림 도착 시 상태 업데이트
                 } catch (error) {
                   console.error('Failed to parse event data:', error);
@@ -119,7 +119,7 @@ export default function Home() {
       setAuth(true);
 
       // URL에서 쿼리 파라미터 제거
-      navigate('/', { replace: true });
+      // navigate('/', { replace: true });
       setIsProcessingAuth(false);
     }
   }, [location, navigate]);
