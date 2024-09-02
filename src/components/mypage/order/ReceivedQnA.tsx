@@ -208,7 +208,7 @@ export default function ReceivedQnA() {
                             <Flex justifyContent="flex-end">
                               <Button
                                 size="sm"
-                                ml="10px"
+                                mt={3}
                                 onClick={() => {
                                   setSelectedAnswerId(answer.id);
                                   deleteQnAAnswer.onOpen();
@@ -221,9 +221,7 @@ export default function ReceivedQnA() {
                         ))}
                       </Flex>
                     ) : (
-                      <Text mt={4} color="gray.600">
-                        아직 답변이 없습니다.
-                      </Text>
+                      ''
                     )}
                   </Flex>
                 </AccordionPanel>
