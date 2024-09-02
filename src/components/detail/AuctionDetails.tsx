@@ -28,7 +28,7 @@ const AuctionDetails = ({ auctionId }) => {
     queryFn: () => fetchAuctionDetailData(auctionId),
   });
 
-  console.log('data!!:', data);
+  // console.log('data!!:', data);
 
   useEffect(() => {
     const stompClient = new Client({
@@ -42,9 +42,16 @@ const AuctionDetails = ({ auctionId }) => {
       // 입찰 성공 수신
       stompClient.subscribe(`/sub/auction/${auctionId}`, message => {
         console.log('Bid successful:', message.body);
+
         // 새로운 입찰 정보가 들어오면 쿼리를 무효화하여 데이터를 새로고침
         queryClient.invalidateQueries({ queryKey: ['detail', auctionId] });
-        return toastRef.current({
+      });
+
+      // 성공시 알림 수신
+      stompClient.subscribe(`/sub/auction/${auctionId}/${memberId}`, message => {
+        console.log(message.body);
+
+        toastRef.current({
           title: '입찰 성공',
           description: '성공적으로 입찰 되었습니다.',
           status: 'success',
@@ -184,9 +191,9 @@ const AuctionDetails = ({ auctionId }) => {
         <Text fontSize={{ base: '2xl', md: '3xl' }} fontWeight="bold">
           {data?.title}
         </Text>
-        <Text fontSize={{ base: 'lg', md: 'xl' }} color="gray.600">
+        <Box fontSize={{ base: 'lg', md: 'xl' }} color="gray.600">
           <Timer endedAt={data?.endedAt} setIsFinished={setIsFinished} />
-        </Text>
+        </Box>
       </Flex>
 
       <Flex gap={{ base: '4', md: '8' }} mt={4}>
@@ -196,7 +203,7 @@ const AuctionDetails = ({ auctionId }) => {
           </Text>
           <Flex
             fontSize={{ base: 'md', sm: 'lg', md: '2xl' }}
-            color={'#3182ce'}
+            color="#3182ce"
             fontWeight="bold"
             pl="10px"
           >
@@ -229,14 +236,26 @@ const AuctionDetails = ({ auctionId }) => {
 
       <Flex direction="column" gap={2} mt={4}>
         <Text fontSize="lg">상품명: {data?.productName}</Text>
-        <Text>판매자: {maskUserId(data?.seller.memberId)}</Text>
         <Text fontSize="md" color="gray.600">
-          {data?.productDescription}
+          판매자: {maskUserId(data?.seller.memberId)}
         </Text>
         {/* 컬러값 */}
         <Text fontSize="md" color="gray.600">
           색상: {data?.productColor}
         </Text>
+        <Text fontSize="md" color="gray.600">
+          {data?.productDescription}
+        </Text>
+        {data.deliveryType === 'NO_DELIVERY' ? (
+          ''
+        ) : (
+          <Text color="gray.600">배송비: {formatPrice(+data.deliveryPrice)}원</Text>
+        )}
+        {data.receiveType === 'DELIVERY' ? (
+          ''
+        ) : (
+          <Text color="gray.600">직거래 장소: {data.contactPlace}</Text>
+        )}
         <Flex mt={4} gap={4} direction="column">
           <Flex gap={6}>
             <Box>
