@@ -62,32 +62,36 @@ export default function MyInfoTable() {
         boxShadow="lg"
       >
         <TableContainer>
-          <Table variant="simple" size={{ base: 'sm', md: 'md' }}>
-            <Thead>
-              <Tr>
-                <Th>
-                  <Text fontSize="md">경매 이름</Text>
-                </Th>
-                <Th>
-                  <Text fontSize="md">입찰 시간</Text>
-                </Th>
-                <Th isNumeric>
-                  <Text fontSize="md">입찰가</Text>
-                </Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {data?.pages.map(bidItem =>
-                bidItem.content.map(item => (
-                  <Tr key={item.id}>
-                    <Td>{item.auctionTitle}</Td>
-                    <Td>{formatDate(item?.createdAt)}</Td>
-                    <Td isNumeric>{formatPrice(item?.bidPrice)}P</Td>
-                  </Tr>
-                )),
-              )}
-            </Tbody>
-          </Table>
+          {data.pages[0].content.length > 0 ? (
+            <Table variant="simple" size={{ base: 'sm', md: 'md' }}>
+              <Thead>
+                <Tr>
+                  <Th>
+                    <Text fontSize="md">경매 이름</Text>
+                  </Th>
+                  <Th>
+                    <Text fontSize="md">입찰 시간</Text>
+                  </Th>
+                  <Th isNumeric>
+                    <Text fontSize="md">입찰가</Text>
+                  </Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {data?.pages.map(bidItem =>
+                  bidItem.content.map(item => (
+                    <Tr key={item.id}>
+                      <Td>{item.auctionTitle}</Td>
+                      <Td>{formatDate(item?.createdAt)}</Td>
+                      <Td isNumeric>{formatPrice(item?.bidPrice)}P</Td>
+                    </Tr>
+                  )),
+                )}
+              </Tbody>
+            </Table>
+          ) : (
+            '입찰 내역이 없습니다.'
+          )}
           <Text ref={ref} textAlign="center" py={0}></Text>
         </TableContainer>
       </Box>

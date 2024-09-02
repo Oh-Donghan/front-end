@@ -18,12 +18,17 @@ import {
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fetchDeleteAccount } from '../../../axios/mypage/deleteaccount';
+import { signOut } from '../../../axios/auth/user';
 
 export default function DeleteAccount({ onClose, isOpen, initialRef }) {
   const [reason, setReason] = useState('');
   const [isChecked, setIsChecked] = useState(false);
   const navigate = useNavigate();
   const toast = useToast();
+
+  const handleSignOut = async () => {
+    await signOut();
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -42,17 +47,17 @@ export default function DeleteAccount({ onClose, isOpen, initialRef }) {
       const response = await fetchDeleteAccount(reason);
 
       if (response) {
-        // 로컬스토리지에서 accessToken과 memberId 삭제
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('memberId');
-
         toast({
           title: '탈퇴가 성공적으로 완료되었습니다.',
           status: 'success',
           duration: 3000,
           isClosable: true,
         });
+        // 로컬스토리지에서 accessToken과 memberId 삭제
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('memberId');
 
+        handleSignOut();
         navigate('/'); // 성공 시 홈으로 이동
       } else {
         toast({

@@ -16,7 +16,14 @@ const CurrentPoint = () => {
 
   // 에러 상태 처리
   if (isError) {
-    return <Box>포인트 정보를 불러오는데 실패했습니다.</Box>;
+    return (
+      <Flex gap={2} alignItems="center">
+        <Text color="gray.600">사용 가능 포인트:</Text>
+        <Text color="#3182ce" fontWeight="bold" fontSize="md">
+          로그인후 확인 가능합니다.
+        </Text>
+      </Flex>
+    );
   }
 
   // 데이터가 정상적으로 로드된 경우
