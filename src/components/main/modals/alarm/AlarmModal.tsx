@@ -53,7 +53,7 @@ export default function AlarmModal({ type, onOpen }: AlarmModalType) {
           </Box>
         </PopoverTrigger>
 
-        <PopoverContent minWidth={'640px'}>
+        <PopoverContent minWidth={'590px'}>
           <PopoverArrow />
           <PopoverHeader
             display={'flex'}
