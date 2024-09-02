@@ -10,7 +10,6 @@ import CurrentPoint from './CurrentPoint';
 import { useRecoilState } from 'recoil';
 import { authState } from '../../recoil/atom/authAtom';
 import Timer from '../main/timer/Timer';
-import maskUserId from '../../utils/maskUserId';
 import FlipNumbers from 'react-flip-numbers';
 
 const AuctionDetails = ({ auctionId }) => {
@@ -237,7 +236,7 @@ const AuctionDetails = ({ auctionId }) => {
       <Flex direction="column" gap={2} mt={4}>
         <Text fontSize="lg">상품명: {data?.productName}</Text>
         <Text fontSize="md" color="gray.600">
-          판매자: {maskUserId(data?.seller.memberId)}
+          판매자: {data?.seller.memberId}
         </Text>
         {/* 컬러값 */}
         <Text fontSize="md" color="gray.600">
