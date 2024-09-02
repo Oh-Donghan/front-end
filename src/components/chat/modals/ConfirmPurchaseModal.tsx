@@ -68,6 +68,7 @@ export default function ConfirmPurchaseModal({ isOpen, onClose, currentAuction }
         price: res.price,
         sellerId: res.sellerId,
       });
+      onClose();
       navigate('/rooms?id=0');
     } catch (error) {
       console.log(`Get Transactions Error : ${error}`);

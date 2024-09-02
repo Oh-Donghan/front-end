@@ -41,6 +41,11 @@ export default function AuctionList() {
     return cat.categoryName === category;
   });
 
+  // 페이지 첫 로드시 스크롤 최상단으로 이동
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   // 웹소켓 연결 및 구독 설정
   useEffect(() => {
     const stompClient = new Client({
@@ -179,8 +184,8 @@ export default function AuctionList() {
                   height={'28px'}
                   className="ml-1 mr-3 mb-0.5 mt-1.5"
                 />
-                <Text fontSize="26px" fontWeight="bold" ml="3px" mt={'4px'}>
-                  {`${search} 에 대한 검색 결과`}
+                <Text fontSize={{ base: '20px', md: '26px' }} fontWeight="bold" ml="3px" mt={'4px'}>
+                  {`'${search}' 에 대한 검색 결과`}
                 </Text>
               </Flex>
             )}

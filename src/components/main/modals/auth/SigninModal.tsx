@@ -20,13 +20,16 @@ import { SiNaver } from 'react-icons/si';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { logIn } from '../../../../axios/auth/user';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { authState } from '../../../../recoil/atom/authAtom';
+import { eventSourceState } from '../../../../recoil/atom/eventSourceAtom';
 
 export default function SigninModal({ onClose, isOpen, initialRef, onSignupClick }) {
   const { register, handleSubmit, reset } = useForm();
   const setAuth = useSetRecoilState(authState);
+  const [eventSource, setEventSource] = useRecoilState(eventSourceState);
   const toast = useToast();
+  const lastEventId = localStorage.getItem('lastEventId');
 
   const onSubmit = async data => {
     if (data.id.trim() === '' || data.password.trim() === '') {
@@ -39,6 +42,70 @@ export default function SigninModal({ onClose, isOpen, initialRef, onSignupClick
         setAuth(true);
         reset();
         onClose();
+
+        if (eventSource) {
+          console.log('Unsubscribed from notifications');
+          eventSource.close();
+          setEventSource(null);
+        }
+
+        const headers = {
+          Authorization: `Bearer ${response.accessToken}`,
+          ...(lastEventId ? { 'Last-Event-ID': lastEventId } : {}),
+        };
+
+        // SSE 연결을 fetch로 구현
+        const sseConnect = async (url, headers) => {
+          try {
+            const response = await fetch(url, {
+              headers,
+              method: 'GET',
+            });
+
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+
+            let buffer = '';
+
+            // 새로운 EventSource 객체 생성
+            const newEventSource = {
+              close: () => {
+                reader.cancel(); // SSE 연결을 수동으로 해제
+              },
+            };
+
+            setEventSource(newEventSource);
+
+            while (true) {
+              const { done, value } = await reader.read();
+              if (done) break;
+
+              buffer += decoder.decode(value, { stream: true });
+
+              let lines = buffer.split('\n');
+              buffer = lines.pop() || '';
+
+              for (const line of lines) {
+                if (line.startsWith('data:')) {
+                  const eventData = line.replace(/^data:\s*/, '');
+                  console.log('New message:', eventData);
+                  // 여기에서 SSE로 받은 데이터를 처리합니다.
+                }
+              }
+            }
+          } catch (err) {
+            console.error('SSE connection failed:', err);
+          }
+        };
+
+        // Fetch-based SSE connection
+        sseConnect('https://dddang.store/api/members/notification/subscribe', headers);
+
+        console.log('Subscribed to notifications');
       }
     } catch (error) {
       toast({
