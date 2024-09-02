@@ -84,6 +84,7 @@ export default function ChatRightSection({
         <ConfirmPurchaseModal
           isOpen={ConfirmPurchaseDisclosure.isOpen}
           onClose={ConfirmPurchaseDisclosure.onClose}
+          currentAuction={currentAuction}
         />
         <Flex
           flex={3}
@@ -107,6 +108,7 @@ export default function ChatRightSection({
       <ConfirmPurchaseModal
         isOpen={ConfirmPurchaseDisclosure.isOpen}
         onClose={ConfirmPurchaseDisclosure.onClose}
+        currentAuction={currentAuction}
       />
       <Flex flex={3} direction={'column'} minWidth={'800px'}>
         {/* 오른쪽 채팅 메시지 헤더 */}
@@ -133,24 +135,26 @@ export default function ChatRightSection({
               marginX={'10px'}
             />
             <Text fontSize={'16px'} color={'rgba(80,80,80,1)'}>
-              {currentAuction.buyer.memberId === memberId ? '판매중' : '구매중'}
+              {currentAuction.buyer.memberId !== memberId ? '판매중' : '구매중'}
             </Text>
           </Flex>
           <Flex mr={2}>
-            <Button
-              bgColor={'rgb(49, 130, 206)'}
-              color={'rgb(255,255,255)'}
-              _hover={{ bgColor: 'rgba(49, 130, 206,0.8)' }}
-              fontWeight={'normal'}
-              fontSize={'15px'}
-              paddingY={'8px'}
-              paddingX={'12px'}
-              onClick={async () => {
-                ConfirmPurchaseDisclosure.onOpen();
-              }}
-            >
-              구매확정
-            </Button>
+            {currentAuction.buyer.memberId === memberId && (
+              <Button
+                bgColor={'rgb(49, 130, 206)'}
+                color={'rgb(255,255,255)'}
+                _hover={{ bgColor: 'rgba(49, 130, 206,0.8)' }}
+                fontWeight={'normal'}
+                fontSize={'15px'}
+                paddingY={'8px'}
+                paddingX={'12px'}
+                onClick={async () => {
+                  ConfirmPurchaseDisclosure.onOpen();
+                }}
+              >
+                구매확정
+              </Button>
+            )}
           </Flex>
         </Flex>
         {/* 오른쪽 채팅 메시지 채팅들 */}

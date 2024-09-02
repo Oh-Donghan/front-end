@@ -18,20 +18,19 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { getTransactions } from '../../../axios/auction/auctionItems';
 
 interface ConfirmAuctionPaymentInput {
+  auctionId: string;
   price: number;
   sellerId: string;
 }
 
-export default function ConfirmPurchaseModal({ isOpen, onClose }) {
+export default function ConfirmPurchaseModal({ isOpen, onClose, currentAuction }) {
   const [isChecked, setIsCheked] = useState(false);
   const toast = useToast();
   const queryClient = useQueryClient();
-  const searchParams = new URLSearchParams(location.search);
-  const roomId = searchParams.get('id');
 
   const { mutate, isPending } = useMutation({
-    mutationFn: ({ price, sellerId }: ConfirmAuctionPaymentInput) =>
-      confirmAuctionPayment({ auctionId: parseInt(roomId), price, sellerId }),
+    mutationFn: ({ auctionId, price, sellerId }: ConfirmAuctionPaymentInput) =>
+      confirmAuctionPayment({ auctionId, price, sellerId }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['chat'] });
       toast({
@@ -60,13 +59,16 @@ export default function ConfirmPurchaseModal({ isOpen, onClose }) {
       return;
     }
 
-    // try {
-    //   const res = await getTransactions( 경매 아이디 );
-    //   console.log(res);
-    //   mutate({ price: res.price, sellerId: res.sellerId });
-    // } catch (error) {
-    //   console.log(`Get Transactions Error : ${error}`);
-    // }
+    try {
+      const res = await getTransactions(parseInt(currentAuction.auction.id));
+      mutate({
+        auctionId: String(currentAuction.auction.id),
+        price: res.price,
+        sellerId: res.sellerId,
+      });
+    } catch (error) {
+      console.log(`Get Transactions Error : ${error}`);
+    }
   };
 
   return (

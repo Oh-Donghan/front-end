@@ -62,7 +62,7 @@ export const confirmAuctionPayment = async ({
   price,
   sellerId,
 }: {
-  auctionId: number;
+  auctionId: string;
   price: number;
   sellerId: string;
 }) => {

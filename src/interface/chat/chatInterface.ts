@@ -9,6 +9,7 @@ interface Buyer {
 }
 
 interface Auction {
+  id: number;
   title: string;
   thumbnail: string;
 }

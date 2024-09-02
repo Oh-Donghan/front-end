@@ -1,4 +1,3 @@
-import { unsubscribeFromSSE } from '../../sse/alarm/unsubscribeFromAlarmSSE';
 import axiosInstance from '../instance';
 
 export const signIn = async (id: string, password: string) => {
@@ -21,7 +20,6 @@ export const signOut = async () => {
     const response = await axiosInstance.post('https://dddang.store/api/auth/logout', {});
 
     // 로그아웃이 성공하면 SSE 구독 해제
-    unsubscribeFromSSE();
 
     return response.data;
   } catch (error) {

@@ -51,6 +51,8 @@ export default function Chat() {
         console.log('STOMP client connected');
         client.subscribe(`/sub/chat/room/${roomId}`, (message: IMessage) => {
           const body = JSON.parse(message.body);
+          console.log('Received message from server:', body);
+
           setMessages(prevMessages => [...prevMessages, body]);
         });
       },
@@ -77,6 +79,7 @@ export default function Chat() {
           message,
         }),
       });
+
       // 새 메시지를 상태에 추가
       setMessages(prevMessages => [
         ...prevMessages,
