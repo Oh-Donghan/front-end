@@ -27,6 +27,7 @@ import { authState } from '../../../../recoil/atom/authAtom';
 import { eventSourceState } from '../../../../recoil/atom/eventSourceAtom';
 import { alarmState, isNewNotificationState } from '../../../../recoil/atom/alarmAtom';
 import { useEffect } from 'react';
+import axios from 'axios';
 
 export default function SigninModal({ onClose, isOpen, initialRef, onSignupClick }) {
   const { register, handleSubmit, reset } = useForm();
@@ -45,42 +46,61 @@ export default function SigninModal({ onClose, isOpen, initialRef, onSignupClick
         setEventSource(null);
       }
 
-      // const headers = {
-      //   Authorization: `Bearer ${response.accessToken}`,
-      //   ...(lastEventId ? { 'Last-Event-ID': lastEventId } : {}),
-      // };
+      // SSE 연결을 axios로 구현
+      const connectSSE = async () => {
+        try {
+          const response = await axios.get(
+            'https://dddang.store/api/members/notification/subscribe',
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+                // ...(lastEventId ? { 'Last-Event-ID': lastEventId } : {}),
+              },
+              responseType: 'stream', // 스트리밍 방식으로 응답 처리
+            },
+          );
 
-      const source = new EventSourcePolyfill(
-        'https://dddang.store/api/members/notification/subscribe',
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-          withCredentials: true,
-        },
-      );
+          const reader = response.data.getReader();
+          const decoder = new TextDecoder('utf-8');
+          let buffer = '';
 
-      source.onmessage = e => {
-        if (e.data.startsWith('{')) {
-          // 'e.type' 체크는 불필요합니다.
-          try {
-            const eventData = JSON.parse(e.data);
-            setAlarmState(prev => [eventData, ...prev]);
-            setIsNewNotification(true); // 새로운 알림 도착 시 상태 업데이트
-          } catch (error) {
-            console.error('Failed to parse event data:', error);
+          // 새로운 "EventSource" 객체처럼 작동하는 커스텀 객체 생성
+          const newEventSource = {
+            close: () => {
+              reader.cancel(); // 스트림 읽기를 중단하여 연결을 닫음
+            },
+          };
+
+          setEventSource(newEventSource);
+
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+
+            buffer += decoder.decode(value, { stream: true });
+
+            const lines = buffer.split('\n');
+            buffer = lines.pop() || '';
+
+            for (const line of lines) {
+              if (line.startsWith('data:')) {
+                const eventDataString = line.replace(/^data:\s*/, '');
+                try {
+                  const eventData = JSON.parse(eventDataString);
+                  setAlarmState(prev => [eventData, ...prev]);
+                  setIsNewNotification(true); // 새로운 알림 도착 시 상태 업데이트
+                } catch (error) {
+                  console.error('Failed to parse event data:', error);
+                }
+              }
+            }
           }
+        } catch (err) {
+          console.error('SSE connection failed:', err);
         }
       };
 
-      source.addEventListener('error', function (e) {
-        if (e) {
-          console.error('SSE error occurred:', e);
-          source.close(); // 에러가 발생시 SSE 연결을 닫아줌
-        }
-      });
-
-      setEventSource(source);
+      connectSSE();
       console.log('Subscribed to notifications');
     }
   }, [auth]);
@@ -97,7 +117,7 @@ export default function SigninModal({ onClose, isOpen, initialRef, onSignupClick
 
       const accessToken = localStorage.getItem('accessToken');
       const memberId = localStorage.getItem('memberId');
-      const lastEventId = localStorage.getItem(`last-event-id-${memberId}`);
+      // const lastEventId = localStorage.getItem(`last-event-id-${memberId}`);
 
       if (eventSource) {
         console.log('Unsubscribed from notifications');
@@ -105,10 +125,10 @@ export default function SigninModal({ onClose, isOpen, initialRef, onSignupClick
         setEventSource(null);
       }
 
-      const headers = {
-        Authorization: `Bearer ${accessToken}`,
-        ...(lastEventId ? { 'Last-Event-ID': lastEventId } : {}),
-      };
+      // const headers = {
+      //   Authorization: `Bearer ${accessToken}`,
+      //   ...(lastEventId ? { 'Last-Event-ID': lastEventId } : {}),
+      // };
 
       // SSE 연결을 fetch로 구현 ( 연결이 끊겨도 재연결 시도 X )
       // const sseConnect = async (url, headers) => {
