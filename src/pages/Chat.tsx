@@ -3,7 +3,7 @@ import { Flex } from '@chakra-ui/react';
 import ChatLeftSection from '../components/main/chat/ChatLeftSection';
 import ChatRightSection from '../components/main/chat/ChatRightSection';
 import { Client, IMessage } from '@stomp/stompjs';
-import { getAllChats } from '../axios/chat/chat';
+import { enterChatRoom, getAllChats } from '../axios/chat/chat';
 import { useQuery } from '@tanstack/react-query';
 import { formatDateToCustomString } from '../utils/dateFormat';
 
@@ -36,6 +36,10 @@ export default function Chat() {
   }, [messages]);
 
   useEffect(() => {
+    // 서버에 채팅방 id값 넘겨주기
+    enterChatRoom({ roomId });
+
+    // rooId 변경 시 채팅 웹소켓 연결
     setSelectedChatId(parseInt(roomId));
     const accessToken = localStorage.getItem('accessToken');
 
