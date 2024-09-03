@@ -127,7 +127,7 @@ export const FindPassword = async ({ memberId, email }: { memberId: string; emai
     email,
   };
 
-  const response = await axiosInstance.post('api//auth/find/password', requestBody);
+  const response = await axiosInstance.post('api/auth/find/password', requestBody);
 
   return response.data;
 };
