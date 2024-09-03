@@ -27,7 +27,7 @@ export default function Home() {
   const [, setAuctionArray] = useRecoilState(auctionState);
   const [, setIsNewNotification] = useRecoilState(isNewNotificationState);
 
-  // 소셜 로그인 후 redirect 주소에 있는 accessToken recoil에 저장
+  // 소셜 로그인 후 redirect 주소에 있는 accessToken을 Recoil에 저장
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const accessToken = queryParams.get('accessToken');
@@ -82,13 +82,14 @@ export default function Home() {
 
           setEventSource(newEventSource);
 
+          // eslint-disable-next-line no-constant-condition
           while (true) {
             const { done, value } = await reader.read();
-            if (done) break;
+            if (done) break; // 읽기가 완료되면 루프 종료
 
             buffer += decoder.decode(value, { stream: true });
 
-            let lines = buffer.split('\n');
+            const lines = buffer.split('\n');
             buffer = lines.pop() || '';
 
             for (const line of lines) {
