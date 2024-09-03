@@ -3,6 +3,7 @@ import default_profile from '../../../assets/image/modal/chat/profile.png';
 import { timeAgo } from '../../../utils/dateFormat';
 import { ChatDataType } from '../../../interface/chat/chatInterface';
 import { Link } from 'react-router-dom';
+import { exitChatRoom } from '../../../axios/chat/chat';
 
 interface ChatItemPropsType {
   chat: ChatDataType;
@@ -11,6 +12,15 @@ interface ChatItemPropsType {
 }
 
 export default function ChatItem({ chat, isSelected, onSelect }: ChatItemPropsType) {
+  const searchParams = new URLSearchParams(location.search);
+  const roomId = searchParams.get('id');
+
+  const onClick = () => {
+    console.log(1);
+
+    exitChatRoom({ roomId });
+  };
+
   return (
     <>
       <Link to={`/rooms?id=${chat.id}`}>
@@ -24,7 +34,10 @@ export default function ChatItem({ chat, isSelected, onSelect }: ChatItemPropsTy
           paddingRight={'20px'}
           paddingY={'15.5px'}
           bgColor={!isSelected ? 'rgba(255,255,255,1)' : 'rgba(245,245,245,1)'}
-          onClick={onSelect}
+          onClick={() => {
+            onClick();
+            onSelect();
+          }}
           boxShadow={'0px 1px 2px rgba(120,120,120,0.1)'}
         >
           <Flex align={'center'}>

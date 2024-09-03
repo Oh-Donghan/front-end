@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { MdLogout } from 'react-icons/md';
 import { ChatDataType } from '../../../interface/chat/chatInterface';
 import ChatList from '../../../components/chat/item/ChatList';
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useEffect, useRef } from 'react';
 
 interface ChatLeftSectionType {
   selectedChatId: number;
@@ -20,10 +20,6 @@ export default function ChatLeftSection({
   chatList,
   isChatListLoading,
 }: ChatLeftSectionType) {
-  if (isChatListLoading) {
-    return null;
-  }
-
   return (
     <Flex flexDirection={'column'} flex={1.4}>
       <ChatList
@@ -51,6 +47,7 @@ export default function ChatLeftSection({
             나가기
           </Text>
         </Link>
+        <p>이전 URL: {}</p>
       </Flex>
     </Flex>
   );
