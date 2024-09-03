@@ -20,6 +20,7 @@ import { authState } from '../../../../recoil/atom/authAtom';
 export default function ChatModal() {
   const [isChatModalOpen, setIsChatModalOpen] = useState(false);
   const [shouldFetch, setShouldFetch] = useState(false);
+  const [searchTerm, setSearchTerm] = useState(''); // 검색어 상태 추가
   const auth = useRecoilValue(authState);
   const toast = useToast();
 
@@ -49,6 +50,10 @@ export default function ChatModal() {
     }
   };
 
+  const filteredChats = chats?.filter(
+    chat => chat.auction.title.toLowerCase().includes(searchTerm.toLowerCase()), // 검색어로 필터링
+  );
+
   return (
     <div className="fixed bottom-12 right-3 z-[100]">
       <Popover placement="top-start" closeOnBlur={false} isOpen={auth && isChatModalOpen}>
@@ -62,11 +67,11 @@ export default function ChatModal() {
         {auth && (
           <PopoverContent boxShadow={'2px 2px 6px rgba(1,1,1,0.1)'} width={'370px'}>
             <PopoverHeader marginRight={'20px'} width={'full'}>
-              <ChatModalInput />
+              <ChatModalInput onSearch={setSearchTerm} /> {/* 검색어 업데이트 함수 전달 */}
             </PopoverHeader>
             <PopoverArrow />
             <PopoverBody padding={'0px'}>
-              <ChatList chats={chats} isLoading={isLoading} />
+              <ChatList chats={filteredChats} isLoading={isLoading} /> {/* 필터링된 데이터 전달 */}
             </PopoverBody>
           </PopoverContent>
         )}

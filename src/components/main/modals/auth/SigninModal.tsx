@@ -94,9 +94,82 @@ export default function SigninModal({ onClose, isOpen, initialRef, onSignupClick
     try {
       const response = await logIn({ id: data.id, password: data.password });
 
+      await logIn({ id: data.id, password: data.password });
+
       const accessToken = localStorage.getItem('accessToken');
       const memberId = localStorage.getItem('memberId');
       const lastEventId = localStorage.getItem(`last-event-id-${memberId}`);
+
+      if (eventSource) {
+        console.log('Unsubscribed from notifications');
+        eventSource.close();
+        setEventSource(null);
+      }
+
+      const headers = {
+        Authorization: `Bearer ${accessToken}`,
+        ...(lastEventId ? { 'Last-Event-ID': lastEventId } : {}),
+      };
+
+      // SSE 연결을 fetch로 구현 ( 연결이 끊겨도 재연결 시도 X )
+      // const sseConnect = async (url, headers) => {
+      //   try {
+      //     const response = await fetch(url, {
+      //       headers,
+      //       method: 'GET',
+      //     });
+
+      //     if (!response.ok) {
+      //       throw new Error('Network response was not ok');
+      //     }
+
+      //     const reader = response.body.getReader();
+      //     const decoder = new TextDecoder();
+
+      //     let buffer = '';
+
+      //     // 새로운 EventSource 객체 생성
+      //     const newEventSource = {
+      //       close: () => {
+      //         reader.cancel(); // SSE 연결을 수동으로 해제
+      //       },
+      //     };
+
+      //     setEventSource(newEventSource);
+
+      //     // eslint-disable-next-line no-constant-condition
+      //     while (true) {
+      //       const { done, value } = await reader.read();
+      //       if (done) break;
+
+      //       buffer += decoder.decode(value, { stream: true });
+
+      //       const lines = buffer.split('\n');
+      //       buffer = lines.pop() || '';
+
+      //       for (const line of lines) {
+      //         if (line.startsWith('data:')) {
+      //           const eventDataString = line.replace(/^data:\s*/, '');
+      //           try {
+      //             const eventData = JSON.parse(eventDataString); // JSON 문자열을 객체로 변환
+      //             console.log('New message:', eventData);
+      //             setAlarmState(prev => [eventData, ...prev]);
+      //             localStorage.setItem(`last-event-id-${memberId}`, eventData.id.toString()); // id 값을 로컬 스토리지에 저장
+      //             setIsNewNotification(true); // 새로운 알림 도착 시 상태 업데이트
+      //           } catch (error) {
+      //             console.error('Failed to parse event data:', error);
+      //           }
+      //         }
+      //       }
+      //     }
+      //   } catch (err) {
+      //     console.error('SSE connection failed:', err);
+      //   }
+      // };
+
+      // sseConnect('https://dddang.store/api/members/notification/subscribe', headers);
+
+      console.log('Subscribed to notifications');
 
       setAuth(true);
       reset();

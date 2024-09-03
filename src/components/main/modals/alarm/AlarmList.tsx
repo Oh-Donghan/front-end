@@ -2,12 +2,12 @@ import { Flex, Spinner, Text } from '@chakra-ui/react';
 import Alarm from './Alarm';
 import { useQuery } from '@tanstack/react-query';
 import { getAlarms } from '../../../../axios/alarm/alarm';
-import { useRecoilState } from 'recoil';
-import { alarmState } from '../../../../recoil/atom/alarmAtom';
-import { useEffect } from 'react';
+// import { useRecoilState } from 'recoil';
+// import { alarmState } from '../../../../recoil/atom/alarmAtom';
+// import { useEffect } from 'react';
 
 export default function AlarmList() {
-  const [alarms, setAlarms] = useRecoilState(alarmState);
+  // const [alarms, setAlarms] = useRecoilState(alarmState);
 
   const { data, isLoading } = useQuery({
     queryKey: ['alarm'],
@@ -16,11 +16,17 @@ export default function AlarmList() {
     gcTime: 0,
   });
 
-  useEffect(() => {
-    if (data) {
-      setAlarms(prev => [...prev, ...data]);
-    }
-  }, [data, setAlarms]);
+  // useEffect(() => {
+  //   if (data) {
+  //     // 중복된 content를 가진 객체 제거
+  //     const filteredData = data.filter(
+  //       newAlarm => !alarms.some(existingAlarm => existingAlarm.content === newAlarm.content),
+  //     );
+
+  //     // 기존의 alarms와 중복이 제거된 data를 병합
+  //     setAlarms(prev => [...prev, ...filteredData]);
+  //   }
+  // }, [data, setAlarms, alarms]);
 
   if (isLoading) {
     return (
@@ -30,7 +36,7 @@ export default function AlarmList() {
     );
   }
 
-  if (alarms.length === 0) {
+  if (data.length === 0) {
     return (
       <Flex w={'100%'} h={'272px'} align={'center'} justify={'center'}>
         <Text
@@ -59,7 +65,7 @@ export default function AlarmList() {
         scrollbarWidth: 'none',
       }}
     >
-      {alarms?.map(alarm => (
+      {data?.map(alarm => (
         <Alarm
           key={alarm.id}
           type={alarm.notificationType}

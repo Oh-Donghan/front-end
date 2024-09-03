@@ -40,18 +40,18 @@ export default function Nav() {
   const initialRef = useRef(null);
   const toast = useToast();
 
-  // const unSubscribeAlarmSSE = () => {
-  //   if (eventSource) {
-  //     try {
-  //       eventSource.close(); // SSE 연결 닫기
-  //       console.log('Unsubscribed from notifications');
-  //     } catch (error) {
-  //       console.error('Failed to unsubscribe from notifications:', error);
-  //     } finally {
-  //       setEventSource(null);
-  //     }
-  //   }
-  // };
+  const unSubscribeAlarmSSE = () => {
+    if (eventSource) {
+      try {
+        eventSource.close(); // SSE 연결 닫기
+        console.log('Unsubscribed from notifications');
+      } catch (error) {
+        console.error('Failed to unsubscribe from notifications:', error);
+      } finally {
+        setEventSource(null);
+      }
+    }
+  };
 
   const handleSignupOpen = () => {
     signinDisclosure.onClose();
@@ -116,10 +116,10 @@ export default function Nav() {
                   <AlarmModal type="button" onOpen={handleAlarmModalOpen} />
                   {isNewNotification && (
                     <Badge
-                      colorScheme="red"
+                      bgColor={'rgba(228, 25, 18)'}
                       position="absolute"
-                      top="0"
-                      right="0"
+                      top="11px"
+                      right="-6px"
                       borderRadius="full"
                       width="8px"
                       height="8px"
@@ -141,10 +141,12 @@ export default function Nav() {
                 <li
                   className="mr-4 cursor-pointer"
                   onClick={async () => {
-                    // unSubscribeAlarmSSE();
+                    unSubscribeAlarmSSE();
+                    drawerDisclosure.onClose();
 
                     await setAuth(false);
                     await signOut();
+                    unSubscribeAlarmSSE();
                     localStorage.removeItem('accessToken');
                     localStorage.removeItem('memberId');
                   }}
@@ -262,10 +264,11 @@ export default function Nav() {
                       className="cursor-pointer -mx-6 px-6 py-3 hover:bg-[rgba(226,232,240,1)]"
                       onClick={async () => {
                         drawerDisclosure.onClose();
-                        // unSubscribeAlarmSSE();
+                        unSubscribeAlarmSSE();
 
                         await setAuth(false);
                         await signOut();
+                        unSubscribeAlarmSSE();
                         localStorage.removeItem('accessToken');
                         localStorage.removeItem('memberId');
                       }}

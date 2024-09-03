@@ -27,7 +27,77 @@ export default function Home() {
   const [, setAuctionArray] = useRecoilState(auctionState);
   const [, setIsNewNotification] = useRecoilState(isNewNotificationState);
 
-  // 소셜 로그인 후 redirect 주소에 있는 accessToken recoil에 저장
+  // 재연결 로직을 처리하는 함수
+  const reconnectSSE = (url, headers, memberId, retryCount = 0) => {
+    const maxRetries = 5; // 최대 재시도 횟수
+    const retryDelay = 5000; // 재시도 간격 (5초)
+
+    const sseConnect = async () => {
+      try {
+        const response = await fetch(url, {
+          headers,
+          method: 'GET',
+        });
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+
+        let buffer = '';
+
+        // 새로운 EventSource 객체 생성
+        const newEventSource = {
+          close: () => {
+            reader.cancel(); // SSE 연결을 수동으로 해제
+          },
+        };
+
+        setEventSource(newEventSource);
+
+        // eslint-disable-next-line no-constant-condition
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break; // 읽기가 완료되면 루프 종료
+
+          buffer += decoder.decode(value, { stream: true });
+
+          const lines = buffer.split('\n');
+          buffer = lines.pop() || '';
+
+          for (const line of lines) {
+            if (line.startsWith('data:')) {
+              const eventDataString = line.replace(/^data:\s*/, '');
+              try {
+                const eventData = JSON.parse(eventDataString); // JSON 문자열을 객체로 변환
+                console.log('New message:', eventData);
+                setAlarmState(prev => [eventData, ...prev]);
+                localStorage.setItem(`last-event-id-${memberId}`, eventData.id.toString()); // id 값을 로컬 스토리지에 저장
+                setIsNewNotification(true); // 새로운 알림 도착 시 상태 업데이트
+              } catch (error) {
+                console.error('Failed to parse event data:', error);
+              }
+            }
+          }
+        }
+      } catch (err) {
+        console.error('SSE connection failed:', err);
+
+        if (retryCount < maxRetries) {
+          console.log(`Reconnecting SSE... Attempt ${retryCount + 1}`);
+          setTimeout(() => reconnectSSE(url, headers, memberId, retryCount + 1), retryDelay);
+        } else {
+          console.error('Max retries reached. SSE connection failed.');
+        }
+      }
+    };
+
+    sseConnect();
+  };
+
+  // 소셜 로그인 후 redirect 주소에 있는 accessToken을 Recoil에 저장
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const accessToken = queryParams.get('accessToken');
@@ -56,62 +126,8 @@ export default function Home() {
         ...(lastEventId ? { 'Last-Event-ID': lastEventId } : {}),
       };
 
-      // SSE 연결을 fetch로 구현
-      const sseConnect = async (url, headers) => {
-        try {
-          const response = await fetch(url, {
-            headers,
-            method: 'GET',
-          });
-
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-
-          const reader = response.body.getReader();
-          const decoder = new TextDecoder();
-
-          let buffer = '';
-
-          // 새로운 EventSource 객체 생성
-          const newEventSource = {
-            close: () => {
-              reader.cancel(); // SSE 연결을 수동으로 해제
-            },
-          };
-
-          setEventSource(newEventSource);
-
-          while (true) {
-            const { done, value } = await reader.read();
-            if (done) break;
-
-            buffer += decoder.decode(value, { stream: true });
-
-            let lines = buffer.split('\n');
-            buffer = lines.pop() || '';
-
-            for (const line of lines) {
-              if (line.startsWith('data:')) {
-                const eventDataString = line.replace(/^data:\s*/, '');
-                try {
-                  const eventData = JSON.parse(eventDataString); // JSON 문자열을 객체로 변환
-                  console.log('New message:', eventData);
-                  setAlarmState(prev => [eventData, ...prev]);
-                  localStorage.setItem(`last-event-id-${memberId}`, eventData.id.toString()); // id 값을 로컬 스토리지에 저장
-                  setIsNewNotification(true); // 새로운 알림 도착 시 상태 업데이트
-                } catch (error) {
-                  console.error('Failed to parse event data:', error);
-                }
-              }
-            }
-          }
-        } catch (err) {
-          console.error('SSE connection failed:', err);
-        }
-      };
-
-      sseConnect('https://dddang.store/api/members/notification/subscribe', headers);
+      // SSE 연결 및 재연결 로직 시작
+      reconnectSSE('https://dddang.store/api/members/notification/subscribe', headers, memberId);
 
       console.log('Subscribed to notifications');
 

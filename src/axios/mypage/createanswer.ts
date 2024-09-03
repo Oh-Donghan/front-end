@@ -17,7 +17,7 @@ export interface IAnswerImage {
   imageUrl: string;
 }
 
-interface IAnswerResponse {
+export interface IAnswerResponse {
   id: number;
   auctionId: number;
   auctionTitle: string;
