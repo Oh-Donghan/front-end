@@ -33,6 +33,76 @@ export default function SigninModal({ onClose, isOpen, initialRef, onSignupClick
   const [, setIsNewNotification] = useRecoilState(isNewNotificationState); // 추가
   const toast = useToast();
 
+  // 재연결 로직을 처리하는 함수
+  const reconnectSSE = (url, headers, memberId, retryCount = 0) => {
+    const maxRetries = 5; // 최대 재시도 횟수
+    const retryDelay = 5000; // 재시도 간격 (5초)
+
+    const sseConnect = async () => {
+      try {
+        const response = await fetch(url, {
+          headers,
+          method: 'GET',
+        });
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+
+        let buffer = '';
+
+        // 새로운 EventSource 객체 생성
+        const newEventSource = {
+          close: () => {
+            reader.cancel(); // SSE 연결을 수동으로 해제
+          },
+        };
+
+        setEventSource(newEventSource);
+
+        // eslint-disable-next-line no-constant-condition
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break; // 읽기가 완료되면 루프 종료
+
+          buffer += decoder.decode(value, { stream: true });
+
+          const lines = buffer.split('\n');
+          buffer = lines.pop() || '';
+
+          for (const line of lines) {
+            if (line.startsWith('data:')) {
+              const eventDataString = line.replace(/^data:\s*/, '');
+              try {
+                const eventData = JSON.parse(eventDataString); // JSON 문자열을 객체로 변환
+                console.log('New message:', eventData);
+                setAlarmState(prev => [eventData, ...prev]);
+                localStorage.setItem(`last-event-id-${memberId}`, eventData.id.toString()); // id 값을 로컬 스토리지에 저장
+                setIsNewNotification(true); // 새로운 알림 도착 시 상태 업데이트
+              } catch (error) {
+                console.error('Failed to parse event data:', error);
+              }
+            }
+          }
+        }
+      } catch (err) {
+        console.error('SSE connection failed:', err);
+
+        if (retryCount < maxRetries) {
+          console.log(`Reconnecting SSE... Attempt ${retryCount + 1}`);
+          setTimeout(() => reconnectSSE(url, headers, memberId, retryCount + 1), retryDelay);
+        } else {
+          console.error('Max retries reached. SSE connection failed.');
+        }
+      }
+    };
+
+    sseConnect();
+  };
+
   const onSubmit = async data => {
     if (data.id.trim() === '' || data.password.trim() === '') {
       return;
@@ -45,10 +115,6 @@ export default function SigninModal({ onClose, isOpen, initialRef, onSignupClick
       const memberId = localStorage.getItem('memberId');
       const lastEventId = localStorage.getItem(`last-event-id-${memberId}`);
 
-      setAuth(true);
-      reset();
-      onClose();
-
       if (eventSource) {
         console.log('Unsubscribed from notifications');
         eventSource.close();
@@ -60,65 +126,71 @@ export default function SigninModal({ onClose, isOpen, initialRef, onSignupClick
         ...(lastEventId ? { 'Last-Event-ID': lastEventId } : {}),
       };
 
-      // SSE 연결을 fetch로 구현
-      const sseConnect = async (url, headers) => {
-        try {
-          const response = await fetch(url, {
-            headers,
-            method: 'GET',
-          });
+      reconnectSSE('https://dddang.store/api/members/notification/subscribe', headers, memberId);
 
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
+      // SSE 연결을 fetch로 구현 ( 연결이 끊겨도 재연결 시도 X )
+      // const sseConnect = async (url, headers) => {
+      //   try {
+      //     const response = await fetch(url, {
+      //       headers,
+      //       method: 'GET',
+      //     });
 
-          const reader = response.body.getReader();
-          const decoder = new TextDecoder();
+      //     if (!response.ok) {
+      //       throw new Error('Network response was not ok');
+      //     }
 
-          let buffer = '';
+      //     const reader = response.body.getReader();
+      //     const decoder = new TextDecoder();
 
-          // 새로운 EventSource 객체 생성
-          const newEventSource = {
-            close: () => {
-              reader.cancel(); // SSE 연결을 수동으로 해제
-            },
-          };
+      //     let buffer = '';
 
-          setEventSource(newEventSource);
+      //     // 새로운 EventSource 객체 생성
+      //     const newEventSource = {
+      //       close: () => {
+      //         reader.cancel(); // SSE 연결을 수동으로 해제
+      //       },
+      //     };
 
-          // eslint-disable-next-line no-constant-condition
-          while (true) {
-            const { done, value } = await reader.read();
-            if (done) break;
+      //     setEventSource(newEventSource);
 
-            buffer += decoder.decode(value, { stream: true });
+      //     // eslint-disable-next-line no-constant-condition
+      //     while (true) {
+      //       const { done, value } = await reader.read();
+      //       if (done) break;
 
-            const lines = buffer.split('\n');
-            buffer = lines.pop() || '';
+      //       buffer += decoder.decode(value, { stream: true });
 
-            for (const line of lines) {
-              if (line.startsWith('data:')) {
-                const eventDataString = line.replace(/^data:\s*/, '');
-                try {
-                  const eventData = JSON.parse(eventDataString); // JSON 문자열을 객체로 변환
-                  console.log('New message:', eventData);
-                  setAlarmState(prev => [eventData, ...prev]);
-                  localStorage.setItem(`last-event-id-${memberId}`, eventData.id.toString()); // id 값을 로컬 스토리지에 저장
-                  setIsNewNotification(true); // 새로운 알림 도착 시 상태 업데이트
-                } catch (error) {
-                  console.error('Failed to parse event data:', error);
-                }
-              }
-            }
-          }
-        } catch (err) {
-          console.error('SSE connection failed:', err);
-        }
-      };
+      //       const lines = buffer.split('\n');
+      //       buffer = lines.pop() || '';
 
-      sseConnect('https://dddang.store/api/members/notification/subscribe', headers);
+      //       for (const line of lines) {
+      //         if (line.startsWith('data:')) {
+      //           const eventDataString = line.replace(/^data:\s*/, '');
+      //           try {
+      //             const eventData = JSON.parse(eventDataString); // JSON 문자열을 객체로 변환
+      //             console.log('New message:', eventData);
+      //             setAlarmState(prev => [eventData, ...prev]);
+      //             localStorage.setItem(`last-event-id-${memberId}`, eventData.id.toString()); // id 값을 로컬 스토리지에 저장
+      //             setIsNewNotification(true); // 새로운 알림 도착 시 상태 업데이트
+      //           } catch (error) {
+      //             console.error('Failed to parse event data:', error);
+      //           }
+      //         }
+      //       }
+      //     }
+      //   } catch (err) {
+      //     console.error('SSE connection failed:', err);
+      //   }
+      // };
+
+      // sseConnect('https://dddang.store/api/members/notification/subscribe', headers);
 
       console.log('Subscribed to notifications');
+
+      setAuth(true);
+      reset();
+      onClose();
     } catch (error) {
       toast({
         title: '등록된 계정이 아닙니다.',
