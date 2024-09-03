@@ -9,7 +9,6 @@ import {
   DrawerContent,
   DrawerCloseButton,
   Box,
-  Flex,
   Badge,
 } from '@chakra-ui/react';
 import { RxTextAlignJustify } from 'react-icons/rx';
@@ -112,10 +111,10 @@ export default function Nav() {
                   <AlarmModal type="button" onOpen={handleAlarmModalOpen} />
                   {isNewNotification && (
                     <Badge
-                      colorScheme="red"
+                      bgColor={'rgba(228, 25, 18)'}
                       position="absolute"
-                      top="0"
-                      right="0"
+                      top="11px"
+                      right="-6px"
                       borderRadius="full"
                       width="8px"
                       height="8px"
