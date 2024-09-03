@@ -20,7 +20,7 @@ import { SiNaver } from 'react-icons/si';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { logIn } from '../../../../axios/auth/user';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { authState } from '../../../../recoil/atom/authAtom';
 import { eventSourceState } from '../../../../recoil/atom/eventSourceAtom';
 import { alarmState, isNewNotificationState } from '../../../../recoil/atom/alarmAtom';
@@ -29,7 +29,6 @@ import { useEffect } from 'react';
 export default function SigninModal({ onClose, isOpen, initialRef, onSignupClick }) {
   const { register, handleSubmit, reset } = useForm();
   const [auth, setAuth] = useRecoilState(authState);
-  const setAlarmState = useSetRecoilState(alarmState);
   const [eventSource, setEventSource] = useRecoilState(eventSourceState);
   const [, setIsNewNotification] = useRecoilState(isNewNotificationState); // 추가
   const toast = useToast();
@@ -57,26 +56,49 @@ export default function SigninModal({ onClose, isOpen, initialRef, onSignupClick
       const source = new EventSource(url.toString());
 
       source.onmessage = e => {
-        if (e.data.startsWith('{')) {
-          try {
-            const eventData = JSON.parse(e.data);
+        console.log('Received event:', e);
+        console.log('Event data:', e.data);
 
-            // 알림 상태를 업데이트
-            setAlarmState(prev => [eventData, ...prev]);
+        try {
+          const eventData = e.data; // 이미 객체이므로 JSON.parse 불필요
 
-            // 새로운 알림 도착 시 상태 업데이트
-            setIsNewNotification(true);
+          console.log('데이터 도착:', eventData);
 
-            // last event id를 로컬 스토리지에 저장
-            const memberId = localStorage.getItem('memberId');
-            if (memberId && eventData.id) {
-              localStorage.setItem(`last-event-id-${memberId}`, eventData.id.toString());
-            }
-          } catch (error) {
-            console.error('Failed to parse event data:', error);
+          // 새로운 알림 도착 시 상태 업데이트
+          setIsNewNotification(true);
+
+          // last event id를 로컬 스토리지에 저장
+          const memberId = localStorage.getItem('memberId');
+          if (memberId && eventData.id) {
+            localStorage.setItem(`last-event-id-${memberId}`, eventData.id.toString());
           }
+        } catch (error) {
+          console.error('Failed to process event data:', error);
         }
       };
+
+      source.onopen = () => {
+        console.log('open!!!');
+      };
+
+      // source.addEventListener('sse', e => {
+      //   if (e.data.startsWith('{')) {
+      //     try {
+      //       const eventData = JSON.parse(e.data);
+      //       console.log('데이터 도착');
+      //       // 새로운 알림 도착 시 상태 업데이트
+      //       setIsNewNotification(true);
+
+      //       // last event id를 로컬 스토리지에 저장
+      //       const memberId = localStorage.getItem('memberId');
+      //       if (memberId && eventData.id) {
+      //         localStorage.setItem(`last-event-id-${memberId}`, eventData.id.toString());
+      //       }
+      //     } catch (error) {
+      //       console.error('Failed to parse event data:', error);
+      //     }
+      //   }
+      // });
 
       source.onerror = function (e) {
         console.error('SSE error occurred:', e);

@@ -63,6 +63,10 @@ export default function Nav() {
   };
 
   useEffect(() => {
+    console.log(isNewNotification);
+  }, [isNewNotification]);
+
+  useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 1024 && drawerDisclosure.isOpen) {
         drawerDisclosure.onClose();

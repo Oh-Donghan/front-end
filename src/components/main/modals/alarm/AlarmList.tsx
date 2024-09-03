@@ -2,31 +2,14 @@ import { Flex, Spinner, Text } from '@chakra-ui/react';
 import Alarm from './Alarm';
 import { useQuery } from '@tanstack/react-query';
 import { getAlarms } from '../../../../axios/alarm/alarm';
-// import { useRecoilState } from 'recoil';
-// import { alarmState } from '../../../../recoil/atom/alarmAtom';
-// import { useEffect } from 'react';
 
 export default function AlarmList() {
-  // const [alarms, setAlarms] = useRecoilState(alarmState);
-
   const { data, isLoading } = useQuery({
     queryKey: ['alarm'],
     queryFn: () => getAlarms(),
     staleTime: 0,
     gcTime: 0,
   });
-
-  // useEffect(() => {
-  //   if (data) {
-  //     // 중복된 content를 가진 객체 제거
-  //     const filteredData = data.filter(
-  //       newAlarm => !alarms.some(existingAlarm => existingAlarm.content === newAlarm.content),
-  //     );
-
-  //     // 기존의 alarms와 중복이 제거된 data를 병합
-  //     setAlarms(prev => [...prev, ...filteredData]);
-  //   }
-  // }, [data, setAlarms, alarms]);
 
   if (isLoading) {
     return (
