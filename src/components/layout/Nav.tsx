@@ -136,11 +136,12 @@ export default function Nav() {
                 <li
                   className="mr-4 cursor-pointer"
                   onClick={async () => {
+                    drawerDisclosure.onClose();
+                    await setAuth(false);
+                    await signOut();
                     unSubscribeAlarmSSE();
                     localStorage.removeItem('accessToken');
                     localStorage.removeItem('memberId');
-                    await setAuth(false);
-                    await signOut();
                   }}
                 >
                   로그아웃
@@ -256,11 +257,11 @@ export default function Nav() {
                       className="cursor-pointer -mx-6 px-6 py-3 hover:bg-[rgba(226,232,240,1)]"
                       onClick={async () => {
                         drawerDisclosure.onClose();
+                        await setAuth(false);
+                        await signOut();
                         unSubscribeAlarmSSE();
                         localStorage.removeItem('accessToken');
                         localStorage.removeItem('memberId');
-                        await setAuth(false);
-                        await signOut();
                       }}
                     >
                       로그아웃
