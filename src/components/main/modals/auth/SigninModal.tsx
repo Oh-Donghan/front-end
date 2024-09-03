@@ -40,7 +40,6 @@ export default function SigninModal({ onClose, isOpen, initialRef, onSignupClick
 
     try {
       await logIn({ id: data.id, password: data.password });
-      // const responseData = await response.json(); // 이 줄은 제거합니다.
 
       const accessToken = localStorage.getItem('accessToken');
       const memberId = localStorage.getItem('memberId');

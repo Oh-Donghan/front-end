@@ -15,10 +15,16 @@ export default function Chat({ chat }) {
         paddingY={'16px'}
       >
         <Flex align={'center'}>
-          <Box w={'50px'} h={'50px'} borderRadius={'50%'} overflow={'hidden'}>
+          <Box
+            w={'50px'}
+            h={'50px'}
+            borderRadius={'50%'}
+            boxShadow={'1px 1px 3px rgba(150,150,150,0.3)'}
+          >
             <Image
               src={chat.auction.thumbnail ? chat.auction.thumbnail : defaul_profile}
               alt={chat.auction.title}
+              borderRadius={'50%'}
             />
           </Box>
           <div className="ml-3">
