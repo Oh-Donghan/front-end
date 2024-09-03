@@ -162,17 +162,15 @@ export default function SignupModal({ onClose, isOpen, initialRef }) {
                 }
                 try {
                   const response = await idDuplicateCheck({ id });
-                  setIdMessage(response);
-                  setIdMessageColor('rgba(0, 119, 255, 0.9)');
+
                   if (response === '사용 가능한 아이디 입니다.') {
-                    setIsIdConfirmed(true);
-                  } else if (response === '이미 존재하는 아이디입니다. ') {
-                    setIsIdConfirmed(false);
-                    toast({
-                      title: '이미 존재하는 아이디입니다.',
-                      status: 'error',
-                      duration: 1300,
-                    });
+                    await setIsIdConfirmed(true);
+                    await setIdMessage(response);
+                    await setIdMessageColor('rgba(0, 119, 255, 0.9)');
+                  } else if (response === '이미 존재하는 아이디입니다.') {
+                    await setIsIdConfirmed(false);
+                    await setIdMessage(response);
+                    await setIdMessageColor('rgb(240, 33, 33)');
                   }
                 } catch (error) {
                   console.error('아이디 중복 확인 오류 :' + error);
