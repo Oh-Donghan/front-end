@@ -25,7 +25,7 @@ export default function ChatList({
 
   if (isLoading) {
     return (
-      <Flex w={'390px'} h={'668px'} align={'center'} justify={'center'}>
+      <Flex w={'390px'} maxH={'596px'} align={'center'} justify={'center'}>
         <Spinner size={'xl'} />
       </Flex>
     );
@@ -35,7 +35,7 @@ export default function ChatList({
     return (
       <Flex
         w={'390px'}
-        h={'668px'}
+        maxH={'596px'}
         align={'center'}
         justify={'center'}
         color={'rgba(70,70,70,1)'}
@@ -57,7 +57,7 @@ export default function ChatList({
         msOverflowStyle: 'none', // Internet Explorer 10+
         scrollbarWidth: 'none', // Firefox
       }}
-      minH="596px"
+      maxH="596px"
     >
       {chats.map(chat => (
         <ChatItem
