@@ -73,15 +73,16 @@ export default function Home() {
         if (e.data.startsWith('{')) {
           try {
             const eventData = JSON.parse(e.data);
+            if (!eventData.dummyContent) {
+              console.log('데이터 도착');
+              // 새로운 알림 도착 시 상태 업데이트
+              setIsNewNotification(true);
 
-            console.log('데이터 도착');
-            // 새로운 알림 도착 시 상태 업데이트
-            setIsNewNotification(true);
-
-            // last event id를 로컬 스토리지에 저장
-            const memberId = localStorage.getItem('memberId');
-            if (memberId && eventData.id) {
-              localStorage.setItem(`last-event-id-${memberId}`, eventData.id.toString());
+              // last event id를 로컬 스토리지에 저장
+              const memberId = localStorage.getItem('memberId');
+              if (memberId && eventData.id) {
+                localStorage.setItem(`last-event-id-${memberId}`, eventData.id.toString());
+              }
             }
           } catch (error) {
             console.error('Failed to parse event data:', error);
