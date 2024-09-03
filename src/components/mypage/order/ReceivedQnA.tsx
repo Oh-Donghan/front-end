@@ -21,9 +21,11 @@ import { fetchReceiveQnAData, IAnswer } from '../../../axios/mypage/receiveqna';
 import { formatDate } from '../../../utils/dateFormat';
 import QnAAnswer from './modal/QnAAnswer';
 import DeleteReceiveQnA from './modal/DeleteReceiveQnA';
+import QnAAnswerFix from './modal/QnAAnswerFix';
 
 export default function ReceivedQnA() {
   const qnaAnswerDisclosure = useDisclosure();
+  const qnaAnswerFixDisclosure = useDisclosure();
   const deleteQnAAnswer = useDisclosure();
   const initialRef = useRef(null);
   const { ref, inView } = useInView();
@@ -90,7 +92,16 @@ export default function ReceivedQnA() {
     qnaAnswerDisclosure.onOpen();
   };
 
-  console.log('선택된 답변 아이디', selectedAnswerId);
+  const openAnswerFixModal = (
+    title: string,
+    content: string,
+    auctionId: number,
+    id: number,
+    existingAnswer: IAnswer,
+  ) => {
+    setSelectedQuestion({ title, content, auctionId, id, existingAnswer });
+    qnaAnswerFixDisclosure.onOpen();
+  };
 
   return (
     <>
@@ -102,7 +113,14 @@ export default function ReceivedQnA() {
         questionContent={selectedQuestion.content}
         auctionId={selectedQuestion.auctionId}
         askId={selectedQuestion.id}
-        existingAnswer={selectedQuestion.existingAnswer} // 기존 답변 정보 전달
+      />
+      <QnAAnswerFix
+        onClose={qnaAnswerFixDisclosure.onClose}
+        isOpen={qnaAnswerFixDisclosure.isOpen}
+        initialRef={initialRef}
+        questionTitle={selectedQuestion.title}
+        questionContent={selectedQuestion.content}
+        existingAnswer={selectedQuestion.existingAnswer}
       />
       {selectedAnswerId && (
         <DeleteReceiveQnA
@@ -114,120 +132,141 @@ export default function ReceivedQnA() {
       )}
       <Box h="100%" overflowY="auto">
         <Accordion allowToggle paddingY="20px">
-          {data.pages.map(qnaPage =>
-            qnaPage.content.map(qna => (
-              <AccordionItem key={qna.id}>
-                <h2>
-                  <AccordionButton
-                    paddingX={{ base: '4px', md: '12px' }}
-                    paddingY={{ base: '6px', md: '20px' }}
-                  >
-                    <Flex gap={4} flex="1" textAlign="left">
-                      <Text fontWeight="bold">{qna.auctionTitle}</Text> -{' '}
-                      <Text>{qna.writerId}</Text>
+          {data &&
+            data.pages.map(qnaPage =>
+              qnaPage.content.map(qna => (
+                <AccordionItem key={qna.id}>
+                  <h2>
+                    <AccordionButton
+                      paddingX={{ base: '4px', md: '12px' }}
+                      paddingY={{ base: '6px', md: '20px' }}
+                    >
+                      <Flex gap={4} flex="1" textAlign="left">
+                        <Text fontWeight="bold">{qna.auctionTitle}</Text> -{' '}
+                        <Text>{qna.writerId}</Text>
+                        {qna.answerList && qna.answerList.length > 0 ? (
+                          <Flex justifyContent="center" alignItems="center">
+                            <Badge colorScheme="blue">답변완료</Badge>
+                          </Flex>
+                        ) : (
+                          <Flex justifyContent="center" alignItems="center">
+                            <Badge>답변전</Badge>
+                          </Flex>
+                        )}
+                      </Flex>
+                      <AccordionIcon />
+                    </AccordionButton>
+                  </h2>
+                  <AccordionPanel pb={4} bgColor={'gray.50'}>
+                    <Flex direction="column" gap={1}>
+                      <Flex gap={2} fontWeight="bold">
+                        <Text>제목:</Text>
+                        <Text>{qna.title}</Text>
+                      </Flex>
+                      <Flex gap={2} fontSize="sm">
+                        <Text>생성날짜:</Text>
+                        <Text>{formatDate(qna.createdAt)}</Text>
+                      </Flex>
+                      <Divider borderColor="gray.500" />
+                      <Box>{qna.content}</Box>
+                      <Flex justifyContent="flex-end">
+                        {qna.answerList && qna.answerList.length > 0 ? (
+                          // 답변 수정
+                          <Button
+                            colorScheme="blue"
+                            size="sm"
+                            onClick={() =>
+                              openAnswerFixModal(
+                                qna.title,
+                                qna.content,
+                                qna.auctionId,
+                                qna.id,
+                                qna.answerList[0],
+                              )
+                            }
+                          >
+                            답변 수정
+                          </Button>
+                        ) : (
+                          // 답변 달기
+                          <Button
+                            onClick={() =>
+                              openAnswerModal(
+                                qna.title,
+                                qna.content,
+                                qna.auctionId,
+                                qna.id,
+                                qna.answerList[0],
+                              )
+                            }
+                            colorScheme="blue"
+                            size="sm"
+                          >
+                            답변 달기
+                          </Button>
+                        )}
+                      </Flex>
+                      {/* 답변 영역 */}
                       {qna.answerList && qna.answerList.length > 0 ? (
-                        <Flex justifyContent="center" alignItems="center">
-                          <Badge colorScheme="blue">답변완료</Badge>
+                        <Flex
+                          direction="column"
+                          gap={1}
+                          mt={4}
+                          p={4}
+                          border="1px"
+                          borderColor="blue.200"
+                          borderRadius="md"
+                          bgColor="blue.50"
+                        >
+                          {qna.answerList.map(answer => (
+                            <Box key={answer.id}>
+                              <Flex gap={2} fontWeight="bold" color="blue.600">
+                                <Text>답변 제목:</Text>
+                                <Text>{answer.title}</Text>
+                              </Flex>
+                              <Flex gap={2} fontSize="sm" color="blue.600">
+                                <Text>작성자:</Text>
+                                <Text>{answer.writerId}</Text>
+                              </Flex>
+                              <Flex gap={2} fontSize="sm" color="blue.600">
+                                <Text>작성일:</Text>
+                                <Text>{formatDate(answer.createdAt)}</Text>
+                              </Flex>
+                              <Box mt={2} color="blue.800">
+                                {answer.content}
+                              </Box>
+                              <Divider borderColor="blue.300" mt={2} />
+                              {answer.imageList &&
+                                answer.imageList.length > 0 &&
+                                answer.imageList.map(image => (
+                                  <Box key={image.id} mt={2} w="200px" h="100%">
+                                    <Image src={image.imageUrl} alt="Answer Image" />
+                                  </Box>
+                                ))}
+
+                              <Flex justifyContent="flex-end">
+                                <Button
+                                  size="sm"
+                                  mt={3}
+                                  onClick={() => {
+                                    setSelectedAnswerId(answer.id);
+                                    deleteQnAAnswer.onOpen();
+                                  }}
+                                >
+                                  답변 삭제
+                                </Button>
+                              </Flex>
+                            </Box>
+                          ))}
                         </Flex>
                       ) : (
-                        <Flex justifyContent="center" alignItems="center">
-                          <Badge>답변전</Badge>
-                        </Flex>
+                        ''
                       )}
                     </Flex>
-                    <AccordionIcon />
-                  </AccordionButton>
-                </h2>
-                <AccordionPanel pb={4} bgColor={'gray.50'}>
-                  <Flex direction="column" gap={1}>
-                    <Flex gap={2} fontWeight="bold">
-                      <Text>제목:</Text>
-                      <Text>{qna.title}</Text>
-                    </Flex>
-                    <Flex gap={2} fontSize="sm">
-                      <Text>생성날짜:</Text>
-                      <Text>{formatDate(qna.createdAt)}</Text>
-                    </Flex>
-                    <Divider borderColor="gray.500" />
-                    <Box>{qna.content}</Box>
-                    <Flex justifyContent="flex-end">
-                      <Button
-                        onClick={() =>
-                          openAnswerModal(
-                            qna.title,
-                            qna.content,
-                            qna.auctionId,
-                            qna.id,
-                            qna.answerList[0],
-                          )
-                        }
-                        colorScheme="blue"
-                        size="sm"
-                      >
-                        {qna.answerList && qna.answerList.length > 0 ? '답변 수정' : '답변 달기'}
-                      </Button>
-                    </Flex>
-                    {/* 답변 영역 */}
-                    {qna.answerList && qna.answerList.length > 0 ? (
-                      <Flex
-                        direction="column"
-                        gap={1}
-                        mt={4}
-                        p={4}
-                        border="1px"
-                        borderColor="blue.200"
-                        borderRadius="md"
-                        bgColor="blue.50"
-                      >
-                        {qna.answerList.map(answer => (
-                          <Box key={answer.id}>
-                            <Flex gap={2} fontWeight="bold" color="blue.600">
-                              <Text>답변 제목:</Text>
-                              <Text>{answer.title}</Text>
-                            </Flex>
-                            <Flex gap={2} fontSize="sm" color="blue.600">
-                              <Text>작성자:</Text>
-                              <Text>{answer.writerId}</Text>
-                            </Flex>
-                            <Flex gap={2} fontSize="sm" color="blue.600">
-                              <Text>작성일:</Text>
-                              <Text>{formatDate(answer.createdAt)}</Text>
-                            </Flex>
-                            <Box mt={2} color="blue.800">
-                              {answer.content}
-                            </Box>
-                            <Divider borderColor="blue.300" mt={2} />
-                            {answer.imageList &&
-                              answer.imageList.length > 0 &&
-                              answer.imageList.map(image => (
-                                <Box key={image.id} mt={2} w="200px" h="100%">
-                                  <Image src={image.imageUrl} alt="Answer Image" />
-                                </Box>
-                              ))}
-
-                            <Flex justifyContent="flex-end">
-                              <Button
-                                size="sm"
-                                mt={3}
-                                onClick={() => {
-                                  setSelectedAnswerId(answer.id);
-                                  deleteQnAAnswer.onOpen();
-                                }}
-                              >
-                                답변 삭제
-                              </Button>
-                            </Flex>
-                          </Box>
-                        ))}
-                      </Flex>
-                    ) : (
-                      ''
-                    )}
-                  </Flex>
-                </AccordionPanel>
-              </AccordionItem>
-            )),
-          )}
+                  </AccordionPanel>
+                </AccordionItem>
+              )),
+            )}
         </Accordion>
         <Box ref={ref} textAlign="center" py={4}>
           {hasNextPage ? <Spinner size="sm" /> : '마지막 목록 입니다.'}
