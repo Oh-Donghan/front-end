@@ -17,7 +17,7 @@ export const signIn = async (id: string, password: string) => {
 
 export const signOut = async () => {
   try {
-    const response = await axiosInstance.post('https://dddang.store/api/auth/logout', {});
+    const response = await axiosInstance.post('/api/auth/logout', {});
 
     // 로그아웃이 성공하면 SSE 구독 해제
 
@@ -50,7 +50,7 @@ export const signUp = async ({
     authNum,
   };
 
-  const response = await axiosInstance.post('https://dddang.store/api/auth/signup', requestBody);
+  const response = await axiosInstance.post('/api/auth/signup', requestBody);
 
   return response.data;
 };
@@ -61,7 +61,7 @@ export const idDuplicateCheck = async ({ id }: { id: string }) => {
     memberId: id,
   };
 
-  const response = await axiosInstance.post('https://dddang.store/api/auth/check/id', requestBody);
+  const response = await axiosInstance.post('/api/auth/check/id', requestBody);
 
   return response.data;
 };
@@ -72,7 +72,7 @@ export const RequestAuthenticationEmailCode = async ({ email }: { email: string 
     email,
   };
 
-  const response = await axiosInstance.post('https://dddang.store/api/mail/send', requestBody);
+  const response = await axiosInstance.post('/api/mail/send', requestBody);
 
   return response.data;
 };
@@ -84,7 +84,7 @@ export const confirmEmail = async ({ email, authNum }: { email: string; authNum:
     authNum,
   };
 
-  const response = await axiosInstance.post('https://dddang.store/api/mail/check', requestBody);
+  const response = await axiosInstance.post('/api/mail/check', requestBody);
 
   return response.data;
 };
@@ -105,6 +105,29 @@ export const logIn = async ({ id, password }: { id: string; password: string }) 
   // 로그인 성공시 토큰을 localStorage에 저장
   localStorage.setItem('accessToken', accessToken);
   localStorage.setItem('memberId', memberId);
+
+  return response.data;
+};
+
+// 아이디 중복 확인 api
+export const FindId = async ({ email }: { email: string }) => {
+  const requestBody = {
+    email,
+  };
+
+  const response = await axiosInstance.post('api/auth/find/id', requestBody);
+
+  return response.data;
+};
+
+// 아이디 중복 확인 api
+export const FindPassword = async ({ memberId, email }: { memberId: string; email: string }) => {
+  const requestBody = {
+    memberId,
+    email,
+  };
+
+  const response = await axiosInstance.post('api//auth/find/password', requestBody);
 
   return response.data;
 };

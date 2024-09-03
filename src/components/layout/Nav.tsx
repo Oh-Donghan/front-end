@@ -14,6 +14,7 @@ import {
 import { RxTextAlignJustify } from 'react-icons/rx';
 import SigninModal from '../main/modals/auth/SigninModal';
 import SignupModal from '../main/modals/auth/SignupModal';
+import FindIdModal from '../main/modals/auth/FindIdModal';
 import { useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import PointChargeModal from '../main/modals/point/PointChargeModal';
@@ -25,12 +26,15 @@ import { authState } from '../../recoil/atom/authAtom';
 import { signOut } from '../../axios/auth/user';
 import { eventSourceState } from '../../recoil/atom/eventSourceAtom';
 import { isNewNotificationState } from '../../recoil/atom/alarmAtom';
+import FindPasswordModal from '../main/modals/auth/FindPasswordModal';
 
 export default function Nav() {
   const signinDisclosure = useDisclosure();
   const signupDisclosure = useDisclosure();
   const pointChargeDisclosure = useDisclosure();
   const createAuctionDisclosure = useDisclosure();
+  const findIdDisclosure = useDisclosure();
+  const findPasswordDisclosure = useDisclosure();
   const drawerDisclosure = useDisclosure();
   const [auth, setAuth] = useRecoilState(authState);
   const [eventSource, setEventSource] = useRecoilState(eventSourceState);
@@ -58,6 +62,16 @@ export default function Nav() {
     signupDisclosure.onOpen();
   };
 
+  const handleFindIdOpen = () => {
+    signinDisclosure.onClose();
+    findIdDisclosure.onOpen();
+  };
+
+  const handleFindPasswordOpen = () => {
+    signinDisclosure.onClose();
+    findPasswordDisclosure.onOpen();
+  };
+
   const handleAlarmModalOpen = () => {
     setIsNewNotification(false); // 알림 확인 시 빨간 점 사라지게 설정
   };
@@ -82,6 +96,12 @@ export default function Nav() {
 
   return (
     <>
+      <FindIdModal onClose={findIdDisclosure.onClose} isOpen={findIdDisclosure.isOpen} />
+      <FindPasswordModal
+        onClose={findPasswordDisclosure.onClose}
+        isOpen={findPasswordDisclosure.isOpen}
+      />
+
       <CreateAuctionModal
         onClose={createAuctionDisclosure.onClose}
         isOpen={createAuctionDisclosure.isOpen}
@@ -96,6 +116,8 @@ export default function Nav() {
         isOpen={signinDisclosure.isOpen}
         initialRef={initialRef}
         onSignupClick={handleSignupOpen}
+        onFindIdClick={handleFindIdOpen}
+        onFindPasswordClick={handleFindPasswordOpen}
       />
       <SignupModal
         onClose={signupDisclosure.onClose}
