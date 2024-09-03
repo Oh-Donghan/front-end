@@ -15,10 +15,9 @@ import {
   Input,
   HStack,
 } from '@chakra-ui/react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { fetchCreateAnswer, ICreateAnswerDto } from '../../../../axios/mypage/createanswer';
-import { fetchUpdateAnswer, IUpdateAnswerDto } from '../../../../axios/mypage/fixanswer';
 import ImageSection from '../../../../components/main/modals/auction/ImageSection';
 
 export default function QnAAnswer({
@@ -29,21 +28,12 @@ export default function QnAAnswer({
   questionContent,
   auctionId,
   askId,
-  existingAnswer,
 }) {
-  const [content, setContent] = useState('');
   const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const toast = useToast();
   const queryClient = useQueryClient();
-
-  useEffect(() => {
-    if (existingAnswer) {
-      setTitle(existingAnswer.title);
-      setContent(existingAnswer.content);
-      // existingAnswer.imageList가 있다면 초기 selectedImages에 추가할 수 있음
-    }
-  }, [existingAnswer]);
 
   const createMutation = useMutation({
     mutationFn: (createDto: ICreateAnswerDto) => fetchCreateAnswer(createDto, selectedImages),
@@ -69,55 +59,22 @@ export default function QnAAnswer({
     },
   });
 
-  const updateMutation = useMutation({
-    mutationFn: (updateDto: IUpdateAnswerDto) =>
-      fetchUpdateAnswer(existingAnswer.id, updateDto, selectedImages),
-    onSuccess: () => {
-      toast({
-        title: '답변이 수정되었습니다.',
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-      });
-      // 필요에 따라 myQnA 또는 receiveQnA를 무효화
-      queryClient.invalidateQueries({ queryKey: ['receiveQnA'] });
-      handleClose();
-    },
-    onError: error => {
-      toast({
-        title: '답변 수정에 실패했습니다.',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      });
-      console.error('Error updating answer:', error);
-    },
-  });
-
   const handleSubmit = (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    if (existingAnswer) {
-      const updateDto = {
-        content,
-        imageFileNameList: existingAnswer.imageList.map(
-          (img: { imageName: string }) => img.imageName,
-        ),
-      };
-      updateMutation.mutate(updateDto);
-    } else {
-      const createDto = {
-        title: title || questionTitle,
-        content,
-        auctionId,
-        askId,
-      };
-      createMutation.mutate(createDto);
-    }
+    const createDto = {
+      title: title || questionTitle,
+      content,
+      auctionId,
+      askId,
+    };
+    createMutation.mutate(createDto);
   };
 
   const handleClose = () => {
     setSelectedImages([]);
+    setTitle('');
+    setContent('');
     onClose();
   };
 
@@ -132,7 +89,7 @@ export default function QnAAnswer({
       <ModalOverlay />
       <ModalContent>
         <ModalHeader fontSize={'2xl'} textAlign={'center'}>
-          {existingAnswer ? '답변 수정하기' : '답글을 적어주세요'}
+          답글을 적어주세요
         </ModalHeader>
         <ModalBody>
           <FormControl>
@@ -149,7 +106,6 @@ export default function QnAAnswer({
                 value={title}
                 onChange={e => setTitle(e.target.value)}
                 placeholder="답변 제목을 입력하세요"
-                isDisabled={!!existingAnswer} // 수정 시 제목 변경 불가
               />
               <FormLabel htmlFor="content" hidden>
                 답변 내용
@@ -168,7 +124,7 @@ export default function QnAAnswer({
         <ModalFooter>
           <HStack w="100%">
             <Button colorScheme="blue" onClick={handleSubmit} w="full">
-              {existingAnswer ? '수정하기' : '작성하기'}
+              작성하기
             </Button>
             <Button onClick={handleClose} w="full" bg="white">
               취소
