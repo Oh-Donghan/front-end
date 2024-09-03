@@ -9,7 +9,6 @@ import {
   DrawerContent,
   DrawerCloseButton,
   Box,
-  Flex,
   Badge,
 } from '@chakra-ui/react';
 import { RxTextAlignJustify } from 'react-icons/rx';
@@ -35,19 +34,24 @@ export default function Nav() {
   const drawerDisclosure = useDisclosure();
   const [auth, setAuth] = useRecoilState(authState);
   const [eventSource, setEventSource] = useRecoilState(eventSourceState);
-  const [isNewNotification, setIsNewNotification] = useRecoilState(isNewNotificationState); // 추가
+  const [isNewNotification, setIsNewNotification] = useRecoilState(isNewNotificationState);
 
   const navigate = useNavigate();
   const initialRef = useRef(null);
   const toast = useToast();
 
-  const unSubscribeAlarmSSE = () => {
-    if (eventSource) {
-      eventSource.close(); // SSE 연결 닫기
-      setEventSource(null);
-      console.log('Unsubscribed from notifications');
-    }
-  };
+  // const unSubscribeAlarmSSE = () => {
+  //   if (eventSource) {
+  //     try {
+  //       eventSource.close(); // SSE 연결 닫기
+  //       console.log('Unsubscribed from notifications');
+  //     } catch (error) {
+  //       console.error('Failed to unsubscribe from notifications:', error);
+  //     } finally {
+  //       setEventSource(null);
+  //     }
+  //   }
+  // };
 
   const handleSignupOpen = () => {
     signinDisclosure.onClose();
@@ -137,7 +141,7 @@ export default function Nav() {
                 <li
                   className="mr-4 cursor-pointer"
                   onClick={async () => {
-                    unSubscribeAlarmSSE();
+                    // unSubscribeAlarmSSE();
 
                     await setAuth(false);
                     await signOut();
@@ -258,7 +262,7 @@ export default function Nav() {
                       className="cursor-pointer -mx-6 px-6 py-3 hover:bg-[rgba(226,232,240,1)]"
                       onClick={async () => {
                         drawerDisclosure.onClose();
-                        unSubscribeAlarmSSE();
+                        // unSubscribeAlarmSSE();
 
                         await setAuth(false);
                         await signOut();

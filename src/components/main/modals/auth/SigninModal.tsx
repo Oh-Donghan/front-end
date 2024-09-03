@@ -1,3 +1,6 @@
+import { NativeEventSource, EventSourcePolyfill } from 'event-source-polyfill';
+const EventSource = NativeEventSource || EventSourcePolyfill;
+
 import {
   Button,
   Modal,
@@ -24,14 +27,64 @@ import { useRecoilState, useSetRecoilState } from 'recoil';
 import { authState } from '../../../../recoil/atom/authAtom';
 import { eventSourceState } from '../../../../recoil/atom/eventSourceAtom';
 import { alarmState, isNewNotificationState } from '../../../../recoil/atom/alarmAtom';
+import { useEffect } from 'react';
 
 export default function SigninModal({ onClose, isOpen, initialRef, onSignupClick }) {
   const { register, handleSubmit, reset } = useForm();
-  const setAuth = useSetRecoilState(authState);
+  const [auth, setAuth] = useRecoilState(authState);
   const setAlarmState = useSetRecoilState(alarmState);
   const [eventSource, setEventSource] = useRecoilState(eventSourceState);
   const [, setIsNewNotification] = useRecoilState(isNewNotificationState); // 추가
   const toast = useToast();
+
+  useEffect(() => {
+    if (auth) {
+      const accessToken = localStorage.getItem('accessToken');
+      if (eventSource) {
+        console.log('Unsubscribed from notifications');
+        eventSource.close();
+        setEventSource(null);
+      }
+
+      // const headers = {
+      //   Authorization: `Bearer ${response.accessToken}`,
+      //   ...(lastEventId ? { 'Last-Event-ID': lastEventId } : {}),
+      // };
+
+      const source = new EventSourcePolyfill(
+        'https://dddang.store/api/members/notification/subscribe',
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+          withCredentials: true,
+        },
+      );
+
+      source.onmessage = e => {
+        if (e.type === 'sse' && e.data.startsWith('{')) {
+          try {
+            const eventData = JSON.parse(e.data);
+            setAlarmState(prev => [eventData, ...prev]);
+            // localStorage.setItem(`last-event-id-${memberId}`, eventData.id.toString());
+            setIsNewNotification(true); // 새로운 알림 도착 시 상태 업데이트
+          } catch (error) {
+            console.error('Failed to parse event data:', error);
+          }
+        }
+      };
+
+      source.addEventListener('error', function (e) {
+        if (e) {
+          console.error('SSE error occurred:', e);
+          source.close(); // 에러가 발생시 SSE 연결을 닫아줌
+        }
+      });
+
+      setEventSource(source);
+      console.log('Subscribed to notifications');
+    }
+  }, [auth]);
 
   const onSubmit = async data => {
     if (data.id.trim() === '' || data.password.trim() === '') {
@@ -40,7 +93,6 @@ export default function SigninModal({ onClose, isOpen, initialRef, onSignupClick
 
     try {
       const response = await logIn({ id: data.id, password: data.password });
-      // const responseData = await response.json(); // 이 줄은 제거합니다.
 
       const accessToken = localStorage.getItem('accessToken');
       const memberId = localStorage.getItem('memberId');
@@ -49,76 +101,6 @@ export default function SigninModal({ onClose, isOpen, initialRef, onSignupClick
       setAuth(true);
       reset();
       onClose();
-
-      if (eventSource) {
-        console.log('Unsubscribed from notifications');
-        eventSource.close();
-        setEventSource(null);
-      }
-
-      const headers = {
-        Authorization: `Bearer ${accessToken}`,
-        ...(lastEventId ? { 'Last-Event-ID': lastEventId } : {}),
-      };
-
-      // SSE 연결을 fetch로 구현
-      const sseConnect = async (url, headers) => {
-        try {
-          const response = await fetch(url, {
-            headers,
-            method: 'GET',
-          });
-
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-
-          const reader = response.body.getReader();
-          const decoder = new TextDecoder();
-
-          let buffer = '';
-
-          // 새로운 EventSource 객체 생성
-          const newEventSource = {
-            close: () => {
-              reader.cancel(); // SSE 연결을 수동으로 해제
-            },
-          };
-
-          setEventSource(newEventSource);
-
-          while (true) {
-            const { done, value } = await reader.read();
-            if (done) break;
-
-            buffer += decoder.decode(value, { stream: true });
-
-            let lines = buffer.split('\n');
-            buffer = lines.pop() || '';
-
-            for (const line of lines) {
-              if (line.startsWith('data:')) {
-                const eventDataString = line.replace(/^data:\s*/, '');
-                try {
-                  const eventData = JSON.parse(eventDataString); // JSON 문자열을 객체로 변환
-                  console.log('New message:', eventData);
-                  setAlarmState(prev => [eventData, ...prev]);
-                  localStorage.setItem(`last-event-id-${memberId}`, eventData.id.toString()); // id 값을 로컬 스토리지에 저장
-                  setIsNewNotification(true); // 새로운 알림 도착 시 상태 업데이트
-                } catch (error) {
-                  console.error('Failed to parse event data:', error);
-                }
-              }
-            }
-          }
-        } catch (err) {
-          console.error('SSE connection failed:', err);
-        }
-      };
-
-      sseConnect('https://dddang.store/api/members/notification/subscribe', headers);
-
-      console.log('Subscribed to notifications');
     } catch (error) {
       toast({
         title: '등록된 계정이 아닙니다.',
