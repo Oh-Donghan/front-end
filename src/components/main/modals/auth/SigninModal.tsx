@@ -1,5 +1,3 @@
-import { EventSourcePolyfill } from 'ng-event-source';
-
 import {
   Button,
   Modal,
@@ -27,7 +25,6 @@ import { authState } from '../../../../recoil/atom/authAtom';
 import { eventSourceState } from '../../../../recoil/atom/eventSourceAtom';
 import { alarmState, isNewNotificationState } from '../../../../recoil/atom/alarmAtom';
 import { useEffect } from 'react';
-import axios from 'axios';
 
 export default function SigninModal({ onClose, isOpen, initialRef, onSignupClick }) {
   const { register, handleSubmit, reset } = useForm();
@@ -39,68 +36,54 @@ export default function SigninModal({ onClose, isOpen, initialRef, onSignupClick
 
   useEffect(() => {
     if (auth) {
-      const accessToken = localStorage.getItem('accessToken');
+      const memberId = localStorage.getItem('memberId');
+      const lastEventId = localStorage.getItem(`last-event-id-${memberId}`);
+
       if (eventSource) {
         console.log('Unsubscribed from notifications');
         eventSource.close();
         setEventSource(null);
       }
 
-      // SSE 연결을 axios로 구현
-      const connectSSE = async () => {
-        try {
-          const response = await axios.get(
-            'https://dddang.store/api/members/notification/subscribe',
-            {
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-                // ...(lastEventId ? { 'Last-Event-ID': lastEventId } : {}),
-              },
-              responseType: 'stream', // 스트리밍 방식으로 응답 처리
-            },
-          );
+      // last-event-id를 URL의 쿼리 파라미터로 포함시킵니다.
+      const url = new URL('https://dddang.store/api/members/notification/subscribe');
+      if (lastEventId) {
+        url.searchParams.append('lastEventId', lastEventId);
+      }
+      if (memberId) {
+        url.searchParams.append('memberId', memberId);
+      }
 
-          const reader = response.data.getReader();
-          const decoder = new TextDecoder('utf-8');
-          let buffer = '';
+      const source = new EventSource(url.toString());
 
-          // 새로운 "EventSource" 객체처럼 작동하는 커스텀 객체 생성
-          const newEventSource = {
-            close: () => {
-              reader.cancel(); // 스트림 읽기를 중단하여 연결을 닫음
-            },
-          };
+      source.onmessage = e => {
+        if (e.data.startsWith('{')) {
+          try {
+            const eventData = JSON.parse(e.data);
 
-          setEventSource(newEventSource);
+            // 알림 상태를 업데이트
+            setAlarmState(prev => [eventData, ...prev]);
 
-          while (true) {
-            const { done, value } = await reader.read();
-            if (done) break;
+            // 새로운 알림 도착 시 상태 업데이트
+            setIsNewNotification(true);
 
-            buffer += decoder.decode(value, { stream: true });
-
-            const lines = buffer.split('\n');
-            buffer = lines.pop() || '';
-
-            for (const line of lines) {
-              if (line.startsWith('data:')) {
-                const eventDataString = line.replace(/^data:\s*/, '');
-                try {
-                  const eventData = JSON.parse(eventDataString);
-                  setAlarmState(prev => [eventData, ...prev]);
-                  setIsNewNotification(true); // 새로운 알림 도착 시 상태 업데이트
-                } catch (error) {
-                  console.error('Failed to parse event data:', error);
-                }
-              }
+            // last event id를 로컬 스토리지에 저장
+            const memberId = localStorage.getItem('memberId');
+            if (memberId && eventData.id) {
+              localStorage.setItem(`last-event-id-${memberId}`, eventData.id.toString());
             }
+          } catch (error) {
+            console.error('Failed to parse event data:', error);
           }
-        } catch (err) {
-          console.error('SSE connection failed:', err);
         }
       };
 
-      connectSSE();
+      source.onerror = function (e) {
+        console.error('SSE error occurred:', e);
+        source.close(); // 에러가 발생시 SSE 연결을 닫음
+      };
+
+      setEventSource(source);
       console.log('Subscribed to notifications');
     }
   }, [auth]);
