@@ -39,52 +39,63 @@ export default function SigninModal({ onClose, isOpen, initialRef, onSignupClick
       const memberId = localStorage.getItem('memberId');
       const lastEventId = localStorage.getItem(`last-event-id-${memberId}`);
 
+      // 기존 SSE 연결이 있으면 종료합니다.
       if (eventSource) {
         console.log('Unsubscribed from notifications');
         eventSource.close();
         setEventSource(null);
       }
 
-      // last-event-id를 URL의 쿼리 파라미터로 포함시킵니다.
-      const url = new URL('https://dddang.store/api/members/notification/subscribe');
-      if (lastEventId) {
-        url.searchParams.append('lastEventId', lastEventId);
-      }
-      if (memberId) {
-        url.searchParams.append('memberId', memberId);
-      }
-
-      const source = new EventSource(url.toString());
-
-      source.onmessage = e => {
-        if (e.data.startsWith('{')) {
-          try {
-            const eventData = JSON.parse(e.data);
-
-            // 알림 상태를 업데이트
-            setAlarmState(prev => [eventData, ...prev]);
-
-            // 새로운 알림 도착 시 상태 업데이트
-            setIsNewNotification(true);
-
-            // last event id를 로컬 스토리지에 저장
-            const memberId = localStorage.getItem('memberId');
-            if (memberId && eventData.id) {
-              localStorage.setItem(`last-event-id-${memberId}`, eventData.id.toString());
-            }
-          } catch (error) {
-            console.error('Failed to parse event data:', error);
-          }
+      // SSE 연결을 설정하는 함수
+      const connectEventSource = () => {
+        const url = new URL('https://dddang.store/api/members/notification/subscribe');
+        if (lastEventId) {
+          url.searchParams.append('lastEventId', lastEventId);
         }
+        if (memberId) {
+          url.searchParams.append('memberId', memberId);
+        }
+
+        const source = new EventSource(url.toString());
+
+        source.onmessage = e => {
+          if (e.data.startsWith('{')) {
+            try {
+              const eventData = JSON.parse(e.data);
+
+              // 알림 상태를 업데이트
+              setAlarmState(prev => [eventData, ...prev]);
+
+              // 새로운 알림 도착 시 상태 업데이트
+              setIsNewNotification(true);
+
+              // last event id를 로컬 스토리지에 저장
+              const memberId = localStorage.getItem('memberId');
+              if (memberId && eventData.id) {
+                localStorage.setItem(`last-event-id-${memberId}`, eventData.id.toString());
+              }
+            } catch (error) {
+              console.error('Failed to parse event data:', error);
+            }
+          }
+        };
+
+        source.onerror = function (e) {
+          console.error('SSE error occurred:', e);
+          source.close(); // 에러가 발생시 SSE 연결을 닫음
+          // 일정 시간 후 재연결 시도
+          setTimeout(() => {
+            console.log('Reconnecting to SSE...');
+            connectEventSource(); // 재연결 시도
+          }, 3000); // 5초 후에 재연결 시도
+        };
+
+        setEventSource(source);
+        console.log('Subscribed to notifications');
       };
 
-      source.onerror = function (e) {
-        console.error('SSE error occurred:', e);
-        source.close(); // 에러가 발생시 SSE 연결을 닫음
-      };
-
-      setEventSource(source);
-      console.log('Subscribed to notifications');
+      // SSE 연결을 초기화합니다.
+      connectEventSource();
     }
   }, [auth]);
 
