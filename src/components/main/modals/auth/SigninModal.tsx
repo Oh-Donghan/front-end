@@ -77,6 +77,10 @@ export default function SigninModal({ onClose, isOpen, initialRef, onSignupClick
         }
       };
 
+      source.addEventListener('message', e => {
+        console.log('Raw event data:', e.data);
+      });
+
       source.onopen = () => {
         console.log('open!!!');
       };

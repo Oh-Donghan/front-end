@@ -68,6 +68,10 @@ export default function Home() {
         }
       };
 
+      source.addEventListener('message', e => {
+        console.log('Raw event data:', e.data);
+      });
+
       // source.addEventListener('sse', e => {
       //   if (e.data.startsWith('{')) {
       //     try {
