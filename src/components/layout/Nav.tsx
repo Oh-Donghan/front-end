@@ -137,11 +137,10 @@ export default function Nav() {
                   className="mr-4 cursor-pointer"
                   onClick={async () => {
                     unSubscribeAlarmSSE();
-
-                    await setAuth(false);
-                    await signOut();
                     localStorage.removeItem('accessToken');
                     localStorage.removeItem('memberId');
+                    await setAuth(false);
+                    await signOut();
                   }}
                 >
                   로그아웃
@@ -258,11 +257,10 @@ export default function Nav() {
                       onClick={async () => {
                         drawerDisclosure.onClose();
                         unSubscribeAlarmSSE();
-
-                        await setAuth(false);
-                        await signOut();
                         localStorage.removeItem('accessToken');
                         localStorage.removeItem('memberId');
+                        await setAuth(false);
+                        await signOut();
                       }}
                     >
                       로그아웃
