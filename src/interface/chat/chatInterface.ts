@@ -19,5 +19,16 @@ export interface ChatDataType {
   seller: Seller;
   buyer: Buyer;
   auction: Auction;
-  createdAt: string;
+  unReadCnt: number;
+  lastMessage: string;
+  lastMessageTime: string;
+  createdAt?: string;
 }
+
+// export interface ChatDataType {
+//   id: number;
+//   seller: Seller;
+//   buyer: Buyer;
+//   auction: Auction;
+//   createdAt: string;
+// }

@@ -55,18 +55,22 @@ export default function ChatItem({ chat, isSelected, onSelect }: ChatItemPropsTy
               textColor={'rgba(160,160,160,1)'}
               marginBottom={'6px'}
             >
-              {timeAgo(chat.createdAt)}
+              {timeAgo(chat.lastMessageTime ? chat.lastMessageTime : chat.createdAt)}
             </Text>
-            {/* <Flex
-          className=" text-white font-thin w-4 h-4"
-          alignItems={'center'}
-          justifyContent={'center'}
-          fontSize={11}
-          borderRadius={'50%'}
-          bgColor={'rgb(49, 130, 206)'}
-        >
-          쌓여 있는 메세지
-        </Flex> */}
+            <>
+              {chat.unReadCnt ? (
+                <Flex
+                  className=" text-white font-thin w-3 h-3"
+                  alignItems={'center'}
+                  justifyContent={'center'}
+                  fontSize={10}
+                  borderRadius={'50%'}
+                  bgColor={'rgb(49, 130, 206)'}
+                >
+                  {chat.unReadCnt}
+                </Flex>
+              ) : null}
+            </>
           </Flex>
         </Flex>
       </Link>

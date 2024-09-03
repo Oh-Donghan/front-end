@@ -37,7 +37,7 @@ export default function Chat({ chat }) {
               {chat.auction.title}
             </Text>
             <Text fontSize={12} textColor={'rgba(160,160,160,1)'}>
-              {/* 마지막 채팅 */}
+              {chat.lastMessage ? chat.lastMessage : null}
             </Text>
           </div>
         </Flex>
@@ -50,16 +50,20 @@ export default function Chat({ chat }) {
           >
             {timeAgo(chat.createdAt)}
           </Text>
-          {/* <Flex
-            className=" text-white font-thin w-4 h-4"
-            alignItems={'center'}
-            justifyContent={'center'}
-            fontSize={11}
-            borderRadius={'50%'}
-            bgColor={'rgb(49, 130, 206)'}
-          >
-            쌓인 메세지 count
-          </Flex> */}
+          <>
+            {chat.unReadCnt ? (
+              <Flex
+                className=" text-white font-thin w-3 h-3"
+                alignItems={'center'}
+                justifyContent={'center'}
+                fontSize={10}
+                borderRadius={'50%'}
+                bgColor={'rgb(49, 130, 206)'}
+              >
+                {chat.unReadCnt}
+              </Flex>
+            ) : null}
+          </>
         </Flex>
       </Flex>
     </Link>
