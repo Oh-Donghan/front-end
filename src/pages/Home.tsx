@@ -68,7 +68,7 @@ export default function Home() {
         }
       };
 
-      source.addEventListener('message', e => {
+      source.addEventListener('sse', e => {
         console.log('Raw event data:', e.data);
       });
 
