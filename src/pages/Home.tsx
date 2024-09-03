@@ -47,8 +47,28 @@ export default function Home() {
 
       const source = new EventSource(url.toString());
 
-      source.onmessage = e => {
-        console.log(e.data);
+      // source.onmessage = e => {
+      //   console.log(e.data);
+      //   if (e.data.startsWith('{')) {
+      //     try {
+      //       const eventData = JSON.parse(e.data);
+
+      //       console.log('데이터 도착');
+      //       // 새로운 알림 도착 시 상태 업데이트
+      //       setIsNewNotification(true);
+
+      //       // last event id를 로컬 스토리지에 저장
+      //       const memberId = localStorage.getItem('memberId');
+      //       if (memberId && eventData.id) {
+      //         localStorage.setItem(`last-event-id-${memberId}`, eventData.id.toString());
+      //       }
+      //     } catch (error) {
+      //       console.error('Failed to parse event data:', error);
+      //     }
+      //   }
+      // };
+
+      source.addEventListener('sse', e => {
         if (e.data.startsWith('{')) {
           try {
             const eventData = JSON.parse(e.data);
@@ -66,7 +86,7 @@ export default function Home() {
             console.error('Failed to parse event data:', error);
           }
         }
-      };
+      });
 
       source.addEventListener('sse', e => {
         console.log('Raw event data:', e.data);
