@@ -45,7 +45,7 @@ export default function SigninModal({ onClose, isOpen, initialRef, onSignupClick
         setEventSource(null);
       }
 
-      // last-event-id를 URL의 쿼리 파라미터로 포함시킵니다.
+      // last-event-id와 memberId를 URL의 쿼리 파라미터로 포함.
       const url = new URL('https://dddang.store/api/members/notification/subscribe');
       if (lastEventId) {
         url.searchParams.append('lastEventId', lastEventId);
