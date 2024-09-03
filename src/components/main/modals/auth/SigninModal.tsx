@@ -39,7 +39,7 @@ export default function SigninModal({ onClose, isOpen, initialRef, onSignupClick
     }
 
     try {
-      const response = await logIn({ id: data.id, password: data.password });
+      await logIn({ id: data.id, password: data.password });
       // const responseData = await response.json(); // 이 줄은 제거합니다.
 
       const accessToken = localStorage.getItem('accessToken');
@@ -87,13 +87,14 @@ export default function SigninModal({ onClose, isOpen, initialRef, onSignupClick
 
           setEventSource(newEventSource);
 
+          // eslint-disable-next-line no-constant-condition
           while (true) {
             const { done, value } = await reader.read();
             if (done) break;
 
             buffer += decoder.decode(value, { stream: true });
 
-            let lines = buffer.split('\n');
+            const lines = buffer.split('\n');
             buffer = lines.pop() || '';
 
             for (const line of lines) {
