@@ -1,5 +1,4 @@
-import { NativeEventSource, EventSourcePolyfill } from 'event-source-polyfill';
-const EventSource = NativeEventSource || EventSourcePolyfill;
+import { EventSourcePolyfill } from 'ng-event-source';
 
 import {
   Button,
@@ -62,11 +61,11 @@ export default function SigninModal({ onClose, isOpen, initialRef, onSignupClick
       );
 
       source.onmessage = e => {
-        if (e.type === 'sse' && e.data.startsWith('{')) {
+        if (e.data.startsWith('{')) {
+          // 'e.type' 체크는 불필요합니다.
           try {
             const eventData = JSON.parse(e.data);
             setAlarmState(prev => [eventData, ...prev]);
-            // localStorage.setItem(`last-event-id-${memberId}`, eventData.id.toString());
             setIsNewNotification(true); // 새로운 알림 도착 시 상태 업데이트
           } catch (error) {
             console.error('Failed to parse event data:', error);
