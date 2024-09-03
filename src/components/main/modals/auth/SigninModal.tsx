@@ -78,6 +78,8 @@ export default function SigninModal({ onClose, isOpen, initialRef, onSignupClick
 
       source.addEventListener('sse', e => {
         if (e.data.startsWith('{')) {
+          console.log(e.data);
+
           try {
             const eventData = JSON.parse(e.data);
 

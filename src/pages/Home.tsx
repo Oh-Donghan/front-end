@@ -69,6 +69,7 @@ export default function Home() {
       // };
 
       source.addEventListener('sse', e => {
+        console.log(e.data);
         if (e.data.startsWith('{')) {
           try {
             const eventData = JSON.parse(e.data);
