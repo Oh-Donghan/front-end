@@ -28,9 +28,17 @@ export default function FindPasswordModal({ isOpen, onClose }) {
     }
   };
 
+  const handleClose = () => {
+    // 모달이 닫힐 때 상태 초기화
+    setMemberId('');
+    setEmail('');
+    setPassword('');
+    onClose();
+  };
+
   return (
     <>
-      <Modal isOpen={isOpen} onClose={onClose} isCentered>
+      <Modal isOpen={isOpen} onClose={handleClose} isCentered>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader mb={4}>비밀번호 찾기</ModalHeader>
@@ -39,10 +47,8 @@ export default function FindPasswordModal({ isOpen, onClose }) {
               <FormLabel>아이디</FormLabel>
               <Input
                 placeholder="아이디를 입력해 주세요."
-                defaultValue={memberId}
-                onChange={e => {
-                  setMemberId(e.target.value);
-                }}
+                value={memberId} // defaultValue 대신 value 사용
+                onChange={e => setMemberId(e.target.value)}
               />
             </FormControl>
 
@@ -50,10 +56,8 @@ export default function FindPasswordModal({ isOpen, onClose }) {
               <FormLabel>이메일</FormLabel>
               <Input
                 placeholder="이메일을 입력해 주세요."
-                defaultValue={email}
-                onChange={e => {
-                  setEmail(e.target.value);
-                }}
+                value={email} // defaultValue 대신 value 사용
+                onChange={e => setEmail(e.target.value)}
               />
             </FormControl>
 
@@ -64,7 +68,7 @@ export default function FindPasswordModal({ isOpen, onClose }) {
             <Button colorScheme="blue" mr={3} onClick={onSubmit}>
               전송
             </Button>
-            <Button onClick={onClose}>취소</Button>
+            <Button onClick={handleClose}>취소</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
