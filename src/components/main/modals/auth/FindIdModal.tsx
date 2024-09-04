@@ -10,6 +10,8 @@ import {
   ModalOverlay,
   ModalFooter,
   Text,
+  useToast,
+  Spinner,
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { FindId } from '../../../../axios/auth/user';
@@ -17,13 +19,37 @@ import { FindId } from '../../../../axios/auth/user';
 export default function FindIdModal({ isOpen, onClose }) {
   const [email, setEmail] = useState('');
   const [id, setId] = useState('');
+  const [loading, setIsLoading] = useState(false);
+  const toast = useToast();
 
   const onSubmit = async () => {
+    if (email.trim() === '') {
+      toast({
+        title: '이메일을 입력해 주세요.',
+        duration: 1300,
+        status: 'error',
+      });
+      return;
+    }
+
+    setIsLoading(true); // 로딩 상태 시작
     try {
       const response = await FindId({ email });
       setId(response);
+      toast({
+        title: `회원님의 아이디는 ${response} 입니다.`,
+        duration: null,
+        status: 'success',
+        isClosable: true,
+      });
     } catch (error) {
-      console.error(`find id error: ${error}`);
+      toast({
+        title: error.response?.data || '아이디 재발급에 실패했습니다.',
+        duration: 1300,
+        status: 'error',
+      });
+    } finally {
+      setIsLoading(false); // 로딩 상태 종료
     }
   };
 
@@ -46,17 +72,17 @@ export default function FindIdModal({ isOpen, onClose }) {
               <Input
                 placeholder="이메일을 입력해 주세요."
                 value={email} // defaultValue에서 value로 변경
+                borderColor={'rgba(200,200,200,1)'}
                 onChange={e => {
                   setEmail(e.target.value);
                 }}
               />
             </FormControl>
-            <Text mt={4}>{id !== '' ? `아이디: ${id}` : ''}</Text>
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onSubmit}>
-              전송
+            <Button colorScheme="blue" mr={3} onClick={onSubmit} disabled={loading}>
+              {loading ? <Spinner size={'md'} /> : '전송'}
             </Button>
             <Button onClick={handleClose}>취소</Button>
           </ModalFooter>
