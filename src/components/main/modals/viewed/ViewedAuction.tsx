@@ -29,7 +29,7 @@ export default function ViewedAuction({ data }: ViewedAuctionType) {
           >
             <Image src={data.thumbnailUrl} alt={data.title} />
           </Box>
-          <Text mr={'4px'} maxW={'300px'} fontSize={['14px', '16px']} noOfLines={1}>
+          <Text mr={'6px'} maxW={'300px'} fontSize={['13px', '15px']} noOfLines={1} isTruncated>
             {data.title}
           </Text>
         </Flex>
