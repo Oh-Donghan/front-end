@@ -1,0 +1,106 @@
+{
+  "content": [
+    {
+      "id": 1,
+      "pointType": "CHARGE",
+      "pointAmount": 5000,
+      "curPointAmount": 123456789,
+      "createdAt": "2024-08-03T11:12:13",
+      "memberId": 1
+    },
+    {
+      "id": 2,
+      "pointType": "USE",
+      "pointAmount": -1000,
+      "curPointAmount": 123456789,
+      "createdAt": "2024-08-17T11:22:13",
+      "memberId": 1
+    },
+    {
+      "id": 3,
+      "pointType": "CHARGE",
+      "pointAmount": -1000,
+      "curPointAmount": 123456789,
+      "createdAt": "2024-08-01T01:12:13",
+      "memberId": 1
+    },
+    {
+      "id": 4,
+      "pointType": "USE",
+      "pointAmount": -1000,
+      "curPointAmount": 123456789,
+      "createdAt": "2024-08-16T18:12:13",
+      "memberId": 1
+    },
+    {
+      "id": 5,
+      "pointType": "USE",
+      "pointAmount": 3000,
+      "curPointAmount": 123456789,
+      "createdAt": "2024-08-07T11:12:13",
+      "memberId": 1
+    },
+    {
+      "id": 6,
+      "pointType": "CHARGE",
+      "pointAmount": -2000,
+      "curPointAmount": 123456789,
+      "createdAt": "2024-08-21T22:12:13",
+      "memberId": 1
+    },
+    {
+      "id": 7,
+      "pointType": "CHARGE",
+      "pointAmount": 11000,
+      "curPointAmount": 123456789,
+      "createdAt": "2024-08-22T14:12:13",
+      "memberId": 1
+    },
+    {
+      "id": 8,
+      "pointType": "USE",
+      "pointAmount": -13000,
+      "curPointAmount": 123456789,
+      "createdAt": "2024-08-30T21:12:13",
+      "memberId": 1
+    },
+    {
+      "id": 9,
+      "pointType": "USE",
+      "pointAmount": 62000,
+      "curPointAmount": 123456789,
+      "createdAt": "2024-08-20T21:12:13",
+      "memberId": 1
+    },
+    {
+      "id": 10,
+      "pointType": "USE",
+      "pointAmount": -1000,
+      "curPointAmount": 123456789,
+      "createdAt": "2024-08-20T21:22:13",
+      "memberId": 1
+    },
+    {
+      "id": 11,
+      "pointType": "USE",
+      "pointAmount": 12000,
+      "curPointAmount": 123456789,
+      "createdAt": "2024-08-10T11:12:13",
+      "memberId": 1
+    },
+    {
+      "id": 12,
+      "pointType": "CHARGE",
+      "pointAmount": 7000,
+      "curPointAmount": 123456789,
+      "createdAt": "2024-08-10T11:12:13",
+      "memberId": 1
+    }
+  ],
+  "page": {
+    "size": 10,
+    "number": 0,
+    "totalElements": 5,
+    "totalPages": 1
+  }
+}
