@@ -20,6 +20,8 @@ export default function ViewedAuction({ data }: ViewedAuctionType) {
           <Box
             width={['32px', '54px']}
             height={['32px', '54px']}
+            minHeight={['32px', '54px']}
+            minWidth={['32px', '54px']}
             bgColor={'rgba(230,230,230,1)'}
             borderRadius={'50%'}
             marginRight={['8px', '14px']}
@@ -27,9 +29,12 @@ export default function ViewedAuction({ data }: ViewedAuctionType) {
           >
             <Image src={data.thumbnailUrl} alt={data.title} />
           </Box>
-          <Text fontSize={['14px', '16px']}>{data.title}</Text>
+          <Text mr={'4px'} maxW={'350px'} fontSize={['14px', '16px']} noOfLines={1}>
+            {data.title}
+          </Text>
         </Flex>
         <Text
+          minW={'40px'}
           fontSize={['xs', 'sm']}
           fontWeight={'normal'}
           color={data.auctionState === 'CONTINUE' ? 'rgb(49, 130, 206)' : 'rgba(150,150,150,1)'}
