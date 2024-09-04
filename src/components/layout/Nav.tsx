@@ -11,6 +11,7 @@ import {
   Box,
   Badge,
   Image,
+  Flex,
 } from '@chakra-ui/react';
 import { RxTextAlignJustify } from 'react-icons/rx';
 import SigninModal from '../main/modals/auth/SigninModal';
@@ -131,8 +132,15 @@ export default function Nav() {
         isOpen={signupDisclosure.isOpen}
         initialRef={initialRef}
       />
-
-      <div className="flex justify-between items-center h-[84px] px-10 min-w-[375px] max-w-full">
+      <Flex
+        justifyContent={'space-between'}
+        align={'center'}
+        h={'84px'}
+        px={10}
+        minW={'375px'}
+        maxW={'full'}
+        zIndex={2000}
+      >
         <Link to={'/'}>
           <Image src={logo} alt="로고 이미지" h="75px" />
         </Link>
@@ -250,8 +258,7 @@ export default function Nav() {
             )}
           </ul>
         </div>
-      </div>
-
+      </Flex>
       {/* 드로어 */}
       <Box>
         <Drawer
