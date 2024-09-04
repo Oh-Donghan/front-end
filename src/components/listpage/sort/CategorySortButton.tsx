@@ -57,7 +57,7 @@ export default function CategorySortButton() {
         size={{ base: 'sm', lg: 'sm' }}
         mr={2}
       >
-        {selectedOption}
+        {category === '기타' ? '기타' : selectedOption}
       </MenuButton>
       <MenuList zIndex={99} fontSize={15} paddingY={'0px'} color={'rgba(30,30,30,1)'}>
         {categories.map((category, i) => {
