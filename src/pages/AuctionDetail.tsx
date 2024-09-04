@@ -1,4 +1,4 @@
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, Flex } from '@chakra-ui/react';
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, Flex, Text } from '@chakra-ui/react';
 import { RxChevronRight } from 'react-icons/rx';
 import AuctionImages from '../components/detail/AuctionImages';
 import AuctionDetails from '../components/detail/AuctionDetails';
@@ -71,10 +71,10 @@ const AuctionDetail = () => {
           <BreadcrumbLink href="/">전체</BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbItem>
-          <BreadcrumbLink href="#">{data?.parentCategory?.categoryName}</BreadcrumbLink>
+          <Text>{data?.parentCategory?.categoryName}</Text>
         </BreadcrumbItem>
         <BreadcrumbItem>
-          <BreadcrumbLink href="#">{data?.childCategory?.categoryName}</BreadcrumbLink>
+          <Text>{data?.childCategory?.categoryName}</Text>
         </BreadcrumbItem>
         <BreadcrumbItem isCurrentPage>
           <BreadcrumbLink href="#">{data?.title}</BreadcrumbLink>
