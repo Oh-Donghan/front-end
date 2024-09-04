@@ -32,7 +32,7 @@ export default function ViewedAuction({ data }: ViewedAuctionType) {
           </Text>
         </Flex>
         <Text
-          minW={'70px'}
+          minW={'50px'}
           fontSize={['xs', 'sm']}
           fontWeight={'normal'}
           color={data.auctionState === 'CONTINUE' ? 'rgb(49, 130, 206)' : 'rgba(150,150,150,1)'}
