@@ -9,7 +9,6 @@ import {
   ModalHeader,
   ModalOverlay,
   ModalFooter,
-  Text,
   useToast,
   Spinner,
 } from '@chakra-ui/react';
@@ -18,7 +17,7 @@ import { FindId } from '../../../../axios/auth/user';
 
 export default function FindIdModal({ isOpen, onClose }) {
   const [email, setEmail] = useState('');
-  const [id, setId] = useState('');
+  const [, setId] = useState('');
   const [loading, setIsLoading] = useState(false);
   const toast = useToast();
 
@@ -82,7 +81,7 @@ export default function FindIdModal({ isOpen, onClose }) {
 
           <ModalFooter>
             <Button colorScheme="blue" mr={3} onClick={onSubmit} disabled={loading}>
-              {loading ? <Spinner size={'md'} /> : '전송'}
+              {loading ? <Spinner size={'md'} /> : '찾기'}
             </Button>
             <Button onClick={handleClose}>취소</Button>
           </ModalFooter>

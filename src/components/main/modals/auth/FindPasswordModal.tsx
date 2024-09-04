@@ -19,7 +19,7 @@ import { FindPassword } from '../../../../axios/auth/user';
 export default function FindPasswordModal({ isOpen, onClose }) {
   const [memberId, setMemberId] = useState('');
   const [email, setEmail] = useState('');
-  const [responseMessage, setResponseMessage] = useState('');
+  const [, setResponseMessage] = useState('');
   const [loading, setIsLoading] = useState(false);
   const toast = useToast();
 
@@ -110,7 +110,7 @@ export default function FindPasswordModal({ isOpen, onClose }) {
 
           <ModalFooter>
             <Button colorScheme="blue" mr={3} onClick={onSubmit} isLoading={loading}>
-              {loading ? <Spinner size={'md'} /> : '전송'}
+              {loading ? <Spinner size={'md'} /> : '찾기'}
             </Button>
             <Button onClick={handleClose}>취소</Button>
           </ModalFooter>
