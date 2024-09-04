@@ -25,7 +25,7 @@ export default function ChatItem({ chat, isSelected, onSelect }: ChatItemPropsTy
     <>
       <Link to={`/rooms?id=${chat.id}`}>
         <Flex
-          _hover={{ bgColor: 'rgba(245,245,245,1)' }}
+          _hover={{ bgColor: 'rgba(240,240,240,1)' }}
           align="center"
           justify="space-between"
           minWidth={'390px'}
@@ -41,25 +41,26 @@ export default function ChatItem({ chat, isSelected, onSelect }: ChatItemPropsTy
           boxShadow={'0px 1px 2px rgba(120,120,120,0.1)'}
         >
           <Flex align={'center'}>
-            <Box w={'50px'} h={'50px'} borderRadius={'50%'} overflow={'hidden'}>
+            <Box
+              w={'50px'}
+              h={'50px'}
+              borderRadius={'50%'}
+              boxShadow={'1px 1px 3px rgba(150,150,150,0.3)'}
+            >
               <Image
                 src={chat.auction.thumbnail ? chat.auction.thumbnail : default_profile}
                 alt={chat.auction.title}
+                borderRadius={'50%'}
               />
             </Box>
-            <Flex ml={3} align={'center'}>
-              <Text
-                fontSize={17}
-                textColor={'rgba(70,70,70,1)'}
-                fontWeight={'bold'}
-                marginBottom={'3px'}
-              >
+            <div className="ml-3">
+              <Text fontSize={17} textColor={'rgba(70,70,70,1)'} fontWeight={'bold'}>
                 {chat.auction.title}
               </Text>
-              <Text fontSize={12} textColor={'rgba(160,160,160,1)'}>
-                {/* 채팅 마지막 메세지 */}
+              <Text fontSize={14} textColor={'rgba(160,160,160,1)'} ml={0.5}>
+                {chat.lastMessage ? chat.lastMessage : null}
               </Text>
-            </Flex>
+            </div>
           </Flex>
           <Flex direction="column" ml="auto" align="flex-end">
             <Text
@@ -68,7 +69,7 @@ export default function ChatItem({ chat, isSelected, onSelect }: ChatItemPropsTy
               textColor={'rgba(160,160,160,1)'}
               marginBottom={'6px'}
             >
-              {timeAgo(chat.lastMessageTime ? chat.lastMessageTime : chat.createdAt)}
+              {chat.lastMessageTime === null ? '' : timeAgo(chat.lastMessageTime)}
             </Text>
             <>
               {chat.unReadCnt ? (

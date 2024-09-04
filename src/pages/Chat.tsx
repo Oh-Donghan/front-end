@@ -22,7 +22,7 @@ export default function Chat() {
     queryKey: ['chat'],
     queryFn: () => getAllChats(),
     staleTime: 0,
-    gcTime: 30 * 60 * 1000,
+    gcTime: 0,
   });
 
   const scrollBottom = () => {

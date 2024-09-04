@@ -27,6 +27,8 @@ export default function ChatModal() {
   useEffect(() => {
     if (isChatModalOpen) {
       setShouldFetch(true);
+    } else {
+      setShouldFetch(false);
     }
   }, [isChatModalOpen]);
 

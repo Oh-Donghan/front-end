@@ -1,5 +1,5 @@
 import { Box, Flex, Image, Text } from '@chakra-ui/react';
-import defaul_profile from '../../../assets/image/modal/chat/profile.png';
+import default_profile from '../../../assets/image/modal/chat/profile.png';
 import { Link } from 'react-router-dom';
 import { timeAgo } from '../../../utils/dateFormat';
 
@@ -22,7 +22,7 @@ export default function Chat({ chat }) {
             boxShadow={'1px 1px 3px rgba(150,150,150,0.3)'}
           >
             <Image
-              src={chat.auction.thumbnail ? chat.auction.thumbnail : defaul_profile}
+              src={chat.auction.thumbnail ? chat.auction.thumbnail : default_profile}
               alt={chat.auction.title}
               borderRadius={'50%'}
             />
@@ -48,7 +48,7 @@ export default function Chat({ chat }) {
             textColor={'rgba(160,160,160,1)'}
             marginBottom={'6px'}
           >
-            {timeAgo(chat.createdAt)}
+            {chat.lastMessageTime === null ? '' : timeAgo(chat.lastMessageTime)}
           </Text>
           <>
             {chat.unReadCnt ? (
