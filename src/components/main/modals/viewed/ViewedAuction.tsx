@@ -26,6 +26,7 @@ export default function ViewedAuction({ data }: ViewedAuctionType) {
             borderRadius={'50%'}
             marginRight={['8px', '14px']}
             overflow={'hidden'}
+            mt={'2px'}
           >
             <Image src={data.thumbnailUrl} alt={data.title} />
           </Box>
