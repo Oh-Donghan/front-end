@@ -158,7 +158,7 @@ const AuctionDetails = ({ auctionId }) => {
 
   const getReceiveTypeText = (type: string) => {
     const receiveTypeMap = {
-      CONTACT: '대면 거래',
+      CONTACT: '직거래',
       DELIVERY: '택배',
       ALL: '직거래 / 택배',
     };
