@@ -30,8 +30,6 @@ export default function AuctionList() {
   const sort = searchParams.get('sorted') || 'recent';
   const search = searchParams.get('word') || undefined;
 
-  // 메인 페이지에서 캐싱한 카테고리 데이터 사용
-  // url을 직접 수정해서 들어오는 경우도 고려해서 queryClient.getQueryData(['categories'])는 사용하지 않음
   const { data: categories, isLoading } = useQuery({
     queryKey: ['categories'],
     queryFn: () => getCategories(),
@@ -41,12 +39,10 @@ export default function AuctionList() {
     return cat.categoryName === category;
   });
 
-  // 페이지 첫 로드시 스크롤 최상단으로 이동
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  // 웹소켓 연결 및 구독 설정
   useEffect(() => {
     const stompClient = new Client({
       brokerURL: 'wss://dddang.store/auction-websocket',
@@ -56,15 +52,11 @@ export default function AuctionList() {
     stompClient.onConnect = () => {
       console.log('Connected to WebSocket');
 
-      // 경매 입찰 성공 메시지 구독
       stompClient.subscribe('/sub/auction-all', message => {
         const bidData = JSON.parse(message.body);
         console.log('Received bid data:', bidData);
         setAuctionArray(prev => {
-          // 기존 배열에서 동일한 auctionId를 가진 객체 제거
           const updatedArray = prev.filter(item => item.auctionId !== bidData.auctionId);
-
-          // 새로운 bidData를 추가한 배열 반환
           return [...updatedArray, bidData];
         });
       });
@@ -99,12 +91,9 @@ export default function AuctionList() {
         </Box>
       ) : (
         <>
-          {/* 지금 핫한 Top5 섹션 */}
           <Box mt={{ base: '12', sm: '60px' }}>
             <SwiperHotItemList isCategoryLoading={isLoading} />
           </Box>
-
-          {/* 전체 매물 섹션 */}
           <section>
             <ItemList isCategoryLoading={isLoading} />
           </section>
@@ -117,10 +106,8 @@ export default function AuctionList() {
     <Box minW="442px" px={8} overflowX="hidden">
       <TopButton />
       <ChatModal />
-      {/* 카테고리와 서브카테고리 네비게이션 */}
       <Box pt="30px">
         <Flex alignItems="center" fontSize="14px" color="rgba(90,90,90,1)" pl="6px">
-          {/*검색 키워드가 있을 때*/}
           {search && (
             <>
               <Text>전체 경매</Text>
@@ -128,7 +115,6 @@ export default function AuctionList() {
               <Text>{search}</Text>
             </>
           )}
-          {/*검색 키워드가 없고 카테고리가 전체가 아닐 때*/}
           {category !== '전체' && !search && (
             <>
               <Text>전체 경매</Text>
@@ -142,14 +128,13 @@ export default function AuctionList() {
               )}
             </>
           )}
-          {/*검색 키워드가 없고 카테고리가 전체일 때*/}
           {category === '전체' && !search && (
             <>
               <Text>전체 경매</Text>
             </>
           )}
         </Flex>
-        {/*검색 키워드가 없고 카테고리가 전체가 아닐 때 타이틀*/}
+
         {isLoading ? (
           <>
             <Flex align={'center'} mt={'20px'}>
@@ -159,7 +144,6 @@ export default function AuctionList() {
           </>
         ) : (
           <>
-            {/*카테고리를 선택하고 검색은 하지 않았을 떄*/}
             {category !== '전체' && !search && (
               <Flex alignItems={'center'} marginTop={'20px'}>
                 <img
@@ -174,7 +158,6 @@ export default function AuctionList() {
                 </Text>
               </Flex>
             )}
-            {/*카테고리를 선택하고 검색을 했을 떄*/}
             {category !== '전체' && search && (
               <Flex align={'center'} mt={4}>
                 <img
@@ -192,7 +175,6 @@ export default function AuctionList() {
           </>
         )}
 
-        {/*검색 키워드가 없고 카테고리가 전체일 때 타이틀*/}
         {category === '전체' && !search && (
           <Flex alignItems={'center'} marginTop={'20px'}>
             <img
@@ -208,7 +190,6 @@ export default function AuctionList() {
           </Flex>
         )}
 
-        {/* 반응형 서브카테고리 및 기타 요소 네비게이션 */}
         <Flex
           mt="16px"
           fontSize="16px"
@@ -230,14 +211,14 @@ export default function AuctionList() {
         >
           <Flex alignItems="center" justifyContent={'space-between'} width={'full'}>
             <Flex>
-              <CategorySortButton /> {/* 대분류 변경 핸들러 */}
+              <CategorySortButton />
               {category !== '전체' && category !== '기타' && (
                 <Link
                   to={{
                     pathname: '/auctions',
                     search: new URLSearchParams({
                       mainCategory: category,
-                      ...(sort !== 'recent' && { sort }), // sort가 있으면 포함
+                      ...(sort !== 'recent' && { sort }),
                     }).toString(),
                   }}
                   className="mr-2"
@@ -253,6 +234,18 @@ export default function AuctionList() {
                   </Button>
                 </Link>
               )}
+              {category === '기타' && (
+                <Button
+                  size={{ base: 'xs', sm: 'sm' }}
+                  variant={!subCategory ? 'solid' : 'outline'}
+                  colorScheme={!subCategory ? 'blue' : 'gray'}
+                  leftIcon={!subCategory ? <FaCheck /> : null}
+                  borderColor={'rgba(210,210,210,1)'}
+                  isDisabled
+                >
+                  {'전체'}
+                </Button>
+              )}
               {currentCategoryData?.categories?.map((sub, i) => (
                 <Link
                   to={{
@@ -260,7 +253,7 @@ export default function AuctionList() {
                     search: new URLSearchParams({
                       mainCategory: category,
                       subCategory: sub.categoryName,
-                      ...(sort !== 'recent' && { sort }), // sort가 있으면 포함
+                      ...(sort !== 'recent' && { sort }),
                     }).toString(),
                   }}
                   key={i}
@@ -294,14 +287,12 @@ export default function AuctionList() {
         </Flex>
       </Box>
 
-      {/* 너비가 좁아질 때 아래에 Input이 나타나도록 구현 */}
       {showSearchInputBelow && (
         <Box mb={{ base: '4', sm: '5' }} mt={'5'}>
           <Input />
         </Box>
       )}
 
-      {/* 아이템 목록 렌더링 */}
       {renderItemList()}
     </Box>
   );
