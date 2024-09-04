@@ -41,7 +41,7 @@ export default function Alarm({ type, content, createdAt, auctionId }) {
           <LazyLoadImage
             src={logo}
             alt="alarm logo"
-            className="w-6 h-5.5 mr-3.5"
+            className="w-6 h-5.5 mr-3.5 mt-2"
             effect="blur" // 로딩 시 블러 효과
           />
           <Text
