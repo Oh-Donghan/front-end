@@ -13,7 +13,7 @@ export default function AlarmList() {
 
   if (isLoading) {
     return (
-      <Flex w={'100%'} h={'272px'} align={'center'} justify={'center'}>
+      <Flex w={'100%'} h={'256px'} align={'center'} justify={'center'}>
         <Spinner size="xl" />
       </Flex>
     );
@@ -21,7 +21,7 @@ export default function AlarmList() {
 
   if (data.length === 0) {
     return (
-      <Flex w={'100%'} h={'272px'} align={'center'} justify={'center'}>
+      <Flex w={'100%'} h={'256px'} align={'center'} justify={'center'}>
         <Text
           color={'rgba(90,90,90,1)'}
           fontSize={'1.05rem'}
@@ -38,7 +38,7 @@ export default function AlarmList() {
   return (
     <Flex
       direction={'column'}
-      maxHeight={'272px'}
+      maxHeight={'256px'}
       overflowY={'scroll'}
       sx={{
         '::-webkit-scrollbar': {
