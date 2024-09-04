@@ -82,7 +82,7 @@ export default function SwiperHotItemList({ isCategoryLoading }: SwiperHotItemLi
   ) : (
     <>
       {data.length === 0 ? null : (
-        <Box minW="375px" mt={{ base: 12, sm: '75px' }} position={'relative'} zIndex={1000}>
+        <Box minW="375px" mt={{ base: 12, sm: '75px' }} position={'relative'} zIndex={1}>
           <Flex alignItems="center" mb={{ base: '4', sm: '5' }}>
             <Text fontSize={{ base: 'xl', sm: '1.5rem' }} fontWeight="bold">
               {`지금 핫한 ${subCategory ? subCategory : category !== '전체' ? category : '경매'} Top5`}
