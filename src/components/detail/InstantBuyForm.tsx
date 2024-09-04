@@ -1,12 +1,15 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { fetchInstantBuyData } from '../../axios/auctionDetail/InstantBuy';
 import { Button, useToast } from '@chakra-ui/react';
 import { AxiosError } from 'axios';
 import { authState } from '../../recoil/atom/authAtom';
 import { useRecoilState } from 'recoil';
+import { useNavigate } from 'react-router-dom';
 
 const InstantBuyForm = ({ auctionState, auctionId }) => {
   const [auth] = useRecoilState(authState);
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const toast = useToast();
 
   // useMutation 훅을 사용하여 API 요청을 관리
@@ -17,8 +20,15 @@ const InstantBuyForm = ({ auctionState, auctionId }) => {
         title: '구매 성공',
         description: '즉시 구매가 완료되었습니다.',
         status: 'success',
-        duration: 3000,
+        duration: 2000,
         isClosable: true,
+        onCloseComplete: () => {
+          // 즉시 구매시 쿼리를 무효화하여 데이터를 새로고침
+          queryClient.invalidateQueries({ queryKey: ['detail', auctionId] });
+          // 홈으로 이동하고 새로고침
+          navigate('/', { replace: true });
+          window.location.reload();
+        },
       });
     },
     onError: (error: AxiosError) => {
