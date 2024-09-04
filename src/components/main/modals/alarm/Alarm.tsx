@@ -48,7 +48,7 @@ export default function Alarm({ type, content, createdAt, auctionId }) {
             {content}
           </Text>
         </Flex>
-        <Text fontSize={'14px'} fontWeight={'normal'} color={'rgba(150,150,150,1)'}>
+        <Text minW={'40px'} fontSize={'14px'} fontWeight={'normal'} color={'rgba(150,150,150,1)'}>
           {timeElapsed}
         </Text>
       </Flex>
