@@ -73,6 +73,11 @@ export default function Nav() {
   };
 
   const handleAlarmModalOpen = () => {
+    const memberId = localStorage.getItem('memberId');
+
+    if (isNewNotification) {
+      localStorage.removeItem(`last-event-id-${memberId}`);
+    }
     setIsNewNotification(false); // 알림 확인 시 빨간 점 사라지게 설정
   };
 

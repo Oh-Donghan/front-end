@@ -15,7 +15,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Client } from '@stomp/stompjs';
 import { auctionState } from '../recoil/atom/auctionPriceAtom';
 import { eventSourceState } from '../recoil/atom/eventSourceAtom';
-import { alarmState, isNewNotificationState } from '../recoil/atom/alarmAtom';
+import { isNewNotificationState } from '../recoil/atom/alarmAtom';
 
 export default function Home() {
   const [isProcessingAuth, setIsProcessingAuth] = useState(false);
@@ -23,7 +23,6 @@ export default function Home() {
   const navigate = useNavigate();
   const location = useLocation();
   const [eventSource, setEventSource] = useRecoilState(eventSourceState);
-  const setAlarmState = useSetRecoilState(alarmState);
   const [, setAuctionArray] = useRecoilState(auctionState);
   const [, setIsNewNotification] = useRecoilState(isNewNotificationState);
 
@@ -108,11 +107,6 @@ export default function Home() {
         eventSource.close();
         setEventSource(null);
       }
-
-      const headers = {
-        Authorization: `Bearer ${accessToken}`,
-        ...(lastEventId ? { 'Last-Event-ID': lastEventId } : {}),
-      };
 
       // SSE 연결 및 재연결 로직 시작
       connectSSE(lastEventId, memberId);
