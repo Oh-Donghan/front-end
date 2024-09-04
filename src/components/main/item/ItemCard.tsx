@@ -102,9 +102,7 @@ export default function ItemCard({ rank, item, type, auctionArray }: ItemCardPro
               )}
             </Stack>
             <Heading size="md" marginBottom={'8px'}>
-              <Flex whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">
-                {item.title}
-              </Flex>
+              <Flex isTruncated>{item.title}</Flex>
             </Heading>
             <Flex justifyContent={'space-between'} alignItems={'center'} height={'28px'}>
               <Text fontSize="sm">현재 입찰가</Text>
@@ -210,9 +208,7 @@ export default function ItemCard({ rank, item, type, auctionArray }: ItemCardPro
             )}
           </Stack>
           <Heading size="md" marginBottom={'8px'} noOfLines={1}>
-            <Flex whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">
-              {item.title}
-            </Flex>
+            <Flex isTruncated>{item.title}</Flex>
           </Heading>
           <Flex justifyContent={'space-between'} alignItems={'center'} height={'25px'}>
             <Text fontSize="sm" flexShrink={0}>
