@@ -16,6 +16,8 @@ export default function Chat({ chat }) {
       >
         <Flex align={'center'}>
           <Box
+            maxH={'50px'}
+            maxW={'50px'}
             w={'50px'}
             h={'50px'}
             borderRadius={'50%'}
