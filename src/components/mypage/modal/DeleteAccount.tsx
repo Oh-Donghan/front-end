@@ -61,18 +61,13 @@ export default function DeleteAccount({ onClose, isOpen, initialRef }) {
         // 홈으로 이동하고 새로고침
         navigate('/', { replace: true });
         window.location.reload();
-      } else {
-        toast({
-          title: '탈퇴에 실패했습니다. 다시 시도해주세요.',
-          status: 'error',
-          duration: 3000,
-          isClosable: true,
-        });
       }
     } catch (error) {
+      const errorMessage = error.response.data;
+
       toast({
-        title: '탈퇴 중 오류가 발생했습니다.',
-        description: '다시 시도해주세요.',
+        title: '탈퇴 실패',
+        description: errorMessage,
         status: 'error',
         duration: 3000,
         isClosable: true,

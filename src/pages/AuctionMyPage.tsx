@@ -23,7 +23,7 @@ export default function AuctionMyPage() {
     { icon: <FaUser />, label: '내 정보', path: '/mypage/myinfo' },
     { icon: <FaShoppingCart />, label: '구매 내역', path: '/mypage/buy' },
     { icon: <RiDiscountPercentFill />, label: '판매 내역', path: '/mypage/sell' },
-    { icon: <SiLightning />, label: '충전 내역', path: '/mypage/charge' },
+    { icon: <SiLightning />, label: '포인트 내역', path: '/mypage/charge' },
     { icon: <SiLightning />, label: 'QnA', path: '/mypage/QnA' },
   ];
 
