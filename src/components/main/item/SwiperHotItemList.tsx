@@ -26,6 +26,8 @@ export default function SwiperHotItemList({ isCategoryLoading }: SwiperHotItemLi
   const { data, isLoading } = useQuery({
     queryKey: ['items', category, subCategory, 'top5'],
     queryFn: () => getAuctionHotItems({ category, subCategory }),
+    staleTime: 0,
+    gcTime: 30 * 60 * 1000,
   });
 
   if (isCategoryLoading || isLoading) {

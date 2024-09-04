@@ -40,6 +40,8 @@ export default function ItemList({ isCategoryLoading }: SwiperHotItemListProps) 
       return lastPage.last ? undefined : lastPage.number + 1;
     },
     initialPageParam: 0,
+    staleTime: 0,
+    gcTime: 30 * 60 * 1000,
   });
 
   useEffect(() => {

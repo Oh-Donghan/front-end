@@ -27,71 +27,59 @@ export default function Home() {
   const [, setAuctionArray] = useRecoilState(auctionState);
   const [, setIsNewNotification] = useRecoilState(isNewNotificationState);
 
-  // 재연결 로직을 처리하는 함수
-  const reconnectSSE = (url, headers, memberId, retryCount = 0) => {
-    const maxRetries = 5; // 최대 재시도 횟수
-    const retryDelay = 5000; // 재시도 간격 (5초)
-
+  // SSE 연결
+  const connectSSE = (lastEventId, memberId) => {
     const sseConnect = async () => {
-      try {
-        const response = await fetch(url, {
-          headers,
-          method: 'GET',
-        });
+      if (eventSource) {
+        console.log('Unsubscribed from notifications');
+        eventSource.close();
+        setEventSource(null);
+      }
 
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
+      // last-event-id와 memberId를 URL의 쿼리 파라미터로 포함.
+      const url = new URL('https://dddang.store/api/members/notification/subscribe');
+      if (lastEventId) {
+        url.searchParams.append('lastEventId', lastEventId);
+      }
+      if (memberId) {
+        url.searchParams.append('memberId', memberId);
+      }
 
-        const reader = response.body.getReader();
-        const decoder = new TextDecoder();
+      const source = new EventSource(url.toString());
 
-        let buffer = '';
+      source.addEventListener('sse', e => {
+        console.log(e.data);
+        if (e.data.startsWith('{')) {
+          try {
+            const eventData = JSON.parse(e.data);
+            if (!eventData.dummyContent) {
+              console.log('데이터 도착');
+              // 새로운 알림 도착 시 상태 업데이트
+              setIsNewNotification(true);
 
-        // 새로운 EventSource 객체 생성
-        const newEventSource = {
-          close: () => {
-            reader.cancel(); // SSE 연결을 수동으로 해제
-          },
-        };
-
-        setEventSource(newEventSource);
-
-        // eslint-disable-next-line no-constant-condition
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break; // 읽기가 완료되면 루프 종료
-
-          buffer += decoder.decode(value, { stream: true });
-
-          const lines = buffer.split('\n');
-          buffer = lines.pop() || '';
-
-          for (const line of lines) {
-            if (line.startsWith('data:')) {
-              const eventDataString = line.replace(/^data:\s*/, '');
-              try {
-                const eventData = JSON.parse(eventDataString); // JSON 문자열을 객체로 변환
-                console.log('New message:', eventData);
-                setAlarmState(prev => [eventData, ...prev]);
-                localStorage.setItem(`last-event-id-${memberId}`, eventData.id.toString()); // id 값을 로컬 스토리지에 저장
-                setIsNewNotification(true); // 새로운 알림 도착 시 상태 업데이트
-              } catch (error) {
-                console.error('Failed to parse event data:', error);
+              // last event id를 로컬 스토리지에 저장
+              const memberId = localStorage.getItem('memberId');
+              if (memberId && eventData.id) {
+                localStorage.setItem(`last-event-id-${memberId}`, eventData.id.toString());
               }
             }
+          } catch (error) {
+            console.error('Failed to parse event data:', error);
           }
         }
-      } catch (err) {
-        console.error('SSE connection failed:', err);
+      });
 
-        if (retryCount < maxRetries) {
-          console.log(`Reconnecting SSE... Attempt ${retryCount + 1}`);
-          setTimeout(() => reconnectSSE(url, headers, memberId, retryCount + 1), retryDelay);
-        } else {
-          console.error('Max retries reached. SSE connection failed.');
-        }
-      }
+      source.addEventListener('sse', e => {
+        console.log('Raw event data:', e.data);
+      });
+
+      source.onerror = function (e) {
+        console.error('SSE error occurred:', e);
+        // source.close(); // 에러가 발생시 SSE 연결을 닫음
+      };
+
+      setEventSource(source);
+      console.log('Subscribed to notifications');
     };
 
     sseConnect();
@@ -127,7 +115,7 @@ export default function Home() {
       };
 
       // SSE 연결 및 재연결 로직 시작
-      reconnectSSE('https://dddang.store/api/members/notification/subscribe', headers, memberId);
+      connectSSE(lastEventId, memberId);
 
       console.log('Subscribed to notifications');
 

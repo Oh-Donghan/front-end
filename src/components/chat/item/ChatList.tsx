@@ -58,6 +58,7 @@ export default function ChatList({
         scrollbarWidth: 'none', // Firefox
       }}
       maxH="596px"
+      minH="596px"
     >
       {chats.map(chat => (
         <ChatItem

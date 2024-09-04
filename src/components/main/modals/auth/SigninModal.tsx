@@ -20,34 +20,30 @@ import { SiNaver } from 'react-icons/si';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { logIn } from '../../../../axios/auth/user';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { authState } from '../../../../recoil/atom/authAtom';
 import { eventSourceState } from '../../../../recoil/atom/eventSourceAtom';
-import { alarmState, isNewNotificationState } from '../../../../recoil/atom/alarmAtom';
+import { isNewNotificationState } from '../../../../recoil/atom/alarmAtom';
+import { useEffect } from 'react';
 
-export default function SigninModal({ onClose, isOpen, initialRef, onSignupClick }) {
+export default function SigninModal({
+  onClose,
+  isOpen,
+  initialRef,
+  onSignupClick,
+  onFindIdClick,
+  onFindPasswordClick,
+}) {
   const { register, handleSubmit, reset } = useForm();
-  const setAuth = useSetRecoilState(authState);
-  const setAlarmState = useSetRecoilState(alarmState);
+  const [auth, setAuth] = useRecoilState(authState);
   const [eventSource, setEventSource] = useRecoilState(eventSourceState);
-  const [, setIsNewNotification] = useRecoilState(isNewNotificationState); // 추가
+  const [, setIsNewNotification] = useRecoilState(isNewNotificationState);
   const toast = useToast();
 
-  const onSubmit = async data => {
-    if (data.id.trim() === '' || data.password.trim() === '') {
-      return;
-    }
-
-    try {
-      await logIn({ id: data.id, password: data.password });
-
-      const accessToken = localStorage.getItem('accessToken');
+  useEffect(() => {
+    if (auth) {
       const memberId = localStorage.getItem('memberId');
       const lastEventId = localStorage.getItem(`last-event-id-${memberId}`);
-
-      setAuth(true);
-      reset();
-      onClose();
 
       if (eventSource) {
         console.log('Unsubscribed from notifications');
@@ -55,70 +51,74 @@ export default function SigninModal({ onClose, isOpen, initialRef, onSignupClick
         setEventSource(null);
       }
 
-      const headers = {
-        Authorization: `Bearer ${accessToken}`,
-        ...(lastEventId ? { 'Last-Event-ID': lastEventId } : {}),
-      };
+      // last-event-id와 memberId를 URL의 쿼리 파라미터로 포함.
+      const url = new URL('https://dddang.store/api/members/notification/subscribe');
+      if (lastEventId) {
+        url.searchParams.append('lastEventId', lastEventId);
+      }
+      if (memberId) {
+        url.searchParams.append('memberId', memberId);
+      }
 
-      // SSE 연결을 fetch로 구현
-      const sseConnect = async (url, headers) => {
-        try {
-          const response = await fetch(url, {
-            headers,
-            method: 'GET',
-          });
+      const source = new EventSource(url.toString());
 
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
+      source.addEventListener('sse', e => {
+        if (e.data.startsWith('{')) {
+          console.log(e.data);
+          try {
+            const eventData = JSON.parse(e.data);
+            if (!eventData.dummyContent) {
+              console.log('데이터 도착');
+              // 새로운 알림 도착 시 상태 업데이트
+              setIsNewNotification(true);
 
-          const reader = response.body.getReader();
-          const decoder = new TextDecoder();
-
-          let buffer = '';
-
-          // 새로운 EventSource 객체 생성
-          const newEventSource = {
-            close: () => {
-              reader.cancel(); // SSE 연결을 수동으로 해제
-            },
-          };
-
-          setEventSource(newEventSource);
-
-          // eslint-disable-next-line no-constant-condition
-          while (true) {
-            const { done, value } = await reader.read();
-            if (done) break;
-
-            buffer += decoder.decode(value, { stream: true });
-
-            const lines = buffer.split('\n');
-            buffer = lines.pop() || '';
-
-            for (const line of lines) {
-              if (line.startsWith('data:')) {
-                const eventDataString = line.replace(/^data:\s*/, '');
-                try {
-                  const eventData = JSON.parse(eventDataString); // JSON 문자열을 객체로 변환
-                  console.log('New message:', eventData);
-                  setAlarmState(prev => [eventData, ...prev]);
-                  localStorage.setItem(`last-event-id-${memberId}`, eventData.id.toString()); // id 값을 로컬 스토리지에 저장
-                  setIsNewNotification(true); // 새로운 알림 도착 시 상태 업데이트
-                } catch (error) {
-                  console.error('Failed to parse event data:', error);
-                }
+              // last event id를 로컬 스토리지에 저장
+              const memberId = localStorage.getItem('memberId');
+              if (memberId && eventData.id) {
+                localStorage.setItem(`last-event-id-${memberId}`, eventData.id.toString());
               }
             }
+          } catch (error) {
+            console.error('Failed to parse event data:', error);
           }
-        } catch (err) {
-          console.error('SSE connection failed:', err);
         }
+      });
+
+      source.onopen = () => {
+        console.log('open!!!');
       };
 
-      sseConnect('https://dddang.store/api/members/notification/subscribe', headers);
+      source.onerror = function (e) {
+        console.error('SSE error occurred:', e);
+        // source.close(); // 에러가 발생시 SSE 연결을 닫음
+      };
+
+      setEventSource(source);
+      console.log('Subscribed to notifications');
+    }
+  }, [auth]);
+
+  const onSubmit = async data => {
+    if (data.id.trim() === '' || data.password.trim() === '') {
+      return;
+    }
+
+    try {
+      const response = await logIn({ id: data.id, password: data.password });
+
+      await logIn({ id: data.id, password: data.password });
+
+      if (eventSource) {
+        console.log('Unsubscribed from notifications');
+        eventSource.close();
+        setEventSource(null);
+      }
 
       console.log('Subscribed to notifications');
+
+      setAuth(true);
+      reset();
+      onClose();
     } catch (error) {
       toast({
         title: '등록된 계정이 아닙니다.',
@@ -176,11 +176,15 @@ export default function SigninModal({ onClose, isOpen, initialRef, onSignupClick
             <Text marginTop={'8px'}>
               <Flex width={'full'} alignItems={'center'} justifyContent={'center'}>
                 <Link color={'rgba(150,150,150,1)'} to="#">
-                  <Text fontSize={'sm'}>아이디 찾기</Text>
+                  <Text fontSize={'sm'} onClick={onFindIdClick}>
+                    아이디 찾기
+                  </Text>
                 </Link>
                 <span className="mx-3 text-gray-300">|</span>
                 <Link color={'rgba(150,150,150,1)'} to="#">
-                  <Text fontSize={'sm'}>비밀번호 찾기</Text>
+                  <Text fontSize={'sm'} onClick={onFindPasswordClick}>
+                    비밀번호 찾기
+                  </Text>
                 </Link>
                 <span className="mx-3 text-gray-300">|</span>
                 <Link color={'rgba(150,150,150,1)'} to="#" onClick={onSignupClick}>
