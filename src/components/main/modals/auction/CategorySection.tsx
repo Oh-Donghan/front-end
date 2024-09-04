@@ -506,27 +506,7 @@ const categories = [
     categories: [
       {
         id: 92,
-        categoryName: '기타1',
-        parentId: 16,
-      },
-      {
-        id: 93,
-        categoryName: '기타2',
-        parentId: 16,
-      },
-      {
-        id: 94,
-        categoryName: '기타3',
-        parentId: 16,
-      },
-      {
-        id: 95,
-        categoryName: '기타4',
-        parentId: 16,
-      },
-      {
-        id: 96,
-        categoryName: '기타5',
+        categoryName: '전체',
         parentId: 16,
       },
     ],
