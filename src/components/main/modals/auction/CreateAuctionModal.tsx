@@ -15,6 +15,7 @@ import {
   Select,
   useToast,
   Spinner,
+  Image,
 } from '@chakra-ui/react';
 import { useForm, FormProvider } from 'react-hook-form';
 import CategorySection from './CategorySection';
@@ -25,6 +26,7 @@ import { createAuction } from '../../../../axios/auction/auction';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { CreateAuctionType } from '../../../../interface/auction/actionInterface';
 import { formatDateToCustomString } from '../../../../utils/dateFormat';
+import logo from '../../../../assets/logo/logo-final.png';
 
 export default function CreateAuctionModal({ isOpen, onClose }) {
   const methods = useForm();
@@ -200,7 +202,9 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
       <ModalOverlay />
       <ModalContent maxWidth={'950px'} minWidth={'808px'}>
         <ModalHeader paddingX={'40px'} paddingTop={'30px'} paddingBottom={'20px'}>
-          <Text fontSize={'3xl'}>Logo</Text>
+          <Text fontSize={'3xl'}>
+            <Image src={logo} alt="로고 이미지" h="75px" />
+          </Text>
         </ModalHeader>
         <ModalBody paddingX={'40px'} paddingBottom={'20px'}>
           <FormProvider {...methods}>

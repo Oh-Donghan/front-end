@@ -1,21 +1,24 @@
-import { Button, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
+import { Button, Menu, MenuButton, MenuItem, MenuList, Image } from '@chakra-ui/react';
 import { FaGithub } from 'react-icons/fa';
 import { RiNotionFill } from 'react-icons/ri';
 import { IoChevronDownSharp } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
+import logo from '../../assets/logo/logo-final.png';
 
 export default function Footer() {
   return (
     <>
       <div className="hidden w-full p-10 lg:block">
         <div className="flex items-center justify-between">
-          <div className="text-3xl font-bold min-w-[200px]">Logo</div>
+          <div className="text-3xl font-bold min-w-[200px]">
+            <Image src={logo} alt="로고 이미지" h="75px" />
+          </div>
           <div className="flex items-center justify-between min-w-[550px] underline">
             <Link to={'https://github.com/JinhwanB'}>BE 배진환</Link>
             <Link to={'https://github.com/Cathunder'}>BE 박민규</Link>
             <Link to={'https://github.com/sh035'}>BE 엄석현</Link>
             <Link to={'https://github.com/seungh22'}>BE 양승희</Link>
-            <Link to={'https://github.com/Oh-Donghan'}>FE 오동환</Link>
+            <Link to={'https://github.com/Oh-Donghan'}>FE 오동한</Link>
             <Link to={'https://github.com/choiinyoung13'}>FE 최인영</Link>
           </div>
           <div className="flex justify-end items-center min-w-[200px]">
@@ -65,7 +68,7 @@ export default function Footer() {
                   BE 양승희
                 </MenuItem>
                 <MenuItem as="a" href="https://github.com/Oh-Donghan">
-                  FE 오동환
+                  FE 오동한
                 </MenuItem>
                 <MenuItem as="a" href="https://github.com/choiinyoung13">
                   FE 최인영
