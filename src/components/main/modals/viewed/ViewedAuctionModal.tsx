@@ -21,7 +21,7 @@ export default function ViewedAuctionModal({ type }: AlarmModalType) {
   const { onOpen, onClose, isOpen } = useDisclosure();
 
   return (
-    <Box>
+    <Box position={'relative'} zIndex={1500}>
       <Popover
         placement={type === 'drawer' ? 'end-end' : 'bottom-end'}
         closeOnBlur={true}
@@ -44,7 +44,7 @@ export default function ViewedAuctionModal({ type }: AlarmModalType) {
           </Box>
         </PopoverTrigger>
 
-        <PopoverContent width={['330px', '380px']} position={'relative'} zIndex={1000}>
+        <PopoverContent width={['330px', '380px']} position={'relative'} zIndex={1500}>
           <PopoverArrow />
           <PopoverHeader
             display={'flex'}
