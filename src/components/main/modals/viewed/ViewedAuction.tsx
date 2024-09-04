@@ -24,12 +24,12 @@ export default function ViewedAuction({ data }: ViewedAuctionType) {
             minWidth={['32px', '54px']}
             bgColor={'rgba(230,230,230,1)'}
             borderRadius={'50%'}
-            marginRight={['10px', '16px']}
+            marginRight={['8px', '14px']}
             overflow={'hidden'}
           >
             <Image src={data.thumbnailUrl} alt={data.title} />
           </Box>
-          <Text w={'300px'} maxW={'300px'} fontSize={['13px', '15px']} noOfLines={1}>
+          <Text mr={'2px'} maxW={'330px'} fontSize={['14px', '16px']} noOfLines={1}>
             {data.title}
           </Text>
         </Flex>
