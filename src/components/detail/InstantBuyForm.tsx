@@ -20,7 +20,7 @@ const InstantBuyForm = ({ auctionState, auctionId }) => {
         title: '구매 성공',
         description: '즉시 구매가 완료되었습니다.',
         status: 'success',
-        duration: 3000,
+        duration: 2000,
         isClosable: true,
         onCloseComplete: () => {
           // 즉시 구매시 쿼리를 무효화하여 데이터를 새로고침
