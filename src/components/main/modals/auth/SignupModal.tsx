@@ -411,6 +411,11 @@ export default function SignupModal({ onClose, isOpen, initialRef }) {
                 }
               } catch (error) {
                 console.error('회입가입 오류' + error);
+                toast({
+                  title: `${error.response.data}`,
+                  status: 'error',
+                  duration: 1300,
+                });
               }
             }}
           >
