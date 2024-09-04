@@ -27,7 +27,7 @@ export default function SwiperItemList({ isCategoryLoading }: SwiperHotItemListP
     queryKey: ['items', category],
     queryFn: () =>
       getAuctionItems({ word: undefined, category, sorted: undefined, subCategory: undefined }),
-    staleTime: 3 * 60 * 1000,
+    staleTime: 0,
     gcTime: 30 * 60 * 1000,
   });
 
