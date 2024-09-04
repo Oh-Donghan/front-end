@@ -210,7 +210,9 @@ export default function ItemCard({ rank, item, type, auctionArray }: ItemCardPro
             )}
           </Stack>
           <Heading size="md" marginBottom={'8px'} noOfLines={1}>
-            <Flex>{item.title}</Flex>
+            <Flex whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">
+              {item.title}
+            </Flex>
           </Heading>
           <Flex justifyContent={'space-between'} alignItems={'center'} height={'25px'}>
             <Text fontSize="sm" flexShrink={0}>
