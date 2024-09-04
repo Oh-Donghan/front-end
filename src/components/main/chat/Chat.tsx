@@ -27,6 +27,10 @@ export default function Chat({ chat }) {
               src={chat.auction.thumbnail ? chat.auction.thumbnail : default_profile}
               alt={chat.auction.title}
               borderRadius={'50%'}
+              maxH={'50px'}
+              maxW={'50px'}
+              w={'50px'}
+              h={'50px'}
             />
           </Box>
           <div className="ml-3">

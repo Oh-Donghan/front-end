@@ -42,12 +42,18 @@ export default function ChatItem({ chat, isSelected, onSelect }: ChatItemPropsTy
         >
           <Flex align={'center'}>
             <Box
+              maxH={'50px'}
+              maxW={'50px'}
               w={'50px'}
               h={'50px'}
               borderRadius={'50%'}
               boxShadow={'1px 1px 3px rgba(150,150,150,0.3)'}
             >
               <Image
+                maxH={'50px'}
+                maxW={'50px'}
+                w={'50px'}
+                h={'50px'}
                 src={chat.auction.thumbnail ? chat.auction.thumbnail : default_profile}
                 alt={chat.auction.title}
                 borderRadius={'50%'}
