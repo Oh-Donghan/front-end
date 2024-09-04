@@ -102,7 +102,9 @@ export default function ItemCard({ rank, item, type, auctionArray }: ItemCardPro
               )}
             </Stack>
             <Heading size="md" marginBottom={'8px'}>
-              <Flex>{item.title}</Flex>
+              <Flex whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">
+                {item.title}
+              </Flex>
             </Heading>
             <Flex justifyContent={'space-between'} alignItems={'center'} height={'28px'}>
               <Text fontSize="sm">현재 입찰가</Text>
