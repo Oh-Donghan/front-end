@@ -20,6 +20,8 @@ export default function ViewedAuction({ data }: ViewedAuctionType) {
           <Box
             width={['32px', '54px']}
             height={['32px', '54px']}
+            minHeight={['32px', '54px']}
+            minWidth={['32px', '54px']}
             bgColor={'rgba(230,230,230,1)'}
             borderRadius={'50%'}
             marginRight={['8px', '14px']}
