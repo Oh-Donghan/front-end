@@ -8,6 +8,7 @@ import {
   Box,
   Text,
   useDisclosure,
+  Portal,
 } from '@chakra-ui/react';
 import { RefObject } from 'react';
 import ViewedAuctionList from './ViewedAuctionList';
@@ -44,23 +45,25 @@ export default function ViewedAuctionModal({ type }: AlarmModalType) {
           </Box>
         </PopoverTrigger>
 
-        <PopoverContent width={['330px', '380px']} position={'relative'} zIndex={1500}>
-          <PopoverArrow />
-          <PopoverHeader
-            display={'flex'}
-            justifyContent={'start'}
-            alignItems={'center'}
-            paddingY={['2', '4']}
-            paddingLeft={['4', '6']}
-          >
-            <Text fontSize={['xs', 'sm']} color={'rgba(160,160,160,1)'} fontWeight={'normal'}>
-              *최근 조회한 5개의 경매만 보관됩니다.
-            </Text>
-          </PopoverHeader>
-          <PopoverBody padding={'0px'}>
-            {isOpen && <ViewedAuctionList />} {/* 모달이 열릴 때만 ViewedAuctionList를 렌더링 */}
-          </PopoverBody>
-        </PopoverContent>
+        <Portal>
+          <PopoverContent width={['330px', '380px']} position={'relative'} zIndex={3000}>
+            <PopoverArrow />
+            <PopoverHeader
+              display={'flex'}
+              justifyContent={'start'}
+              alignItems={'center'}
+              paddingY={['2', '4']}
+              paddingLeft={['4', '6']}
+            >
+              <Text fontSize={['xs', 'sm']} color={'rgba(160,160,160,1)'} fontWeight={'normal'}>
+                *최근 조회한 5개의 경매만 보관됩니다.
+              </Text>
+            </PopoverHeader>
+            <PopoverBody padding={'0px'}>
+              {isOpen && <ViewedAuctionList />} {/* 모달이 열릴 때만 ViewedAuctionList를 렌더링 */}
+            </PopoverBody>
+          </PopoverContent>
+        </Portal>
       </Popover>
     </Box>
   );
