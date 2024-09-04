@@ -45,7 +45,7 @@ export default function Alarm({ type, content, createdAt, auctionId }) {
             effect="blur" // 로딩 시 블러 효과
           />
           <Text
-            maxW={'400px'}
+            maxW={'480px'}
             fontSize={'16px'}
             overflow="hidden"
             whiteSpace="nowrap"
