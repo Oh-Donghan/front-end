@@ -231,7 +231,7 @@ export default function AuctionList() {
           <Flex alignItems="center" justifyContent={'space-between'} width={'full'}>
             <Flex>
               <CategorySortButton /> {/* 대분류 변경 핸들러 */}
-              {category !== '전체' && category !== '기타' && (
+              {category !== '전체' && (
                 <Link
                   to={{
                     pathname: '/auctions',
