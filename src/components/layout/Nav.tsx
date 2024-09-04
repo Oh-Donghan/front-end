@@ -10,6 +10,7 @@ import {
   DrawerCloseButton,
   Box,
   Badge,
+  Image,
 } from '@chakra-ui/react';
 import { RxTextAlignJustify } from 'react-icons/rx';
 import SigninModal from '../main/modals/auth/SigninModal';
@@ -27,6 +28,7 @@ import { signOut } from '../../axios/auth/user';
 import { eventSourceState } from '../../recoil/atom/eventSourceAtom';
 import { isNewNotificationState } from '../../recoil/atom/alarmAtom';
 import FindPasswordModal from '../main/modals/auth/FindPasswordModal';
+import logo from '../../assets/logo/logo-final.png';
 
 export default function Nav() {
   const signinDisclosure = useDisclosure();
@@ -131,8 +133,8 @@ export default function Nav() {
       />
 
       <div className="flex justify-between items-center h-[84px] px-10 min-w-[375px] max-w-full">
-        <Link to={'/'} className="text-3xl font-bold">
-          Logo
+        <Link to={'/'}>
+          <Image src={logo} alt="로고 이미지" h="75px" />
         </Link>
         <RxTextAlignJustify
           className="lg:hidden cursor-pointer"
