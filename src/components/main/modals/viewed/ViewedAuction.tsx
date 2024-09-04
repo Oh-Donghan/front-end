@@ -34,6 +34,7 @@ export default function ViewedAuction({ data }: ViewedAuctionType) {
           </Text>
         </Flex>
         <Text
+          ml={'2px'}
           minW={'50px'}
           fontSize={['xs', 'sm']}
           fontWeight={'normal'}
