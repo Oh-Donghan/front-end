@@ -44,11 +44,17 @@ export default function Alarm({ type, content, createdAt, auctionId }) {
             className="w-6 h-5.5 mr-3.5"
             effect="blur" // 로딩 시 블러 효과
           />
-          <Text fontSize={'16px'} overflow="hidden" whiteSpace="nowrap" textOverflow="ellipsis">
+          <Text
+            maxW={'400px'}
+            fontSize={'16px'}
+            overflow="hidden"
+            whiteSpace="nowrap"
+            textOverflow="ellipsis"
+          >
             {content}
           </Text>
         </Flex>
-        <Text minW={'40px'} fontSize={'14px'} fontWeight={'normal'} color={'rgba(150,150,150,1)'}>
+        <Text minW={'50px'} fontSize={'14px'} fontWeight={'normal'} color={'rgba(150,150,150,1)'}>
           {timeElapsed}
         </Text>
       </Flex>

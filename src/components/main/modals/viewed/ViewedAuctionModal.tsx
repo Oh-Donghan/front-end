@@ -44,7 +44,7 @@ export default function ViewedAuctionModal({ type }: AlarmModalType) {
           </Box>
         </PopoverTrigger>
 
-        <PopoverContent width={['330px', '380px']}>
+        <PopoverContent width={['330px', '380px']} position={'relative'} zIndex={1000}>
           <PopoverArrow />
           <PopoverHeader
             display={'flex'}
