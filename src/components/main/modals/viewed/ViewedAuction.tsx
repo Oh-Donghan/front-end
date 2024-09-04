@@ -29,12 +29,12 @@ export default function ViewedAuction({ data }: ViewedAuctionType) {
           >
             <Image src={data.thumbnailUrl} alt={data.title} />
           </Box>
-          <Text mr={'4px'} maxW={'350px'} fontSize={['14px', '16px']} noOfLines={1}>
+          <Text mr={'4px'} maxW={'300px'} fontSize={['14px', '16px']} noOfLines={1}>
             {data.title}
           </Text>
         </Flex>
         <Text
-          minW={'40px'}
+          minW={'50px'}
           fontSize={['xs', 'sm']}
           fontWeight={'normal'}
           color={data.auctionState === 'CONTINUE' ? 'rgb(49, 130, 206)' : 'rgba(150,150,150,1)'}
