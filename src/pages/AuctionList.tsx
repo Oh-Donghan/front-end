@@ -253,30 +253,31 @@ export default function AuctionList() {
                   </Button>
                 </Link>
               )}
-              {currentCategoryData?.categories?.map((sub, i) => (
-                <Link
-                  to={{
-                    pathname: '/auctions',
-                    search: new URLSearchParams({
-                      mainCategory: category,
-                      subCategory: sub.categoryName,
-                      ...(sort !== 'recent' && { sort }), // sort가 있으면 포함
-                    }).toString(),
-                  }}
-                  key={i}
-                  className="mr-2"
-                >
-                  <Button
-                    size={{ base: 'xs', sm: 'sm' }}
-                    variant={sub.categoryName === subCategory ? 'solid' : 'outline'}
-                    colorScheme={sub.categoryName === subCategory ? 'blue' : 'gray'}
-                    leftIcon={sub.categoryName === subCategory ? <FaCheck /> : null}
-                    borderColor={'rgba(210,210,210,1)'}
+              {currentCategoryData !== '기타' &&
+                currentCategoryData?.categories?.map((sub, i) => (
+                  <Link
+                    to={{
+                      pathname: '/auctions',
+                      search: new URLSearchParams({
+                        mainCategory: category,
+                        subCategory: sub.categoryName,
+                        ...(sort !== 'recent' && { sort }), // sort가 있으면 포함
+                      }).toString(),
+                    }}
+                    key={i}
+                    className="mr-2"
                   >
-                    {sub.categoryName}
-                  </Button>
-                </Link>
-              ))}
+                    <Button
+                      size={{ base: 'xs', sm: 'sm' }}
+                      variant={sub.categoryName === subCategory ? 'solid' : 'outline'}
+                      colorScheme={sub.categoryName === subCategory ? 'blue' : 'gray'}
+                      leftIcon={sub.categoryName === subCategory ? <FaCheck /> : null}
+                      borderColor={'rgba(210,210,210,1)'}
+                    >
+                      {sub.categoryName}
+                    </Button>
+                  </Link>
+                ))}
             </Flex>
 
             <Flex>
