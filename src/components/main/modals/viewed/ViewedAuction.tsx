@@ -27,7 +27,7 @@ export default function ViewedAuction({ data }: ViewedAuctionType) {
           >
             <Image src={data.thumbnailUrl} alt={data.title} />
           </Box>
-          <Text maxW={'550px'} fontSize={['14px', '16px']} noOfLines={1}>
+          <Text maxW={'450px'} fontSize={['14px', '16px']} noOfLines={1}>
             {data.title}
           </Text>
         </Flex>
