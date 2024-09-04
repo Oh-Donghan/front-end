@@ -22,13 +22,14 @@ const InstantBuyForm = ({ auctionState, auctionId }) => {
         status: 'success',
         duration: 3000,
         isClosable: true,
+        onCloseComplete: () => {
+          // 즉시 구매시 쿼리를 무효화하여 데이터를 새로고침
+          queryClient.invalidateQueries({ queryKey: ['detail', auctionId] });
+          // 홈으로 이동하고 새로고침
+          navigate('/', { replace: true });
+          window.location.reload();
+        },
       });
-
-      // 즉시 구매시 쿼리를 무효화하여 데이터를 새로고침
-      queryClient.invalidateQueries({ queryKey: ['detail', auctionId] });
-      // 홈으로 이동하고 새로고침
-      navigate('/', { replace: true });
-      window.location.reload();
     },
     onError: (error: AxiosError) => {
       // AxiosError 타입으로 에러 객체 캐스팅
