@@ -20,11 +20,11 @@ import { SiNaver } from 'react-icons/si';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { logIn } from '../../../../axios/auth/user';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { authState } from '../../../../recoil/atom/authAtom';
 import { eventSourceState } from '../../../../recoil/atom/eventSourceAtom';
 import { isNewNotificationState } from '../../../../recoil/atom/alarmAtom';
-import { useEffect } from 'react';
+// import { useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 
 export default function SigninModal({
@@ -36,7 +36,8 @@ export default function SigninModal({
   onFindPasswordClick,
 }) {
   const { register, handleSubmit, reset } = useForm();
-  const [auth, setAuth] = useRecoilState(authState);
+  // const [auth, setAuth] = useRecoilState(authState);
+  const setAuth = useSetRecoilState(authState);
   const [eventSource, setEventSource] = useRecoilState(eventSourceState);
   const [, setIsNewNotification] = useRecoilState(isNewNotificationState);
   const queryClient = useQueryClient();
