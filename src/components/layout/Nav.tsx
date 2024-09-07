@@ -277,21 +277,12 @@ export default function Nav() {
               <ul className="flex flex-col font-semibold text-lg">
                 {auth ? (
                   <>
-                    <Box position={'relative'}>
-                      <AlarmModal type={'drawer'} onOpen={handleAlarmModalOpen} />
-                      {isNewNotification && (
-                        <Badge
-                          bgColor={'rgba(228, 25, 18)'}
-                          position="absolute"
-                          top="14px"
-                          right="234px"
-                          borderRadius="full"
-                          width="8px"
-                          height="8px"
-                          display="inline-block"
-                        />
-                      )}
-                    </Box>
+                    <AlarmModal
+                      type={'drawer'}
+                      onOpen={handleAlarmModalOpen}
+                      isNewNotification={isNewNotification}
+                    />
+
                     <ViewedAuctionModal type={'drawer'} />
                     <li
                       className="cursor-pointer -mx-6 px-6 py-3 hover:bg-[rgba(226,232,240,1)]"
