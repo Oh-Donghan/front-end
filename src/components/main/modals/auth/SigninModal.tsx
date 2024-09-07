@@ -41,6 +41,7 @@ export default function SigninModal({
   const toast = useToast();
 
   useEffect(() => {
+    // 로그인 성공시 알림 SSE 연결
     if (auth) {
       const memberId = localStorage.getItem('memberId');
       const lastEventId = localStorage.getItem(`last-event-id-${memberId}`);
@@ -63,12 +64,12 @@ export default function SigninModal({
       const source = new EventSource(url.toString());
 
       source.addEventListener('sse', e => {
+        console.log('ㅎㅇㅎㅇ');
         if (e.data.startsWith('{')) {
-          console.log(e.data);
           try {
             const eventData = JSON.parse(e.data);
+
             if (!eventData.dummyContent) {
-              console.log('데이터 도착');
               // 새로운 알림 도착 시 상태 업데이트
               setIsNewNotification(true);
 
@@ -76,6 +77,13 @@ export default function SigninModal({
               const memberId = localStorage.getItem('memberId');
               if (memberId && eventData.id) {
                 localStorage.setItem(`last-event-id-${memberId}`, eventData.id.toString());
+              }
+
+              // 판매자가 받은 알림 SSE 응답에 '경매의 구매를 확정했습니다.'라는 텍스트가 있으면 새로고침
+              if (eventData.content && eventData.content.includes('경매의 구매를 확정했습니다')) {
+                console.log('새로 고침');
+
+                window.location.reload(); // 페이지 새로고침
               }
             }
           } catch (error) {
@@ -104,8 +112,6 @@ export default function SigninModal({
     }
 
     try {
-      const response = await logIn({ id: data.id, password: data.password });
-
       await logIn({ id: data.id, password: data.password });
 
       if (eventSource) {

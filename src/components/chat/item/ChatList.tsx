@@ -25,7 +25,7 @@ export default function ChatList({
 
   if (isLoading) {
     return (
-      <Flex w={'390px'} maxH={'596px'} align={'center'} justify={'center'}>
+      <Flex w={'390px'} h={'596px'} align={'center'} justify={'center'}>
         <Spinner size={'xl'} />
       </Flex>
     );
@@ -33,14 +33,7 @@ export default function ChatList({
 
   if (chats === undefined || chats.length === 0) {
     return (
-      <Flex
-        w={'390px'}
-        maxH={'596px'}
-        align={'center'}
-        justify={'center'}
-        color={'rgba(70,70,70,1)'}
-        border={'1px solid red'}
-      >
+      <Flex w={'390px'} h={'596px'} align={'center'} justify={'center'} color={'rgba(70,70,70,1)'}>
         <Text>현재 존재하는 채팅이 없습니다.</Text>
       </Flex>
     );
