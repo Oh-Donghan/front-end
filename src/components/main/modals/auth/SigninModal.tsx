@@ -43,11 +43,82 @@ export default function SigninModal({
 
   const toast = useToast();
 
-  useEffect(() => {
-    // 로그인 성공시 알림 SSE 연결
-    console.log(auth);
+  // useEffect(() => {
+  //   // 로그인 성공시 알림 SSE 연결
+  //   console.log(auth);
 
-    if (auth) {
+  //   if (auth) {
+  //     const memberId = localStorage.getItem('memberId');
+  //     const lastEventId = localStorage.getItem(`last-event-id-${memberId}`);
+
+  //     if (eventSource) {
+  //       console.log('Unsubscribed from notifications');
+  //       eventSource.close();
+  //       setEventSource(null);
+  //     }
+
+  //     // last-event-id와 memberId를 URL의 쿼리 파라미터로 포함.
+  //     const url = new URL('https://dddang.store/api/members/notification/subscribe');
+  //     if (lastEventId) {
+  //       url.searchParams.append('lastEventId', lastEventId);
+  //     }
+  //     if (memberId) {
+  //       url.searchParams.append('memberId', memberId);
+  //     }
+
+  //     const source = new EventSource(url.toString());
+
+  //     source.addEventListener('sse', e => {
+  //       if (e.data.startsWith('{')) {
+  //         try {
+  //           const eventData = JSON.parse(e.data);
+  //           console.log(eventData);
+
+  //           if (!eventData.dummyContent) {
+  //             // 새로운 알림 도착 시 상태 업데이트
+  //             setIsNewNotification(true);
+
+  //             // last event id를 로컬 스토리지에 저장
+  //             const memberId = localStorage.getItem('memberId');
+  //             if (memberId && eventData.id) {
+  //               localStorage.setItem(`last-event-id-${memberId}`, eventData.id.toString());
+  //             }
+
+  //             if (eventData.content && eventData.content.includes('종료')) {
+  //               queryClient.invalidateQueries({
+  //                 predicate: query =>
+  //                   Array.isArray(query.queryKey) && query.queryKey.includes('items'),
+  //               });
+  //             }
+  //           }
+  //         } catch (error) {
+  //           console.error('Failed to parse event data:', error);
+  //         }
+  //       }
+  //     });
+
+  //     source.onopen = () => {
+  //       console.log('open!!!');
+  //     };
+
+  //     source.onerror = function (e) {
+  //       console.error('SSE error occurred:', e);
+  //       // source.close(); // 에러가 발생시 SSE 연결을 닫음
+  //     };
+
+  //     setEventSource(source);
+  //     console.log('Subscribed to notifications');
+  //   }
+  // }, [auth]);
+
+  const onSubmit = async data => {
+    if (data.id.trim() === '' || data.password.trim() === '') {
+      return;
+    }
+
+    try {
+      await logIn({ id: data.id, password: data.password });
+
       const memberId = localStorage.getItem('memberId');
       const lastEventId = localStorage.getItem(`last-event-id-${memberId}`);
 
@@ -72,6 +143,7 @@ export default function SigninModal({
         if (e.data.startsWith('{')) {
           try {
             const eventData = JSON.parse(e.data);
+            console.log(eventData);
 
             if (!eventData.dummyContent) {
               // 새로운 알림 도착 시 상태 업데이트
@@ -106,24 +178,6 @@ export default function SigninModal({
       };
 
       setEventSource(source);
-      console.log('Subscribed to notifications');
-    }
-  }, [auth]);
-
-  const onSubmit = async data => {
-    if (data.id.trim() === '' || data.password.trim() === '') {
-      return;
-    }
-
-    try {
-      await logIn({ id: data.id, password: data.password });
-
-      if (eventSource) {
-        console.log('Unsubscribed from notifications');
-        eventSource.close();
-        setEventSource(null);
-      }
-
       console.log('Subscribed to notifications');
 
       setAuth(true);
