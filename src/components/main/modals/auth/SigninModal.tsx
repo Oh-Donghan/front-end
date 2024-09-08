@@ -41,7 +41,6 @@ export default function SigninModal({
   const [eventSource, setEventSource] = useRecoilState(eventSourceState);
   const [, setIsNewNotification] = useRecoilState(isNewNotificationState);
   const queryClient = useQueryClient();
-
   const toast = useToast();
 
   // useEffect(() => {
@@ -156,10 +155,30 @@ export default function SigninModal({
                 localStorage.setItem(`last-event-id-${memberId}`, eventData.id.toString());
               }
 
-              if (eventData.content && eventData.content.includes('종료')) {
+              // 경매종료 알림을 받을 경우 경매 아이템 리패치
+              if (
+                eventData.notificationType === 'DONE_INSTANT' ||
+                eventData.notificationType === 'DONE'
+              ) {
                 queryClient.invalidateQueries({
                   predicate: query =>
                     Array.isArray(query.queryKey) && query.queryKey.includes('items'),
+                });
+              }
+
+              // 구매확정 알림을 받을 경우 경매 경매 채팅방 리패치
+              if (eventData.notificationType === 'CONFIRM') {
+                console.log('구매가 확정되었습니다.');
+
+                toast({
+                  title: eventData.content,
+                  status: 'success',
+                  duration: 1500,
+                });
+
+                queryClient.invalidateQueries({
+                  predicate: query =>
+                    Array.isArray(query.queryKey) && query.queryKey.includes('chat'),
                 });
               }
             }
