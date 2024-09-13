@@ -1,30 +1,45 @@
-# React + TypeScript + Vite
+# 🛍️ 중고 물품 경매 프로젝트 - 땅땅땅!
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 😎 조원 소개
 
-Currently, two official plugins are available:
+<table>
+  <tr>
+    <th colspan="2" align="center">프로필</th>
+    <th align="center">역할</th>
+    <th align="center">작업 영역</th>
+  </tr>
+    <tr>
+    <td align="center"><img src="https://avatars.githubusercontent.com/u/108457670?v=4" width="70"></td>
+    <td>최인영(<a href="https://github.com/choiinyoung13" target="_blank">@choiinyoung13</a>)<br>Front-End</td>
+    <td align="center">팀원</td>
+      <td>와이어 프레임 제작, 기본 레이아웃 구현(네비게이션바, 풋터), 메인 페이지 구현, 채팅 페이지 및 채팅 모달 구현, 경매 리스트 페이지 구현, 로그인 & 회원가입 모달 구현, 알림 & 최근 본 경매 모달 구현</td>
+  
+  </tr>
+  <tr>
+    <td align="center"><img src="https://avatars.githubusercontent.com/u/156155896?v=4" width="70"></td>
+    <td>오동한(<a href="https://github.com/Oh-Donghan" target="_blank">@Oh-Donghan</a>)<br>Front-End</td>
+    <td align="center">팀원</td>
+   <td>상세페이지 레이아웃 구현, 입찰하기 및 즉시구매 구현, 마이페이지 레이아웃 구현, QnA 기능 구현, 이메일, 비밀번호 변경 구현, 회원 탈퇴 구현, MSW를 이용한 목데이터 생성</td>
+  </tr>
+</table>
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+<br>
 
-## Expanding the ESLint configuration
+## 사용 기술
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+![Visual Studio Code](https://img.shields.io/badge/Visual%20Studio%20Code-0078d7.svg?style=for-the-badge&logo=visual-studio-code&logoColor=white)
+![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white)
+![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)<br>
+![NPM](https://img.shields.io/badge/NPM-%23CB3837.svg?style=for-the-badge&logo=npm&logoColor=white)<br>
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+<img src="https://img.shields.io/badge/typescript-239DAD?style=for-the-badge&logo=typescript&logoColor=white">
+<img src="https://img.shields.io/badge/recoli-3578E5?style=for-the-badge&logo=recoil&logoColor=white">
+<img src="https://img.shields.io/badge/tanskquery-FF4154?style=for-the-badge&logo=reactquery&logoColor=white">
+<img src="https://img.shields.io/badge/tailwind-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white">
+![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
 
-- Configure the top-level `parserOptions` property like this:
+<br>
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json', './tsconfig.app.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+## Figma
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+[Figma Link](https://www.figma.com/design/npI8dmNSIYbq44YcCzX44A/wireFrame?node-id=0-1&t=5fPLEnqY1ZSot2w7-1).
