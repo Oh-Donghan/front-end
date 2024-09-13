@@ -20,11 +20,12 @@ import { SiNaver } from 'react-icons/si';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { logIn } from '../../../../axios/auth/user';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { authState } from '../../../../recoil/atom/authAtom';
 import { eventSourceState } from '../../../../recoil/atom/eventSourceAtom';
 import { isNewNotificationState } from '../../../../recoil/atom/alarmAtom';
-import { useEffect } from 'react';
+// import { useEffect } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function SigninModal({
   onClose,
@@ -35,13 +36,89 @@ export default function SigninModal({
   onFindPasswordClick,
 }) {
   const { register, handleSubmit, reset } = useForm();
-  const [auth, setAuth] = useRecoilState(authState);
+  // const [auth, setAuth] = useRecoilState(authState);
+  const setAuth = useSetRecoilState(authState);
   const [eventSource, setEventSource] = useRecoilState(eventSourceState);
   const [, setIsNewNotification] = useRecoilState(isNewNotificationState);
+  const queryClient = useQueryClient();
   const toast = useToast();
 
-  useEffect(() => {
-    if (auth) {
+  // useEffect(() => {
+  //   // 로그인 성공시 알림 SSE 연결
+  //   console.log(auth);
+
+  //   if (auth) {
+  //     const memberId = localStorage.getItem('memberId');
+  //     const lastEventId = localStorage.getItem(`last-event-id-${memberId}`);
+
+  //     if (eventSource) {
+  //       console.log('Unsubscribed from notifications');
+  //       eventSource.close();
+  //       setEventSource(null);
+  //     }
+
+  //     // last-event-id와 memberId를 URL의 쿼리 파라미터로 포함.
+  //     const url = new URL('https://dddang.store/api/members/notification/subscribe');
+  //     if (lastEventId) {
+  //       url.searchParams.append('lastEventId', lastEventId);
+  //     }
+  //     if (memberId) {
+  //       url.searchParams.append('memberId', memberId);
+  //     }
+
+  //     const source = new EventSource(url.toString());
+
+  //     source.addEventListener('sse', e => {
+  //       if (e.data.startsWith('{')) {
+  //         try {
+  //           const eventData = JSON.parse(e.data);
+  //           console.log(eventData);
+
+  //           if (!eventData.dummyContent) {
+  //             // 새로운 알림 도착 시 상태 업데이트
+  //             setIsNewNotification(true);
+
+  //             // last event id를 로컬 스토리지에 저장
+  //             const memberId = localStorage.getItem('memberId');
+  //             if (memberId && eventData.id) {
+  //               localStorage.setItem(`last-event-id-${memberId}`, eventData.id.toString());
+  //             }
+
+  //             if (eventData.content && eventData.content.includes('종료')) {
+  //               queryClient.invalidateQueries({
+  //                 predicate: query =>
+  //                   Array.isArray(query.queryKey) && query.queryKey.includes('items'),
+  //               });
+  //             }
+  //           }
+  //         } catch (error) {
+  //           console.error('Failed to parse event data:', error);
+  //         }
+  //       }
+  //     });
+
+  //     source.onopen = () => {
+  //       console.log('open!!!');
+  //     };
+
+  //     source.onerror = function (e) {
+  //       console.error('SSE error occurred:', e);
+  //       // source.close(); // 에러가 발생시 SSE 연결을 닫음
+  //     };
+
+  //     setEventSource(source);
+  //     console.log('Subscribed to notifications');
+  //   }
+  // }, [auth]);
+
+  const onSubmit = async data => {
+    if (data.id.trim() === '' || data.password.trim() === '') {
+      return;
+    }
+
+    try {
+      await logIn({ id: data.id, password: data.password });
+
       const memberId = localStorage.getItem('memberId');
       const lastEventId = localStorage.getItem(`last-event-id-${memberId}`);
 
@@ -64,11 +141,11 @@ export default function SigninModal({
 
       source.addEventListener('sse', e => {
         if (e.data.startsWith('{')) {
-          console.log(e.data);
           try {
             const eventData = JSON.parse(e.data);
+            console.log(eventData);
+
             if (!eventData.dummyContent) {
-              console.log('데이터 도착');
               // 새로운 알림 도착 시 상태 업데이트
               setIsNewNotification(true);
 
@@ -76,6 +153,33 @@ export default function SigninModal({
               const memberId = localStorage.getItem('memberId');
               if (memberId && eventData.id) {
                 localStorage.setItem(`last-event-id-${memberId}`, eventData.id.toString());
+              }
+
+              // 경매종료 알림을 받을 경우 경매 아이템 리패치
+              if (
+                eventData.notificationType === 'DONE_INSTANT' ||
+                eventData.notificationType === 'DONE'
+              ) {
+                queryClient.invalidateQueries({
+                  predicate: query =>
+                    Array.isArray(query.queryKey) && query.queryKey.includes('items'),
+                });
+              }
+
+              // 구매확정 알림을 받을 경우 경매 경매 채팅방 리패치
+              if (eventData.notificationType === 'CONFIRM') {
+                console.log('구매가 확정되었습니다.');
+
+                toast({
+                  title: eventData.content,
+                  status: 'success',
+                  duration: 1500,
+                });
+
+                queryClient.invalidateQueries({
+                  predicate: query =>
+                    Array.isArray(query.queryKey) && query.queryKey.includes('chat'),
+                });
               }
             }
           } catch (error) {
@@ -94,26 +198,6 @@ export default function SigninModal({
       };
 
       setEventSource(source);
-      console.log('Subscribed to notifications');
-    }
-  }, [auth]);
-
-  const onSubmit = async data => {
-    if (data.id.trim() === '' || data.password.trim() === '') {
-      return;
-    }
-
-    try {
-      const response = await logIn({ id: data.id, password: data.password });
-
-      await logIn({ id: data.id, password: data.password });
-
-      if (eventSource) {
-        console.log('Unsubscribed from notifications');
-        eventSource.close();
-        setEventSource(null);
-      }
-
       console.log('Subscribed to notifications');
 
       setAuth(true);

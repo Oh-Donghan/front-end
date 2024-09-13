@@ -3,7 +3,7 @@ import Categories from '../components/main/categories/Categories';
 import SwiperItemList from '../components/main/item/SwiperItemList';
 import SwiperHotItemList from '../components/main/item/SwiperHotItemList';
 import ChatModal from '../components/main/modals/chat/ChatModal';
-import { Box } from '@chakra-ui/react';
+import { Box, useToast } from '@chakra-ui/react';
 import Input from '../components/main/input/input';
 import { useLocation, useNavigate } from 'react-router-dom';
 import TopButton from '../components/common/button/TopButton';
@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { authState } from '../recoil/atom/authAtom';
 import { getCategories } from '../axios/category/categories';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Client } from '@stomp/stompjs';
 import { auctionState } from '../recoil/atom/auctionPriceAtom';
 import { eventSourceState } from '../recoil/atom/eventSourceAtom';
@@ -25,6 +25,8 @@ export default function Home() {
   const [eventSource, setEventSource] = useRecoilState(eventSourceState);
   const [, setAuctionArray] = useRecoilState(auctionState);
   const [, setIsNewNotification] = useRecoilState(isNewNotificationState);
+  const queryClient = useQueryClient();
+  const toast = useToast();
 
   // SSE 연결
   const connectSSE = (lastEventId, memberId) => {
@@ -47,12 +49,12 @@ export default function Home() {
       const source = new EventSource(url.toString());
 
       source.addEventListener('sse', e => {
-        console.log(e.data);
         if (e.data.startsWith('{')) {
           try {
             const eventData = JSON.parse(e.data);
+            console.log(eventData);
+
             if (!eventData.dummyContent) {
-              console.log('데이터 도착');
               // 새로운 알림 도착 시 상태 업데이트
               setIsNewNotification(true);
 
@@ -61,15 +63,38 @@ export default function Home() {
               if (memberId && eventData.id) {
                 localStorage.setItem(`last-event-id-${memberId}`, eventData.id.toString());
               }
+
+              // 경매종료 알림을 받을 경우 경매 아이템 리패치
+              if (
+                eventData.notificationType === 'DONE_INSTANT' ||
+                eventData.notificationType === 'DONE'
+              ) {
+                queryClient.invalidateQueries({
+                  predicate: query =>
+                    Array.isArray(query.queryKey) && query.queryKey.includes('items'),
+                });
+              }
+
+              // 구매확정 알림을 받을 경우 경매 경매 채팅방 리패치
+              if (eventData.notificationType === 'CONFIRM') {
+                console.log('구매가 확정되었습니다.');
+
+                toast({
+                  title: eventData.content,
+                  status: 'success',
+                  duration: 1500,
+                });
+
+                queryClient.invalidateQueries({
+                  predicate: query =>
+                    Array.isArray(query.queryKey) && query.queryKey.includes('chat'),
+                });
+              }
             }
           } catch (error) {
             console.error('Failed to parse event data:', error);
           }
         }
-      });
-
-      source.addEventListener('sse', e => {
-        console.log('Raw event data:', e.data);
       });
 
       source.onerror = function (e) {
@@ -92,6 +117,8 @@ export default function Home() {
     const lastEventId = localStorage.getItem(`last-event-id-${memberId}`);
 
     if (accessToken && memberId) {
+      console.log('소셜로그인 SSE 연결');
+
       setIsProcessingAuth(true);
 
       // 액세스 토큰을 로컬 스토리지에 저장
@@ -101,17 +128,8 @@ export default function Home() {
       localStorage.setItem('memberId', memberId);
       console.log('Member ID saved:', memberId);
 
-      // 알림 SSE 연결 요청
-      if (eventSource) {
-        console.log('Unsubscribed from notifications');
-        eventSource.close();
-        setEventSource(null);
-      }
-
-      // SSE 연결 및 재연결 로직 시작
+      // SSE 연결
       connectSSE(lastEventId, memberId);
-
-      console.log('Subscribed to notifications');
 
       // Recoil 상태 업데이트
       setAuth(true);

@@ -77,7 +77,7 @@ export const RequestAuthenticationEmailCode = async ({ email }: { email: string 
   return response.data;
 };
 
-// 이메일 인증 코드 발송 api
+// 이메일 인증 코드 발송 api (회원가입)
 export const confirmEmail = async ({ email, authNum }: { email: string; authNum: string }) => {
   const requestBody = {
     email,

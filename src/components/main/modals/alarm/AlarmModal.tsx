@@ -8,6 +8,7 @@ import {
   PopoverArrow,
   Box,
   Text,
+  Badge,
 } from '@chakra-ui/react';
 import AlarmList from './AlarmList';
 
@@ -15,9 +16,10 @@ interface AlarmModalType {
   containerRef?: RefObject<HTMLDivElement>;
   type?: string;
   onOpen?: () => void; // 추가
+  isNewNotification?: boolean;
 }
 
-export default function AlarmModal({ type, onOpen }: AlarmModalType) {
+export default function AlarmModal({ type, onOpen, isNewNotification }: AlarmModalType) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleOpen = () => {
@@ -41,6 +43,7 @@ export default function AlarmModal({ type, onOpen }: AlarmModalType) {
       >
         <PopoverTrigger>
           <Box
+            position={'relative'}
             _hover={{
               bgColor: type === 'drawer' ? 'rgba(226,232,240,1)' : 'rgba(255,255,255,1)',
             }}
@@ -50,6 +53,18 @@ export default function AlarmModal({ type, onOpen }: AlarmModalType) {
             py={3}
           >
             알림
+            {isNewNotification && (
+              <Badge
+                bgColor={'rgba(228, 25, 18)'}
+                position="absolute"
+                top="13px"
+                right="256px"
+                borderRadius="full"
+                width="8px"
+                height="8px"
+                display="inline-block"
+              />
+            )}
           </Box>
         </PopoverTrigger>
 

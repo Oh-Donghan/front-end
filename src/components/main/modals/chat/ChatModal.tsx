@@ -32,7 +32,7 @@ export default function ChatModal() {
     }
   }, [isChatModalOpen]);
 
-  const { data: chats, isLoading } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['chat'],
     queryFn: () => getAllChats(),
     staleTime: 0,
@@ -52,7 +52,7 @@ export default function ChatModal() {
     }
   };
 
-  const filteredChats = chats?.filter(
+  const filteredChats = data?.filter(
     chat => chat.auction.title.toLowerCase().includes(searchTerm.toLowerCase()), // 검색어로 필터링
   );
 
@@ -73,7 +73,8 @@ export default function ChatModal() {
             </PopoverHeader>
             <PopoverArrow />
             <PopoverBody padding={'0px'}>
-              <ChatList chats={filteredChats} isLoading={isLoading} /> {/* 필터링된 데이터 전달 */}
+              <ChatList chats={filteredChats} isLoading={isLoading} />
+              {/* 필터링된 데이터 전달 */}
             </PopoverBody>
           </PopoverContent>
         )}

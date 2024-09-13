@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { MdLogout } from 'react-icons/md';
 import { ChatDataType } from '../../../interface/chat/chatInterface';
 import ChatList from '../../../components/chat/item/ChatList';
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
 interface ChatLeftSectionType {
   selectedChatId: number;
@@ -20,6 +20,21 @@ export default function ChatLeftSection({
   chatList,
   isChatListLoading,
 }: ChatLeftSectionType) {
+  const [chats, setChats] = useState([]);
+
+  useEffect(() => {
+    if (!isChatListLoading && chatList) {
+      const memberId = localStorage.getItem('memberId');
+      if (memberId) {
+        const filteredByMemberId = chatList.filter(
+          item => item.seller.memberId === memberId || item.buyer.memberId === memberId,
+        );
+
+        setChats(filteredByMemberId);
+      }
+    }
+  }, [chatList, isChatListLoading]);
+
   return (
     <Flex flexDirection={'column'} flex={1.4}>
       <ChatList
@@ -27,7 +42,7 @@ export default function ChatLeftSection({
         setSelectedChatId={setSelectedChatId}
         scrollBottom={scrollBottom}
         isLoading={isChatListLoading}
-        chats={chatList}
+        chats={chats}
       />
       <Flex
         alignItems={'center'}

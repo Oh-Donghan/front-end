@@ -277,7 +277,12 @@ export default function Nav() {
               <ul className="flex flex-col font-semibold text-lg">
                 {auth ? (
                   <>
-                    <AlarmModal type={'drawer'} onOpen={handleAlarmModalOpen} />
+                    <AlarmModal
+                      type={'drawer'}
+                      onOpen={handleAlarmModalOpen}
+                      isNewNotification={isNewNotification}
+                    />
+
                     <ViewedAuctionModal type={'drawer'} />
                     <li
                       className="cursor-pointer -mx-6 px-6 py-3 hover:bg-[rgba(226,232,240,1)]"
