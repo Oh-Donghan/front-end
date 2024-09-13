@@ -35,11 +35,6 @@ export default function ConfirmPurchaseModal({ isOpen, onClose, currentAuction }
       confirmAuctionPayment({ auctionId, price, sellerId }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['chat'] });
-      toast({
-        title: '구매 확정 완료되었습니다',
-        status: 'success',
-        duration: 1300,
-      });
     },
     onError: error => {
       toast({

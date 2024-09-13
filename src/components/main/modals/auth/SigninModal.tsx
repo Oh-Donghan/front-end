@@ -168,16 +168,11 @@ export default function SigninModal({
 
               // 구매확정 알림을 받을 경우 경매 경매 채팅방 리패치
               if (eventData.notificationType === 'CONFIRM') {
-                const userId = eventData.content.split('님')[0];
-                alert(`userId: ${userId} --- memberId: ${memberId}`);
-                if (userId !== memberId) {
-                  // 판매자에게만 toast를 보여줌
-                  toast({
-                    title: eventData.content,
-                    status: 'success',
-                    duration: 1500,
-                  });
-                }
+                toast({
+                  title: eventData.content,
+                  status: 'success',
+                  duration: 1500,
+                });
                 queryClient.invalidateQueries({
                   predicate: query =>
                     Array.isArray(query.queryKey) && query.queryKey.includes('chat'),
