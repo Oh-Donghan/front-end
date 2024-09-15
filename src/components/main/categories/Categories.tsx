@@ -10,6 +10,7 @@ import {
   MenuItem,
   Image,
   Text,
+  Portal,
 } from '@chakra-ui/react';
 import computer from '../../../assets/image/category/computer.png';
 
@@ -113,28 +114,38 @@ export default function Categories({ categories, isCategoryLoading }) {
               </Text>
             </Flex>
           </MenuButton>
-          <MenuList maxH="220px" overflowY="auto" width={'100%'}>
-            {categories.map(category => (
-              <MenuItem
-                key={category.id}
-                value={category.title}
-                onClick={() => {
-                  handleSelect(category);
-                }}
-              >
-                <Flex align="center">
-                  <Image
-                    src={category.imgUrl}
-                    alt={category.categoryName}
-                    boxSize="1.3rem"
-                    mr="9px"
-                    marginLeft={'-2px'}
-                  />
-                  <Text>{category.categoryName}</Text>
-                </Flex>
-              </MenuItem>
-            ))}
-          </MenuList>
+          <Portal>
+            <MenuList
+              maxH="220px"
+              overflowY="auto"
+              width={'100%'}
+              p={0}
+              position={'relative'}
+              zIndex={1000}
+            >
+              {categories.map(category => (
+                <MenuItem
+                  py={2.5}
+                  key={category.id}
+                  value={category.title}
+                  onClick={() => {
+                    handleSelect(category);
+                  }}
+                >
+                  <Flex align="center">
+                    <Image
+                      src={category.imageUrl}
+                      alt={category.categoryName}
+                      boxSize="1.3rem"
+                      mr="9px"
+                      marginLeft={'-2px'}
+                    />
+                    <Text>{category.categoryName}</Text>
+                  </Flex>
+                </MenuItem>
+              ))}
+            </MenuList>
+          </Portal>
         </Menu>
       </div>
       {/* 가로 너비 sm 이상일 때 카테고리 */}
