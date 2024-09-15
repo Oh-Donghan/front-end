@@ -55,7 +55,17 @@ export default function SwiperItemList({ isCategoryLoading }: SwiperHotItemListP
 
   return isSlider ? (
     <>
-      {data?.content.length === 0 ? null : (
+      {data?.content.length === 0 ? (
+        <Flex direction={'column'} justify={'center'} align={'center'} gap={2} height={'500px'}>
+          <Text
+            fontWeight={'bold'}
+            fontSize={{ base: '1.1rem', md: '1.4rem' }}
+            color={'rgba(60,60,60,1)'}
+          >
+            {'현재 진행중인 경매가 없습니다.'}
+          </Text>
+        </Flex>
+      ) : (
         <Box minW="375px" mb={{ base: '12', sm: '20' }} mt={{ base: '12', sm: '20' }}>
           <Flex alignItems="end" justifyContent="space-between" mb={{ base: '4', sm: '5' }}>
             <Text fontSize={{ base: 'xl', sm: '1.5rem' }} fontWeight="bold">
@@ -87,7 +97,17 @@ export default function SwiperItemList({ isCategoryLoading }: SwiperHotItemListP
     </>
   ) : (
     <>
-      {data?.content.length === 0 ? null : (
+      {data?.content.length === 0 ? (
+        <Flex direction={'column'} justify={'center'} align={'center'} gap={2} height={'500px'}>
+          <Text
+            fontWeight={'bold'}
+            fontSize={{ base: '1.1rem', md: '1.4rem' }}
+            color={'rgba(60,60,60,1)'}
+          >
+            {'현재 진행중인 경매가 없습니다.'}
+          </Text>
+        </Flex>
+      ) : (
         <Box minW="375px" mb={{ base: '12', sm: '20' }} mt={{ base: '12', sm: '20' }}>
           <Flex alignItems="end" justifyContent="space-between" mb={{ base: '4', sm: '5' }}>
             <Text fontSize={{ base: 'xl', sm: '1.5rem' }} fontWeight="bold">
