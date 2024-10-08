@@ -1,4 +1,4 @@
-import chat from '../../../assets/image/modal/chat/chat.png';
+import chat from '../../../assets/image/modal/chat/chat2.png';
 import close from '../../../assets/image/modal/chat/close.png';
 
 export default function ChatButton({ isPopoverOpen }) {

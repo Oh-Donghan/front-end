@@ -125,9 +125,9 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
     onError: error => {
       console.error('Error submitting form:', error);
       toast({
-        title: `경매 만들기 실패`,
+        title: `경매 만들기 실패 (상품이미지는 jpg, jpeg, png만 사용가능)`,
         status: 'error',
-        duration: 1300,
+        duration: 1800,
       });
     },
   });
