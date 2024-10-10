@@ -18,10 +18,10 @@ export default function ViewedAuction({ data }: ViewedAuctionType) {
       >
         <Flex alignItems={'center'}>
           <Box
-            width={['32px', '54px']}
-            height={['32px', '54px']}
-            minHeight={['32px', '54px']}
-            minWidth={['32px', '54px']}
+            width={['32px', '38px']}
+            height={['32px', '38px']}
+            minHeight={['32px', '38px']}
+            minWidth={['32px', '38px']}
             bgColor={'rgba(230,230,230,1)'}
             borderRadius={'50%'}
             marginRight={['8px', '14px']}
@@ -29,7 +29,7 @@ export default function ViewedAuction({ data }: ViewedAuctionType) {
           >
             <Image src={data.thumbnailUrl} alt={data.title} />
           </Box>
-          <Text mr={'2px'} maxW={'330px'} fontSize={['14px', '16px']} noOfLines={1}>
+          <Text mr={'2px'} maxW={'320px'} fontSize={['14px', '15px']} noOfLines={1}>
             {data.title}
           </Text>
         </Flex>
