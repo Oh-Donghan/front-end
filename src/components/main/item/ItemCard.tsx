@@ -69,7 +69,13 @@ export default function ItemCard({ rank, item, type, auctionArray }: ItemCardPro
               justifyContent={'center'}
               boxShadow={'1px 1px 6px rgba(0,0,0,0.1)'}
             >
-              <Image src={item.imageList[0].imageUrl} alt={item.imageList[0].imageName} />
+              <Image
+                src={item.imageList[0].imageUrl}
+                alt={item.imageList[0].imageName}
+                objectFit="cover"
+                width="100%"
+                height="100%"
+              />
             </Box>
             <Badge position={'absolute'} top={2} right={2} bgColor={'rgba(200,200,200,0.2)'}>
               <Flex alignItems={'center'}>
@@ -175,7 +181,13 @@ export default function ItemCard({ rank, item, type, auctionArray }: ItemCardPro
             justifyContent={'center'}
             boxShadow={'1px 1px 6px rgba(0,0,0,0.1)'}
           >
-            <Image src={item.imageList[0].imageUrl} alt={item.imageList[0].imageName} />
+            <Image
+              src={item.imageList[0].imageUrl}
+              alt={item.imageList[0].imageName}
+              objectFit="cover"
+              width="100%"
+              height="100%"
+            />
           </Box>
           <Badge position={'absolute'} top={2} right={2} bgColor={'rgba(200,200,200,0.2)'}>
             <Flex alignItems={'center'}>
