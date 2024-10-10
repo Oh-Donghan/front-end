@@ -68,7 +68,7 @@ export default function AlarmModal({ type, onOpen, isNewNotification }: AlarmMod
           </Box>
         </PopoverTrigger>
 
-        <PopoverContent maxWidth={'600px'}>
+        <PopoverContent minWidth={'600px'}>
           <PopoverArrow />
           <PopoverHeader
             display={'flex'}
