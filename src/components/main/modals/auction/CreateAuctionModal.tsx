@@ -212,6 +212,7 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
               <Flex gap={10}>
                 <Flex flex={'1'} direction={'column'}>
                   <Flex gap={6}>
+                    {/* 경매명 섹션 */}
                     <InputGroup flex={'1'}>
                       <Flex direction={'column'} width={'full'}>
                         <Flex alignItems={'center'} marginBottom={'4px'}>
@@ -230,6 +231,8 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
                         />
                       </Flex>
                     </InputGroup>
+
+                    {/* 상품명 섹션 */}
                     <InputGroup flex={'1'}>
                       <Flex direction={'column'} width={'full'}>
                         <Flex alignItems={'center'} marginBottom={'4px'}>
@@ -249,6 +252,8 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
                       </Flex>
                     </InputGroup>
                   </Flex>
+
+                  {/* 카테고리 섹션 */}
                   <CategorySection
                     selectedCategory={selectedCategory}
                     setSelectedCategory={setSelectedCategory}
@@ -257,7 +262,8 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
                     setSubCategories={setSubCategories}
                   />
                   <Flex gap={6} marginTop={'30px'} position={'relative'} zIndex={999}>
-                    <InputGroup>
+                    {/* 색상 섹션 */}
+                    <InputGroup flex={'1'}>
                       <Flex direction={'column'} width={'full'}>
                         <Flex alignItems={'center'} marginBottom={'4px'}>
                           <Text fontSize={16} fontWeight={'semibold'}>
@@ -272,6 +278,12 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
                         />
                       </Flex>
                     </InputGroup>
+
+                    {/* 상태 섹션 */}
+                    <RatingSection rating={rating} onRatingChange={setRating} />
+                  </Flex>
+                  <Flex marginTop={'30px'}>
+                    {/* 경매 종료 날짜 섹션 */}
                     <InputGroup>
                       <Flex direction={'column'} width={'full'}>
                         <Flex alignItems={'center'} marginBottom={'4px'}></Flex>
@@ -279,10 +291,8 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
                       </Flex>
                     </InputGroup>
                   </Flex>
-                  <Flex marginTop={'30px'}>
-                    <RatingSection rating={rating} onRatingChange={setRating} />
-                  </Flex>
                   <Flex gap={6} marginTop={'30px'} position={'relative'} zIndex={1}>
+                    {/* 입찰 시작가 섹션 */}
                     <InputGroup>
                       <Flex direction={'column'} width={'full'}>
                         <Flex alignItems={'center'} marginBottom={'4px'}>
@@ -304,6 +314,7 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
                       </Flex>
                     </InputGroup>
                     <InputGroup>
+                      {/* 즉시 구매가 섹션 */}
                       <Flex direction={'column'} width={'full'}>
                         <Flex alignItems={'center'} marginBottom={'4px'}>
                           <Text fontSize={16} fontWeight={'semibold'}>
@@ -326,6 +337,7 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
                   </Flex>
                 </Flex>
                 <Flex flex={'1'} direction={'column'}>
+                  {/* 상품 설명 섹션 */}
                   <InputGroup>
                     <Flex direction={'column'} width={'full'}>
                       <Flex alignItems={'center'} marginBottom={'4px'}>
@@ -360,6 +372,7 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
                     </Flex>
                   </InputGroup>
                   <Flex gap={6} marginTop={'30px'}>
+                    {/* 거래 방법 섹션 */}
                     <Flex flex={1} direction={'column'}>
                       <Flex alignItems={'center'} marginBottom={'4px'}>
                         <Text fontSize={16} fontWeight={'semibold'}>
@@ -382,6 +395,7 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
                       </Select>
                     </Flex>
 
+                    {/* 직거래 주소 섹션 */}
                     <Flex flex={1} direction={'column'}>
                       <Flex alignItems={'center'} marginBottom={'4px'}>
                         <Text fontSize={16} fontWeight={'semibold'}>
@@ -403,6 +417,7 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
                     </Flex>
                   </Flex>
                   <Flex gap={6} marginTop={'30px'}>
+                    {/* 택배비 섹션 */}
                     <InputGroup>
                       <Flex flex={1} direction={'column'}>
                         <Flex alignItems={'center'} marginBottom={'4px'}>
@@ -425,6 +440,7 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
                       </Flex>
                     </InputGroup>
 
+                    {/* 택배비 지불 방법 섹션 */}
                     <InputGroup>
                       <Flex flex={1} direction={'column'}>
                         <Flex alignItems={'center'} marginBottom={'4px'}>
@@ -457,6 +473,7 @@ export default function CreateAuctionModal({ isOpen, onClose }) {
                       </Flex>
                     </InputGroup>
                   </Flex>
+                  {/* 상품 이미지 섹션 */}
                   <Flex marginTop={'30px'}>
                     <ImageSection files={files} setFiles={setFiles} />
                   </Flex>

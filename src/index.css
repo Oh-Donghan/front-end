@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.react-datepicker-popper {
+  z-index: 9999 !important;
+}
+
 .swiper-button-next::after,
 .swiper-button-prev::after {
   font-size: 2rem;

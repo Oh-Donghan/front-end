@@ -8,7 +8,7 @@ interface RatingSectionProps {
 
 export default function RatingSection({ rating, onRatingChange }: RatingSectionProps) {
   return (
-    <Flex flex={1} direction={'column'}>
+    <Flex flex={'1'} direction={'column'}>
       <Flex alignItems={'center'}>
         <Text fontSize={16} fontWeight={'semibold'}>
           상태
