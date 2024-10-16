@@ -26,10 +26,10 @@ export default function RatingSection({ rating, onRatingChange }: RatingSectionP
           isHalf={true}
         />
         <Text
-          fontSize={16}
+          fontSize={13}
           fontWeight={'normal'}
           marginLeft={2}
-          marginTop={'14px'}
+          marginTop={'15px'}
           color={'rgba(150,150,150,1)'}
         >
           ({rating}/5)
