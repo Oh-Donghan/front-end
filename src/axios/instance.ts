@@ -26,7 +26,7 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   response => {
     console.log('Response headers:', response.headers); // 서버 응답의 헤더를 로그에 출력
-    const newToken = response.headers['new-token']; // 응답 헤더에서 새로운 토큰을 확인
+    const newToken = response.headers['__vercel_live_token']; // 응답 헤더에서 새로운 토큰을 확인
     if (newToken) {
       console.log('New Token (success):', newToken); // 새로운 토큰이 있으면 로그에 출력
       localStorage.setItem('accessToken', newToken); // 새로운 토큰을 로컬 스토리지에 저장
