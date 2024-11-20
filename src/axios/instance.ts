@@ -3,7 +3,6 @@ import axios from 'axios';
 // Axios 인스턴스 생성 - VITE_BASE_URL을 기반으로 모든 요청이 이 URL을 사용
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL || 'https://dddang.store',
-  withCredentials: true,
   // baseURL: 'https://dddang.store',
 });
 
@@ -14,7 +13,7 @@ axiosInstance.interceptors.request.use(
     const token = localStorage.getItem('accessToken');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`; // Authorization 헤더에 토큰 추가
-      // config.withCredentials = true; // 쿠키를 포함한 자격 증명을 요청에 포함
+      config.withCredentials = true; // 쿠키를 포함한 자격 증명을 요청에 포함
     }
     return config; // 수정된 config를 반환하여 요청에 반영
   },
@@ -45,6 +44,8 @@ axiosInstance.interceptors.response.use(
     }
     if (error.response && error.response.status === 401) {
       console.error('Authorization failed, token expired or invalid'); // 401 오류 발생 시 콘솔에 오류 메시지 출력
+      // 메인 페이지로 리디렉션
+      window.location.href = '';
     }
     return Promise.reject(error); // 오류를 그대로 반환하여 호출한 코드에서 처리할 수 있게 함
   },
