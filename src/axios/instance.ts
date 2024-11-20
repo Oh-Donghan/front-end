@@ -9,11 +9,11 @@ const axiosInstance = axios.create({
 // 요청 인터셉터 - 요청이 서버로 보내지기 전에 실행
 axiosInstance.interceptors.request.use(
   config => {
+    config.withCredentials = true; // 쿠키를 포함한 자격 증명을 요청에 포함
     // 로컬 스토리지에서 accessToken을 가져와 Authorization 헤더에 추가
     const token = localStorage.getItem('accessToken');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`; // Authorization 헤더에 토큰 추가
-      config.withCredentials = true; // 쿠키를 포함한 자격 증명을 요청에 포함
     }
     return config; // 수정된 config를 반환하여 요청에 반영
   },
