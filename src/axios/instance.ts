@@ -2,7 +2,8 @@ import axios from 'axios';
 
 // Axios 인스턴스 생성 - VITE_BASE_URL을 기반으로 모든 요청이 이 URL을 사용
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_BASE_URL,
+  baseURL: import.meta.env.VITE_BASE_URL || 'https://dddang.store',
+  withCredentials: true,
   // baseURL: 'https://dddang.store',
 });
 
@@ -13,7 +14,7 @@ axiosInstance.interceptors.request.use(
     const token = localStorage.getItem('accessToken');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`; // Authorization 헤더에 토큰 추가
-      config.withCredentials = true; // 쿠키를 포함한 자격 증명을 요청에 포함
+      // config.withCredentials = true; // 쿠키를 포함한 자격 증명을 요청에 포함
     }
     return config; // 수정된 config를 반환하여 요청에 반영
   },

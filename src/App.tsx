@@ -102,7 +102,7 @@ function App() {
         }
       };
     }
-  }, []);
+  }, [auth, eventSource, setEventSource, setIsNewNotification, toast]);
 
   return (
     <RecoilProvider>
